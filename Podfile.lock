@@ -1,0 +1,35 @@
+PODS:
+  - Alamofire (5.8.0)
+  - AlamofireImage (4.2.0):
+    - Alamofire (~> 5.4)
+  - FDSoundActivatedRecorder (3.1.0)
+  - Realm (10.42.1):
+    - Realm/Headers (= 10.42.1)
+  - Realm/Headers (10.42.1)
+  - RealmSwift (10.42.1):
+    - Realm (= 10.42.1)
+
+DEPENDENCIES:
+  - Alamofire (~> 5.8)
+  - AlamofireImage (~> 4.2)
+  - FDSoundActivatedRecorder (~> 3.1)
+  - RealmSwift (~> 10.42)
+
+SPEC REPOS:
+  trunk:
+    - Alamofire
+    - AlamofireImage
+    - FDSoundActivatedRecorder
+    - Realm
+    - RealmSwift
+
+SPEC CHECKSUMS:
+  Alamofire: 0e92e751b3e9e66d7982db43919d01f313b8eb91
+  AlamofireImage: 34a2d90b0e5fe6a5605f85ae4b7b01e784c60192
+  FDSoundActivatedRecorder: f08e5114767d843a7d781488cb3ed209a3ffe546
+  Realm: f433b80a05f68575e88364d6fcc6234965ccc5af
+  RealmSwift: 757e1416e2314f7e1543abdb2aa65b311d7b6545
+
+PODFILE CHECKSUM: 3bf92e63570ea93e86c92cc48a2a7c9fcf06493f
+
+COCOAPODS: 1.12.1

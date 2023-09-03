@@ -1,0 +1,667 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A505864B29BC195C001F1970 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A505864A29BC195C001F1970 /* LoginView.swift */; };
+		A505865129BC1A13001F1970 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A505865029BC1A13001F1970 /* LoginViewModel.swift */; };
+		A505865329BCFF2A001F1970 /* AuthenticateMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A505865229BCFF2A001F1970 /* AuthenticateMessage.swift */; };
+		A505865529BD003B001F1970 /* PersistentManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A505865429BD003B001F1970 /* PersistentManager.swift */; };
+		A505865729BD00C8001F1970 /* Extentions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A505865629BD00C8001F1970 /* Extentions.swift */; };
+		A525EEAA29B172BC00A57CE8 /* AITherapistApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A525EEA929B172BC00A57CE8 /* AITherapistApp.swift */; };
+		A525EEAC29B172BC00A57CE8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A525EEAB29B172BC00A57CE8 /* ContentView.swift */; };
+		A56E17A029B2DB680077B76B /* SpeakManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56E179F29B2DB680077B76B /* SpeakManager.swift */; };
+		A596AD1229B4385100C19DA6 /* MicManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A596AD1129B4385100C19DA6 /* MicManager.swift */; };
+		A596AD1429B43CA900C19DA6 /* SpeechVisualBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A596AD1329B43CA900C19DA6 /* SpeechVisualBarView.swift */; };
+		A5A708CC29C5342B001BCF2F /* SpeechManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A708CB29C5342B001BCF2F /* SpeechManager.swift */; };
+		A5A708CE29C67227001BCF2F /* UsernameInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A708CD29C67227001BCF2F /* UsernameInputView.swift */; };
+		A5A708D029C676A0001BCF2F /* PasswordInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A708CF29C676A0001BCF2F /* PasswordInputView.swift */; };
+		A5AE6FDA2AA3E9AE00168037 /* ConversationSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5AE6FD92AA3E9AE00168037 /* ConversationSummary.swift */; };
+		A5AE6FDD2AA3ECF100168037 /* Conversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5AE6FDC2AA3ECF000168037 /* Conversation.swift */; };
+		A5AE6FEF2AA3F37600168037 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5AE6FEE2AA3F37600168037 /* AppState.swift */; };
+		A5B50BDD29C7809B006F8BE1 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5B50BDC29C7809B006F8BE1 /* SignUpView.swift */; };
+		A5B7D5CE29B3AFFD001D7113 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5B7D5CD29B3AFFD001D7113 /* User.swift */; };
+		A5B7D5D029B3B03C001D7113 /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5B7D5CF29B3B03C001D7113 /* Enums.swift */; };
+		A5B7D5D629B3B535001D7113 /* TherapyChatModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5B7D5D529B3B535001D7113 /* TherapyChatModel.swift */; };
+		A5B7D5D929B3B640001D7113 /* DatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5B7D5D829B3B640001D7113 /* DatabaseManager.swift */; };
+		A5B7D5DD29B3D4A5001D7113 /* TherapyChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5B7D5DC29B3D4A5001D7113 /* TherapyChatView.swift */; };
+		A5B7D5DF29B3D4B3001D7113 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5B7D5DE29B3D4B3001D7113 /* NetworkManager.swift */; };
+		A5B7D5E829B41997001D7113 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5B7D5E729B41997001D7113 /* Utilities.swift */; };
+		F5BED7ECE5A1009911E9192C /* Pods_AITherapist.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 470052D87753E53A6EB3A9BF /* Pods_AITherapist.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		470052D87753E53A6EB3A9BF /* Pods_AITherapist.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AITherapist.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8DE6E6FDFE71D5785CF8491A /* Pods-AITherapist.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AITherapist.release.xcconfig"; path = "Target Support Files/Pods-AITherapist/Pods-AITherapist.release.xcconfig"; sourceTree = "<group>"; };
+		A505864A29BC195C001F1970 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		A505865029BC1A13001F1970 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
+		A505865229BCFF2A001F1970 /* AuthenticateMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticateMessage.swift; sourceTree = "<group>"; };
+		A505865429BD003B001F1970 /* PersistentManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentManager.swift; sourceTree = "<group>"; };
+		A505865629BD00C8001F1970 /* Extentions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extentions.swift; sourceTree = "<group>"; };
+		A525EEA629B172BC00A57CE8 /* AITherapist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AITherapist.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A525EEA929B172BC00A57CE8 /* AITherapistApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AITherapistApp.swift; sourceTree = "<group>"; };
+		A525EEAB29B172BC00A57CE8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		A525EEAD29B172BF00A57CE8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A525EEB029B172BF00A57CE8 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		A56E179F29B2DB680077B76B /* SpeakManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeakManager.swift; sourceTree = "<group>"; };
+		A596AD1129B4385100C19DA6 /* MicManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicManager.swift; sourceTree = "<group>"; };
+		A596AD1329B43CA900C19DA6 /* SpeechVisualBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SpeechVisualBarView.swift; path = AITherapist/Presentation/SignUp/ViewModel/SpeechVisualBarView.swift; sourceTree = SOURCE_ROOT; };
+		A5A708CB29C5342B001BCF2F /* SpeechManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpeechManager.swift; sourceTree = "<group>"; };
+		A5A708CD29C67227001BCF2F /* UsernameInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsernameInputView.swift; sourceTree = "<group>"; };
+		A5A708CF29C676A0001BCF2F /* PasswordInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordInputView.swift; sourceTree = "<group>"; };
+		A5AE6FD92AA3E9AE00168037 /* ConversationSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationSummary.swift; sourceTree = "<group>"; };
+		A5AE6FDC2AA3ECF000168037 /* Conversation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Conversation.swift; sourceTree = "<group>"; };
+		A5AE6FEA2AA3EFE600168037 /* MessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageView.swift; sourceTree = "<group>"; };
+		A5AE6FEB2AA3EFE600168037 /* ContentMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentMessageView.swift; sourceTree = "<group>"; };
+		A5AE6FEE2AA3F37600168037 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		A5B50BDC29C7809B006F8BE1 /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
+		A5B7D5CD29B3AFFD001D7113 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		A5B7D5CF29B3B03C001D7113 /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
+		A5B7D5D529B3B535001D7113 /* TherapyChatModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TherapyChatModel.swift; sourceTree = "<group>"; };
+		A5B7D5D829B3B640001D7113 /* DatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseManager.swift; sourceTree = "<group>"; };
+		A5B7D5DC29B3D4A5001D7113 /* TherapyChatView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TherapyChatView.swift; sourceTree = "<group>"; };
+		A5B7D5DE29B3D4B3001D7113 /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		A5B7D5E729B41997001D7113 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Utilities.swift; path = AITherapist/Utilities.swift; sourceTree = SOURCE_ROOT; };
+		E42015C30DF5C284A403DE1D /* Pods-AITherapist.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AITherapist.debug.xcconfig"; path = "Target Support Files/Pods-AITherapist/Pods-AITherapist.debug.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A525EEA329B172BC00A57CE8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F5BED7ECE5A1009911E9192C /* Pods_AITherapist.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		061639D190501180EF62BFFA /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				E42015C30DF5C284A403DE1D /* Pods-AITherapist.debug.xcconfig */,
+				8DE6E6FDFE71D5785CF8491A /* Pods-AITherapist.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		987F8DB59E9D06126284ADE1 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				470052D87753E53A6EB3A9BF /* Pods_AITherapist.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A505864C29BC198D001F1970 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				A5B7D5D529B3B535001D7113 /* TherapyChatModel.swift */,
+				A505865029BC1A13001F1970 /* LoginViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		A525EE9D29B172BC00A57CE8 = {
+			isa = PBXGroup;
+			children = (
+				A525EEA829B172BC00A57CE8 /* AITherapist */,
+				A525EEA729B172BC00A57CE8 /* Products */,
+				061639D190501180EF62BFFA /* Pods */,
+				987F8DB59E9D06126284ADE1 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		A525EEA729B172BC00A57CE8 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A525EEA629B172BC00A57CE8 /* AITherapist.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A525EEA829B172BC00A57CE8 /* AITherapist */ = {
+			isa = PBXGroup;
+			children = (
+				A5652C4D2AA407A90045DB95 /* Repository */,
+				A5AE6FED2AA3F32900168037 /* Injected */,
+				A5AE6FE02AA3EF7B00168037 /* Presentation */,
+				A5AE6FDE2AA3EDD900168037 /* Domain */,
+				A5B7D5E629B41915001D7113 /* Resources */,
+				A5B7D5D729B3B610001D7113 /* Manager */,
+				A525EEA929B172BC00A57CE8 /* AITherapistApp.swift */,
+				A525EEAB29B172BC00A57CE8 /* ContentView.swift */,
+				A525EEAF29B172BF00A57CE8 /* Preview Content */,
+			);
+			path = AITherapist;
+			sourceTree = "<group>";
+		};
+		A525EEAF29B172BF00A57CE8 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				A525EEB029B172BF00A57CE8 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		A5652C4D2AA407A90045DB95 /* Repository */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Repository;
+			sourceTree = "<group>";
+		};
+		A5AE6FD82AA3E91D00168037 /* ConversationSummary */ = {
+			isa = PBXGroup;
+			children = (
+				A5AE6FD92AA3E9AE00168037 /* ConversationSummary.swift */,
+			);
+			path = ConversationSummary;
+			sourceTree = "<group>";
+		};
+		A5AE6FDB2AA3ECCC00168037 /* Conversation */ = {
+			isa = PBXGroup;
+			children = (
+				A5AE6FDC2AA3ECF000168037 /* Conversation.swift */,
+			);
+			path = Conversation;
+			sourceTree = "<group>";
+		};
+		A5AE6FDE2AA3EDD900168037 /* Domain */ = {
+			isa = PBXGroup;
+			children = (
+				A5AE6FDF2AA3EDE100168037 /* Entities */,
+			);
+			path = Domain;
+			sourceTree = "<group>";
+		};
+		A5AE6FDF2AA3EDE100168037 /* Entities */ = {
+			isa = PBXGroup;
+			children = (
+				A505864C29BC198D001F1970 /* ViewModel */,
+				A5B7D5CA29B3ADD5001D7113 /* Model */,
+			);
+			path = Entities;
+			sourceTree = "<group>";
+		};
+		A5AE6FE02AA3EF7B00168037 /* Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				A5AE6FE32AA3EF9700168037 /* TherapyChat */,
+				A5AE6FE22AA3EF8B00168037 /* SignUp */,
+				A5AE6FE12AA3EF8300168037 /* Login */,
+			);
+			path = Presentation;
+			sourceTree = "<group>";
+		};
+		A5AE6FE12AA3EF8300168037 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				A5AE6FE52AA3EFA700168037 /* ViewModel */,
+				A5AE6FE42AA3EFA200168037 /* View */,
+			);
+			path = Login;
+			sourceTree = "<group>";
+		};
+		A5AE6FE22AA3EF8B00168037 /* SignUp */ = {
+			isa = PBXGroup;
+			children = (
+				A5AE6FE72AA3EFB000168037 /* ViewModel */,
+				A5AE6FE62AA3EFAC00168037 /* View */,
+			);
+			path = SignUp;
+			sourceTree = "<group>";
+		};
+		A5AE6FE32AA3EF9700168037 /* TherapyChat */ = {
+			isa = PBXGroup;
+			children = (
+				A5AE6FE92AA3EFB900168037 /* ViewModel */,
+				A5AE6FE82AA3EFB500168037 /* View */,
+			);
+			path = TherapyChat;
+			sourceTree = "<group>";
+		};
+		A5AE6FE42AA3EFA200168037 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				A505864A29BC195C001F1970 /* LoginView.swift */,
+				A5A708CD29C67227001BCF2F /* UsernameInputView.swift */,
+				A5A708CF29C676A0001BCF2F /* PasswordInputView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		A5AE6FE52AA3EFA700168037 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		A5AE6FE62AA3EFAC00168037 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				A5B50BDC29C7809B006F8BE1 /* SignUpView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		A5AE6FE72AA3EFB000168037 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				A5B7D5DC29B3D4A5001D7113 /* TherapyChatView.swift */,
+				A5AE6FEB2AA3EFE600168037 /* ContentMessageView.swift */,
+				A5AE6FEA2AA3EFE600168037 /* MessageView.swift */,
+				A596AD1329B43CA900C19DA6 /* SpeechVisualBarView.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		A5AE6FE82AA3EFB500168037 /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		A5AE6FE92AA3EFB900168037 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		A5AE6FEC2AA3F00A00168037 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				A525EEAD29B172BF00A57CE8 /* Assets.xcassets */,
+			);
+			path = Assets;
+			sourceTree = "<group>";
+		};
+		A5AE6FED2AA3F32900168037 /* Injected */ = {
+			isa = PBXGroup;
+			children = (
+				A5AE6FEE2AA3F37600168037 /* AppState.swift */,
+			);
+			path = Injected;
+			sourceTree = "<group>";
+		};
+		A5B7D5CA29B3ADD5001D7113 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				A5AE6FDB2AA3ECCC00168037 /* Conversation */,
+				A5AE6FD82AA3E91D00168037 /* ConversationSummary */,
+				A5B7D5CD29B3AFFD001D7113 /* User.swift */,
+				A5B7D5CF29B3B03C001D7113 /* Enums.swift */,
+				A505865229BCFF2A001F1970 /* AuthenticateMessage.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		A5B7D5D729B3B610001D7113 /* Manager */ = {
+			isa = PBXGroup;
+			children = (
+				A5A708CB29C5342B001BCF2F /* SpeechManager.swift */,
+				A56E179F29B2DB680077B76B /* SpeakManager.swift */,
+				A5B7D5D829B3B640001D7113 /* DatabaseManager.swift */,
+				A5B7D5DE29B3D4B3001D7113 /* NetworkManager.swift */,
+				A596AD1129B4385100C19DA6 /* MicManager.swift */,
+				A505865429BD003B001F1970 /* PersistentManager.swift */,
+			);
+			path = Manager;
+			sourceTree = "<group>";
+		};
+		A5B7D5E629B41915001D7113 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A5AE6FEC2AA3F00A00168037 /* Assets */,
+				A5B7D5E729B41997001D7113 /* Utilities.swift */,
+				A505865629BD00C8001F1970 /* Extentions.swift */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A525EEA529B172BC00A57CE8 /* AITherapist */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A525EEB429B172BF00A57CE8 /* Build configuration list for PBXNativeTarget "AITherapist" */;
+			buildPhases = (
+				D7BE1B37DCB9FFDB772813CD /* [CP] Check Pods Manifest.lock */,
+				A525EEA229B172BC00A57CE8 /* Sources */,
+				A525EEA329B172BC00A57CE8 /* Frameworks */,
+				3E18B8E902C06A32BEB5BAD5 /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AITherapist;
+			productName = AITherapist;
+			productReference = A525EEA629B172BC00A57CE8 /* AITherapist.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A525EE9E29B172BC00A57CE8 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1420;
+				LastUpgradeCheck = 1420;
+				TargetAttributes = {
+					A525EEA529B172BC00A57CE8 = {
+						CreatedOnToolsVersion = 14.2;
+					};
+				};
+			};
+			buildConfigurationList = A525EEA129B172BC00A57CE8 /* Build configuration list for PBXProject "AITherapist" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A525EE9D29B172BC00A57CE8;
+			productRefGroup = A525EEA729B172BC00A57CE8 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A525EEA529B172BC00A57CE8 /* AITherapist */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		3E18B8E902C06A32BEB5BAD5 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-AITherapist/Pods-AITherapist-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-AITherapist/Pods-AITherapist-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AITherapist/Pods-AITherapist-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D7BE1B37DCB9FFDB772813CD /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-AITherapist-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A525EEA229B172BC00A57CE8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A5B7D5DF29B3D4B3001D7113 /* NetworkManager.swift in Sources */,
+				A5B7D5D929B3B640001D7113 /* DatabaseManager.swift in Sources */,
+				A5B7D5DD29B3D4A5001D7113 /* TherapyChatView.swift in Sources */,
+				A5AE6FDD2AA3ECF100168037 /* Conversation.swift in Sources */,
+				A5B7D5E829B41997001D7113 /* Utilities.swift in Sources */,
+				A505865529BD003B001F1970 /* PersistentManager.swift in Sources */,
+				A56E17A029B2DB680077B76B /* SpeakManager.swift in Sources */,
+				A5B7D5D629B3B535001D7113 /* TherapyChatModel.swift in Sources */,
+				A525EEAC29B172BC00A57CE8 /* ContentView.swift in Sources */,
+				A5B7D5CE29B3AFFD001D7113 /* User.swift in Sources */,
+				A505865329BCFF2A001F1970 /* AuthenticateMessage.swift in Sources */,
+				A5A708CC29C5342B001BCF2F /* SpeechManager.swift in Sources */,
+				A596AD1429B43CA900C19DA6 /* SpeechVisualBarView.swift in Sources */,
+				A525EEAA29B172BC00A57CE8 /* AITherapistApp.swift in Sources */,
+				A505865729BD00C8001F1970 /* Extentions.swift in Sources */,
+				A5B50BDD29C7809B006F8BE1 /* SignUpView.swift in Sources */,
+				A5AE6FDA2AA3E9AE00168037 /* ConversationSummary.swift in Sources */,
+				A5A708D029C676A0001BCF2F /* PasswordInputView.swift in Sources */,
+				A505864B29BC195C001F1970 /* LoginView.swift in Sources */,
+				A5B7D5D029B3B03C001D7113 /* Enums.swift in Sources */,
+				A505865129BC1A13001F1970 /* LoginViewModel.swift in Sources */,
+				A5AE6FEF2AA3F37600168037 /* AppState.swift in Sources */,
+				A5A708CE29C67227001BCF2F /* UsernameInputView.swift in Sources */,
+				A596AD1229B4385100C19DA6 /* MicManager.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		A525EEB229B172BF00A57CE8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		A525EEB329B172BF00A57CE8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		A525EEB529B172BF00A57CE8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E42015C30DF5C284A403DE1D /* Pods-AITherapist.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"AITherapist/Preview Content\"";
+				DEVELOPMENT_TEAM = 39957QBL2C;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Audio is recorded to transcribe the meeting. Audio recordings are discarded after transcription.”";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "You can view a text transcription of your meeting in the app.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = CyrusRefahi.AITherapist;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A525EEB629B172BF00A57CE8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8DE6E6FDFE71D5785CF8491A /* Pods-AITherapist.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"AITherapist/Preview Content\"";
+				DEVELOPMENT_TEAM = 39957QBL2C;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Audio is recorded to transcribe the meeting. Audio recordings are discarded after transcription.”";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "You can view a text transcription of your meeting in the app.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = CyrusRefahi.AITherapist;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A525EEA129B172BC00A57CE8 /* Build configuration list for PBXProject "AITherapist" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A525EEB229B172BF00A57CE8 /* Debug */,
+				A525EEB329B172BF00A57CE8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A525EEB429B172BF00A57CE8 /* Build configuration list for PBXNativeTarget "AITherapist" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A525EEB529B172BF00A57CE8 /* Debug */,
+				A525EEB629B172BF00A57CE8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A525EE9E29B172BC00A57CE8 /* Project object */;
+}

@@ -1,0 +1,45 @@
+//
+//  Extentions.swift
+//  AITherapist
+//
+//  Created by cyrus refahi on 3/11/23.
+//
+
+import Foundation
+import SwiftUI
+import Combine
+
+#if canImport(UIKit)
+extension View {
+    
+    func hideKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
+    
+    public func flip() -> some View {
+        return self
+            .rotationEffect(.radians(.pi))
+            .scaleEffect(x: -1, y: 1, anchor: .center)
+    }
+}
+#endif
+
+public struct PlaceholderStyle: ViewModifier {
+    var showPlaceHolder: Bool
+    var placeholder: String
+
+    public func body(content: Content) -> some View {
+        ZStack(alignment: .topLeading) {
+            if showPlaceHolder {
+                Text(placeholder)
+                    .foregroundColor(ColorPallet.greenAiMessage)
+                    .font(.system(size: 10))
+                .padding(.horizontal, 15)
+                .offset(y: 8)
+            }
+            content
+            .foregroundColor(Color.black)
+            .padding(5.0)
+        }
+    }
+}
