@@ -8,6 +8,8 @@
 import Foundation
    
 struct ConversationSummary:  Identifiable {
+    var id: String { conversationSummaryId }
+    
     typealias Identifier = String
 
     let conversationSummaryId: Identifier

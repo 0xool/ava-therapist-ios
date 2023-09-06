@@ -32,7 +32,8 @@ struct MessageView : View {
 
 struct MessageView_Previews: PreviewProvider {
     static var previews: some View {
-        let message = Message(content: "Hello User I am AITherapist, Hello User I am AITherapist, Hello User I am AITherapist, Hello User I am AITherapist", isUser: false)
+        let message = Message(id: 0, content: "Hello User I am AITherapist, Hello User I am AITherapist, Hello User I am AITherapist, Hello User I am AITherapist", isUser: false)
+//        Message(content: "Hello User I am AITherapist, Hello User I am AITherapist, Hello User I am AITherapist, Hello User I am AITherapist", isUser: false)
         MessageView(currentMessage: message)
     }
 }

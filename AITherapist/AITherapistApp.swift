@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-@main
+//@main
 struct AITherapistApp: App {
 
     var body: some Scene {

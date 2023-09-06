@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import SwiftUI
 
 class TherapyChatModel: ObservableObject {
 
@@ -20,41 +21,40 @@ class TherapyChatModel: ObservableObject {
         
     func sendMessage(_ chatMessage: String){
         let message = Message(content: chatMessage, isUser: true)
-        conversation.conversations.append(message)
+        conversation.messages.append(message)
         didChange.send(())
         isUserTurnToSpeak = false
         sendConversation()
     }
     
     func sendConversation() {
-        
         var conversationList: [String] = []
-        for message in conversation.conversations {
+        for message in conversation.messages {
             conversationList.append(message.content)
         }
         
-        let params = ["conversation": conversationList]
-        `NetworkManager.SendRequest(decoderModel: AiMessageResponse.self, params: params, successHandler: { res in
-            
-            guard let value = res.value else { return }
-            let messageResponse: AiMessageResponse = value
-            self.setAiMessage(messageResponse.message)
-            self.isUserTurnToSpeak = true
-            
-        }, failedHandler: { res in
-            print(Constants.SendConversationUrl)
-            print(res.error ?? "")
-        }, url: Constants.SendConversationUrl)
+        _ = ["conversation": conversationList]
+//        NetworkManager.SendRequest(decoderModel: AiMessageResponse.self, params: params, successHandler: { res in
+//
+//            guard let value = res.value else { return }
+//            let messageResponse: AiMessageResponse = value
+//            self.setAiMessage(messageResponse.message)
+//            self.isUserTurnToSpeak = true
+//
+//        }, failedHandler: { res in
+//            print(Constants.SendConversationUrl)
+//            print(res.error ?? "")
+//        }, url: Constants.SendConversationUrl)
     }
     
     func setAiMessage(_ msg: String){
         let message = Message(content: msg, isUser: false)
-        conversation.conversations.append(message)
+        conversation.messages.append(message)
         speechRecognizer.readOut(text: message.content)
     }
     
     public func getConversation() -> [Message] {
-        return conversation.conversations
+        return conversation.messages.map { $0 }
     }
     
     public func restart() {

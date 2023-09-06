@@ -12,9 +12,32 @@
 		A505865329BCFF2A001F1970 /* AuthenticateMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A505865229BCFF2A001F1970 /* AuthenticateMessage.swift */; };
 		A505865529BD003B001F1970 /* PersistentManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A505865429BD003B001F1970 /* PersistentManager.swift */; };
 		A505865729BD00C8001F1970 /* Extentions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A505865629BD00C8001F1970 /* Extentions.swift */; };
+		A50A1A662AA44A2D00A6AD6D /* ServiceContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50A1A652AA44A2D00A6AD6D /* ServiceContainer.swift */; };
+		A50A1A692AA44AF000A6AD6D /* RootViewAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50A1A682AA44AF000A6AD6D /* RootViewAppearance.swift */; };
+		A50A1A6B2AA44C9400A6AD6D /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50A1A6A2AA44C9400A6AD6D /* Helper.swift */; };
+		A50A1A6D2AA44CE000A6AD6D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50A1A6C2AA44CE000A6AD6D /* SceneDelegate.swift */; };
+		A50A1A6F2AA44D0D00A6AD6D /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50A1A6E2AA44D0D00A6AD6D /* AppEnvironment.swift */; };
+		A516527F2AA43A87005E9BC6 /* Diary.swift in Sources */ = {isa = PBXBuildFile; fileRef = A516527E2AA43A87005E9BC6 /* Diary.swift */; };
 		A525EEAA29B172BC00A57CE8 /* AITherapistApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A525EEA929B172BC00A57CE8 /* AITherapistApp.swift */; };
 		A525EEAC29B172BC00A57CE8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A525EEAB29B172BC00A57CE8 /* ContentView.swift */; };
+		A55BCAD82AA4371500C8335E /* DailyMood.swift in Sources */ = {isa = PBXBuildFile; fileRef = A55BCAD72AA4371500C8335E /* DailyMood.swift */; };
+		A566DCA12AA503A200920940 /* WebRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A566DCA02AA503A200920940 /* WebRepository.swift */; };
+		A566DCA32AA503EE00920940 /* APICall.swift in Sources */ = {isa = PBXBuildFile; fileRef = A566DCA22AA503EE00920940 /* APICall.swift */; };
+		A569DEFD2AA4423C006D39AA /* Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = A569DEFC2AA4423C006D39AA /* Chat.swift */; };
+		A569DF002AA447B0006D39AA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A569DEFF2AA447B0006D39AA /* AppDelegate.swift */; };
+		A569DF022AA44822006D39AA /* SystemEventsHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = A569DF012AA44822006D39AA /* SystemEventsHandler.swift */; };
+		A569DF042AA4488C006D39AA /* DependencyInjector.swift in Sources */ = {isa = PBXBuildFile; fileRef = A569DF032AA4488C006D39AA /* DependencyInjector.swift */; };
+		A569DF072AA448E9006D39AA /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = A569DF062AA448E9006D39AA /* Store.swift */; };
 		A56E17A029B2DB680077B76B /* SpeakManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56E179F29B2DB680077B76B /* SpeakManager.swift */; };
+		A578EACC2AA418A200D992AD /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = A578EACB2AA418A200D992AD /* Message.swift */; };
+		A578EACE2AA41BAB00D992AD /* MessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A578EACD2AA41BAB00D992AD /* MessageView.swift */; };
+		A578EACF2AA41BEF00D992AD /* ContentMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5AE6FEB2AA3EFE600168037 /* ContentMessageView.swift */; };
+		A57AD7D02AA64AB8008EC1FB /* ConversationRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57AD7CF2AA64AB8008EC1FB /* ConversationRepository.swift */; };
+		A57AD7D32AA64C6D008EC1FB /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57AD7D22AA64C6D008EC1FB /* Error.swift */; };
+		A57AD7D52AA65D83008EC1FB /* AuthenticateRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57AD7D42AA65D83008EC1FB /* AuthenticateRepository.swift */; };
+		A57AD7D82AA6781F008EC1FB /* ConversationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57AD7D72AA6781F008EC1FB /* ConversationService.swift */; };
+		A57AD7DA2AA678CB008EC1FB /* LazyList.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57AD7D92AA678CB008EC1FB /* LazyList.swift */; };
+		A57AD7E02AA67B51008EC1FB /* Loadable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57AD7DF2AA67B51008EC1FB /* Loadable.swift */; };
 		A596AD1229B4385100C19DA6 /* MicManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A596AD1129B4385100C19DA6 /* MicManager.swift */; };
 		A596AD1429B43CA900C19DA6 /* SpeechVisualBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A596AD1329B43CA900C19DA6 /* SpeechVisualBarView.swift */; };
 		A5A708CC29C5342B001BCF2F /* SpeechManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A708CB29C5342B001BCF2F /* SpeechManager.swift */; };
@@ -31,6 +54,14 @@
 		A5B7D5DD29B3D4A5001D7113 /* TherapyChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5B7D5DC29B3D4A5001D7113 /* TherapyChatView.swift */; };
 		A5B7D5DF29B3D4B3001D7113 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5B7D5DE29B3D4B3001D7113 /* NetworkManager.swift */; };
 		A5B7D5E829B41997001D7113 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5B7D5E729B41997001D7113 /* Utilities.swift */; };
+		A5C55FDB2AA55DBD00154ED0 /* CancelBag.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C55FDA2AA55DBD00154ED0 /* CancelBag.swift */; };
+		A5C55FDE2AA562D300154ED0 /* MainContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C55FDD2AA562D300154ED0 /* MainContentView.swift */; };
+		A5CA948B2AA7D74300E25A46 /* ConversationDBRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5CA948A2AA7D74300E25A46 /* ConversationDBRepository.swift */; };
+		A5CA948D2AA7FA6D00E25A46 /* PushNotificationsHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5CA948C2AA7FA6D00E25A46 /* PushNotificationsHandler.swift */; };
+		A5CA948F2AA7FE8000E25A46 /* DeepLinksHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5CA948E2AA7FE8000E25A46 /* DeepLinksHandler.swift */; };
+		A5CA94912AA7FFBC00E25A46 /* PushTokenWebRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5CA94902AA7FFBC00E25A46 /* PushTokenWebRepository.swift */; };
+		A5CA94932AA8039D00E25A46 /* UserPermissionsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5CA94922AA8039D00E25A46 /* UserPermissionsService.swift */; };
+		A5CA94962AA80F7F00E25A46 /* EnvironmentOverrides in Frameworks */ = {isa = PBXBuildFile; productRef = A5CA94952AA80F7F00E25A46 /* EnvironmentOverrides */; };
 		F5BED7ECE5A1009911E9192C /* Pods_AITherapist.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 470052D87753E53A6EB3A9BF /* Pods_AITherapist.framework */; };
 /* End PBXBuildFile section */
 
@@ -42,20 +73,41 @@
 		A505865229BCFF2A001F1970 /* AuthenticateMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticateMessage.swift; sourceTree = "<group>"; };
 		A505865429BD003B001F1970 /* PersistentManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentManager.swift; sourceTree = "<group>"; };
 		A505865629BD00C8001F1970 /* Extentions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extentions.swift; sourceTree = "<group>"; };
+		A50A1A652AA44A2D00A6AD6D /* ServiceContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ServiceContainer.swift; path = /Users/cyrusrefahi/Documents/AITherapist/AITherapist/Injected/ServiceContainer.swift; sourceTree = "<absolute>"; };
+		A50A1A682AA44AF000A6AD6D /* RootViewAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewAppearance.swift; sourceTree = "<group>"; };
+		A50A1A6A2AA44C9400A6AD6D /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
+		A50A1A6C2AA44CE000A6AD6D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		A50A1A6E2AA44D0D00A6AD6D /* AppEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
+		A516527E2AA43A87005E9BC6 /* Diary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Diary.swift; sourceTree = "<group>"; };
 		A525EEA629B172BC00A57CE8 /* AITherapist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AITherapist.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A525EEA929B172BC00A57CE8 /* AITherapistApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AITherapistApp.swift; sourceTree = "<group>"; };
 		A525EEAB29B172BC00A57CE8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		A525EEAD29B172BF00A57CE8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A525EEB029B172BF00A57CE8 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		A55BCAD72AA4371500C8335E /* DailyMood.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DailyMood.swift; path = DailyMood2/DailyMood.swift; sourceTree = "<group>"; };
+		A566DCA02AA503A200920940 /* WebRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebRepository.swift; sourceTree = "<group>"; };
+		A566DCA22AA503EE00920940 /* APICall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APICall.swift; sourceTree = "<group>"; };
+		A569DEFC2AA4423C006D39AA /* Chat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chat.swift; sourceTree = "<group>"; };
+		A569DEFF2AA447B0006D39AA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		A569DF012AA44822006D39AA /* SystemEventsHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemEventsHandler.swift; sourceTree = "<group>"; };
+		A569DF032AA4488C006D39AA /* DependencyInjector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependencyInjector.swift; sourceTree = "<group>"; };
+		A569DF062AA448E9006D39AA /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		A56E179F29B2DB680077B76B /* SpeakManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeakManager.swift; sourceTree = "<group>"; };
+		A578EACB2AA418A200D992AD /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		A578EACD2AA41BAB00D992AD /* MessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageView.swift; sourceTree = "<group>"; };
+		A57AD7CF2AA64AB8008EC1FB /* ConversationRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationRepository.swift; sourceTree = "<group>"; };
+		A57AD7D22AA64C6D008EC1FB /* Error.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
+		A57AD7D42AA65D83008EC1FB /* AuthenticateRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticateRepository.swift; sourceTree = "<group>"; };
+		A57AD7D72AA6781F008EC1FB /* ConversationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationService.swift; sourceTree = "<group>"; };
+		A57AD7D92AA678CB008EC1FB /* LazyList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LazyList.swift; sourceTree = "<group>"; };
+		A57AD7DF2AA67B51008EC1FB /* Loadable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Loadable.swift; sourceTree = "<group>"; };
 		A596AD1129B4385100C19DA6 /* MicManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicManager.swift; sourceTree = "<group>"; };
-		A596AD1329B43CA900C19DA6 /* SpeechVisualBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SpeechVisualBarView.swift; path = AITherapist/Presentation/SignUp/ViewModel/SpeechVisualBarView.swift; sourceTree = SOURCE_ROOT; };
+		A596AD1329B43CA900C19DA6 /* SpeechVisualBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SpeechVisualBarView.swift; path = AITherapist/Presentation/SignUp/View/SpeechVisualBarView.swift; sourceTree = SOURCE_ROOT; };
 		A5A708CB29C5342B001BCF2F /* SpeechManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpeechManager.swift; sourceTree = "<group>"; };
 		A5A708CD29C67227001BCF2F /* UsernameInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsernameInputView.swift; sourceTree = "<group>"; };
 		A5A708CF29C676A0001BCF2F /* PasswordInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordInputView.swift; sourceTree = "<group>"; };
 		A5AE6FD92AA3E9AE00168037 /* ConversationSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationSummary.swift; sourceTree = "<group>"; };
 		A5AE6FDC2AA3ECF000168037 /* Conversation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Conversation.swift; sourceTree = "<group>"; };
-		A5AE6FEA2AA3EFE600168037 /* MessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageView.swift; sourceTree = "<group>"; };
 		A5AE6FEB2AA3EFE600168037 /* ContentMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentMessageView.swift; sourceTree = "<group>"; };
 		A5AE6FEE2AA3F37600168037 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		A5B50BDC29C7809B006F8BE1 /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
@@ -66,6 +118,16 @@
 		A5B7D5DC29B3D4A5001D7113 /* TherapyChatView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TherapyChatView.swift; sourceTree = "<group>"; };
 		A5B7D5DE29B3D4B3001D7113 /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		A5B7D5E729B41997001D7113 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Utilities.swift; path = AITherapist/Utilities.swift; sourceTree = SOURCE_ROOT; };
+		A5C55FDA2AA55DBD00154ED0 /* CancelBag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelBag.swift; sourceTree = "<group>"; };
+		A5C55FDD2AA562D300154ED0 /* MainContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainContentView.swift; sourceTree = "<group>"; };
+		A5CA948A2AA7D74300E25A46 /* ConversationDBRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationDBRepository.swift; sourceTree = "<group>"; };
+		A5CA948C2AA7FA6D00E25A46 /* PushNotificationsHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationsHandler.swift; sourceTree = "<group>"; };
+		A5CA948E2AA7FE8000E25A46 /* DeepLinksHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinksHandler.swift; sourceTree = "<group>"; };
+		A5CA94902AA7FFBC00E25A46 /* PushTokenWebRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushTokenWebRepository.swift; sourceTree = "<group>"; };
+		A5CA94922AA8039D00E25A46 /* UserPermissionsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPermissionsService.swift; sourceTree = "<group>"; };
+		A5CA949B2AA81ACE00E25A46 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		A5CA949C2AA81AD200E25A46 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		A5CA949D2AA81B4000E25A46 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		E42015C30DF5C284A403DE1D /* Pods-AITherapist.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AITherapist.debug.xcconfig"; path = "Target Support Files/Pods-AITherapist/Pods-AITherapist.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -74,6 +136,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A5CA94962AA80F7F00E25A46 /* EnvironmentOverrides in Frameworks */,
 				F5BED7ECE5A1009911E9192C /* Pods_AITherapist.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -98,18 +161,26 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		A505864C29BC198D001F1970 /* ViewModel */ = {
+		A50A1A672AA44AC800A6AD6D /* Root */ = {
 			isa = PBXGroup;
 			children = (
-				A5B7D5D529B3B535001D7113 /* TherapyChatModel.swift */,
-				A505865029BC1A13001F1970 /* LoginViewModel.swift */,
+				A50A1A682AA44AF000A6AD6D /* RootViewAppearance.swift */,
 			);
-			path = ViewModel;
+			path = Root;
 			sourceTree = "<group>";
+		};
+		A51652802AA43E93005E9BC6 /* UserQuote */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = UserQuote;
+			path = AITherapist/Domain/Entities/Model/UserQuote;
+			sourceTree = SOURCE_ROOT;
 		};
 		A525EE9D29B172BC00A57CE8 = {
 			isa = PBXGroup;
 			children = (
+				A5CA949A2AA81AA100E25A46 /* UnitTest */,
 				A525EEA829B172BC00A57CE8 /* AITherapist */,
 				A525EEA729B172BC00A57CE8 /* Products */,
 				061639D190501180EF62BFFA /* Pods */,
@@ -128,6 +199,10 @@
 		A525EEA829B172BC00A57CE8 /* AITherapist */ = {
 			isa = PBXGroup;
 			children = (
+				A5CA949D2AA81B4000E25A46 /* Info.plist */,
+				A57AD7D62AA677ED008EC1FB /* Service */,
+				A569DF052AA448C0006D39AA /* Utilities */,
+				A569DEFE2AA4478C006D39AA /* System */,
 				A5652C4D2AA407A90045DB95 /* Repository */,
 				A5AE6FED2AA3F32900168037 /* Injected */,
 				A5AE6FE02AA3EF7B00168037 /* Presentation */,
@@ -149,12 +224,103 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		A55BCAD62AA435F000C8335E /* DailyMood */ = {
+			isa = PBXGroup;
+			children = (
+				A55BCAD72AA4371500C8335E /* DailyMood.swift */,
+			);
+			path = DailyMood;
+			sourceTree = "<group>";
+		};
+		A55BCAD92AA439B300C8335E /* Diary */ = {
+			isa = PBXGroup;
+			children = (
+				A516527E2AA43A87005E9BC6 /* Diary.swift */,
+			);
+			path = Diary;
+			sourceTree = "<group>";
+		};
 		A5652C4D2AA407A90045DB95 /* Repository */ = {
 			isa = PBXGroup;
 			children = (
+				A566DCA02AA503A200920940 /* WebRepository.swift */,
+				A57AD7CF2AA64AB8008EC1FB /* ConversationRepository.swift */,
+				A57AD7D42AA65D83008EC1FB /* AuthenticateRepository.swift */,
+				A5CA948A2AA7D74300E25A46 /* ConversationDBRepository.swift */,
+				A5CA94902AA7FFBC00E25A46 /* PushTokenWebRepository.swift */,
 			);
 			path = Repository;
 			sourceTree = "<group>";
+		};
+		A569DEFA2AA44083006D39AA /* User */ = {
+			isa = PBXGroup;
+			children = (
+				A5B7D5CD29B3AFFD001D7113 /* User.swift */,
+			);
+			path = User;
+			sourceTree = "<group>";
+		};
+		A569DEFB2AA44219006D39AA /* Chat */ = {
+			isa = PBXGroup;
+			children = (
+				A569DEFC2AA4423C006D39AA /* Chat.swift */,
+			);
+			path = Chat;
+			sourceTree = "<group>";
+		};
+		A569DEFE2AA4478C006D39AA /* System */ = {
+			isa = PBXGroup;
+			children = (
+				A569DEFF2AA447B0006D39AA /* AppDelegate.swift */,
+				A569DF012AA44822006D39AA /* SystemEventsHandler.swift */,
+				A50A1A6C2AA44CE000A6AD6D /* SceneDelegate.swift */,
+				A50A1A6E2AA44D0D00A6AD6D /* AppEnvironment.swift */,
+				A5CA948C2AA7FA6D00E25A46 /* PushNotificationsHandler.swift */,
+				A5CA948E2AA7FE8000E25A46 /* DeepLinksHandler.swift */,
+			);
+			name = System;
+			path = /Users/cyrusrefahi/Documents/AITherapist/AITherapist/System;
+			sourceTree = "<absolute>";
+		};
+		A569DF052AA448C0006D39AA /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				A569DF062AA448E9006D39AA /* Store.swift */,
+				A50A1A6A2AA44C9400A6AD6D /* Helper.swift */,
+				A566DCA22AA503EE00920940 /* APICall.swift */,
+				A5C55FDA2AA55DBD00154ED0 /* CancelBag.swift */,
+				A57AD7D92AA678CB008EC1FB /* LazyList.swift */,
+				A57AD7DF2AA67B51008EC1FB /* Loadable.swift */,
+			);
+			name = Utilities;
+			path = /Users/cyrusrefahi/Documents/AITherapist/AITherapist/Utilities;
+			sourceTree = "<absolute>";
+		};
+		A578EACA2AA4187E00D992AD /* Message */ = {
+			isa = PBXGroup;
+			children = (
+				A578EACB2AA418A200D992AD /* Message.swift */,
+			);
+			path = Message;
+			sourceTree = "<group>";
+		};
+		A57AD7D12AA64C4B008EC1FB /* Error */ = {
+			isa = PBXGroup;
+			children = (
+				A57AD7D22AA64C6D008EC1FB /* Error.swift */,
+			);
+			path = Error;
+			sourceTree = "<group>";
+		};
+		A57AD7D62AA677ED008EC1FB /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				A57AD7D72AA6781F008EC1FB /* ConversationService.swift */,
+				A5CA94922AA8039D00E25A46 /* UserPermissionsService.swift */,
+			);
+			name = Service;
+			path = /Users/cyrusrefahi/Documents/AITherapist/AITherapist/Service;
+			sourceTree = "<absolute>";
 		};
 		A5AE6FD82AA3E91D00168037 /* ConversationSummary */ = {
 			isa = PBXGroup;
@@ -183,7 +349,6 @@
 		A5AE6FDF2AA3EDE100168037 /* Entities */ = {
 			isa = PBXGroup;
 			children = (
-				A505864C29BC198D001F1970 /* ViewModel */,
 				A5B7D5CA29B3ADD5001D7113 /* Model */,
 			);
 			path = Entities;
@@ -192,6 +357,8 @@
 		A5AE6FE02AA3EF7B00168037 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				A5C55FDC2AA562B500154ED0 /* MainContentView */,
+				A50A1A672AA44AC800A6AD6D /* Root */,
 				A5AE6FE32AA3EF9700168037 /* TherapyChat */,
 				A5AE6FE22AA3EF8B00168037 /* SignUp */,
 				A5AE6FE12AA3EF8300168037 /* Login */,
@@ -239,6 +406,7 @@
 		A5AE6FE52AA3EFA700168037 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				A505865029BC1A13001F1970 /* LoginViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -246,6 +414,10 @@
 		A5AE6FE62AA3EFAC00168037 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				A5B7D5DC29B3D4A5001D7113 /* TherapyChatView.swift */,
+				A5AE6FEB2AA3EFE600168037 /* ContentMessageView.swift */,
+				A596AD1329B43CA900C19DA6 /* SpeechVisualBarView.swift */,
+				A578EACD2AA41BAB00D992AD /* MessageView.swift */,
 				A5B50BDC29C7809B006F8BE1 /* SignUpView.swift */,
 			);
 			path = View;
@@ -254,10 +426,6 @@
 		A5AE6FE72AA3EFB000168037 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				A5B7D5DC29B3D4A5001D7113 /* TherapyChatView.swift */,
-				A5AE6FEB2AA3EFE600168037 /* ContentMessageView.swift */,
-				A5AE6FEA2AA3EFE600168037 /* MessageView.swift */,
-				A596AD1329B43CA900C19DA6 /* SpeechVisualBarView.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -272,6 +440,7 @@
 		A5AE6FE92AA3EFB900168037 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				A5B7D5D529B3B535001D7113 /* TherapyChatModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -288,6 +457,8 @@
 			isa = PBXGroup;
 			children = (
 				A5AE6FEE2AA3F37600168037 /* AppState.swift */,
+				A569DF032AA4488C006D39AA /* DependencyInjector.swift */,
+				A50A1A652AA44A2D00A6AD6D /* ServiceContainer.swift */,
 			);
 			path = Injected;
 			sourceTree = "<group>";
@@ -295,9 +466,15 @@
 		A5B7D5CA29B3ADD5001D7113 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				A57AD7D12AA64C4B008EC1FB /* Error */,
+				A569DEFB2AA44219006D39AA /* Chat */,
+				A569DEFA2AA44083006D39AA /* User */,
+				A51652802AA43E93005E9BC6 /* UserQuote */,
+				A55BCAD92AA439B300C8335E /* Diary */,
+				A55BCAD62AA435F000C8335E /* DailyMood */,
+				A578EACA2AA4187E00D992AD /* Message */,
 				A5AE6FDB2AA3ECCC00168037 /* Conversation */,
 				A5AE6FD82AA3E91D00168037 /* ConversationSummary */,
-				A5B7D5CD29B3AFFD001D7113 /* User.swift */,
 				A5B7D5CF29B3B03C001D7113 /* Enums.swift */,
 				A505865229BCFF2A001F1970 /* AuthenticateMessage.swift */,
 			);
@@ -320,11 +497,28 @@
 		A5B7D5E629B41915001D7113 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				A5CA949C2AA81AD200E25A46 /* LaunchScreen.storyboard */,
+				A5CA949B2AA81ACE00E25A46 /* Localizable.strings */,
 				A5AE6FEC2AA3F00A00168037 /* Assets */,
 				A5B7D5E729B41997001D7113 /* Utilities.swift */,
 				A505865629BD00C8001F1970 /* Extentions.swift */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		A5C55FDC2AA562B500154ED0 /* MainContentView */ = {
+			isa = PBXGroup;
+			children = (
+				A5C55FDD2AA562D300154ED0 /* MainContentView.swift */,
+			);
+			path = MainContentView;
+			sourceTree = "<group>";
+		};
+		A5CA949A2AA81AA100E25A46 /* UnitTest */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = UnitTest;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -344,6 +538,9 @@
 			dependencies = (
 			);
 			name = AITherapist;
+			packageProductDependencies = (
+				A5CA94952AA80F7F00E25A46 /* EnvironmentOverrides */,
+			);
 			productName = AITherapist;
 			productReference = A525EEA629B172BC00A57CE8 /* AITherapist.app */;
 			productType = "com.apple.product-type.application";
@@ -372,6 +569,10 @@
 				Base,
 			);
 			mainGroup = A525EE9D29B172BC00A57CE8;
+			packageReferences = (
+				A5CA94942AA80F7F00E25A46 /* XCRemoteSwiftPackageReference "EnvironmentOverrides" */,
+				A5CA94972AA8167B00E25A46 /* XCRemoteSwiftPackageReference "ViewInspector" */,
+			);
 			productRefGroup = A525EEA729B172BC00A57CE8 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -428,28 +629,58 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A566DCA32AA503EE00920940 /* APICall.swift in Sources */,
+				A55BCAD82AA4371500C8335E /* DailyMood.swift in Sources */,
+				A5CA948F2AA7FE8000E25A46 /* DeepLinksHandler.swift in Sources */,
 				A5B7D5DF29B3D4B3001D7113 /* NetworkManager.swift in Sources */,
+				A50A1A692AA44AF000A6AD6D /* RootViewAppearance.swift in Sources */,
 				A5B7D5D929B3B640001D7113 /* DatabaseManager.swift in Sources */,
 				A5B7D5DD29B3D4A5001D7113 /* TherapyChatView.swift in Sources */,
 				A5AE6FDD2AA3ECF100168037 /* Conversation.swift in Sources */,
 				A5B7D5E829B41997001D7113 /* Utilities.swift in Sources */,
 				A505865529BD003B001F1970 /* PersistentManager.swift in Sources */,
+				A5CA94912AA7FFBC00E25A46 /* PushTokenWebRepository.swift in Sources */,
+				A50A1A6F2AA44D0D00A6AD6D /* AppEnvironment.swift in Sources */,
 				A56E17A029B2DB680077B76B /* SpeakManager.swift in Sources */,
+				A578EACC2AA418A200D992AD /* Message.swift in Sources */,
 				A5B7D5D629B3B535001D7113 /* TherapyChatModel.swift in Sources */,
 				A525EEAC29B172BC00A57CE8 /* ContentView.swift in Sources */,
+				A5CA948B2AA7D74300E25A46 /* ConversationDBRepository.swift in Sources */,
 				A5B7D5CE29B3AFFD001D7113 /* User.swift in Sources */,
+				A57AD7E02AA67B51008EC1FB /* Loadable.swift in Sources */,
+				A569DF022AA44822006D39AA /* SystemEventsHandler.swift in Sources */,
 				A505865329BCFF2A001F1970 /* AuthenticateMessage.swift in Sources */,
+				A5CA94932AA8039D00E25A46 /* UserPermissionsService.swift in Sources */,
+				A569DEFD2AA4423C006D39AA /* Chat.swift in Sources */,
 				A5A708CC29C5342B001BCF2F /* SpeechManager.swift in Sources */,
 				A596AD1429B43CA900C19DA6 /* SpeechVisualBarView.swift in Sources */,
 				A525EEAA29B172BC00A57CE8 /* AITherapistApp.swift in Sources */,
+				A57AD7DA2AA678CB008EC1FB /* LazyList.swift in Sources */,
 				A505865729BD00C8001F1970 /* Extentions.swift in Sources */,
+				A57AD7D52AA65D83008EC1FB /* AuthenticateRepository.swift in Sources */,
 				A5B50BDD29C7809B006F8BE1 /* SignUpView.swift in Sources */,
 				A5AE6FDA2AA3E9AE00168037 /* ConversationSummary.swift in Sources */,
+				A50A1A662AA44A2D00A6AD6D /* ServiceContainer.swift in Sources */,
+				A578EACE2AA41BAB00D992AD /* MessageView.swift in Sources */,
+				A5C55FDB2AA55DBD00154ED0 /* CancelBag.swift in Sources */,
+				A57AD7D32AA64C6D008EC1FB /* Error.swift in Sources */,
+				A5C55FDE2AA562D300154ED0 /* MainContentView.swift in Sources */,
+				A50A1A6B2AA44C9400A6AD6D /* Helper.swift in Sources */,
 				A5A708D029C676A0001BCF2F /* PasswordInputView.swift in Sources */,
+				A569DF002AA447B0006D39AA /* AppDelegate.swift in Sources */,
 				A505864B29BC195C001F1970 /* LoginView.swift in Sources */,
+				A569DF042AA4488C006D39AA /* DependencyInjector.swift in Sources */,
+				A57AD7D82AA6781F008EC1FB /* ConversationService.swift in Sources */,
 				A5B7D5D029B3B03C001D7113 /* Enums.swift in Sources */,
+				A5CA948D2AA7FA6D00E25A46 /* PushNotificationsHandler.swift in Sources */,
+				A57AD7D02AA64AB8008EC1FB /* ConversationRepository.swift in Sources */,
+				A569DF072AA448E9006D39AA /* Store.swift in Sources */,
+				A516527F2AA43A87005E9BC6 /* Diary.swift in Sources */,
 				A505865129BC1A13001F1970 /* LoginViewModel.swift in Sources */,
 				A5AE6FEF2AA3F37600168037 /* AppState.swift in Sources */,
+				A578EACF2AA41BEF00D992AD /* ContentMessageView.swift in Sources */,
+				A566DCA12AA503A200920940 /* WebRepository.swift in Sources */,
+				A50A1A6D2AA44CE000A6AD6D /* SceneDelegate.swift in Sources */,
 				A5A708CE29C67227001BCF2F /* UsernameInputView.swift in Sources */,
 				A596AD1229B4385100C19DA6 /* MicManager.swift in Sources */,
 			);
@@ -584,10 +815,10 @@
 				DEVELOPMENT_TEAM = 39957QBL2C;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = AITherapist/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Audio is recorded to transcribe the meeting. Audio recordings are discarded after transcription.”";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "You can view a text transcription of your meeting in the app.";
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -618,10 +849,10 @@
 				DEVELOPMENT_TEAM = 39957QBL2C;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = AITherapist/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Audio is recorded to transcribe the meeting. Audio recordings are discarded after transcription.”";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "You can view a text transcription of your meeting in the app.";
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -662,6 +893,33 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		A5CA94942AA80F7F00E25A46 /* XCRemoteSwiftPackageReference "EnvironmentOverrides" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/nalexn/EnvironmentOverrides";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.0.4;
+			};
+		};
+		A5CA94972AA8167B00E25A46 /* XCRemoteSwiftPackageReference "ViewInspector" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/nalexn/ViewInspector";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.9.8;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A5CA94952AA80F7F00E25A46 /* EnvironmentOverrides */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A5CA94942AA80F7F00E25A46 /* XCRemoteSwiftPackageReference "EnvironmentOverrides" */;
+			productName = EnvironmentOverrides;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = A525EE9E29B172BC00A57CE8 /* Project object */;
 }

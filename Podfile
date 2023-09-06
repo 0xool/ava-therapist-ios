@@ -5,6 +5,7 @@ target 'AITherapist' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
 
+#  pod 'ViewInspector'
   pod 'Alamofire', '~> 5.8'
 pod 'AlamofireImage', '~> 4.2'
   pod 'RealmSwift', '~> 10.42'

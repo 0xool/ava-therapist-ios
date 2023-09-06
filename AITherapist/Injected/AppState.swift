@@ -4,6 +4,8 @@
 //
 //  Created by cyrus refahi on 9/2/23.
 //
+
+
 import SwiftUI
 import Combine
 
@@ -27,8 +29,8 @@ extension AppState {
 
 extension AppState {
     struct ViewRouting: Equatable {
-        var countriesList = CountriesList.Routing()
-        var countryDetails = CountryDetails.Routing()
+//        var countriesList = CountriesList.Routing()
+//        var countryDetails = CountryDetails.Routing()
     }
 }
 
