@@ -19,6 +19,10 @@ class Message: Object, Codable {
         case isUser = "IsUser"
     }
     
+    override init() {
+        super.init()
+    }
+    
     init(id: Int = 0, content: String, isUser: Bool) {
         super.init()
         

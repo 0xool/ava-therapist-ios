@@ -20,16 +20,21 @@ struct MainContentView: View {
             if viewModel.isRunningTests {
                 Text("Running unit tests")
             }else{
-                Text("WOOOOHOOOOO!!!!")
+                if (viewModel.container.appState[\.userData.user] == nil){
+                    AuthenticationView(viewModel: .init(container: viewModel.container))
+                                            .attachEnvironmentOverrides(onChange: viewModel.onChangeHandler)
+                                            .modifier(RootViewAppearance(viewModel: .init(container: viewModel.container)))
+                                            
+                                            
+                }else{
+                    Text("LOGGED IN!!!")
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    
+                }
             }
-            
-            
-//            } else {
-//                CountriesList(viewModel: .init(container: viewModel.container))
-//                    .attachEnvironmentOverrides(onChange: viewModel.onChangeHandler)
-//                    .modifier(RootViewAppearance(viewModel: .init(container: viewModel.container)))
-//            }
         }
+        .background(Color(red: 220/255, green: 255/255, blue: 253/255))
+        .animation(.easeIn, value: viewModel.container.appState[\.userData.user])
     }
 }
 
@@ -40,10 +45,16 @@ extension MainContentView {
         
         let container: DIContainer
         let isRunningTests: Bool
+        var anyCancellable: AnyCancellable? = nil
         
-        init(container: DIContainer, isRunningTests: Bool = ProcessInfo.processInfo.isRunningTests) {
+        init(container: DIContainer, isRunningTests: Bool = ProcessInfo.processInfo.isRunningTests){
             self.container = container
             self.isRunningTests = isRunningTests
+            self.container.services.authenticationService.checkUserLoggedStatus()
+            
+            anyCancellable = container.appState.value.userData.objectWillChange.sink { (_) in
+                self.objectWillChange.send()
+            }
         }
         
         var onChangeHandler: (EnvironmentValues.Diff) -> Void {
@@ -53,6 +64,10 @@ extension MainContentView {
                 }
             }
         }
+        
+//        func loadCountries() {
+//            self.container.services.conversationService.loadConversationList(conversations: loadableSubject(\.conversations))
+//        }
     }
 }
 

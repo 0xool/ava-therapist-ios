@@ -16,7 +16,6 @@ struct DIContainer: EnvironmentKey {
     let services: Services
     
     static var defaultValue: Self { Self.default }
-    
     private static let `default` = DIContainer(appState: AppState(), services: .stub)
     
     init(appState: Store<AppState>, services: DIContainer.Services) {

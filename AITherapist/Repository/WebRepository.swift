@@ -24,49 +24,67 @@ import Combine
 
 protocol WebRepository {
     var baseURL: String { get }
-    func GetRequest<D>(pathVariable: String?, params: [String : Any], url: String) -> AnyPublisher<D, Error> where D : Decodable
-    func SendRequest<D>(pathVariable: String?, params: [String : Any], url: String) -> AnyPublisher<D, Error> where D : Decodable
+    func GetRequest<D>(pathVariable: String?, params: [String : Any]?, url: String) -> AnyPublisher<D, Error> where D : Decodable
+    func SendRequest<D>(pathVariable: String?, params: [String : Any]?, url: String) -> AnyPublisher<D, Error> where D : Decodable
 }
 
 
 extension WebRepository {
     
-    func GetRequest<D>(pathVariable: String?, params: [String : Any], url: String) -> AnyPublisher<D, Error> where D : Decodable  {
-
-        return AF.request(url,
-                          method: .get, parameters: params)
-            .validate()
-            .publishDecodable(type: D.self)
-            .map { response in
-                response.mapError { error in
-                    let backendError = response.data.flatMap { try? JSONDecoder().decode(BackendError.self, from: $0)}
-                    return NetworkError(initialError: error, backendError: backendError)
-                } as! D
-            }
-            .receive(on: DispatchQueue.main)
-            .setFailureType(to: Error.self)
-            .eraseToAnyPublisher()
+    private func generateCookie() {
+        let cookieProps = [
+            HTTPCookiePropertyKey.domain: "aitherapist.online",
+            HTTPCookiePropertyKey.path: "/",
+            HTTPCookiePropertyKey.name: "jwt",
+            HTTPCookiePropertyKey.value: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiaWF0IjoxNjk0MDQzODUyLCJleHAiOjE2OTc2NDM4NTJ9.XZ5eG2Hgu6ecm_QFts0rKuoALyOK1BYYssqIUjkDfhA"
+           ]
+        
+        if let cookie = HTTPCookie(properties: cookieProps) {
+            AF.session.configuration.httpCookieStorage?.setCookie(cookie)
+        }
+        
     }
     
-    func SendRequest<D>( pathVariable: String?, params: [String : Any], url: String) -> AnyPublisher<D, Error> where D : Decodable {
-
+    func GetRequest<D>(pathVariable: String?, params: [String : Any]?, url: String) -> AnyPublisher<D, Error> where D : Decodable  {
+        
+        generateCookie()
+        
         return AF.request(url,
-                          method: .post, parameters: params)
-            .validate()
-            .publishDecodable(type: D.self)
-            .map { response in
-                response.mapError { error in
-                    let backendError = response.data.flatMap { try? JSONDecoder().decode(BackendError.self, from: $0)}
-                    return NetworkError(initialError: error, backendError: backendError)
-                } as! D
-            }
-            .receive(on: DispatchQueue.main)
-            .setFailureType(to: Error.self)
-            .eraseToAnyPublisher()
+                          method: .get, parameters: params)
+        .validate()
+        .publishDecodable(type: D.self)
+        .value()
+        .mapError{
+            $0 as Error
+            
+        }
+        .receive(on: DispatchQueue.main)
+        .eraseToAnyPublisher()
     }
-
+    
+    func SendRequest<D>(pathVariable: String?, params: [String : Any]?, url: String) -> AnyPublisher<D, Error> where D : Decodable  {
+        return AF.request(url,
+                          method: .post, parameters: params, encoding: Alamofire.JSONEncoding.default)        
+        .validate()
+        .publishDecodable(type: D.self)
+        .value()
+        .mapError{
+            $0 as Error
+        }
+        .receive(on: DispatchQueue.main)
+        .print("Debugging")
+        .eraseToAnyPublisher()
+    }
+    
 }
 
+
+enum ClientError: Error {
+    case invalidURL
+    case httpCode(HTTPCode)
+    case unexpectedResponse
+    case imageDeserialization
+}
 
 //
 //protocol WebRepository {

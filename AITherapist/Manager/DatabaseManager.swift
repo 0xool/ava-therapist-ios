@@ -12,12 +12,67 @@ import Combine
 class DataBaseManager {
     
     static let Instance = DataBaseManager()
-    let realm: Realm
+    private let realm: Realm
     private var cancellable: AnyCancellable?
 
     
     init() {
         realm = try! Realm()
+    }
+    
+    func getDB() -> Realm {
+        return realm
+    }
+    
+    func hasLoadedUser() -> AnyPublisher<Bool, Error> {
+        let userCount = realm.objects(User.self).count
+        return Just(userCount > 0)
+            .setFailureType(to: Error.self)
+            .eraseToAnyPublisher()
+    }
+    
+    func readUser() -> AnyPublisher<User, Error> {
+        let user = Array(realm.objects(User.self))
+        
+        if user.count == 0 {
+            return Fail(error: DataBaseError.UserIsNil)
+                .eraseToAnyPublisher()
+        }
+        
+        return Just(user.first!)
+            .setFailureType(to: Error.self)
+            .eraseToAnyPublisher()
+    }
+    
+    func writeUserData(user: User) -> AnyPublisher<Void, Error>{        
+        return Future<Void, Error> { [weak self] promise in
+               guard let self = self else {
+                   promise(.failure(DataBaseError.SelfIsNil))
+                   return
+               }
+               
+               if !self.userExists(id: user.id)  {
+                   do {
+                       try self.realm.write {
+                           self.realm.add(user)
+                       }
+                       promise(.success(()))
+                   } catch {
+                       promise(.failure(error))
+                   }
+               } else {
+                   do {
+                       try self.realm.write {
+                           self.realm.delete(user)
+                           self.realm.add(user)
+                       }
+                       promise(.success(()))
+                   } catch {
+                       promise(.failure(error))
+                   }
+               }
+           }
+           .eraseToAnyPublisher()
     }
     
     func hasLoadedConversations() -> AnyPublisher<Bool, Error> {
@@ -38,7 +93,7 @@ class DataBaseManager {
     func writeConversationData(conversation: Conversation) -> AnyPublisher<Void, Error> {
         return Future<Void, Error> { [weak self] promise in
                guard let self = self else {
-                   promise(.failure(MyError.selfIsNil))
+                   promise(.failure(DataBaseError.SelfIsNil))
                    return
                }
                
@@ -85,6 +140,10 @@ class DataBaseManager {
     func deleteConversation(conversation: Conversation) {
         realm.delete(conversation)
     }
+    
+    func deleteUser(user: User) {
+        realm.delete(user)
+    }
 //
 //    func deleteRecipeDataByID(favRecipeID: Int) {
 //        if(favRecipeExist(id: favRecipeID)){
@@ -100,12 +159,16 @@ class DataBaseManager {
     private func conversationExist(id: Int) -> Bool {
         return realm.object(ofType: Conversation.self, forPrimaryKey: id) != nil
     }
+
+    private func userExists(id: Int) -> Bool {
+        return realm.object(ofType: Conversation.self, forPrimaryKey: id) != nil
+    } 
     
 }
 
 extension DataBaseManager {
-    enum MyError: Error {
-        case selfIsNil
+    enum DataBaseError: Error {
+        case SelfIsNil
+        case UserIsNil
     }
 }
-

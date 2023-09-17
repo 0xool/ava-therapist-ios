@@ -8,27 +8,31 @@
 import Foundation
 import RealmSwift
 
-class User: Identifiable, Decodable {
-    var id: Int = 0
-    var userName: String = ""
-    var token: String
-    var userFeeling: UserFeeling?
+class User: Object, Decodable {
+    @Persisted(primaryKey: true) var id: Int
+    @Persisted var token: String
     
+    override init() {
+        super.init()
+    }
+    
+    init(id: Int, token: String) {
+        super.init()
+        self.id = id
+        self.token = token
+    }
+    
+    required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self._id = try container.decode(Persisted<Int>.self, forKey: .id)
+        self._token = try container.decode(Persisted<String>.self, forKey: .token)
+    }
 //    var questions: [String:String]
     
     enum CodingKeys: String, CodingKey {
         case id
-        case userName
         case token
-//        case userFeeling
     }
-
-    init(id: Int, userName: String, token: String) {
-        self.id = id
-        self.userName = userName
-        self.token = token
-    }
-    
 }
 
 class UserToBeReplaced: Object, Codable {
@@ -53,6 +57,10 @@ class UserToBeReplaced: Object, Codable {
         case email = "Email"
         case generalSummary = "GeneralSummary"
         case token = "Token"
+    }
+    
+    override init() {
+        super.init()
     }
     
     required init(from decoder: Decoder) throws {

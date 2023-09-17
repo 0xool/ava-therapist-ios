@@ -27,6 +27,10 @@ class Chat: Object, Codable {
         case dateCreated = "DateCreated"
     }
     
+    override init() {
+        super.init()
+    }
+    
     required init(from decoder: Decoder) throws {
         super.init()
         let container = try decoder.container(keyedBy: CodingKeys.self)

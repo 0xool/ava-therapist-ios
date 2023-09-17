@@ -45,6 +45,7 @@ extension AppEnvironment {
             container: diContainer, deepLinksHandler: deepLinksHandler,
             pushNotificationsHandler: pushNotificationsHandler,
             pushTokenWebRepository: webRepositories.pushTokenWebRepository)
+        
         return AppEnvironment(container: diContainer,
                               systemEventsHandler: systemEventsHandler)
     }
@@ -53,16 +54,18 @@ extension AppEnvironment {
         let configuration = URLSessionConfiguration.default
         configuration.timeoutIntervalForRequest = 60
         configuration.timeoutIntervalForResource = 120
+        
         configuration.waitsForConnectivity = true
         configuration.httpMaximumConnectionsPerHost = 5
         configuration.requestCachePolicy = .returnCacheDataElseLoad
+        
         configuration.urlCache = .shared
         return URLSession(configuration: configuration)
     }
 
     
     private static func configuredWebRepositories(session: URLSession) -> DIContainer.WebRepositories {
-        let baseURL: String = "https://aitherapist.online:3000/"
+        let baseURL: String = "http://localhost:3000/"//"https://aitherapist.online:3000/"
 
 //        let countriesWebRepository = RealCountriesWebRepository(
 //            session: session,
@@ -70,30 +73,31 @@ extension AppEnvironment {
 //        let imageWebRepository = RealImageWebRepository(
 //            session: session,
 //            baseURL: "https://ezgif.com")
+        
+        let authenticationWebRepository = MainAuthenticateRepository(baseURL: baseURL)
         let pushTokenWebRepository = RealPushTokenWebRepository(
             session: session,
             baseURL: "https://fake.backend.com")
         let conversationWebRepository = MainConversationRepository(baseURL: baseURL)
-        return .init(conversationRepository: conversationWebRepository, pushTokenWebRepository: pushTokenWebRepository)
+        return .init(conversationRepository: conversationWebRepository, pushTokenWebRepository: pushTokenWebRepository, authenticationRepository: authenticationWebRepository)
     }
     
     private static func configuredDBRepositories(appState: Store<AppState>) -> DIContainer.DBRepositories {
 //        let persistentStore = CoreDataStack(version: CoreDataStack.Version.actual)
         let conversationDBRepository = MainConversationDBRepository()
-        return .init(conversationRepository: conversationDBRepository)
+        let userDBRepository = MainUserDBRepository()
+        return .init(conversationRepository: conversationDBRepository, userRepository: userDBRepository)
     }
     
     private static func configuredServices(appState: Store<AppState>,
                                            dbRepositories: DIContainer.DBRepositories,
                                            webRepositories: DIContainer.WebRepositories
     ) -> DIContainer.Services {
-        
         let conversationService = MainConversationService(conversationRepository: webRepositories.conversationRepository, appState: appState, conversationDBRepository: dbRepositories.conversationRepository)
-        
-        
 //        let imagesService = RealImagesService(
 //            webRepository: webRepositories.imageRepository)
 //
+        let authenticationService = MainAuthenticateService(appState: appState, authenticateRepository: webRepositories.authenticationRepository, userDBRepository: dbRepositories.userRepository)
         let userPermissionsService = MainUserPermissionsService(
             appState: appState, openAppSettings: {
                 URL(string: UIApplication.openSettingsURLString).flatMap {
@@ -101,7 +105,7 @@ extension AppEnvironment {
                 }
             })
         
-        return .init(conversationService: conversationService, userPermissionsService: userPermissionsService)
+        return .init(conversationService: conversationService, userPermissionsService: userPermissionsService, authenticationService: authenticationService)
     }
 }
 
@@ -110,9 +114,11 @@ extension DIContainer {
 //        let imageRepository: ImageWebRepository
         let conversationRepository: ConversationRepository
         let pushTokenWebRepository: PushTokenWebRepository
+        let authenticationRepository: AuthenticateRepository
     }
 
     struct DBRepositories {
         let conversationRepository: ConversationDBRepository
+        let userRepository: UserDBRepository
     }
 }

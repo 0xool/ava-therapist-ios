@@ -54,7 +54,6 @@ struct MainConversationService: ConversationService {
         return conversationRepository
             .loadConversationList()
             .ensureTimeSpan(requestHoldBackTimeInterval)
-            .ensureTimeSpan(requestHoldBackTimeInterval)
             .map { [conversationDBRepository] in
                 for conversation in $0 {
                     _ = conversationDBRepository.store(conversation: conversation)

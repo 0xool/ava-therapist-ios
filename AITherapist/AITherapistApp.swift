@@ -12,7 +12,7 @@ struct AITherapistApp: App {
 
     var body: some Scene {
         WindowGroup {
-            TherapyChatView()
+//            TherapyChatView()
         }
     }
 }

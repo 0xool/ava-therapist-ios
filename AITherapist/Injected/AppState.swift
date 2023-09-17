@@ -17,7 +17,12 @@ struct AppState: Equatable {
 }
 
 extension AppState {
-    struct UserData: Equatable {
+    class UserData: Equatable, ObservableObject{
+        static func == (lhs: AppState.UserData, rhs: AppState.UserData) -> Bool {
+            lhs.user == rhs.user
+        }
+        
+        @Published var user: User?
         /*
          The list of countries (Loadable<[Country]>) used to be stored here.
          It was removed for performing countries' search by name inside a database,
@@ -29,6 +34,7 @@ extension AppState {
 
 extension AppState {
     struct ViewRouting: Equatable {
+//        var user = User.R
 //        var countriesList = CountriesList.Routing()
 //        var countryDetails = CountryDetails.Routing()
     }

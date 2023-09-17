@@ -23,11 +23,14 @@ struct MainConversationRepository: ConversationRepository {
     }
     
     func loadConversationList() -> AnyPublisher<[Conversation], Error> {
+                
+        let request: AnyPublisher<ConversationsResponse, Error> = GetRequest(pathVariable: nil, params: nil, url: getPath(api: .allConversations))
         
-        let params = ["userId" : "1"]   
-        
-        let request: AnyPublisher<[Conversation], Error> = GetRequest(pathVariable: nil, params: params, url: getPath(api: .allConversations))
         return request
+            .map{
+                print($0)
+                return $0.conversations
+            }
             .eraseToAnyPublisher()
     }
     

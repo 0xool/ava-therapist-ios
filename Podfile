@@ -6,8 +6,9 @@ target 'AITherapist' do
   use_frameworks!
 
 #  pod 'ViewInspector'
+  pod 'lottie-ios', '~> 4.2'
   pod 'Alamofire', '~> 5.8'
-pod 'AlamofireImage', '~> 4.2'
+  pod 'AlamofireImage', '~> 4.2'
   pod 'RealmSwift', '~> 10.42'
   pod 'FDSoundActivatedRecorder', '~> 3.1' 
  # Pods for AITherapist

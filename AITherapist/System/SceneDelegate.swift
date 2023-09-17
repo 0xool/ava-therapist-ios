@@ -19,6 +19,7 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession,
                options connectionOptions: UIScene.ConnectionOptions) {
         let environment = AppEnvironment.bootstrap()
+        
         let contentView = MainContentView(viewModel: MainContentView.ViewModel(container: environment.container))
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)
@@ -26,7 +27,7 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             self.window = window
             window.makeKeyAndVisible()
         }
-//        self.systemEventsHandler = environment.systemEventsHandler
+        self.systemEventsHandler = environment.systemEventsHandler
         if !connectionOptions.urlContexts.isEmpty {
             systemEventsHandler?.sceneOpenURLContexts(connectionOptions.urlContexts)
         }
