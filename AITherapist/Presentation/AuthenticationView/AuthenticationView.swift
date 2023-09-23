@@ -20,21 +20,7 @@ struct AuthenticationView: View {
     
     var body: some View {
         self.content
-            .background(Color(red: 220/255, green: 255/255, blue: 253/255))
-        //        GeometryReader { geometry in
-        //            NavigationView {
-        //                self.content
-        //                    .navigationBarItems(trailing: self.permissionsButton)
-        //                    .navigationBarTitle("Login/SignUp")
-        //
-        //            }
-        //            .navigationViewStyle(DoubleColumnNavigationViewStyle())
-        //            .toolbarBackground(
-        //                            .pink,
-        //                            for: .navigationBar)
-        //        }
-        //        .modifier(viewModel.localeReader)
-        //        .onReceive(inspection.notice) { self.inspection.visit(self, $0) }
+            .background(Color(red: 220/255, green: 255/255, blue: 253/255))        
     }
     
     @ViewBuilder private var content: some View {

@@ -27,9 +27,7 @@ struct MainContentView: View {
                                             
                                             
                 }else{
-                    Text("LOGGED IN!!!")
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    
+                    MainView(viewModel: .init(container: viewModel.container))
                 }
             }
         }

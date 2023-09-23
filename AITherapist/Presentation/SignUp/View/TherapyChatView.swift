@@ -9,6 +9,13 @@ import SwiftUI
 import AVFoundation
 import Speech
 import Combine
+
+struct TherapyChatView: View{
+    var body: some View{
+        Text("Ava Chat")
+    }
+}
+
 //
 //struct TherapyChatView: View {
 //    //    @EnvironmentObject var chatHelper: ChatHelper

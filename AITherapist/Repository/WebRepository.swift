@@ -26,12 +26,26 @@ protocol WebRepository {
     var baseURL: String { get }
     func GetRequest<D>(pathVariable: String?, params: [String : Any]?, url: String) -> AnyPublisher<D, Error> where D : Decodable
     func SendRequest<D>(pathVariable: String?, params: [String : Any]?, url: String) -> AnyPublisher<D, Error> where D : Decodable
+    func SetCookie(cookie: String)
 }
 
 
 extension WebRepository {
     
-    private func generateCookie() {
+    func SetCookie(cookie: String) {
+        let cookieProps = [
+            HTTPCookiePropertyKey.domain: "aitherapist.online",
+            HTTPCookiePropertyKey.path: "/",
+            HTTPCookiePropertyKey.name: "jwt",
+            HTTPCookiePropertyKey.value: cookie
+           ]
+        
+        if let cookie = HTTPCookie(properties: cookieProps) {
+            AF.session.configuration.httpCookieStorage?.setCookie(cookie)
+        }
+    }
+    
+    private func generateTestCookie() {
         let cookieProps = [
             HTTPCookiePropertyKey.domain: "aitherapist.online",
             HTTPCookiePropertyKey.path: "/",
@@ -46,9 +60,7 @@ extension WebRepository {
     }
     
     func GetRequest<D>(pathVariable: String?, params: [String : Any]?, url: String) -> AnyPublisher<D, Error> where D : Decodable  {
-        
-        generateCookie()
-        
+                
         return AF.request(url,
                           method: .get, parameters: params)
         .validate()
@@ -72,7 +84,6 @@ extension WebRepository {
             $0 as Error
         }
         .receive(on: DispatchQueue.main)
-        .print("Debugging")
         .eraseToAnyPublisher()
     }
     

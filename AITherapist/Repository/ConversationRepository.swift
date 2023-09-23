@@ -34,22 +34,19 @@ struct MainConversationRepository: ConversationRepository {
             .eraseToAnyPublisher()
     }
     
-//    func loadConversationChat(conversation: Conversation) -> AnyPublisher<[Message], Error> {
-//
-//
-////        return AnyPublisher
-//    }
-    
 }
 
 extension MainConversationRepository {
     
     enum API: String {
         case allConversations = "getConversationList"
+        case addConversation = "addConversation"
     }
     
     func getPath(api: API) -> String {
         switch api {
+        case .addConversation:
+            return "\(baseURL)\(ConversationAPI)/\(api.rawValue)"
         case .allConversations:
             return "\(baseURL)\(ConversationAPI)/\(api.rawValue)"
         }

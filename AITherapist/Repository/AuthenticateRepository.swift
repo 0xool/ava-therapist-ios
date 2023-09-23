@@ -8,13 +8,13 @@
 import Foundation
 import Combine
 
+// Refactor this in both the backend and frontend to fix this respose setup
 struct AuthenticateResponse: Decodable {
     var message: String
     var code: Int
     var auth: Bool
     let token: String
     let id: Int
-//    
 //    enum CodingKeys: String, CodingKey {
 //        case id = "id"
 //        case message = "message"
@@ -50,8 +50,12 @@ struct MainAuthenticateRepository: AuthenticateRepository {
         let params = ["user": ["username" : email , "password" : password]]
         let request: AnyPublisher<AuthenticateResponse, Error> = SendRequest(pathVariable: nil, params: params, url: getPath(api: .login))
         
+        // Refactor this code to remove setting variables inside this call back
         return request.map { (response) -> User in
-            return User(id: response.id, token: response.token)
+            let token = response.token
+            let id = response.id
+            self.SetCookie(cookie: token)
+            return User(id: id, token: token)
         }.eraseToAnyPublisher()
     }
     
@@ -62,7 +66,6 @@ struct MainAuthenticateRepository: AuthenticateRepository {
 }
 
 extension MainAuthenticateRepository {
-    
     enum API: String {
         case login = "login"
         case register = "register/"
