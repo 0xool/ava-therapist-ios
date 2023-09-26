@@ -159,4 +159,12 @@ extension UIApplication {
     
 }
 
+func convertStringToDate(_ dateString: String) -> Date? {
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+    dateFormatter.timeZone = TimeZone(identifier: "UTC") // Assuming the input string is in UTC
+    
+    return dateFormatter.date(from: dateString)
+}
+
 

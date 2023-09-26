@@ -23,6 +23,7 @@ extension AppState {
         }
         
         @Published var user: User?
+        @Published var insight: Insight?
         /*
          The list of countries (Loadable<[Country]>) used to be stored here.
          It was removed for performing countries' search by name inside a database,

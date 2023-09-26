@@ -15,7 +15,6 @@ class DataBaseManager {
     private let realm: Realm
     private var cancellable: AnyCancellable?
 
-    
     init() {
         realm = try! Realm()
     }
@@ -166,9 +165,7 @@ class DataBaseManager {
     
 }
 
-extension DataBaseManager {
-    enum DataBaseError: Error {
-        case SelfIsNil
-        case UserIsNil
-    }
+public enum DataBaseError: Error {
+    case SelfIsNil
+    case UserIsNil
 }

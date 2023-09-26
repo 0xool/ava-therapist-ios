@@ -79,14 +79,16 @@ extension AppEnvironment {
             session: session,
             baseURL: "https://fake.backend.com")
         let conversationWebRepository = MainConversationRepository(baseURL: baseURL)
-        return .init(conversationRepository: conversationWebRepository, pushTokenWebRepository: pushTokenWebRepository, authenticationRepository: authenticationWebRepository)
+        let insightWebRepository = MainIsightRepository(baseURL: baseURL)
+        return .init(conversationRepository: conversationWebRepository, pushTokenWebRepository: pushTokenWebRepository, authenticationRepository: authenticationWebRepository, insightRepository: insightWebRepository)
     }
     
     private static func configuredDBRepositories(appState: Store<AppState>) -> DIContainer.DBRepositories {
 //        let persistentStore = CoreDataStack(version: CoreDataStack.Version.actual)
         let conversationDBRepository = MainConversationDBRepository()
         let userDBRepository = MainUserDBRepository()
-        return .init(conversationRepository: conversationDBRepository, userRepository: userDBRepository)
+        let insightDBRepository = MainInsightDBRepository()
+        return .init(conversationRepository: conversationDBRepository, userRepository: userDBRepository, insightRepository: insightDBRepository)
     }
     
     private static func configuredServices(appState: Store<AppState>,
@@ -94,9 +96,7 @@ extension AppEnvironment {
                                            webRepositories: DIContainer.WebRepositories
     ) -> DIContainer.Services {
         let conversationService = MainConversationService(conversationRepository: webRepositories.conversationRepository, appState: appState, conversationDBRepository: dbRepositories.conversationRepository)
-//        let imagesService = RealImagesService(
-//            webRepository: webRepositories.imageRepository)
-//
+        let insightService = MainInsightService(insightRepository: webRepositories.insightRepository, appState: appState, conversationDBRepository: dbRepositories.insightRepository)
         let authenticationService = MainAuthenticateService(appState: appState, authenticateRepository: webRepositories.authenticationRepository, userDBRepository: dbRepositories.userRepository)
         let userPermissionsService = MainUserPermissionsService(
             appState: appState, openAppSettings: {
@@ -105,7 +105,8 @@ extension AppEnvironment {
                 }
             })
         
-        return .init(conversationService: conversationService, userPermissionsService: userPermissionsService, authenticationService: authenticationService)
+        
+        return .init(conversationService: conversationService, userPermissionsService: userPermissionsService, authenticationService: authenticationService, insightService: insightService)
     }
 }
 
@@ -115,10 +116,13 @@ extension DIContainer {
         let conversationRepository: ConversationRepository
         let pushTokenWebRepository: PushTokenWebRepository
         let authenticationRepository: AuthenticateRepository
+        
+        let insightRepository: InsightRepository
     }
 
     struct DBRepositories {
         let conversationRepository: ConversationDBRepository
         let userRepository: UserDBRepository
+        let insightRepository: InsightDBRepository
     }
 }

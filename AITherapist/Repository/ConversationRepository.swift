@@ -23,7 +23,7 @@ struct MainConversationRepository: ConversationRepository {
     }
     
     func loadConversationList() -> AnyPublisher<[Conversation], Error> {
-                
+        
         let request: AnyPublisher<ConversationsResponse, Error> = GetRequest(pathVariable: nil, params: nil, url: getPath(api: .allConversations))
         
         return request
@@ -33,7 +33,6 @@ struct MainConversationRepository: ConversationRepository {
             }
             .eraseToAnyPublisher()
     }
-    
 }
 
 extension MainConversationRepository {

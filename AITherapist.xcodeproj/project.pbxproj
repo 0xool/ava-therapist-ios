@@ -17,10 +17,13 @@
 		A50A1A6B2AA44C9400A6AD6D /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50A1A6A2AA44C9400A6AD6D /* Helper.swift */; };
 		A50A1A6D2AA44CE000A6AD6D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50A1A6C2AA44CE000A6AD6D /* SceneDelegate.swift */; };
 		A50A1A6F2AA44D0D00A6AD6D /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50A1A6E2AA44D0D00A6AD6D /* AppEnvironment.swift */; };
+		A50B16792AC26BA400571D27 /* InsightService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50B16782AC26BA400571D27 /* InsightService.swift */; };
+		A50B167B2AC26D3300571D27 /* InsightDBRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50B167A2AC26D3300571D27 /* InsightDBRepository.swift */; };
+		A50B167D2AC26D7400571D27 /* InsightRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50B167C2AC26D7400571D27 /* InsightRepository.swift */; };
+		A50F0E552AC1233B0081AD4C /* GeneralUserSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50F0E542AC1233B0081AD4C /* GeneralUserSummary.swift */; };
 		A516527F2AA43A87005E9BC6 /* Diary.swift in Sources */ = {isa = PBXBuildFile; fileRef = A516527E2AA43A87005E9BC6 /* Diary.swift */; };
 		A525EEAA29B172BC00A57CE8 /* AITherapistApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A525EEA929B172BC00A57CE8 /* AITherapistApp.swift */; };
 		A525EEAC29B172BC00A57CE8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A525EEAB29B172BC00A57CE8 /* ContentView.swift */; };
-		A55BCAD82AA4371500C8335E /* DailyMood.swift in Sources */ = {isa = PBXBuildFile; fileRef = A55BCAD72AA4371500C8335E /* DailyMood.swift */; };
 		A566DCA12AA503A200920940 /* WebRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A566DCA02AA503A200920940 /* WebRepository.swift */; };
 		A566DCA32AA503EE00920940 /* APICall.swift in Sources */ = {isa = PBXBuildFile; fileRef = A566DCA22AA503EE00920940 /* APICall.swift */; };
 		A569DEFD2AA4423C006D39AA /* Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = A569DEFC2AA4423C006D39AA /* Chat.swift */; };
@@ -76,6 +79,9 @@
 		A5CA94AC2AAA7EF500E25A46 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5CA94AB2AAA7EF500E25A46 /* ErrorView.swift */; };
 		A5CA94AE2AAA7F3800E25A46 /* ActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5CA94AD2AAA7F3800E25A46 /* ActivityIndicatorView.swift */; };
 		A5CA94BA2AAAB6F400E25A46 /* splashScreen.json in Resources */ = {isa = PBXBuildFile; fileRef = A5CA94B52AAAA4E300E25A46 /* splashScreen.json */; };
+		A5EFC5912AC1072300D6097B /* Insight.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5EFC5902AC1072300D6097B /* Insight.swift */; };
+		A5EFC5932AC10F0C00D6097B /* Quote.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5EFC5922AC10F0C00D6097B /* Quote.swift */; };
+		A5EFC5962AC10FC600D6097B /* Mood.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5EFC5952AC10FC600D6097B /* Mood.swift */; };
 		F5BED7ECE5A1009911E9192C /* Pods_AITherapist.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 470052D87753E53A6EB3A9BF /* Pods_AITherapist.framework */; };
 /* End PBXBuildFile section */
 
@@ -92,13 +98,16 @@
 		A50A1A6A2AA44C9400A6AD6D /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		A50A1A6C2AA44CE000A6AD6D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		A50A1A6E2AA44D0D00A6AD6D /* AppEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
+		A50B16782AC26BA400571D27 /* InsightService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightService.swift; sourceTree = "<group>"; };
+		A50B167A2AC26D3300571D27 /* InsightDBRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightDBRepository.swift; sourceTree = "<group>"; };
+		A50B167C2AC26D7400571D27 /* InsightRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsightRepository.swift; sourceTree = "<group>"; };
+		A50F0E542AC1233B0081AD4C /* GeneralUserSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralUserSummary.swift; sourceTree = "<group>"; };
 		A516527E2AA43A87005E9BC6 /* Diary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Diary.swift; sourceTree = "<group>"; };
 		A525EEA629B172BC00A57CE8 /* AITherapist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AITherapist.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A525EEA929B172BC00A57CE8 /* AITherapistApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AITherapistApp.swift; sourceTree = "<group>"; };
 		A525EEAB29B172BC00A57CE8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		A525EEAD29B172BF00A57CE8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A525EEB029B172BF00A57CE8 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		A55BCAD72AA4371500C8335E /* DailyMood.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DailyMood.swift; path = DailyMood2/DailyMood.swift; sourceTree = "<group>"; };
 		A566DCA02AA503A200920940 /* WebRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebRepository.swift; sourceTree = "<group>"; };
 		A566DCA22AA503EE00920940 /* APICall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APICall.swift; sourceTree = "<group>"; };
 		A569DEFC2AA4423C006D39AA /* Chat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chat.swift; sourceTree = "<group>"; };
@@ -155,6 +164,9 @@
 		A5CA94AB2AAA7EF500E25A46 /* ErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
 		A5CA94AD2AAA7F3800E25A46 /* ActivityIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicatorView.swift; sourceTree = "<group>"; };
 		A5CA94B52AAAA4E300E25A46 /* splashScreen.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = splashScreen.json; path = AITherapist/Resources/Assets/AfterEffects/splashScreen.json; sourceTree = SOURCE_ROOT; };
+		A5EFC5902AC1072300D6097B /* Insight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Insight.swift; sourceTree = "<group>"; };
+		A5EFC5922AC10F0C00D6097B /* Quote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Quote.swift; sourceTree = "<group>"; };
+		A5EFC5952AC10FC600D6097B /* Mood.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mood.swift; sourceTree = "<group>"; };
 		E42015C30DF5C284A403DE1D /* Pods-AITherapist.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AITherapist.debug.xcconfig"; path = "Target Support Files/Pods-AITherapist/Pods-AITherapist.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -196,12 +208,21 @@
 			path = Root;
 			sourceTree = "<group>";
 		};
-		A51652802AA43E93005E9BC6 /* UserQuote */ = {
+		A50F0E532AC123100081AD4C /* GeneralUserSummary */ = {
 			isa = PBXGroup;
 			children = (
+				A50F0E542AC1233B0081AD4C /* GeneralUserSummary.swift */,
 			);
-			name = UserQuote;
-			path = AITherapist/Domain/Entities/Model/UserQuote;
+			path = GeneralUserSummary;
+			sourceTree = "<group>";
+		};
+		A51652802AA43E93005E9BC6 /* Quote */ = {
+			isa = PBXGroup;
+			children = (
+				A5EFC5922AC10F0C00D6097B /* Quote.swift */,
+			);
+			name = Quote;
+			path = AITherapist/Domain/Entities/Model/Quote;
 			sourceTree = SOURCE_ROOT;
 		};
 		A525EE9D29B172BC00A57CE8 = {
@@ -252,14 +273,6 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
-		A55BCAD62AA435F000C8335E /* DailyMood */ = {
-			isa = PBXGroup;
-			children = (
-				A55BCAD72AA4371500C8335E /* DailyMood.swift */,
-			);
-			path = DailyMood;
-			sourceTree = "<group>";
-		};
 		A55BCAD92AA439B300C8335E /* Diary */ = {
 			isa = PBXGroup;
 			children = (
@@ -271,12 +284,14 @@
 		A5652C4D2AA407A90045DB95 /* Repository */ = {
 			isa = PBXGroup;
 			children = (
+				A50B167C2AC26D7400571D27 /* InsightRepository.swift */,
 				A566DCA02AA503A200920940 /* WebRepository.swift */,
 				A57AD7CF2AA64AB8008EC1FB /* ConversationRepository.swift */,
 				A57AD7D42AA65D83008EC1FB /* AuthenticateRepository.swift */,
 				A5CA948A2AA7D74300E25A46 /* ConversationDBRepository.swift */,
 				A5CA94902AA7FFBC00E25A46 /* PushTokenWebRepository.swift */,
 				A5CA94A32AA9646500E25A46 /* UserDBRepository.swift */,
+				A50B167A2AC26D3300571D27 /* InsightDBRepository.swift */,
 			);
 			path = Repository;
 			sourceTree = "<group>";
@@ -382,6 +397,7 @@
 				A57AD7D72AA6781F008EC1FB /* ConversationService.swift */,
 				A5CA94922AA8039D00E25A46 /* UserPermissionsService.swift */,
 				A5CA94A12AA959BD00E25A46 /* AuthenticateService.swift */,
+				A50B16782AC26BA400571D27 /* InsightService.swift */,
 			);
 			name = Service;
 			path = /Users/cyrusrefahi/Documents/AITherapist/AITherapist/Service;
@@ -539,13 +555,15 @@
 		A5B7D5CA29B3ADD5001D7113 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				A50F0E532AC123100081AD4C /* GeneralUserSummary */,
+				A5EFC5942AC10FAB00D6097B /* Mood */,
+				A5EFC58F2AC1071400D6097B /* Insight */,
 				A5CA949E2AA9586E00E25A46 /* Response */,
 				A57AD7D12AA64C4B008EC1FB /* Error */,
 				A569DEFB2AA44219006D39AA /* Chat */,
 				A569DEFA2AA44083006D39AA /* User */,
-				A51652802AA43E93005E9BC6 /* UserQuote */,
+				A51652802AA43E93005E9BC6 /* Quote */,
 				A55BCAD92AA439B300C8335E /* Diary */,
-				A55BCAD62AA435F000C8335E /* DailyMood */,
 				A578EACA2AA4187E00D992AD /* Message */,
 				A5AE6FDB2AA3ECCC00168037 /* Conversation */,
 				A5AE6FD82AA3E91D00168037 /* ConversationSummary */,
@@ -633,6 +651,22 @@
 			name = AfterEffects;
 			path = /Users/cyrusrefahi/Documents/AITherapist/AITherapist/Resources/Assets/AfterEffects;
 			sourceTree = "<absolute>";
+		};
+		A5EFC58F2AC1071400D6097B /* Insight */ = {
+			isa = PBXGroup;
+			children = (
+				A5EFC5902AC1072300D6097B /* Insight.swift */,
+			);
+			path = Insight;
+			sourceTree = "<group>";
+		};
+		A5EFC5942AC10FAB00D6097B /* Mood */ = {
+			isa = PBXGroup;
+			children = (
+				A5EFC5952AC10FC600D6097B /* Mood.swift */,
+			);
+			path = Mood;
+			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
@@ -754,16 +788,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A50B167D2AC26D7400571D27 /* InsightRepository.swift in Sources */,
 				A566DCA32AA503EE00920940 /* APICall.swift in Sources */,
-				A55BCAD82AA4371500C8335E /* DailyMood.swift in Sources */,
 				A5CA94A92AAA714B00E25A46 /* AuthenticationViewModel.swift in Sources */,
 				A5CA948F2AA7FE8000E25A46 /* DeepLinksHandler.swift in Sources */,
 				A5B7D5DF29B3D4B3001D7113 /* NetworkManager.swift in Sources */,
 				A50A1A692AA44AF000A6AD6D /* RootViewAppearance.swift in Sources */,
 				A5B7D5D929B3B640001D7113 /* DatabaseManager.swift in Sources */,
 				A5B7D5DD29B3D4A5001D7113 /* TherapyChatView.swift in Sources */,
+				A50F0E552AC1233B0081AD4C /* GeneralUserSummary.swift in Sources */,
 				A5AE6FDD2AA3ECF100168037 /* Conversation.swift in Sources */,
 				A5B7D5E829B41997001D7113 /* Utilities.swift in Sources */,
+				A5EFC5962AC10FC600D6097B /* Mood.swift in Sources */,
+				A5EFC5912AC1072300D6097B /* Insight.swift in Sources */,
 				A505865529BD003B001F1970 /* PersistentManager.swift in Sources */,
 				A5CA94912AA7FFBC00E25A46 /* PushTokenWebRepository.swift in Sources */,
 				A50A1A6F2AA44D0D00A6AD6D /* AppEnvironment.swift in Sources */,
@@ -799,11 +836,13 @@
 				A5C55FDE2AA562D300154ED0 /* MainContentView.swift in Sources */,
 				A50A1A6B2AA44C9400A6AD6D /* Helper.swift in Sources */,
 				A5A708D029C676A0001BCF2F /* PasswordInputView.swift in Sources */,
+				A50B167B2AC26D3300571D27 /* InsightDBRepository.swift in Sources */,
 				A569DF002AA447B0006D39AA /* AppDelegate.swift in Sources */,
 				A505864B29BC195C001F1970 /* LoginView.swift in Sources */,
 				A569DF042AA4488C006D39AA /* DependencyInjector.swift in Sources */,
 				A57AD7D82AA6781F008EC1FB /* ConversationService.swift in Sources */,
 				A5B7D5D029B3B03C001D7113 /* Enums.swift in Sources */,
+				A5EFC5932AC10F0C00D6097B /* Quote.swift in Sources */,
 				A5CA948D2AA7FA6D00E25A46 /* PushNotificationsHandler.swift in Sources */,
 				A57AD7D02AA64AB8008EC1FB /* ConversationRepository.swift in Sources */,
 				A569DF072AA448E9006D39AA /* Store.swift in Sources */,
@@ -820,6 +859,7 @@
 				A577D5DA2AB79D4400D48F94 /* MainView.swift in Sources */,
 				A5A708CE29C67227001BCF2F /* UsernameInputView.swift in Sources */,
 				A596AD1229B4385100C19DA6 /* MicManager.swift in Sources */,
+				A50B16792AC26BA400571D27 /* InsightService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
