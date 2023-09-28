@@ -9,7 +9,7 @@ import Foundation
 import RealmSwift
 
 
-class Quote: Object, Decodable {
+class Quote: EmbeddedObject, Decodable {
     
     @Persisted var quote: String
     

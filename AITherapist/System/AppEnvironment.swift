@@ -84,10 +84,10 @@ extension AppEnvironment {
     }
     
     private static func configuredDBRepositories(appState: Store<AppState>) -> DIContainer.DBRepositories {
-//        let persistentStore = CoreDataStack(version: CoreDataStack.Version.actual)
         let conversationDBRepository = MainConversationDBRepository()
         let userDBRepository = MainUserDBRepository()
         let insightDBRepository = MainInsightDBRepository()
+        
         return .init(conversationRepository: conversationDBRepository, userRepository: userDBRepository, insightRepository: insightDBRepository)
     }
     

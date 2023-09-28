@@ -12,7 +12,7 @@ class ConversationSummary: Object, Decodable {
 
     @Persisted(primaryKey: true) var id: Int
     @Persisted var summary: String?
-    @Persisted var mood: Mood
+    @Persisted var mood: Mood?
     @Persisted var topDescribingWords: String?
     @Persisted var conversationID: Int?
     @Persisted var dateCreated: Date
@@ -30,7 +30,7 @@ class ConversationSummary: Object, Decodable {
         return "id"
     }
     
-    convenience init(id: Int, summary: String?, mood: Mood, topDescribingWords: String?, conversationID: Int?, dateCreated: Date) {
+    convenience init(id: Int, summary: String?, mood: Mood?, topDescribingWords: String?, conversationID: Int?, dateCreated: Date) {
         self.init()
         self.id = id
         self.summary = summary
@@ -50,19 +50,23 @@ class ConversationSummary: Object, Decodable {
         let dateCreated = try container.decode(Date.self, forKey: CodingKeys.dateCreated)
         self.init(id: id, summary: summary, mood: mood, topDescribingWords: topDescribingWords, conversationID: conversationID, dateCreated: dateCreated)
     }
-    
-
 }
 
-class ConversationSummaries: Object, Decodable {
+class ConversationSummaries: EmbeddedObject, Decodable {
     @Persisted var conversationSummaries: List<ConversationSummary>
     
     enum CodingKeys: String, CodingKey {
         case conversationSummaries = "conversationSummaries"
     }
     
-    required init(from decoder: Decoder) throws {
+    convenience required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.conversationSummaries = try container.decode(List<ConversationSummary>.self, forKey: .conversationSummaries)
+        let conversationSummaries = try container.decode(List<ConversationSummary>.self, forKey: .conversationSummaries)
+        self.init(conversationSummaries: conversationSummaries)
+    }
+
+    convenience init(conversationSummaries: List<ConversationSummary>) {
+        self.init()
+        self.conversationSummaries = conversationSummaries
     }
 }

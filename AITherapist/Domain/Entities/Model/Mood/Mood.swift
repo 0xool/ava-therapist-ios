@@ -8,7 +8,7 @@
 import RealmSwift
 import Foundation
 
-class Mood: Object, Decodable {
+class Mood: EmbeddedObject, Decodable {
     @Persisted var mood: MoodType? = .EmotionNotDetected
     @Persisted var dateCreated: Date
     @Persisted var moodString: String
@@ -19,26 +19,40 @@ class Mood: Object, Decodable {
         case moodString = "Mood"
     }
     
-    required init(from decoder: Decoder) throws {
+    required convenience init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let moodID = try container.decode(Int.self, forKey: .mood)
         
-        self.mood = MoodType(rawValue: moodID)
-        self.dateCreated = try container.decode(Date.self, forKey: .dateCreated)
-        self.moodString = try container.decode(String.self, forKey: .moodString)        
+        let mood = MoodType(rawValue: moodID)
+        let dateCreated = try container.decode(Date.self, forKey: .dateCreated)
+        let moodString = try container.decode(String.self, forKey: .moodString)        
+        self.init(mood: mood, dateCreated: dateCreated, moodString: moodString)
+    }
+
+    convenience init(mood: MoodType, dateCreated: Date, moodString: String) {
+        self.init()
+        self.mood = mood
+        self.dateCreated = dateCreated
+        self.moodString = moodString
     }
 }
 
-class DailyMoods: Object, Decodable {
+class DailyMoods: EmbeddedObject, Decodable {
     @Persisted var moods: List<Mood>
 
     enum CodingKeys: String, CodingKey {
         case moods = "dailyUserMoods"
     }
 
-    required init(from decoder: Decoder) throws {
+    convenience required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.moods = try container.decode(List<Mood>.self, forKey: .moods)
+        let moods = try container.decode(List<Mood>.self, forKey: .moods)
+        self.init(moods: moods)
+    }
+
+    convenience init(moods: List<Mood>) {
+        self.init()
+        self.moods = moods
     }
 }
 
@@ -124,6 +138,7 @@ extension Mood {
             default:
                 self = .EmotionNotDetected
             }
+            
         }
     }
 }
