@@ -7,40 +7,34 @@
 import Foundation
 import RealmSwift
 
+typealias ConversationSummaries = List<ConversationSummary>
+typealias DailyMoods = List<Mood>
+
 class Insight: Object, Decodable {
-    
-    @Persisted(primaryKey: true) var id: Int
-    @Persisted var quote: Quote?
-    @Persisted var dateCreated: Date
-    
-    @Persisted var conversationSummaries: ConversationSummaries?
-    @Persisted var dailyMoods: DailyMoods?
+    @Persisted var conversationSummaries: ConversationSummaries
+    @Persisted var dailyMoods: DailyMoods
+    @Persisted var generalSummary: String?
 
     enum CodingKeys: String, CodingKey {
-        case id = "insightID"
-        case quote = "quote"
-        case dateCreated = "dateCreated"
-        case conversationSummaries = "conversationSummaries"
-        case dailyMoods = "dailyUserMoods"
+        case conversationSummaries = "conversation_summaries"
+        case generalSummary = "general_summary"
+        case dailyMoods = "daily_user_moods"
     }
 
     convenience required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        let id = try container.decode(Int.self, forKey: CodingKeys.id)
-        let quote = try container.decode(Quote.self, forKey: CodingKeys.quote)
-        let dateCreated = try container.decode(Date.self, forKey: CodingKeys.dateCreated)
+        let generalSummary = try container.decode(String.self, forKey: CodingKeys.generalSummary)
         let conversationSummaries = try container.decode(ConversationSummaries.self, forKey: CodingKeys.conversationSummaries)
         let dailyMoods = try container.decode(DailyMoods.self, forKey: CodingKeys.dailyMoods)
-        self.init(id: id, quote: quote, dateCreated: dateCreated, conversationSummaries: conversationSummaries, dailyMoods: dailyMoods)
+
+        self.init(conversationSummaries: conversationSummaries, dailyMoods: dailyMoods, generalSummary: generalSummary)
     }
     
-    convenience init(id: Int, quote: Quote, dateCreated: Date, conversationSummaries: ConversationSummaries, dailyMoods: DailyMoods) {
+    convenience init(conversationSummaries: ConversationSummaries, dailyMoods: DailyMoods, generalSummary: String) {
         self.init()
-        self.id = id
-        self.quote = quote
-        self.dateCreated = dateCreated
         self.conversationSummaries = conversationSummaries
         self.dailyMoods = dailyMoods
+        self.generalSummary = generalSummary
     }
         
 }

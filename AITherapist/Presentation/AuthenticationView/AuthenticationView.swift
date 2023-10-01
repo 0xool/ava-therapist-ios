@@ -25,7 +25,7 @@ struct AuthenticationView: View {
     
     @ViewBuilder private var content: some View {
         
-        switch viewModel.user {
+        switch viewModel.container.appState[\.userData.user] {
         case .notRequested:
             SplashScreen()
         case let .isLoading(last, _):
@@ -247,14 +247,6 @@ private extension AuthenticationView {
             if showLoading {
                 ActivityIndicatorView().padding()
             }
-            //            List(countries) { country in
-            //                NavigationLink(
-            //                    destination: self.detailsView(country: country),
-            //                    tag: country.alpha3Code,
-            //                    selection: self.$viewModel.routingState.countryDetails) {
-            //                        CountryCell(country: country)
-            //                    }
-            //            }
             Text(user.token)
         }.padding(.bottom, bottomInset)
         

@@ -24,7 +24,6 @@ extension AuthenticationView {
         // State
 //        @Published var routingState: Routing
 //        @Published var countriesSearch = CountriesSearch()
-        @Published var user: Loadable<User>
         @Published var canRequestPushPermission: Bool = false
         var alertMessage: AlertMessage = .None
         
@@ -32,9 +31,8 @@ extension AuthenticationView {
         let container: DIContainer
         private var cancelBag = CancelBag()
         
-        init(container: DIContainer, user: Loadable<User> = .notRequested) {
+        init(container: DIContainer) {
             self.container = container
-            _user = .init(initialValue: user)
         }
         
 //        var localeReader: LocaleReader {
@@ -56,7 +54,8 @@ extension AuthenticationView {
         }
         
         func login(email: String, password: String){
-            container.services.authenticationService.loginUser(auth: loadableSubject(\.user), email: email, password: password)
+            // upon success run print statement
+            container.services.authenticationService.loginUser(email: email, password: password)
         }
     }
 }

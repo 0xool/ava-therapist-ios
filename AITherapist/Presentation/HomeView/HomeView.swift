@@ -10,6 +10,7 @@ import Combine
 
 struct InsightView: View {
     var body: some View {
+        
         Text("InsightView")
     }
 }

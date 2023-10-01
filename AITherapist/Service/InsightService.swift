@@ -10,7 +10,8 @@ import Foundation
 import SwiftUI
 
 protocol InsightService {
-    func loadInsight(insight: LoadableSubject<Insight>)
+    func loadInsight()
+    func checkInsight()
 //    func loadConversationChat(message: LoadableSubject<LazyList<Message>>)
 }
 
@@ -26,10 +27,26 @@ struct MainInsightService: InsightService {
         self.appState = appState
     }
     
-    func loadInsight(insight: LoadableSubject<Insight>) {
-        
+    func checkInsight() {
         let cancelBag = CancelBag()
-        insight.wrappedValue.setIsLoading(cancelBag: cancelBag)
+        
+        Just<Void>
+            .withErrorType(Error.self)
+            .flatMap({ [insightDBRepository] in
+                insightDBRepository.loadInsight()
+            })
+            .sink{ subscriptionCompletion in
+                if let _ = subscriptionCompletion.error {
+                }
+            } receiveValue: { insight in
+                self.appState[\.userData.insight] = .loaded(insight)
+            }
+            .store(in: cancelBag)
+    }
+    
+    func loadInsight() {
+        let cancelBag = CancelBag()
+        self.appState[\.userData.insight].setIsLoading(cancelBag: cancelBag)
         
         Just<Void>
             .withErrorType(Error.self)
@@ -40,17 +57,19 @@ struct MainInsightService: InsightService {
                 if hasLoaded {
                     return Just<Void>.withErrorType(Error.self)
                 } else {
-                    return self.refreshConversationList()
+                    return self.loadInsightFromServer()
                 }
             }
             .flatMap({ [insightDBRepository] in
                 insightDBRepository.loadInsight()
             })
-            .sinkToLoadable { insight.wrappedValue = $0 }
+            .sinkToLoadable {
+                self.appState[\.userData.insight] = $0
+            }
             .store(in: cancelBag)
     }
     
-    func refreshConversationList() -> AnyPublisher<Void, Error> {
+    func loadInsightFromServer() -> AnyPublisher<Void, Error> {
         return insightRepository
             .loadInsight()
             .ensureTimeSpan(requestHoldBackTimeInterval)
@@ -66,7 +85,11 @@ struct MainInsightService: InsightService {
 }
 
 struct StubInsightService: InsightService {
-    func loadInsight(insight: LoadableSubject<Insight>) {
+    func loadInsight() {
+    }
+    
+    func checkInsight() {
+        
     }
  }
 

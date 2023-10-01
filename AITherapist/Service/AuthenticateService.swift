@@ -10,7 +10,7 @@ import SwiftUI
 import Combine
 
 protocol AuthenticateService {
-    func loginUser(auth: LoadableSubject<User>, email: String, password: String)
+    func loginUser(email: String, password: String)
     func registerUser(auth: LoadableSubject<User>, email: String, password: String)
     func checkUserLoggedStatus()
 }
@@ -63,15 +63,16 @@ class MainAuthenticateService: AuthenticateService {
                 if let _ = subscriptionCompletion.error {
                 }
             } receiveValue: { user in
-                self.appState[\.userData.user] = user
+                self.authenticateRepository.SetCookie(cookie: user.token)
+                self.appState[\.userData.user] = .loaded(user)
             }
             .store(in: cancelBag)
     }
     
-    func loginUser(auth: LoadableSubject<User>, email: String, password: String) {
+    func loginUser(email: String, password: String) {
         
         let cancelBag = CancelBag()
-        auth.wrappedValue.setIsLoading(cancelBag: cancelBag)
+        self.appState[\.userData.user].setIsLoading(cancelBag: cancelBag)
         
         Just<Void>
             .withErrorType(Error.self)
@@ -89,8 +90,7 @@ class MainAuthenticateService: AuthenticateService {
                 userDBRepository.loadUser()
             })
             .sinkToLoadable {
-                self.appState[\.userData.user] = $0.value
-                auth.wrappedValue = $0
+                self.appState[\.userData.user] = $0
             }
             .store(in: cancelBag)
     }
@@ -100,7 +100,7 @@ class MainAuthenticateService: AuthenticateService {
             .login(email: email, password: password)
             .ensureTimeSpan(requestHoldBackTimeInterval)
             .map { [userDBRepository] in
-                _ = userDBRepository.store(user: $0)
+                _ = userDBRepository.store(user: $0)                
             }
             .eraseToAnyPublisher()
     }
@@ -118,7 +118,7 @@ struct StubAuthenticateService: AuthenticateService {
     func checkUserLoggedStatus() {
     }
     
-    func loginUser(auth: LoadableSubject<User>, email: String, password: String) {
+    func loginUser(email: String, password: String) {
     }
     
     func registerUser(auth: LoadableSubject<User>, email: String, password: String) {

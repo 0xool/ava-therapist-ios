@@ -10,7 +10,6 @@ import Combine
 import EnvironmentOverrides
 
 // MARK: - View
-
 struct MainContentView: View {
     
     @ObservedObject private(set) var viewModel: ViewModel
@@ -19,20 +18,37 @@ struct MainContentView: View {
         Group {
             if viewModel.isRunningTests {
                 Text("Running unit tests")
+            }else if (PersistentManager.UserHasFinishedOnboarding()){
+                Text("OnboardingView")
             }else{
-                if (viewModel.container.appState[\.userData.user] == nil){
-                    AuthenticationView(viewModel: .init(container: viewModel.container))
-                                            .attachEnvironmentOverrides(onChange: viewModel.onChangeHandler)
-                                            .modifier(RootViewAppearance(viewModel: .init(container: viewModel.container)))
-                                            
-                                            
-                }else{
-                    MainView(viewModel: .init(container: viewModel.container))
-                }
+                if viewModel.container.appState[\.userData.user].value == nil
+                { LoginView } else { MainAppView }
             }
         }
         .background(Color(red: 220/255, green: 255/255, blue: 253/255))
         .animation(.easeIn, value: viewModel.container.appState[\.userData.user])
+    }
+    
+    @ViewBuilder var LoginView: some View {
+        AuthenticationView(viewModel: .init(container: viewModel.container))
+            .attachEnvironmentOverrides(onChange: viewModel.onChangeHandler)
+            .modifier(RootViewAppearance(viewModel: .init(container: viewModel.container)))
+    }
+    
+    @ViewBuilder var MainAppView: some View {
+        switch(viewModel.container.appState[\.userData.insight]) {
+        case .notRequested: // if we haven't started requesting the data yet
+            Text("Not requested")
+                .onAppear(){
+                    self.viewModel.container.services.insightService.loadInsight()
+                }
+        case .isLoading(_, _): // if we're waiting for the data to come back
+            Text("Loading")
+        case .loaded(_): // if we've got the data back
+            MainView(viewModel: .init(container: viewModel.container))
+        case let .failed(error): // if the request failed
+            Text(error.localizedDescription)
+        }
     }
 }
 
@@ -49,6 +65,7 @@ extension MainContentView {
             self.container = container
             self.isRunningTests = isRunningTests
             self.container.services.authenticationService.checkUserLoggedStatus()
+            self.container.services.insightService.checkInsight()
             
             anyCancellable = container.appState.value.userData.objectWillChange.sink { (_) in
                 self.objectWillChange.send()
@@ -63,9 +80,9 @@ extension MainContentView {
             }
         }
         
-//        func loadCountries() {
-//            self.container.services.conversationService.loadConversationList(conversations: loadableSubject(\.conversations))
-//        }
+        //        func loadCountries() {
+        //            self.container.services.conversationService.loadConversationList(conversations: loadableSubject(\.conversations))
+        //        }
     }
 }
 

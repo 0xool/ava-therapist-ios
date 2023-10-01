@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Alamofire
 import Combine
 
 protocol InsightRepository: WebRepository {
@@ -23,9 +24,13 @@ struct MainIsightRepository: InsightRepository {
     }
     
     func loadInsight() -> AnyPublisher<Insight, Error> {
-        let request: AnyPublisher<Insight, Error> = GetRequest(pathVariable: nil, params: nil, url: getPath(api: .getInsight))
+        print(AF.session.configuration.httpCookieStorage as Any)
+        
+        
+        let request: AnyPublisher<ServerResponse<Insight>, Error> = GetRequest(pathVariable: nil, params: nil, url: getPath(api: .getInsight))
         
         return request
+            .map{ $0.data }
             .eraseToAnyPublisher()
     }
 }

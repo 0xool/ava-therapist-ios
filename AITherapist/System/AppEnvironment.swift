@@ -65,8 +65,8 @@ extension AppEnvironment {
 
     
     private static func configuredWebRepositories(session: URLSession) -> DIContainer.WebRepositories {
-        let baseURL: String = "http://localhost:3000/"//"https://aitherapist.online:3000/"
-
+//        let baseURL: String = "https://aitherapist.online:3000/"//"http://localhost:3000/
+        let baseURL: String = "http://localhost:3000/"
 //        let countriesWebRepository = RealCountriesWebRepository(
 //            session: session,
 //            baseURL: "https://restcountries.com/v2")

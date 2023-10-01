@@ -22,8 +22,8 @@ extension AppState {
             lhs.user == rhs.user
         }
         
-        @Published var user: User?
-        @Published var insight: Insight?
+        @Published var user: Loadable<User> = .notRequested
+        @Published var insight: Loadable<Insight> = .notRequested
         /*
          The list of countries (Loadable<[Country]>) used to be stored here.
          It was removed for performing countries' search by name inside a database,

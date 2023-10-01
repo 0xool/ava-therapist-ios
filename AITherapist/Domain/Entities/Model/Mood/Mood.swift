@@ -10,7 +10,7 @@ import Foundation
 
 class Mood: EmbeddedObject, Decodable {
     @Persisted var mood: MoodType? = .EmotionNotDetected
-    @Persisted var dateCreated: Date
+    @Persisted var dateCreated: Date?
     @Persisted var moodString: String
     
     enum CodingKeys: String, CodingKey {
@@ -24,35 +24,17 @@ class Mood: EmbeddedObject, Decodable {
         let moodID = try container.decode(Int.self, forKey: .mood)
         
         let mood = MoodType(rawValue: moodID)
-        let dateCreated = try container.decode(Date.self, forKey: .dateCreated)
-        let moodString = try container.decode(String.self, forKey: .moodString)        
+        let dateCreated = convertStringToDate(try container.decode(String.self, forKey: .dateCreated))
+        
+        let moodString = try container.decode(String.self, forKey: .moodString)
         self.init(mood: mood, dateCreated: dateCreated, moodString: moodString)
     }
 
-    convenience init(mood: MoodType, dateCreated: Date, moodString: String) {
+    convenience init(mood: MoodType, dateCreated: Date?, moodString: String) {
         self.init()
         self.mood = mood
         self.dateCreated = dateCreated
         self.moodString = moodString
-    }
-}
-
-class DailyMoods: EmbeddedObject, Decodable {
-    @Persisted var moods: List<Mood>
-
-    enum CodingKeys: String, CodingKey {
-        case moods = "dailyUserMoods"
-    }
-
-    convenience required init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        let moods = try container.decode(List<Mood>.self, forKey: .moods)
-        self.init(moods: moods)
-    }
-
-    convenience init(moods: List<Mood>) {
-        self.init()
-        self.moods = moods
     }
 }
 

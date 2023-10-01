@@ -20,5 +20,68 @@
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "99A01813-C225-48C6-8D08-32AD28B2622F"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "AITherapist/Presentation/MainContentView/MainContentView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "46"
+            endingLineNumber = "46"
+            landmarkName = "MainAppView"
+            landmarkType = "24">
+            <Locations>
+               <Location
+                  uuid = "99A01813-C225-48C6-8D08-32AD28B2622F - 343ab58b644a3a0c"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "AITherapist.MainContentView.MainAppView.getter : some"
+                  moduleName = "AITherapist"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/cyrusrefahi/Documents/AITherapist/AITherapist/Presentation/MainContentView/MainContentView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "46"
+                  endingLineNumber = "46"
+                  offsetFromSymbolStart = "2224">
+               </Location>
+               <Location
+                  uuid = "99A01813-C225-48C6-8D08-32AD28B2622F - 343ab58b644a3a2d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "AITherapist.MainContentView.MainAppView.getter : some"
+                  moduleName = "AITherapist"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/cyrusrefahi/Documents/AITherapist/AITherapist/Presentation/MainContentView/MainContentView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "45"
+                  endingLineNumber = "45"
+                  offsetFromSymbolStart = "2224">
+               </Location>
+               <Location
+                  uuid = "99A01813-C225-48C6-8D08-32AD28B2622F - 343ab58b644a3a0c"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "AITherapist.MainContentView.MainAppView.getter : some"
+                  moduleName = "AITherapist"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/cyrusrefahi/Documents/AITherapist/AITherapist/Presentation/MainContentView/MainContentView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "46"
+                  endingLineNumber = "46"
+                  offsetFromSymbolStart = "1480">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

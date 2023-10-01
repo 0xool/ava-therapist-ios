@@ -38,7 +38,7 @@ extension WebRepository {
             HTTPCookiePropertyKey.path: "/",
             HTTPCookiePropertyKey.name: "jwt",
             HTTPCookiePropertyKey.value: cookie
-           ]
+        ]
         
         if let cookie = HTTPCookie(properties: cookieProps) {
             AF.session.configuration.httpCookieStorage?.setCookie(cookie)
@@ -51,7 +51,7 @@ extension WebRepository {
             HTTPCookiePropertyKey.path: "/",
             HTTPCookiePropertyKey.name: "jwt",
             HTTPCookiePropertyKey.value: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiaWF0IjoxNjk0MDQzODUyLCJleHAiOjE2OTc2NDM4NTJ9.XZ5eG2Hgu6ecm_QFts0rKuoALyOK1BYYssqIUjkDfhA"
-           ]
+        ]
         
         if let cookie = HTTPCookie(properties: cookieProps) {
             AF.session.configuration.httpCookieStorage?.setCookie(cookie)
@@ -60,7 +60,7 @@ extension WebRepository {
     }
     
     func GetRequest<D>(pathVariable: String?, params: [String : Any]?, url: String) -> AnyPublisher<D, Error> where D : Decodable  {
-                
+        
         return AF.request(url,
                           method: .get, parameters: params)
         .validate()
@@ -68,7 +68,6 @@ extension WebRepository {
         .value()
         .mapError{
             $0 as Error
-            
         }
         .receive(on: DispatchQueue.main)
         .eraseToAnyPublisher()
@@ -76,7 +75,7 @@ extension WebRepository {
     
     func SendRequest<D>(pathVariable: String?, params: [String : Any]?, url: String) -> AnyPublisher<D, Error> where D : Decodable  {
         return AF.request(url,
-                          method: .post, parameters: params, encoding: Alamofire.JSONEncoding.default)        
+                          method: .post, parameters: params, encoding: Alamofire.JSONEncoding.default)
         .validate()
         .publishDecodable(type: D.self)
         .value()
@@ -96,6 +95,19 @@ enum ClientError: Error {
     case unexpectedResponse
     case imageDeserialization
 }
+
+struct ServerResponse<T: Decodable>: Decodable {
+    var data: T
+    var message: String?
+    var code: Int?
+    
+    enum CodingKeys: String, CodingKey {
+        case data
+        case message
+        case code
+    }
+}
+
 
 //
 //protocol WebRepository {

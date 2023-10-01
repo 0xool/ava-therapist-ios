@@ -35,7 +35,7 @@
 		A577D5DA2AB79D4400D48F94 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A577D5D92AB79D4400D48F94 /* MainView.swift */; };
 		A577D5DD2AB79DB300D48F94 /* BreathingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A577D5DC2AB79DB300D48F94 /* BreathingView.swift */; };
 		A577D5DE2AB7A2A100D48F94 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A525EEAD29B172BF00A57CE8 /* Assets.xcassets */; };
-		A577D5E12AB7A4CB00D48F94 /* InsightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A577D5E02AB7A4CB00D48F94 /* InsightView.swift */; };
+		A577D5E12AB7A4CB00D48F94 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A577D5E02AB7A4CB00D48F94 /* HomeView.swift */; };
 		A577D5E32AB7CC4F00D48F94 /* CustomTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A577D5E22AB7CC4F00D48F94 /* CustomTabBar.swift */; };
 		A577D5E62AB7EADB00D48F94 /* ConversationListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A577D5E52AB7EADB00D48F94 /* ConversationListView.swift */; };
 		A578EACC2AA418A200D992AD /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = A578EACB2AA418A200D992AD /* Message.swift */; };
@@ -118,7 +118,7 @@
 		A56E179F29B2DB680077B76B /* SpeakManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeakManager.swift; sourceTree = "<group>"; };
 		A577D5D92AB79D4400D48F94 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MainView.swift; path = /Users/cyrusrefahi/Documents/AITherapist/AITherapist/Presentation/MainView/MainView.swift; sourceTree = "<absolute>"; };
 		A577D5DC2AB79DB300D48F94 /* BreathingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreathingView.swift; sourceTree = "<group>"; };
-		A577D5E02AB7A4CB00D48F94 /* InsightView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightView.swift; sourceTree = "<group>"; };
+		A577D5E02AB7A4CB00D48F94 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		A577D5E22AB7CC4F00D48F94 /* CustomTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CustomTabBar.swift; path = AITherapist/Presentation/Components/CustomTabBar.swift; sourceTree = SOURCE_ROOT; };
 		A577D5E52AB7EADB00D48F94 /* ConversationListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationListView.swift; sourceTree = "<group>"; };
 		A578EACB2AA418A200D992AD /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
@@ -205,7 +205,8 @@
 			children = (
 				A50A1A682AA44AF000A6AD6D /* RootViewAppearance.swift */,
 			);
-			path = Root;
+			name = Root;
+			path = ../Root;
 			sourceTree = "<group>";
 		};
 		A50F0E532AC123100081AD4C /* GeneralUserSummary */ = {
@@ -355,16 +356,17 @@
 			children = (
 				A577D5DC2AB79DB300D48F94 /* BreathingView.swift */,
 			);
-			path = BreathingView;
+			name = BreathingView;
+			path = ../BreathingView;
 			sourceTree = "<group>";
 		};
-		A577D5DF2AB7A45C00D48F94 /* InsightView */ = {
+		A577D5DF2AB7A45C00D48F94 /* HomeView */ = {
 			isa = PBXGroup;
 			children = (
-				A577D5E02AB7A4CB00D48F94 /* InsightView.swift */,
+				A577D5E02AB7A4CB00D48F94 /* HomeView.swift */,
 			);
-			name = InsightView;
-			path = /Users/cyrusrefahi/Documents/AITherapist/AITherapist/Presentation/InsightView;
+			name = HomeView;
+			path = /Users/cyrusrefahi/Documents/AITherapist/AITherapist/Presentation/HomeView;
 			sourceTree = "<absolute>";
 		};
 		A577D5E42AB7EAB300D48F94 /* ConversationListView */ = {
@@ -372,7 +374,8 @@
 			children = (
 				A577D5E52AB7EADB00D48F94 /* ConversationListView.swift */,
 			);
-			path = ConversationListView;
+			name = ConversationListView;
+			path = ../ConversationListView;
 			sourceTree = "<group>";
 		};
 		A578EACA2AA4187E00D992AD /* Message */ = {
@@ -401,6 +404,25 @@
 			);
 			name = Service;
 			path = /Users/cyrusrefahi/Documents/AITherapist/AITherapist/Service;
+			sourceTree = "<absolute>";
+		};
+		A59EB1512ACA28A900F31A12 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				A577D5E42AB7EAB300D48F94 /* ConversationListView */,
+				A577D5DF2AB7A45C00D48F94 /* HomeView */,
+				A577D5DB2AB79D9A00D48F94 /* BreathingView */,
+				A577D5D82AB79D0B00D48F94 /* MainView */,
+				A5CA94AA2AAA7EC200E25A46 /* Components */,
+				A5CA94A52AAA711A00E25A46 /* AuthenticationView */,
+				A5C55FDC2AA562B500154ED0 /* MainContentView */,
+				A50A1A672AA44AC800A6AD6D /* Root */,
+				A5AE6FE32AA3EF9700168037 /* TherapyChat */,
+				A5AE6FE22AA3EF8B00168037 /* SignUp */,
+				A5AE6FE12AA3EF8300168037 /* Login */,
+			);
+			name = UI;
+			path = /Users/cyrusrefahi/Documents/AITherapist/AITherapist/Presentation/UI;
 			sourceTree = "<absolute>";
 		};
 		A5AE6FD82AA3E91D00168037 /* ConversationSummary */ = {
@@ -438,17 +460,7 @@
 		A5AE6FE02AA3EF7B00168037 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
-				A577D5E42AB7EAB300D48F94 /* ConversationListView */,
-				A577D5DF2AB7A45C00D48F94 /* InsightView */,
-				A577D5DB2AB79D9A00D48F94 /* BreathingView */,
-				A577D5D82AB79D0B00D48F94 /* MainView */,
-				A5CA94AA2AAA7EC200E25A46 /* Components */,
-				A5CA94A52AAA711A00E25A46 /* AuthenticationView */,
-				A5C55FDC2AA562B500154ED0 /* MainContentView */,
-				A50A1A672AA44AC800A6AD6D /* Root */,
-				A5AE6FE32AA3EF9700168037 /* TherapyChat */,
-				A5AE6FE22AA3EF8B00168037 /* SignUp */,
-				A5AE6FE12AA3EF8300168037 /* Login */,
+				A59EB1512ACA28A900F31A12 /* UI */,
 			);
 			path = Presentation;
 			sourceTree = "<group>";
@@ -459,7 +471,8 @@
 				A5AE6FE52AA3EFA700168037 /* ViewModel */,
 				A5AE6FE42AA3EFA200168037 /* View */,
 			);
-			path = Login;
+			name = Login;
+			path = ../Login;
 			sourceTree = "<group>";
 		};
 		A5AE6FE22AA3EF8B00168037 /* SignUp */ = {
@@ -468,7 +481,8 @@
 				A5AE6FE72AA3EFB000168037 /* ViewModel */,
 				A5AE6FE62AA3EFAC00168037 /* View */,
 			);
-			path = SignUp;
+			name = SignUp;
+			path = ../SignUp;
 			sourceTree = "<group>";
 		};
 		A5AE6FE32AA3EF9700168037 /* TherapyChat */ = {
@@ -477,7 +491,8 @@
 				A5AE6FE92AA3EFB900168037 /* ViewModel */,
 				A5AE6FE82AA3EFB500168037 /* View */,
 			);
-			path = TherapyChat;
+			name = TherapyChat;
+			path = ../TherapyChat;
 			sourceTree = "<group>";
 		};
 		A5AE6FE42AA3EFA200168037 /* View */ = {
@@ -604,7 +619,8 @@
 			children = (
 				A5C55FDD2AA562D300154ED0 /* MainContentView.swift */,
 			);
-			path = MainContentView;
+			name = MainContentView;
+			path = ../MainContentView;
 			sourceTree = "<group>";
 		};
 		A5CA949A2AA81AA100E25A46 /* UnitTest */ = {
@@ -701,7 +717,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1420;
-				LastUpgradeCheck = 1420;
+				LastUpgradeCheck = 1500;
 				TargetAttributes = {
 					A525EEA529B172BC00A57CE8 = {
 						CreatedOnToolsVersion = 14.2;
@@ -820,7 +836,7 @@
 				A596AD1429B43CA900C19DA6 /* SpeechVisualBarView.swift in Sources */,
 				A525EEAA29B172BC00A57CE8 /* AITherapistApp.swift in Sources */,
 				A57AD7DA2AA678CB008EC1FB /* LazyList.swift in Sources */,
-				A577D5E12AB7A4CB00D48F94 /* InsightView.swift in Sources */,
+				A577D5E12AB7A4CB00D48F94 /* HomeView.swift in Sources */,
 				A577D5DD2AB79DB300D48F94 /* BreathingView.swift in Sources */,
 				A505865729BD00C8001F1970 /* Extentions.swift in Sources */,
 				A57AD7D52AA65D83008EC1FB /* AuthenticateRepository.swift in Sources */,
@@ -870,6 +886,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -902,6 +919,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -930,6 +948,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -962,6 +981,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;

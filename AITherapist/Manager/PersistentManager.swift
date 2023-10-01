@@ -8,6 +8,16 @@
 import Foundation
 
 
+
 class PersistentManager {
+    static func UserHasFinishedOnboarding() -> Bool {
+        return UserDefaults.standard.bool(forKey: PersistentType.HasFinishedOnboarding.rawValue)
+    }
+}
+
+extension PersistentManager {
+    enum PersistentType: String{
+        case HasFinishedOnboarding = "HasFinishedOnboarding"
+    }
     
 }
