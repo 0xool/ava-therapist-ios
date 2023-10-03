@@ -167,4 +167,17 @@ func convertStringToDate(_ dateString: String) -> Date? {
     return dateFormatter.date(from: dateString)
 }
 
+extension UIViewController {
+  func screen() -> UIScreen? {
+    var parent = self.parent
+    var lastParent = parent
+    
+    while parent != nil {
+      lastParent = parent
+      parent = parent!.parent
+    }
+    
+    return lastParent?.view.window?.windowScene?.screen
+  }
+}
 
