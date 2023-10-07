@@ -19,6 +19,8 @@
 		A50B167D2AC26D7400571D27 /* InsightRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50B167C2AC26D7400571D27 /* InsightRepository.swift */; };
 		A50F0E552AC1233B0081AD4C /* GeneralUserSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50F0E542AC1233B0081AD4C /* GeneralUserSummary.swift */; };
 		A516527F2AA43A87005E9BC6 /* Diary.swift in Sources */ = {isa = PBXBuildFile; fileRef = A516527E2AA43A87005E9BC6 /* Diary.swift */; };
+		A51B4E342AD0F14500A14AFA /* AITherapistTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51B4E332AD0F14500A14AFA /* AITherapistTests.swift */; };
+		A51B4E3B2AD0F1C300A14AFA /* ConversationsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51B4E3A2AD0F1C200A14AFA /* ConversationsTests.swift */; };
 		A525EEAA29B172BC00A57CE8 /* AITherapistApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A525EEA929B172BC00A57CE8 /* AITherapistApp.swift */; };
 		A525EEAC29B172BC00A57CE8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A525EEAB29B172BC00A57CE8 /* ContentView.swift */; };
 		A566DCA12AA503A200920940 /* WebRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A566DCA02AA503A200920940 /* WebRepository.swift */; };
@@ -88,6 +90,16 @@
 		F5BED7ECE5A1009911E9192C /* Pods_AITherapist.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 470052D87753E53A6EB3A9BF /* Pods_AITherapist.framework */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		A51B4E352AD0F14500A14AFA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A525EE9E29B172BC00A57CE8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A525EEA529B172BC00A57CE8;
+			remoteInfo = AITherapist;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		470052D87753E53A6EB3A9BF /* Pods_AITherapist.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AITherapist.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8DE6E6FDFE71D5785CF8491A /* Pods-AITherapist.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AITherapist.release.xcconfig"; path = "Target Support Files/Pods-AITherapist/Pods-AITherapist.release.xcconfig"; sourceTree = "<group>"; };
@@ -103,6 +115,9 @@
 		A50B167C2AC26D7400571D27 /* InsightRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsightRepository.swift; sourceTree = "<group>"; };
 		A50F0E542AC1233B0081AD4C /* GeneralUserSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralUserSummary.swift; sourceTree = "<group>"; };
 		A516527E2AA43A87005E9BC6 /* Diary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Diary.swift; sourceTree = "<group>"; };
+		A51B4E312AD0F14500A14AFA /* AITherapistTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AITherapistTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A51B4E332AD0F14500A14AFA /* AITherapistTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AITherapistTests.swift; sourceTree = "<group>"; };
+		A51B4E3A2AD0F1C200A14AFA /* ConversationsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsTests.swift; sourceTree = "<group>"; };
 		A525EEA629B172BC00A57CE8 /* AITherapist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AITherapist.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A525EEA929B172BC00A57CE8 /* AITherapistApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AITherapistApp.swift; sourceTree = "<group>"; };
 		A525EEAB29B172BC00A57CE8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -177,6 +192,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		A51B4E2E2AD0F14500A14AFA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A525EEA329B172BC00A57CE8 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -223,11 +245,20 @@
 			path = AITherapist/Domain/Entities/Model/Quote;
 			sourceTree = SOURCE_ROOT;
 		};
+		A51B4E322AD0F14500A14AFA /* AITherapistTests */ = {
+			isa = PBXGroup;
+			children = (
+				A51B4E332AD0F14500A14AFA /* AITherapistTests.swift */,
+			);
+			path = AITherapistTests;
+			sourceTree = "<group>";
+		};
 		A525EE9D29B172BC00A57CE8 = {
 			isa = PBXGroup;
 			children = (
 				A5CA949A2AA81AA100E25A46 /* UnitTest */,
 				A525EEA829B172BC00A57CE8 /* AITherapist */,
+				A51B4E322AD0F14500A14AFA /* AITherapistTests */,
 				A525EEA729B172BC00A57CE8 /* Products */,
 				061639D190501180EF62BFFA /* Pods */,
 				987F8DB59E9D06126284ADE1 /* Frameworks */,
@@ -238,6 +269,7 @@
 			isa = PBXGroup;
 			children = (
 				A525EEA629B172BC00A57CE8 /* AITherapist.app */,
+				A51B4E312AD0F14500A14AFA /* AITherapistTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -644,6 +676,7 @@
 		A5CA949A2AA81AA100E25A46 /* UnitTest */ = {
 			isa = PBXGroup;
 			children = (
+				A51B4E3A2AD0F1C200A14AFA /* ConversationsTests.swift */,
 			);
 			path = UnitTest;
 			sourceTree = "<group>";
@@ -685,6 +718,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		A51B4E302AD0F14500A14AFA /* AITherapistTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A51B4E392AD0F14500A14AFA /* Build configuration list for PBXNativeTarget "AITherapistTests" */;
+			buildPhases = (
+				A51B4E2D2AD0F14500A14AFA /* Sources */,
+				A51B4E2E2AD0F14500A14AFA /* Frameworks */,
+				A51B4E2F2AD0F14500A14AFA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A51B4E362AD0F14500A14AFA /* PBXTargetDependency */,
+			);
+			name = AITherapistTests;
+			productName = AITherapistTests;
+			productReference = A51B4E312AD0F14500A14AFA /* AITherapistTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		A525EEA529B172BC00A57CE8 /* AITherapist */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = A525EEB429B172BF00A57CE8 /* Build configuration list for PBXNativeTarget "AITherapist" */;
@@ -714,9 +765,13 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1420;
+				LastSwiftUpdateCheck = 1500;
 				LastUpgradeCheck = 1500;
 				TargetAttributes = {
+					A51B4E302AD0F14500A14AFA = {
+						CreatedOnToolsVersion = 15.0;
+						TestTargetID = A525EEA529B172BC00A57CE8;
+					};
 					A525EEA529B172BC00A57CE8 = {
 						CreatedOnToolsVersion = 14.2;
 					};
@@ -739,11 +794,19 @@
 			projectRoot = "";
 			targets = (
 				A525EEA529B172BC00A57CE8 /* AITherapist */,
+				A51B4E302AD0F14500A14AFA /* AITherapistTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		A51B4E2F2AD0F14500A14AFA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A5CA94B92AAAB6EA00E25A46 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -798,6 +861,15 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		A51B4E2D2AD0F14500A14AFA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A51B4E3B2AD0F1C300A14AFA /* ConversationsTests.swift in Sources */,
+				A51B4E342AD0F14500A14AFA /* AITherapistTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A525EEA229B172BC00A57CE8 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -882,7 +954,58 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		A51B4E362AD0F14500A14AFA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A525EEA529B172BC00A57CE8 /* AITherapist */;
+			targetProxy = A51B4E352AD0F14500A14AFA /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		A51B4E372AD0F14500A14AFA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 39957QBL2C;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = CyrusRefahi.AITherapistTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AITherapist.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/AITherapist";
+			};
+			name = Debug;
+		};
+		A51B4E382AD0F14500A14AFA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 39957QBL2C;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = CyrusRefahi.AITherapistTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AITherapist.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/AITherapist";
+			};
+			name = Release;
+		};
 		A525EEB229B172BF00A57CE8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1074,6 +1197,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		A51B4E392AD0F14500A14AFA /* Build configuration list for PBXNativeTarget "AITherapistTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A51B4E372AD0F14500A14AFA /* Debug */,
+				A51B4E382AD0F14500A14AFA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		A525EEA129B172BC00A57CE8 /* Build configuration list for PBXProject "AITherapist" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
