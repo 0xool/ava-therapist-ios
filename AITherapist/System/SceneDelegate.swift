@@ -20,7 +20,7 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                options connectionOptions: UIScene.ConnectionOptions) {
         let environment = AppEnvironment.bootstrap()
 //        let contentView = MainContentView(viewModel: MainContentView.ViewModel(container: environment.container))
-        let contentView = ChartView()
+        let contentView = MainView(viewModel: MainView.ViewModel(container: environment.container))
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)
             window.rootViewController = UIHostingController(rootView: contentView)

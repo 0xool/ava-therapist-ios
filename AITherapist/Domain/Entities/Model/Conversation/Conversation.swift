@@ -95,6 +95,13 @@ class Conversation: Object, Decodable {
         super.init()
     }
     
+    init(id: Int, conversationName: String, date: Date){
+        super.init()
+        self.id = id
+        self.conversationName = conversationName
+        self.dateCreated = date
+    }
+    
     required init(from decoder: Decoder) throws {
         super.init()
         let container = try decoder.container(keyedBy: CodingKeys.self)

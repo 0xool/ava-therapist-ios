@@ -9,12 +9,23 @@ import SwiftUI
 import Combine
 
 struct InsightView: View {
+    @State private var showingModalSheet = false
+    
     var body: some View {
         ScrollView{
             WelcomeToHomeTitleView()
             QuoteView
             Divider()
             MoodAnalyticsView()
+                .onTapGesture{
+                    withAnimation {
+                        showingModalSheet.toggle()
+                    }
+                }
+                .sheet(isPresented: $showingModalSheet) {
+                    MoodAnalyticsView()
+                }
+                
             Divider()
             GeneralSummaryView()
             Divider()
@@ -52,9 +63,7 @@ struct InsightView: View {
 
 struct MoodAnalyticsView: View {
     var body: some View {
-        Text("Mood Tracking View")
-            .background(.red)
-            .padding()
+        ChartView()
     }
 }
 
@@ -132,8 +141,6 @@ struct NavBarView: View {
         .frame(maxHeight: .infinity, alignment: .top)
     }
 }
-
-
 
 extension InsightView {
     class ViewModel: ObservableObject {
