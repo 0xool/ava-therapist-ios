@@ -8,17 +8,6 @@
 import Foundation
 import RealmSwift
 
-
-//struct Conversation:  Identifiable {
-//    typealias Identifier = String
-//
-//    let conversationId: Identifier
-//    let summary: String?
-//    let moodID: Int?
-//    let topDescribingWords: String?
-//    let conversationID: Int?
-//}
-
 class Conversations: Decodable{
     var conversations: [Conversation]
     
@@ -76,7 +65,6 @@ class Conversation: Object, Decodable {
     @Persisted var dateCreated: Date
     @Persisted var chats: List<Chat>
     //    @Persisted var messages: List<Message>
-    
     //    enum CodingKeys: String, CodingKey {
     //        case id = "conversationID"
     //        case userID = "UserID"

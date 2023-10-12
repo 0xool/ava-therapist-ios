@@ -41,6 +41,7 @@
 		A57AD7E02AA67B51008EC1FB /* Loadable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57AD7DF2AA67B51008EC1FB /* Loadable.swift */; };
 		A58AA4952AD601C9001F7253 /* ChatDBRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A58AA4942AD601C9001F7253 /* ChatDBRepository.swift */; };
 		A58AA4972AD7A9DA001F7253 /* Loading.swift in Sources */ = {isa = PBXBuildFile; fileRef = A58AA4962AD7A9D9001F7253 /* Loading.swift */; };
+		A58AA4992AD7C86B001F7253 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A58AA4982AD7C86B001F7253 /* Constants.swift */; };
 		A596AD1229B4385100C19DA6 /* MicManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A596AD1129B4385100C19DA6 /* MicManager.swift */; };
 		A59C63F02ACA37EE00B76256 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A59C63CB2ACA37EE00B76256 /* LoginViewModel.swift */; };
 		A59C63F12ACA37EE00B76256 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A59C63CD2ACA37EE00B76256 /* LoginView.swift */; };
@@ -142,6 +143,7 @@
 		A57AD7DF2AA67B51008EC1FB /* Loadable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Loadable.swift; sourceTree = "<group>"; };
 		A58AA4942AD601C9001F7253 /* ChatDBRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatDBRepository.swift; sourceTree = "<group>"; };
 		A58AA4962AD7A9D9001F7253 /* Loading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Loading.swift; sourceTree = "<group>"; };
+		A58AA4982AD7C86B001F7253 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Constants.swift; path = AITherapist/Utilities/Constants.swift; sourceTree = SOURCE_ROOT; };
 		A596AD1129B4385100C19DA6 /* MicManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicManager.swift; sourceTree = "<group>"; };
 		A59C63CB2ACA37EE00B76256 /* LoginViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		A59C63CD2ACA37EE00B76256 /* LoginView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
@@ -674,6 +676,7 @@
 				A5AE6FEC2AA3F00A00168037 /* Assets */,
 				A5B7D5E729B41997001D7113 /* Utilities.swift */,
 				A505865629BD00C8001F1970 /* Extentions.swift */,
+				A58AA4982AD7C86B001F7253 /* Constants.swift */,
 			);
 			name = Resources;
 			path = /Users/cyrusrefahi/Documents/AITherapist/AITherapist/Resources;
@@ -939,6 +942,7 @@
 				A58AA4952AD601C9001F7253 /* ChatDBRepository.swift in Sources */,
 				A569DF042AA4488C006D39AA /* DependencyInjector.swift in Sources */,
 				A57AD7D82AA6781F008EC1FB /* ConversationService.swift in Sources */,
+				A58AA4992AD7C86B001F7253 /* Constants.swift in Sources */,
 				A5B7D5D029B3B03C001D7113 /* Enums.swift in Sources */,
 				A5EFC5932AC10F0C00D6097B /* Quote.swift in Sources */,
 				A5CA948D2AA7FA6D00E25A46 /* PushNotificationsHandler.swift in Sources */,

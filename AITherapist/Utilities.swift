@@ -9,11 +9,7 @@ import Foundation
 import SwiftUI
 
 
-struct Constants {
-    static let BaseUrl = "http://137.184.10.164:3000"
-    static private let sendConversationUrl = "/therapistAnswer"
-    static let SendConversationUrl: String = BaseUrl + sendConversationUrl
-}
+
 
 struct ColorPallet{
     static let creameColor: Color = Color(red: 253/255, green: 232/255, blue: 182/255)

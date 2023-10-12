@@ -34,7 +34,7 @@ extension WebRepository {
     
     func SetCookie(cookie: String) {
         let cookieProps = [
-            HTTPCookiePropertyKey.domain: "aitherapist.online",
+            HTTPCookiePropertyKey.domain: Constants.BaseUrl,
             HTTPCookiePropertyKey.path: "/",
             HTTPCookiePropertyKey.name: "jwt",
             HTTPCookiePropertyKey.value: cookie
@@ -47,10 +47,10 @@ extension WebRepository {
     
     private func generateTestCookie() {
         let cookieProps = [
-            HTTPCookiePropertyKey.domain: "aitherapist.online",
+            HTTPCookiePropertyKey.domain: Constants.BaseUrl,
             HTTPCookiePropertyKey.path: "/",
             HTTPCookiePropertyKey.name: "jwt",
-            HTTPCookiePropertyKey.value: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3MDc1OTcxLCJleHAiOjE3MDA2NzU5NzF9.SdOm3SavsS5DxthhFD85gMoUr50wd5BU4UmqMyg9XpQ"
+            HTTPCookiePropertyKey.value: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3MDkxMTI2LCJleHAiOjE3MDA2OTExMjZ9.iwscIb8HOWlhdXu6zljCUgxHzsO7T2LjQDDlmSh1Zpo"
         ]
         
         if let cookie = HTTPCookie(properties: cookieProps) {
@@ -61,6 +61,7 @@ extension WebRepository {
     
     func GetRequest<D>(pathVariable: String?, params: [String : Any]?, url: String) -> AnyPublisher<D, Error> where D : Decodable  {
         
+        #warning ("REMOVE TESTS")
         generateTestCookie()
         
         return AF.request(url,
@@ -71,12 +72,15 @@ extension WebRepository {
         .mapError{
             $0 as Error
         }
+        .print("DEBBUGING")
+        .breakpoint()
         .receive(on: DispatchQueue.main)
         .eraseToAnyPublisher()
     }
     
     func SendRequest<D>(pathVariable: String?, params: [String : Any]?, url: String) -> AnyPublisher<D, Error> where D : Decodable  {
         
+        #warning ("REMOVE TESTS")
         generateTestCookie()
         
         return AF.request(url,
