@@ -15,9 +15,8 @@ struct ContentMessageView: View {
         Text(contentMessage)
             .padding(10)
             .foregroundColor(isUser ? Color.black : Color.white)
-            .background(isUser ? ColorPallet.blueUserMessage : ColorPallet.greenAiMessage)
-            .cornerRadius(10)
-            
+            .background(isUser ? ColorPallet.SecondaryColorBlue : ColorPallet.SecondaryColorGreen)
+            .cornerRadius(10)   
     }
 }
 

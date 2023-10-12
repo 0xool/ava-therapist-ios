@@ -10,7 +10,7 @@ import Foundation
 import SwiftUI
 
 protocol ConversationService {
-    func loadConversationList(conversations: LoadableSubject<[Conversation]>)
+    func loadConversationList(conversations: LoadableSubject<LazyList<Conversation>>)
 //    func loadConversationChat(message: LoadableSubject<LazyList<Message>>)
 }
 
@@ -26,7 +26,7 @@ struct MainConversationService: ConversationService {
         self.appState = appState
     }
     
-    func loadConversationList(conversations: LoadableSubject<[Conversation]>) {
+    func loadConversationList(conversations: LoadableSubject<LazyList<Conversation>>) {
         
         let cancelBag = CancelBag()
         conversations.wrappedValue.setIsLoading(cancelBag: cancelBag)
@@ -87,7 +87,7 @@ struct MainConversationService: ConversationService {
 }
 
 struct StubCountriesService: ConversationService {
-    func loadConversationList(conversations: LoadableSubject<[Conversation]>) {
+    func loadConversationList(conversations: LoadableSubject<LazyList<Conversation>>) {
     }
     
  }

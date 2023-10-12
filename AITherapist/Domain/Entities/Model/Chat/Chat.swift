@@ -8,7 +8,7 @@
 import Foundation
 import RealmSwift
 
-class Chat: Object, Codable {
+class Chat: Object, Codable, Identifiable {
     
     @Persisted(primaryKey: true) var id: Int
     @Persisted var message: String
@@ -25,6 +25,17 @@ class Chat: Object, Codable {
         case chatSequence = "ChatSequence"
         case isUserMessage = "IsUserMessage"
         case dateCreated = "DateCreated"
+    }
+    
+    init(id: Int, message: String, conversationID: Int, chatSequence: Int, isUserMessage: Bool, dateCreated: Date){
+        super.init()
+        self.id = id
+        self.message = message
+        self.conversationID = conversationID
+        
+        self.chatSequence = chatSequence
+        self.isUserMessage = isUserMessage
+        self.dateCreated = dateCreated
     }
     
     override init() {

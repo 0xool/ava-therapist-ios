@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct MessageView : View {
-    var currentMessage: Message
+    var chat: Chat
+    
     var body: some View {
         HStack(alignment: .top, spacing: 15) {
-            if !currentMessage.isUser {
-                
+            if !chat.isUserMessage {
                 ZStack {
                     Circle()
-                        .foregroundColor(ColorPallet.aiPortraitColor)
+                        .foregroundColor(ColorPallet.SecondaryColorBlue)
                     .frame(width: 40, height: 40, alignment: .top)
                     Text("Ava")
                         .foregroundColor(.black)
@@ -23,17 +23,16 @@ struct MessageView : View {
             } else {
                 Spacer()
             }
-            ContentMessageView(contentMessage: currentMessage.content,
-                               isUser: currentMessage.isUser)
+            ContentMessageView(contentMessage: chat.message,
+                               isUser: chat.isUserMessage)
         }
-        .background(ColorPallet.greenBackground)
+        .frame(maxWidth: .infinity, alignment: chat.isUserMessage ? .trailing : .leading )
     }
 }
 
 struct MessageView_Previews: PreviewProvider {
     static var previews: some View {
-        let message = Message(id: 0, content: "Hello User I am AITherapist, Hello User I am AITherapist, Hello User I am AITherapist, Hello User I am AITherapist", isUser: false)
-//        Message(content: "Hello User I am AITherapist, Hello User I am AITherapist, Hello User I am AITherapist, Hello User I am AITherapist", isUser: false)
-        MessageView(currentMessage: message)
+        let chat = Chat(id: 0, message: "Hello User I am AITherapist, Hello User I am AITherapist, Hello User I am AITherapist, Hello User I am AITherapist", conversationID: 10, chatSequence: 1, isUserMessage: false, dateCreated: .now)
+        MessageView(chat: chat)
     }
 }

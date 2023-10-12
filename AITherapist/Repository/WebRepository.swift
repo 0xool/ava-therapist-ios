@@ -50,7 +50,7 @@ extension WebRepository {
             HTTPCookiePropertyKey.domain: "aitherapist.online",
             HTTPCookiePropertyKey.path: "/",
             HTTPCookiePropertyKey.name: "jwt",
-            HTTPCookiePropertyKey.value: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiaWF0IjoxNjk0MDQzODUyLCJleHAiOjE2OTc2NDM4NTJ9.XZ5eG2Hgu6ecm_QFts0rKuoALyOK1BYYssqIUjkDfhA"
+            HTTPCookiePropertyKey.value: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3MDc1OTcxLCJleHAiOjE3MDA2NzU5NzF9.SdOm3SavsS5DxthhFD85gMoUr50wd5BU4UmqMyg9XpQ"
         ]
         
         if let cookie = HTTPCookie(properties: cookieProps) {
@@ -60,6 +60,8 @@ extension WebRepository {
     }
     
     func GetRequest<D>(pathVariable: String?, params: [String : Any]?, url: String) -> AnyPublisher<D, Error> where D : Decodable  {
+        
+        generateTestCookie()
         
         return AF.request(url,
                           method: .get, parameters: params)
@@ -74,6 +76,9 @@ extension WebRepository {
     }
     
     func SendRequest<D>(pathVariable: String?, params: [String : Any]?, url: String) -> AnyPublisher<D, Error> where D : Decodable  {
+        
+        generateTestCookie()
+        
         return AF.request(url,
                           method: .post, parameters: params, encoding: Alamofire.JSONEncoding.default)
         .validate()

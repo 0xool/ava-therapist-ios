@@ -17,10 +17,11 @@ struct MainView: View {
                 .tabItem {
                     Label("Insight", systemImage: "figure.mind.and.body")
                 }
-            TherapyChatView()
+            //            TherapyChatView(viewModel: .init(conversation: Conversation, container: viewModel.container))
+            ConversationListView(viewModel: .init(coninater: viewModel.container))
                 .tabItem {
                     ZStack {
-                        Label("Chat", systemImage: "bubble.middle.bottom.fill")
+                        Label("ConversationList", systemImage: "list.dash")
                             .overlay {
                                 Circle()
                                     .frame(width: 50, height: 50)
@@ -34,8 +35,11 @@ struct MainView: View {
                     Label("Meditation", systemImage: "camera.macro")
                 }
         }
-        
-        .background(Color(red: 180/255, green: 255/255, blue: 150/255))
+        .onAppear() {
+            UITabBar.appearance().barTintColor = .white
+            UITabBar.appearance().backgroundColor = .white
+        }
+        //        .background(Color(red: 180/255, green: 255/255, blue: 150/255))
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }

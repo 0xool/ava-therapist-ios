@@ -39,6 +39,8 @@
 		A57AD7D82AA6781F008EC1FB /* ConversationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57AD7D72AA6781F008EC1FB /* ConversationService.swift */; };
 		A57AD7DA2AA678CB008EC1FB /* LazyList.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57AD7D92AA678CB008EC1FB /* LazyList.swift */; };
 		A57AD7E02AA67B51008EC1FB /* Loadable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57AD7DF2AA67B51008EC1FB /* Loadable.swift */; };
+		A58AA4952AD601C9001F7253 /* ChatDBRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A58AA4942AD601C9001F7253 /* ChatDBRepository.swift */; };
+		A58AA4972AD7A9DA001F7253 /* Loading.swift in Sources */ = {isa = PBXBuildFile; fileRef = A58AA4962AD7A9D9001F7253 /* Loading.swift */; };
 		A596AD1229B4385100C19DA6 /* MicManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A596AD1129B4385100C19DA6 /* MicManager.swift */; };
 		A59C63F02ACA37EE00B76256 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A59C63CB2ACA37EE00B76256 /* LoginViewModel.swift */; };
 		A59C63F12ACA37EE00B76256 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A59C63CD2ACA37EE00B76256 /* LoginView.swift */; };
@@ -138,6 +140,8 @@
 		A57AD7D72AA6781F008EC1FB /* ConversationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationService.swift; sourceTree = "<group>"; };
 		A57AD7D92AA678CB008EC1FB /* LazyList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LazyList.swift; sourceTree = "<group>"; };
 		A57AD7DF2AA67B51008EC1FB /* Loadable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Loadable.swift; sourceTree = "<group>"; };
+		A58AA4942AD601C9001F7253 /* ChatDBRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatDBRepository.swift; sourceTree = "<group>"; };
+		A58AA4962AD7A9D9001F7253 /* Loading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Loading.swift; sourceTree = "<group>"; };
 		A596AD1129B4385100C19DA6 /* MicManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicManager.swift; sourceTree = "<group>"; };
 		A59C63CB2ACA37EE00B76256 /* LoginViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		A59C63CD2ACA37EE00B76256 /* LoginView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
@@ -322,6 +326,7 @@
 				A5CA94902AA7FFBC00E25A46 /* PushTokenWebRepository.swift */,
 				A5CA94A32AA9646500E25A46 /* UserDBRepository.swift */,
 				A50B167A2AC26D3300571D27 /* InsightDBRepository.swift */,
+				A58AA4942AD601C9001F7253 /* ChatDBRepository.swift */,
 			);
 			path = Repository;
 			sourceTree = "<group>";
@@ -451,6 +456,7 @@
 				A59C63D82ACA37EE00B76256 /* ActivityIndicatorView.swift */,
 				A59C63D92ACA37EE00B76256 /* ErrorView.swift */,
 				A59C64082ACA58E500B76256 /* ChartView.swift */,
+				A58AA4962AD7A9D9001F7253 /* Loading.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -492,7 +498,6 @@
 			children = (
 				A59C63E12ACA37EE00B76256 /* ContentMessageView.swift */,
 				A59C63E22ACA37EE00B76256 /* SpeechVisualBarView.swift */,
-				A59C63E32ACA37EE00B76256 /* TherapyChatView.swift */,
 				A59C63E42ACA37EE00B76256 /* SignUpView.swift */,
 				A59C63E52ACA37EE00B76256 /* MessageView.swift */,
 			);
@@ -543,6 +548,7 @@
 		A59C63EF2ACA37EE00B76256 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				A59C63E32ACA37EE00B76256 /* TherapyChatView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -899,6 +905,7 @@
 				A525EEAC29B172BC00A57CE8 /* ContentView.swift in Sources */,
 				A59C64092ACA58E500B76256 /* ChartView.swift in Sources */,
 				A5CA948B2AA7D74300E25A46 /* ConversationDBRepository.swift in Sources */,
+				A58AA4972AD7A9DA001F7253 /* Loading.swift in Sources */,
 				A5B7D5CE29B3AFFD001D7113 /* User.swift in Sources */,
 				A59C63FD2ACA37EE00B76256 /* ContentMessageView.swift in Sources */,
 				A57AD7E02AA67B51008EC1FB /* Loadable.swift in Sources */,
@@ -929,6 +936,7 @@
 				A50B167B2AC26D3300571D27 /* InsightDBRepository.swift in Sources */,
 				A569DF002AA447B0006D39AA /* AppDelegate.swift in Sources */,
 				A59C64022ACA37EE00B76256 /* BreathingView.swift in Sources */,
+				A58AA4952AD601C9001F7253 /* ChatDBRepository.swift in Sources */,
 				A569DF042AA4488C006D39AA /* DependencyInjector.swift in Sources */,
 				A57AD7D82AA6781F008EC1FB /* ConversationService.swift in Sources */,
 				A5B7D5D029B3B03C001D7113 /* Enums.swift in Sources */,
@@ -1058,7 +1066,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1114,7 +1122,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -1145,7 +1153,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1180,7 +1188,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

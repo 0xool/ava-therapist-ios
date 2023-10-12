@@ -27,15 +27,16 @@ extension View {
 public struct PlaceholderStyle: ViewModifier {
     var showPlaceHolder: Bool
     var placeholder: String
+    var isLargeChatbox = false
 
     public func body(content: Content) -> some View {
-        ZStack(alignment: .topLeading) {
+        ZStack(alignment: isLargeChatbox ? .topLeading : .leading) {
             if showPlaceHolder {
                 Text(placeholder)
-                    .foregroundColor(ColorPallet.greenAiMessage)
+                    .foregroundColor(.white)
                     .font(.system(size: 10))
-                .padding(.horizontal, 15)
-                .offset(y: 8)
+                    .padding(.horizontal, isLargeChatbox ? 15 : 8)
+                .offset(y: isLargeChatbox ? 15 : 0)
             }
             content
             .foregroundColor(Color.black)

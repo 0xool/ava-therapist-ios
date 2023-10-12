@@ -69,21 +69,22 @@ struct ConversationsResponse: Decodable {
 class Conversation: Object, Decodable {
     
     @Persisted(primaryKey: true) var id: Int
-//    @Persisted var userID: Int
-//    @Persisted var therapistID: Int
-//    @Persisted var conversationSummaryID: Int
+    //    @Persisted var userID: Int
+    //    @Persisted var therapistID: Int
+    //    @Persisted var conversationSummaryID: Int
     @Persisted var conversationName: String
     @Persisted var dateCreated: Date
-//    @Persisted var messages: List<Message>
+    @Persisted var chats: List<Chat>
+    //    @Persisted var messages: List<Message>
     
-//    enum CodingKeys: String, CodingKey {
-//        case id = "conversationID"
-//        case userID = "UserID"
-//        case therapistID = "TherapistID"
-//        case conversationSummaryID = "ConversationSummaryID"
-//        case conversationName = "conversationName"
-//        case dateCreated = "dateCreated"
-//    }
+    //    enum CodingKeys: String, CodingKey {
+    //        case id = "conversationID"
+    //        case userID = "UserID"
+    //        case therapistID = "TherapistID"
+    //        case conversationSummaryID = "ConversationSummaryID"
+    //        case conversationName = "conversationName"
+    //        case dateCreated = "dateCreated"
+    //    }
     
     enum CodingKeys: String, CodingKey {
         case id = "conversationID"
@@ -100,20 +101,27 @@ class Conversation: Object, Decodable {
         self.id = id
         self.conversationName = conversationName
         self.dateCreated = date
+        self.chats = List<Chat>()
+        
+        let chat = Chat(id: 0, message: "Hi, How can I help you?", conversationID: 1, chatSequence: 0, isUserMessage: false, dateCreated: .now)
+        let chat1 = Chat(id: 1, message: "I'm good how are you?", conversationID: 1, chatSequence: 1, isUserMessage: true, dateCreated: .now)
+        let chat2 = Chat(id: 2, message: "Glad to hear that", conversationID: 1, chatSequence: 2, isUserMessage: false, dateCreated: .now)
+        self.chats.append(chat)
+        self.chats.append(chat1)
+        self.chats.append(chat2)
     }
     
     required init(from decoder: Decoder) throws {
         super.init()
         let container = try decoder.container(keyedBy: CodingKeys.self)
         id = try container.decode(Int.self , forKey: .id)
-//        userID = try container.decode(Int.self , forKey: .userID)
-//        therapistID = try container.decode(Int.self , forKey: .therapistID)
-//        conversationSummaryID = try container.decode(Int.self , forKey: .conversationSummaryID)
+        //        userID = try container.decode(Int.self , forKey: .userID)
+        //        therapistID = try container.decode(Int.self , forKey: .therapistID)
+        //        conversationSummaryID = try container.decode(Int.self , forKey: .conversationSummaryID)
         conversationName = try container.decode(String.self , forKey: .conversationName)
         let date = try container.decode(String.self , forKey: .dateCreated)
         dateCreated = convertStringToDate(date)!
     }
-    
     
     func convertStringToDate(_ dateString: String) -> Date? {
         let dateFormatter = DateFormatter()
@@ -122,8 +130,6 @@ class Conversation: Object, Decodable {
         
         return dateFormatter.date(from: dateString)
     }
-    
-    
 }
 
 //class Conversation: Object, Decodable {
