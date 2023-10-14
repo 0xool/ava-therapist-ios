@@ -42,6 +42,10 @@
 		A58AA4952AD601C9001F7253 /* ChatDBRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A58AA4942AD601C9001F7253 /* ChatDBRepository.swift */; };
 		A58AA4972AD7A9DA001F7253 /* Loading.swift in Sources */ = {isa = PBXBuildFile; fileRef = A58AA4962AD7A9D9001F7253 /* Loading.swift */; };
 		A58AA4992AD7C86B001F7253 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A58AA4982AD7C86B001F7253 /* Constants.swift */; };
+		A58AA49B2AD8D8A3001F7253 /* ChatRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A58AA49A2AD8D8A3001F7253 /* ChatRepository.swift */; };
+		A58AA49C2AD8D8A3001F7253 /* ChatRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A58AA49A2AD8D8A3001F7253 /* ChatRepository.swift */; };
+		A58AA49E2AD8E9B1001F7253 /* ChatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A58AA49D2AD8E9B1001F7253 /* ChatService.swift */; };
+		A58AA49F2AD8E9B1001F7253 /* ChatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A58AA49D2AD8E9B1001F7253 /* ChatService.swift */; };
 		A596AD1229B4385100C19DA6 /* MicManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A596AD1129B4385100C19DA6 /* MicManager.swift */; };
 		A59C63F02ACA37EE00B76256 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A59C63CB2ACA37EE00B76256 /* LoginViewModel.swift */; };
 		A59C63F12ACA37EE00B76256 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A59C63CD2ACA37EE00B76256 /* LoginView.swift */; };
@@ -144,6 +148,8 @@
 		A58AA4942AD601C9001F7253 /* ChatDBRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatDBRepository.swift; sourceTree = "<group>"; };
 		A58AA4962AD7A9D9001F7253 /* Loading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Loading.swift; sourceTree = "<group>"; };
 		A58AA4982AD7C86B001F7253 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Constants.swift; path = AITherapist/Utilities/Constants.swift; sourceTree = SOURCE_ROOT; };
+		A58AA49A2AD8D8A3001F7253 /* ChatRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRepository.swift; sourceTree = "<group>"; };
+		A58AA49D2AD8E9B1001F7253 /* ChatService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatService.swift; sourceTree = "<group>"; };
 		A596AD1129B4385100C19DA6 /* MicManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicManager.swift; sourceTree = "<group>"; };
 		A59C63CB2ACA37EE00B76256 /* LoginViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		A59C63CD2ACA37EE00B76256 /* LoginView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
@@ -329,6 +335,7 @@
 				A5CA94A32AA9646500E25A46 /* UserDBRepository.swift */,
 				A50B167A2AC26D3300571D27 /* InsightDBRepository.swift */,
 				A58AA4942AD601C9001F7253 /* ChatDBRepository.swift */,
+				A58AA49A2AD8D8A3001F7253 /* ChatRepository.swift */,
 			);
 			path = Repository;
 			sourceTree = "<group>";
@@ -401,6 +408,7 @@
 				A5CA94922AA8039D00E25A46 /* UserPermissionsService.swift */,
 				A5CA94A12AA959BD00E25A46 /* AuthenticateService.swift */,
 				A50B16782AC26BA400571D27 /* InsightService.swift */,
+				A58AA49D2AD8E9B1001F7253 /* ChatService.swift */,
 			);
 			name = Service;
 			path = /Users/cyrusrefahi/Documents/AITherapist/AITherapist/Service;
@@ -875,6 +883,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				A51B4E3B2AD0F1C300A14AFA /* ConversationsTests.swift in Sources */,
+				A58AA49F2AD8E9B1001F7253 /* ChatService.swift in Sources */,
+				A58AA49C2AD8D8A3001F7253 /* ChatRepository.swift in Sources */,
 				A51B4E342AD0F14500A14AFA /* AITherapistTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -896,6 +906,7 @@
 				A59C63F02ACA37EE00B76256 /* LoginViewModel.swift in Sources */,
 				A5EFC5962AC10FC600D6097B /* Mood.swift in Sources */,
 				A59C64002ACA37EE00B76256 /* SignUpView.swift in Sources */,
+				A58AA49E2AD8E9B1001F7253 /* ChatService.swift in Sources */,
 				A59C63FE2ACA37EE00B76256 /* SpeechVisualBarView.swift in Sources */,
 				A5EFC5912AC1072300D6097B /* Insight.swift in Sources */,
 				A505865529BD003B001F1970 /* PersistentManager.swift in Sources */,
@@ -928,6 +939,7 @@
 				A59C63F62ACA37EE00B76256 /* RootViewAppearance.swift in Sources */,
 				A59C63FB2ACA37EE00B76256 /* HomeView.swift in Sources */,
 				A59C63F32ACA37EE00B76256 /* PasswordInputView.swift in Sources */,
+				A58AA49B2AD8D8A3001F7253 /* ChatRepository.swift in Sources */,
 				A5AE6FDA2AA3E9AE00168037 /* ConversationSummary.swift in Sources */,
 				A59C64052ACA37EE00B76256 /* TherapyChatModel.swift in Sources */,
 				A50A1A662AA44A2D00A6AD6D /* ServiceContainer.swift in Sources */,

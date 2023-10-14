@@ -8,6 +8,18 @@
 import Foundation
 import RealmSwift
 
+struct ChatServerResponse: Decodable {
+    var code: Int
+    var message: String
+    var chats: [Chat]
+    
+    enum CodingKeys: String, CodingKey {
+        case message = "message"
+        case code = "code"
+        case chats = "chat"
+    }
+}
+
 class Chat: Object, Codable, Identifiable {
     
     @Persisted(primaryKey: true) var id: Int

@@ -12,19 +12,22 @@ extension DIContainer {
         let conversationService: ConversationService
         let userPermissionsService: UserPermissionsService
         let authenticationService: AuthenticateService
-        let insightService: InsightService
         
-        init(conversationService: ConversationService, userPermissionsService: UserPermissionsService, authenticationService: AuthenticateService, insightService: InsightService) {
+        let insightService: InsightService
+        let chatService: ChatService
+        
+        init(conversationService: ConversationService, userPermissionsService: UserPermissionsService, authenticationService: AuthenticateService, insightService: InsightService, chatService: ChatService) {
             self.conversationService = conversationService
             self.userPermissionsService = userPermissionsService
             self.authenticationService = authenticationService
             
             self.insightService = insightService
+            self.chatService = chatService
         }
         
         static var stub: Self {
             .init(conversationService: StubCountriesService(),
-                  userPermissionsService: StubUserPermissionsService(), authenticationService: StubAuthenticateService(), insightService: StubInsightService())
+                  userPermissionsService: StubUserPermissionsService(), authenticationService: StubAuthenticateService(), insightService: StubInsightService(), chatService: StubChatService())
         }
     }
 }

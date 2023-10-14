@@ -11,9 +11,13 @@ import Combine
 
 protocol DataBase {
     func GetAll<T: RealmFetchable>() -> LazyList<T>
+    func GetByID<T: Object>(id: Int) -> T?
+    func GetByTypeID<T: Object>(ofType: T.Type, id: Int, query: @escaping (Query<T>) -> Query<Bool>) -> AnyPublisher<Results<T>, Error>
     func GetCount<T: RealmFetchable>(value: T.Type) -> Int
     func Write<T: Object>(writeData: T) -> AnyPublisher<Void, Error>
-    func DeleteAndWrite<T: Object>(data: T) -> AnyPublisher<Void, Error>
+    
+    func Update<T: Object>(value: T) -> AnyPublisher<Void,  Error>
+    func UpdateOrWrite<T: Object>(data: T) -> AnyPublisher<Void, Error>
     func EntityExist<Element: Object>(id: Int, ofType: Element.Type) -> Bool
 }
 
@@ -21,6 +25,23 @@ class DataBaseManager: DataBase {
     
     func GetAll<T: RealmFetchable>() -> LazyList<T> {
         return realm.objects(T.self).lazyList
+    }
+    
+    func GetByTypeID<T: Object>(ofType: T.Type, id: Int, query: @escaping (Query<T>) -> Query<Bool>) -> AnyPublisher<Results<T>, Error> {
+        return Future<Results<T>, Error> { promise in
+            let value: Results<T> = self.realm.objects(T.self).where(query)
+            
+            if (value.isEmpty){
+                promise(.success(value))
+            }else{
+                promise(.failure(DataBaseError.NotFound))
+            }
+        }
+        .eraseToAnyPublisher()
+    }
+    
+    func GetByID<T: Object>(id: Int) -> T? {
+        return realm.object(ofType: T.self, forPrimaryKey: id)
     }
     
     func GetCount<T: RealmFetchable>(value: T.Type) -> Int {
@@ -31,7 +52,21 @@ class DataBaseManager: DataBase {
         return realm.object(ofType: ofType, forPrimaryKey: id) != nil
     }
     
-    func DeleteAndWrite<T: Object>(data: T) -> AnyPublisher<Void, Error> {
+    func Update<T: Object>(value: T) -> AnyPublisher<Void,  Error> {
+        return Future<Void, Error> { promise in
+            do {
+                try self.realm.write {
+                    self.realm.add(value, update: .modified)
+                }
+                promise(.success(()))
+            } catch {
+                promise(.failure(error))
+            }
+        }
+        .eraseToAnyPublisher()
+    }
+    
+    func UpdateOrWrite<T: Object>(data: T) -> AnyPublisher<Void, Error> {
         return Future<Void, Error> {  promise in
             
             do {
@@ -124,11 +159,10 @@ class DataBaseManager: DataBase {
         .eraseToAnyPublisher()
     }
     
-    //
     func readRecipeDatas() -> Conversation{
         return Array(realm.objects(Conversation.self))[0]
     }
-    //
+    
     func deleteConversation(conversation: Conversation) {
         realm.delete(conversation)
     }
@@ -159,4 +193,6 @@ class DataBaseManager: DataBase {
 public enum DataBaseError: Error {
     case SelfIsNil
     case UserIsNil
+    case ObjcectWithIDNotFound
+    case NotFound
 }

@@ -15,6 +15,7 @@ enum Loadable<T> {
     case notRequested
     case isLoading(last: T?, cancelBag: CancelBag)
     case loaded(T)
+    case PartialLoaded(T)
     case failed(Error)
 
     var value: T? {
@@ -65,6 +66,8 @@ extension Loadable {
                                   cancelBag: cancelBag)
             case let .loaded(value):
                 return .loaded(try transform(value))
+            case .PartialLoaded(_):
+                return .notRequested
             }
         } catch {
             return .failed(error)

@@ -8,6 +8,7 @@
 import SwiftUI
 import AVFoundation
 import Speech
+
 import Combine
 import Foundation
 
@@ -36,84 +37,18 @@ struct TherapyChatView: View {
     }
     
     var body: some View {
-        
-        ZStack {
-            GeometryReader { geo in
-                VStack {
-                    if viewModel.conversation.chats.count > 0 {
-                        ScrollViewReader{ proxy in
-                            ScrollView {
-                                ForEach(viewModel.conversation.chats.map{$0}) { chat in
-                                    MessageView(chat: chat)
-                                        .listRowSeparator(.hidden)
-                                }.listRowBackground(ColorPallet.BackgroundColorLight)
-                            }
-                            .scrollContentBackground(.hidden)
-                            .background(ColorPallet.BackgroundColorLight)
-                            .padding([.top], 20)
-                            .padding([.bottom], 15)
-                            .padding([.leading, .trailing], 16)
-                            .onReceive(keyboardHeightPublisher) { _ in
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
-                                    withAnimation {
-                                        proxy.scrollTo(viewModel.conversation.chats.last?.id)
-                                    }
-                                }
-                            }
-                            .onReceive(viewModel.$isUserTurnToSpeak, perform: { _ in
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
-                                    withAnimation {
-                                        proxy.scrollTo(viewModel.conversation.chats.last?.id)
-                                    }
-                                }
-                            })
-                        }
-                    }else{
-                        Rectangle()
-                            .foregroundColor(ColorPallet.BackgroundColorLight)
-                    }
-                    
-                    if viewModel.isUserTurnToSpeak {
-                        VStack{
-                            self.isRecording ? speechInputView() : nil
-                            HStack {
-                                Text(userMessage.count.description)
-                                withAnimation {
-                                    
-                                    TextField("", text: $userMessage, axis: .vertical)
-                                        .textFieldStyle(ChatWithAiTextField())
-                                        .modifier(PlaceholderStyle(showPlaceHolder: userMessage.isEmpty,
-                                                                   placeholder: setPlaceHolder ? "" : "What's on your mind today?", isLargeChatbox: (userMessage.count > MessageViewLineLimitMax)))
-                                        .padding(8)
-                                        .background(.gray)
-                                        .frame(height: (userMessage.count > 30) ? 75 : 35)
-                                        .padding([.top], 4)
-                                        .cornerRadius(15)
-                                        .foregroundColor(.white)
-                                }
-                                HStack {
-                                    sendBtnView()
-                                    speechBtnView()
-                                }
-                            }.frame(height: 70, alignment: .bottom)
-                                .padding()
-                                .padding([.top], 0)
-//                                .background(ColorPallet.greenBackground)
-                            
-                        }
-                        .frame(height: 70)
-                        .padding([.bottom], isRecording ? 10 : 0)
-                        .offset(y: -10)
-                    }else{
-                        CircleLoading()
-                    }
-                }
-            }
+        switch self.viewModel.conversation {
+        case .notRequested:
+            notRequestedView
+        case .isLoading(last: _, cancelBag: _):
+            loadingView()
+        case let .loaded(conversation):
+            mainChatView(conversation: conversation)
+        case let .failed(error):
+            failedView(error)
+        case .PartialLoaded(_):
+            notRequestedView
         }
-        .onTapGesture {
-            self.hideKeyboard()
-        }
-        .background(ColorPallet.BackgroundColorLight)
     }
 
     func sendMessage() {
@@ -203,6 +138,105 @@ struct TherapyChatView: View {
     }
 }
 
+private extension TherapyChatView {
+    private var notRequestedView: some View {
+        Text("").onAppear(perform: self.viewModel.loadConversationChat)
+    }
+    
+    func failedView(_ error: Error) -> some View {
+        ErrorView(error: error, retryAction: {
+//            self.viewModel.loadConversationList()
+            #warning("Handle Conversation ERROR")
+            print("Handle Conversation ERROR")
+            
+        })
+    }
+    
+    private func loadingView() -> some View {
+        CircleLoading()
+    }
+    
+    private func mainChatView(conversation: Conversation) -> some View {
+        ZStack {
+            GeometryReader { geo in
+                VStack {
+                    if conversation.chats.count > 0 {
+                        ScrollViewReader{ proxy in
+                            ScrollView {
+                                ForEach(conversation.chats.map{$0}) { chat in
+                                    MessageView(chat: chat)
+                                        .listRowSeparator(.hidden)
+                                }.listRowBackground(ColorPallet.BackgroundColorLight)
+                            }
+                            .scrollContentBackground(.hidden)
+                            .background(ColorPallet.BackgroundColorLight)
+                            .padding([.top], 20)
+                            .padding([.bottom], 15)
+                            .padding([.leading, .trailing], 16)
+                            .onReceive(keyboardHeightPublisher) { _ in
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                                    withAnimation {
+                                        proxy.scrollTo(conversation.chats.last?.id)
+                                    }
+                                }
+                            }
+                            .onReceive(viewModel.$isUserTurnToSpeak, perform: { _ in
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                                    withAnimation {
+                                        proxy.scrollTo(conversation.chats.last?.id)
+                                    }
+                                }
+                            })
+                        }
+                    }else{
+                        Rectangle()
+                            .foregroundColor(ColorPallet.BackgroundColorLight)
+                    }
+                    
+                    if viewModel.isUserTurnToSpeak {
+                        VStack{
+                            self.isRecording ? speechInputView() : nil
+                            HStack {
+                                Text(userMessage.count.description)
+                                withAnimation {
+                                    
+                                    TextField("", text: $userMessage, axis: .vertical)
+                                        .textFieldStyle(ChatWithAiTextField())
+                                        .modifier(PlaceholderStyle(showPlaceHolder: userMessage.isEmpty,
+                                                                   placeholder: setPlaceHolder ? "" : "What's on your mind today?", isLargeChatbox: (userMessage.count > MessageViewLineLimitMax)))
+                                        .padding(8)
+                                        .background(.gray)
+                                        .frame(height: (userMessage.count > 30) ? 75 : 35)
+                                        .padding([.top], 4)
+                                        .cornerRadius(15)
+                                        .foregroundColor(.white)
+                                }
+                                HStack {
+                                    sendBtnView()
+                                    speechBtnView()
+                                }
+                            }.frame(height: 70, alignment: .bottom)
+                                .padding()
+                                .padding([.top], 0)
+//                                .background(ColorPallet.greenBackground)
+                            
+                        }
+                        .frame(height: 70)
+                        .padding([.bottom], isRecording ? 10 : 0)
+                        .offset(y: -10)
+                    }else{
+                        CircleLoading()
+                    }
+                }
+            }
+        }
+        .onTapGesture {
+            self.hideKeyboard()
+        }
+        .background(ColorPallet.BackgroundColorLight)
+    }
+}
+
 extension TherapyChatView {
     
     
@@ -224,11 +258,12 @@ extension TherapyChatView {
     class ViewModel: ObservableObject {
         let container: DIContainer
         private var cancelBag = CancelBag()
-        @Published var conversation: Conversation
+        @Published var conversation: Loadable<Conversation>
         
         @Published var isUserTurnToSpeak: Bool = true
         var speechRecognizer = SpeechManager()
         var didChange = PassthroughSubject<Void, Never>()
+        let isRunningTests: Bool
         
         private let initialAiMessage = "Hi this is Ava your personal therapist. How do you feel today?"
         
@@ -245,6 +280,10 @@ extension TherapyChatView {
 //            for message in conversation.messages {
 //                conversationList.append(message.content)
             }
+        
+        func loadConversationChat() {
+            self.container.services.conversationService.loadConversationChat(conversation: loadableSubject(\.conversation))
+        }
     
         func setAiMessage(_ msg: String){
             let message = Message(content: msg, isUser: false)
@@ -253,14 +292,15 @@ extension TherapyChatView {
         }
     
         public func restart() {
-            self.conversation = Conversation()
+//            self.conversation = Conversation()
             setAiMessage("Hi i'm Ava the AI Therapist! How do you feel today?")
             isUserTurnToSpeak = true
         }
     
-        init(conversation: Conversation, container: DIContainer) {
-            self.conversation = conversation
+        init(conversation: Conversation, container: DIContainer, isRunningTests: Bool = ProcessInfo.processInfo.isRunningTests) {
+            _conversation = .init(initialValue: .PartialLoaded(conversation))
             self.container = container
+            self.isRunningTests = isRunningTests
         }
     }
 }

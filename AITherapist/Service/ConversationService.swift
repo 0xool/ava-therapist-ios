@@ -7,22 +7,26 @@
 
 import Combine
 import Foundation
-import SwiftUI
+import RealmSwift
 
 protocol ConversationService {
     func loadConversationList(conversations: LoadableSubject<LazyList<Conversation>>)
-//    func loadConversationChat(message: LoadableSubject<LazyList<Message>>)
+    func loadConversationChat(conversation: LoadableSubject<Conversation>)
+    //    func loadConversationChat(message: LoadableSubject<LazyList<Message>>)
 }
 
 struct MainConversationService: ConversationService {
     
     let conversationRepository: ConversationRepository
     let conversationDBRepository: ConversationDBRepository
+    let chatDBRepository: ChatDBRepository
+    
     let appState: Store<AppState>
     
-    init(conversationRepository: ConversationRepository, appState: Store<AppState>, conversationDBRepository: ConversationDBRepository) {
+    init(conversationRepository: ConversationRepository, appState: Store<AppState>, conversationDBRepository: ConversationDBRepository, chatDBRepository: ChatDBRepository) {
         self.conversationRepository = conversationRepository
         self.conversationDBRepository = conversationDBRepository
+        self.chatDBRepository = chatDBRepository
         self.appState = appState
     }
     
@@ -50,6 +54,43 @@ struct MainConversationService: ConversationService {
             .store(in: cancelBag)
     }
     
+    func loadConversationChat(conversation: LoadableSubject<Conversation>){
+        let cancelBag = CancelBag()
+        var conversation = conversation
+        conversation.wrappedValue.setIsLoading(cancelBag: cancelBag)
+        
+        Just<Void>
+            .withErrorType(Error.self)
+            .flatMap { [chatDBRepository] in
+                return convertLazyListChatToConversation(publisher: chatDBRepository.loadChatsBy(conversationID: conversation.wrappedValue.value!.id), conversation: conversation)
+            }
+            .sinkToLoadable { conversation.wrappedValue = $0 }
+            .store(in: cancelBag)
+    }
+    
+    private func convertLazyListChatToConversation(publisher: AnyPublisher<LazyList<Chat>, Error>,  conversation: LoadableSubject<Conversation>) -> AnyPublisher<Conversation, Error> {
+        // add chats to conversation then return AnyPublisher<Conversation, Error>
+        return publisher
+            .map{
+                convertLazyListChatToList(chats: $0)
+            }
+            .map{
+                var conversation = conversation
+                conversation.wrappedValue.value!.chats.append(objectsIn: $0)
+                return conversation.wrappedValue.value!
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    private func convertLazyListChatToList(chats: LazyList<Chat>) -> List<Chat> {
+        var chat: List<Chat> = List()
+        for c in chats {
+            chat.append(c)
+        }
+        
+        return chat
+    }
+    
     func refreshConversationList() -> AnyPublisher<Void, Error> {
         return conversationRepository
             .loadConversationList()
@@ -61,24 +102,7 @@ struct MainConversationService: ConversationService {
             }
             .eraseToAnyPublisher()
     }
-    
-    func loadConversationChat(message: LoadableSubject<LazyList<Message>>) {
-        
-//        let cancelBag = CancelBag()
-//        message.wrappedValue.setIsLoading(cancelBag: cancelBag)
-//
-//        conversationRepository 
-//            .loadConversationChat()
-//            .flatMap { messages -> AnyPublisher<Message?, Error> in
-//                if messages != nil {
-//                    return Just<Message?>.withErrorType(messages, Error.self)
-//                } else {
-//                    return self.loadAndStoreConversationChatFromWeb()
-//                }
-//            }
-//            .sinkToLoadable { message.wrappedValue = $0.unwrap() }
-//            .store(in: cancelBag)
-    }
+
     
     private var requestHoldBackTimeInterval: TimeInterval {
         return ProcessInfo.processInfo.isRunningTests ? 0 : 0.5
@@ -90,7 +114,9 @@ struct StubCountriesService: ConversationService {
     func loadConversationList(conversations: LoadableSubject<LazyList<Conversation>>) {
     }
     
- }
+    func loadConversationChat(conversation: LoadableSubject<Conversation>) {
+    }
+}
 
 // protocol CountriesService {
 //     func refreshCountriesList() -> AnyPublisher<Void, Error>

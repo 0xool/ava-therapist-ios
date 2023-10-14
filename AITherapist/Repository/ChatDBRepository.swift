@@ -6,32 +6,49 @@
 //
 
 import Foundation
+import RealmSwift
 import Combine
 
 protocol ChatDBRepository {
-//    func store(conversation: Conversation) -> AnyPublisher<Void, Error>
+    func store(chat: Chat) -> AnyPublisher<Void, Error>
+    func loadChats() -> AnyPublisher<LazyList<Chat>, Error>
+    func loadChatsBy(conversationID: Int) -> AnyPublisher<LazyList<Chat>, Error>
 //    func loadConversationChat(id: Int) -> AnyPublisher<[Chat], Error>
 }
 
 struct MainChatDBRepository: ChatDBRepository {
-    let db = DataBaseManager.Instance.getDB()
-//    func store(conversation: Conversation) -> AnyPublisher<Void, Error> {
-//        DataBaseManager.Instance.writeConversationData(conversation: conversation)
-//    }
+
+    func store(chat: Chat) -> AnyPublisher<Void, Error>{
+        writeChatData(chat: chat)
+    }
     
-//    func loadConversationChat(id: Int) -> AnyPublisher<[Chat], Error> {
-//        DataBaseManager.Instance.readAllConversations()
-        
-//    }
+    func loadChats() -> AnyPublisher<LazyList<Chat>, Error> {
+        readAllChats()
+    }
+    
+    func loadChatsBy(conversationID: Int) -> AnyPublisher<LazyList<Chat>, Error> {
+        getChatBy(conversationID: conversationID)
+    }
+
 }
 
-extension MainChatDBRepository {
-//    private func getChatsByConversationID(id: Int) -> [Chat] {
-//        let chats = db.objects(Chat.self)
-//        let conversationChat = chats.where{
-//            $0.conversationID == id
-//        }
-//
-//    }
+extension MainChatDBRepository {    
+    private func getChatBy(conversationID: Int) -> AnyPublisher<LazyList<Chat>, Error> {
+        DataBaseManager.Instance.GetByTypeID(ofType: Chat.self, id: conversationID) { $0.conversationID == conversationID }
+            .map{ $0.lazyList }
+            .eraseToAnyPublisher()
+    }
+    
+    private func readAllChats() -> AnyPublisher<LazyList<Chat>, Error> {
+        let chats: LazyList<Chat> = DataBaseManager.Instance.GetAll()
+        
+        return Just(chats)
+            .setFailureType(to: Error.self)
+            .eraseToAnyPublisher()
+    }
+    
+    private func writeChatData(chat: Chat) -> AnyPublisher<Void, Error> {
+        return DataBaseManager.Instance.UpdateOrWrite(data: chat)
+    }
 }
 

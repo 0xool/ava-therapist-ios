@@ -12,6 +12,8 @@ protocol ConversationDBRepository {
     func hasLoadedConversation() -> AnyPublisher<Bool, Error>
     func store(conversation: Conversation) -> AnyPublisher<Void, Error>
     func loadConversations() -> AnyPublisher<LazyList<Conversation>, Error>
+    
+    func addChatToConversation(chats: LazyList<Chat>) -> AnyPublisher<Void, Error>
 }
 
 struct MainConversationDBRepository: ConversationDBRepository {
@@ -25,6 +27,10 @@ struct MainConversationDBRepository: ConversationDBRepository {
     
     func loadConversations() -> AnyPublisher<LazyList<Conversation>, Error> {
         readAllConversations()
+    }
+    
+    func addChatToConversation(chats: LazyList<Chat>) -> AnyPublisher<Void, Error>{
+        updateConversationChatsData(chats: chats)
     }
 }
 
@@ -46,9 +52,25 @@ extension MainConversationDBRepository {
             return DataBaseManager.Instance.Write(writeData: conversation)
                     .eraseToAnyPublisher()
         }else{
-            return DataBaseManager.Instance.DeleteAndWrite(data: conversation)
+            return DataBaseManager.Instance.UpdateOrWrite(data: conversation)
                 .eraseToAnyPublisher()
         }
+    }
+    
+    private func updateConversationChatsData(chats: LazyList<Chat>) -> AnyPublisher<Void, Error> {
+        
+        guard let conversationID = chats.first?.conversationID else {
+            //return an Fail publisher
+            #warning("Error is not correct")
+            return Fail(error: DataBaseError.ObjcectWithIDNotFound).eraseToAnyPublisher()
+        }
+        
+        guard let conversation = DataBaseManager.Instance.GetByID(id: conversationID) else{
+            return Fail(error: DataBaseError.ObjcectWithIDNotFound).eraseToAnyPublisher()
+        }
+                
+        return DataBaseManager.Instance.Update(value: conversation)
+            .eraseToAnyPublisher()
     }
     
     private func hasLoadedConversations() -> AnyPublisher<Bool, Error> {
