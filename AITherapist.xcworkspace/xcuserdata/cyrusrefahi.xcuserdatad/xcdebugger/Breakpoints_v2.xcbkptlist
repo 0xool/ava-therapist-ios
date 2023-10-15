@@ -157,8 +157,8 @@
             filePath = "AITherapist/Service/ConversationService.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "108"
-            endingLineNumber = "108"
+            startingLineNumber = "104"
+            endingLineNumber = "104"
             landmarkName = "convertLazyListChatToConversation(publisher:conversation:)"
             landmarkType = "7">
             <Locations>
@@ -220,8 +220,8 @@
             filePath = "AITherapist/Service/ConversationService.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "103"
-            endingLineNumber = "103"
+            startingLineNumber = "99"
+            endingLineNumber = "99"
             landmarkName = "convertLazyListChatToConversation(publisher:conversation:)"
             landmarkType = "7">
             <Locations>
@@ -268,8 +268,8 @@
             filePath = "AITherapist/Service/ConversationService.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "100"
-            endingLineNumber = "100"
+            startingLineNumber = "96"
+            endingLineNumber = "96"
             landmarkName = "convertLazyListChatToConversation(publisher:conversation:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -284,8 +284,8 @@
             filePath = "AITherapist/Service/ConversationService.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "105"
-            endingLineNumber = "105"
+            startingLineNumber = "101"
+            endingLineNumber = "101"
             landmarkName = "convertLazyListChatToConversation(publisher:conversation:)"
             landmarkType = "7">
             <Locations>

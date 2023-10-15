@@ -63,9 +63,7 @@ extension AppEnvironment {
         return URLSession(configuration: configuration)
     }
 
-    
     private static func configuredWebRepositories(session: URLSession) -> DIContainer.WebRepositories {
-//        let baseURL: String = "https://aitherapist.online:3000/"//"http://localhost:3000/
         let baseURL: String = Constants.MainUrl
 //        let countriesWebRepository = RealCountriesWebRepository(
 //            session: session,
@@ -102,7 +100,7 @@ extension AppEnvironment {
         let insightService = MainInsightService(insightRepository: webRepositories.insightRepository, appState: appState, conversationDBRepository: dbRepositories.insightRepository)
         let authenticationService = MainAuthenticateService(appState: appState, authenticateRepository: webRepositories.authenticationRepository, userDBRepository: dbRepositories.userRepository)
         let chatService = MainChatService(chatRepository: webRepositories.chatRepository, appState: appState, chatDBRepository: dbRepositories.chatRepository)
-        let conversationService = MainConversationService(conversationRepository: webRepositories.conversationRepository, appState: appState, conversationDBRepository: dbRepositories.conversationRepository, chatDBRepository: dbRepositories.chatRepository, chatWebRepository: webRepositories.chatRepository)
+        let conversationService = MainConversationService(conversationRepository: webRepositories.conversationRepository, appState: appState, conversationDBRepository: dbRepositories.conversationRepository, chatService: chatService)
         let userPermissionsService = MainUserPermissionsService(
             appState: appState, openAppSettings: {
                 URL(string: UIApplication.openSettingsURLString).flatMap {

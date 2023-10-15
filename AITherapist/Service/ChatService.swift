@@ -12,6 +12,10 @@ import SwiftUI
 
 protocol ChatService {
     func loadConversationChat(chats: LoadableSubject<LazyList<Chat>>, conversationID: Int)
+    func loadChatFromDBBy(conversationID: Int) -> AnyPublisher<LazyList<Chat>, Error>
+    func getChatsForConversationFromServer(conversationID: Int) -> AnyPublisher<LazyList<Chat>, Error>
+    
+    func saveChatInDB(chat: Chat)
 }
 
 struct MainChatService: ChatService {
@@ -43,6 +47,18 @@ struct MainChatService: ChatService {
             .sinkToLoadable { chats.wrappedValue = $0 }
             .store(in: cancelBag)
     }
+    
+    func saveChatInDB(chat: Chat) {
+        _ = chatDBRepository.store(chat: chat)
+    }
+    
+    func loadChatFromDBBy(conversationID: Int) -> AnyPublisher<LazyList<Chat>, Error> {
+        return chatDBRepository.loadChatsBy(conversationID: conversationID)
+    }
+    
+    func getChatsForConversationFromServer(conversationID: Int) -> AnyPublisher<LazyList<Chat>, Error>{
+        return chatRepository.loadChatsForConversation(conversationID: conversationID)
+    }
 
     private var requestHoldBackTimeInterval: TimeInterval {
         return ProcessInfo.processInfo.isRunningTests ? 0 : 0.5
@@ -51,6 +67,22 @@ struct MainChatService: ChatService {
 }
 
 struct StubChatService: ChatService {
+    func saveChatInDB(chat: Chat) {
+        
+    }
+    
+    func getChatsForConversationFromServer(conversationID: Int) -> AnyPublisher<LazyList<Chat>, Error> {
+        return Just([].lazyList)
+        .setFailureType(to: Error.self)
+        .eraseToAnyPublisher()
+    }
+    
+    func loadChatFromDBBy(conversationID: Int) -> AnyPublisher<LazyList<Chat>, Error> {
+        return Just([].lazyList)
+        .setFailureType(to: Error.self)
+        .eraseToAnyPublisher()
+    }
+    
     func loadConversationChat(chats: LoadableSubject<LazyList<Chat>>, conversationID: Int) {
     }
 }

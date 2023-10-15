@@ -12,23 +12,20 @@ import RealmSwift
 protocol ConversationService {
     func loadConversationList(conversations: LoadableSubject<LazyList<Conversation>>)
     func loadConversationChat(conversation: LoadableSubject<Conversation>)
-    //    func loadConversationChat(message: LoadableSubject<LazyList<Message>>)
 }
 
 struct MainConversationService: ConversationService {
     
     let conversationRepository: ConversationRepository
     let conversationDBRepository: ConversationDBRepository
-    let chatDBRepository: ChatDBRepository
-    let chatWebRepository: ChatRepository
+    let chatService: ChatService
     
     let appState: Store<AppState>
     
-    init(conversationRepository: ConversationRepository, appState: Store<AppState>, conversationDBRepository: ConversationDBRepository, chatDBRepository: ChatDBRepository, chatWebRepository: ChatRepository) {
+    init(conversationRepository: ConversationRepository, appState: Store<AppState>, conversationDBRepository: ConversationDBRepository, chatService: ChatService) {
         self.conversationRepository = conversationRepository
         self.conversationDBRepository = conversationDBRepository
-        self.chatDBRepository = chatDBRepository
-        self.chatWebRepository = chatWebRepository
+        self.chatService = chatService
         self.appState = appState
     }
     
@@ -71,8 +68,8 @@ struct MainConversationService: ConversationService {
             .flatMap{
                 return self.loadConversationChatFromWeb(conversationID: id)
             }
-            .map { [chatDBRepository] in
-                 chatDBRepository.loadChatsBy(conversationID: conversation.wrappedValue.value!.id)
+            .map { [chatService] in
+                chatService.loadChatFromDBBy(conversationID: id)
             }
             .flatMap{ publisher in
                 convertLazyListChatToConversation(publisher: publisher, conversation: conversation)
@@ -82,19 +79,18 @@ struct MainConversationService: ConversationService {
     }
     
     func loadConversationChatFromWeb(conversationID: Int) -> AnyPublisher<Void, Error> {
-        return chatWebRepository
-            .loadChatsForConversation(conversationID: conversationID)
+        return chatService
+            .getChatsForConversationFromServer(conversationID: conversationID)
             .ensureTimeSpan(requestHoldBackTimeInterval)
-            .map{ [chatDBRepository] in
+            .map{ [chatService] in
                 for chat in $0 {
-                    _ = chatDBRepository.store(chat: chat)
+                   chatService.saveChatInDB(chat: chat)
                 }
             }
             .eraseToAnyPublisher()
     }
     
     private func convertLazyListChatToConversation(publisher: AnyPublisher<LazyList<Chat>, Error>,  conversation: LoadableSubject<Conversation>) -> AnyPublisher<Conversation, Error> {
-        // add chats to conversation then return AnyPublisher<Conversation, Error>
         return publisher
             .map{
                 convertLazyListChatToList(chats: $0)
@@ -105,7 +101,6 @@ struct MainConversationService: ConversationService {
                     conversation.chats.append(chat)
                 }
                 
-//                conversation.wrappedValue = .loaded(convo)
                 return conversation
             }
             .eraseToAnyPublisher()
@@ -132,11 +127,9 @@ struct MainConversationService: ConversationService {
             .eraseToAnyPublisher()
     }
 
-    
     private var requestHoldBackTimeInterval: TimeInterval {
         return ProcessInfo.processInfo.isRunningTests ? 0 : 0.5
     }
-    
 }
 
 struct StubCountriesService: ConversationService {
@@ -146,105 +139,3 @@ struct StubCountriesService: ConversationService {
     func loadConversationChat(conversation: LoadableSubject<Conversation>) {
     }
 }
-
-// protocol CountriesService {
-//     func refreshCountriesList() -> AnyPublisher<Void, Error>
-//     func load(countries: LoadableSubject<LazyList<Country>>, search: String, locale: Locale)
-//     func load(countryDetails: LoadableSubject<Country.Details>, country: Country)
-// }
-
-// struct RealCountriesService: CountriesService {
-
-//     let webRepository: CountriesWebRepository
-//     let dbRepository: CountriesDBRepository
-//     let appState: Store<AppState>
-
-//     init(webRepository: CountriesWebRepository, dbRepository: CountriesDBRepository, appState: Store<AppState>) {
-//         self.webRepository = webRepository
-//         self.dbRepository = dbRepository
-//         self.appState = appState
-//     }
-
-//     func load(countries: LoadableSubject<LazyList<Country>>, search: String, locale: Locale) {
-
-//         let cancelBag = CancelBag()
-//         countries.wrappedValue.setIsLoading(cancelBag: cancelBag)
-
-//         Just<Void>
-//             .withErrorType(Error.self)
-//             .flatMap { [dbRepository] _ -> AnyPublisher<Bool, Error> in
-//                 dbRepository.hasLoadedCountries()
-//             }
-//             .flatMap { hasLoaded -> AnyPublisher<Void, Error> in
-//                 if hasLoaded {
-//                     return Just<Void>.withErrorType(Error.self)
-//                 } else {
-//                     return self.refreshCountriesList()
-//                 }
-//             }
-//             .flatMap { [dbRepository] in
-//                 dbRepository.countries(search: search, locale: locale)
-//             }
-//             .sinkToLoadable { countries.wrappedValue = $0 }
-//             .store(in: cancelBag)
-//     }
-
-//     func refreshCountriesList() -> AnyPublisher<Void, Error> {
-//         return webRepository
-//             .loadCountries()
-//             .ensureTimeSpan(requestHoldBackTimeInterval)
-//             .flatMap { [dbRepository] in
-//                 dbRepository.store(countries: $0)
-//             }
-//             .eraseToAnyPublisher()
-//     }
-
-//     func load(countryDetails: LoadableSubject<Country.Details>, country: Country) {
-
-//         let cancelBag = CancelBag()
-//         countryDetails.wrappedValue.setIsLoading(cancelBag: cancelBag)
-
-//         dbRepository
-//             .countryDetails(country: country)
-//             .flatMap { details -> AnyPublisher<Country.Details?, Error> in
-//                 if details != nil {
-//                     return Just<Country.Details?>.withErrorType(details, Error.self)
-//                 } else {
-//                     return self.loadAndStoreCountryDetailsFromWeb(country: country)
-//                 }
-//             }
-//             .sinkToLoadable { countryDetails.wrappedValue = $0.unwrap() }
-//             .store(in: cancelBag)
-//     }
-
-//     private func loadAndStoreCountryDetailsFromWeb(country: Country) -> AnyPublisher<Country.Details?, Error> {
-//         return webRepository
-//             .loadCountryDetails(country: country)
-//             .ensureTimeSpan(requestHoldBackTimeInterval)
-//             .flatMap { [dbRepository] in
-//                 dbRepository.store(countryDetails: $0, for: country)
-//             }
-//             .eraseToAnyPublisher()
-//     }
-
-//     private var requestHoldBackTimeInterval: TimeInterval {
-//         return ProcessInfo.processInfo.isRunningTests ? 0 : 0.5
-//     }
-// }
-
-// struct StubCountriesService: CountriesService {
-
-//     func refreshCountriesList() -> AnyPublisher<Void, Error> {
-//         return Just<Void>.withErrorType(Error.self)
-//     }
-
-//     func load(countries: LoadableSubject<LazyList<Country>>, search: String, locale: Locale) {
-//     }
-
-//     func load(countryDetails: LoadableSubject<Country.Details>, country: Country) {
-//     }
-// }
-
-
-
-
