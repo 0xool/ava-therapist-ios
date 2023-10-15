@@ -20,13 +20,15 @@ struct MainConversationService: ConversationService {
     let conversationRepository: ConversationRepository
     let conversationDBRepository: ConversationDBRepository
     let chatDBRepository: ChatDBRepository
+    let chatWebRepository: ChatRepository
     
     let appState: Store<AppState>
     
-    init(conversationRepository: ConversationRepository, appState: Store<AppState>, conversationDBRepository: ConversationDBRepository, chatDBRepository: ChatDBRepository) {
+    init(conversationRepository: ConversationRepository, appState: Store<AppState>, conversationDBRepository: ConversationDBRepository, chatDBRepository: ChatDBRepository, chatWebRepository: ChatRepository) {
         self.conversationRepository = conversationRepository
         self.conversationDBRepository = conversationDBRepository
         self.chatDBRepository = chatDBRepository
+        self.chatWebRepository = chatWebRepository
         self.appState = appState
     }
     
@@ -56,16 +58,39 @@ struct MainConversationService: ConversationService {
     
     func loadConversationChat(conversation: LoadableSubject<Conversation>){
         let cancelBag = CancelBag()
-        var conversation = conversation
         conversation.wrappedValue.setIsLoading(cancelBag: cancelBag)
+        guard let id = conversation.wrappedValue.value?.id else {
+            return Just<Void>
+                .withErrorType(Error.self)
+                .sinkToLoadable{ _ in conversation.wrappedValue = .failed(Error.self as! Error)}
+                .store(in: cancelBag)
+        }
         
         Just<Void>
             .withErrorType(Error.self)
-            .flatMap { [chatDBRepository] in
-                return convertLazyListChatToConversation(publisher: chatDBRepository.loadChatsBy(conversationID: conversation.wrappedValue.value!.id), conversation: conversation)
+            .flatMap{
+                return self.loadConversationChatFromWeb(conversationID: id)
+            }
+            .map { [chatDBRepository] in
+                 chatDBRepository.loadChatsBy(conversationID: conversation.wrappedValue.value!.id)
+            }
+            .flatMap{ publisher in
+                convertLazyListChatToConversation(publisher: publisher, conversation: conversation)
             }
             .sinkToLoadable { conversation.wrappedValue = $0 }
             .store(in: cancelBag)
+    }
+    
+    func loadConversationChatFromWeb(conversationID: Int) -> AnyPublisher<Void, Error> {
+        return chatWebRepository
+            .loadChatsForConversation(conversationID: conversationID)
+            .ensureTimeSpan(requestHoldBackTimeInterval)
+            .map{ [chatDBRepository] in
+                for chat in $0 {
+                    _ = chatDBRepository.store(chat: chat)
+                }
+            }
+            .eraseToAnyPublisher()
     }
     
     private func convertLazyListChatToConversation(publisher: AnyPublisher<LazyList<Chat>, Error>,  conversation: LoadableSubject<Conversation>) -> AnyPublisher<Conversation, Error> {
@@ -75,15 +100,19 @@ struct MainConversationService: ConversationService {
                 convertLazyListChatToList(chats: $0)
             }
             .map{
-                var conversation = conversation
-                conversation.wrappedValue.value!.chats.append(objectsIn: $0)
-                return conversation.wrappedValue.value!
+                let conversation = Conversation(id: conversation.wrappedValue.value!.id, conversationName: conversation.wrappedValue.value!.conversationName, date: conversation.wrappedValue.value!.dateCreated)
+                for chat in $0.lazyList {
+                    conversation.chats.append(chat)
+                }
+                
+//                conversation.wrappedValue = .loaded(convo)
+                return conversation
             }
             .eraseToAnyPublisher()
     }
     
     private func convertLazyListChatToList(chats: LazyList<Chat>) -> List<Chat> {
-        var chat: List<Chat> = List()
+        let chat: List<Chat> = List()
         for c in chats {
             chat.append(c)
         }

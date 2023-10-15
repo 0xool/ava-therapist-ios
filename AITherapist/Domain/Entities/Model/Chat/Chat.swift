@@ -26,20 +26,20 @@ class Chat: Object, Codable, Identifiable {
     @Persisted var message: String
     @Persisted var conversationID: Int
     
-    @Persisted var chatSequence: Int
+    @Persisted var chatSequence: Int?
     @Persisted var isUserMessage: Bool
-    @Persisted var dateCreated: Date
+//    @Persisted var dateCreated: Date
     
     enum CodingKeys: String, CodingKey {
-        case id = "ChatID"
-        case message = "Message"
-        case conversationID = "ConversationID"
-        case chatSequence = "ChatSequence"
-        case isUserMessage = "IsUserMessage"
-        case dateCreated = "DateCreated"
+        case id = "chatID"
+        case message = "message"
+        case conversationID = "conversationID"
+        case chatSequence = "chatsequence"
+        case isUserMessage = "isUserMessage"
+//        case dateCreated = "DateCreated"
     }
     
-    init(id: Int, message: String, conversationID: Int, chatSequence: Int, isUserMessage: Bool, dateCreated: Date){
+    init(id: Int, message: String, conversationID: Int, chatSequence: Int?, isUserMessage: Bool){
         super.init()
         self.id = id
         self.message = message
@@ -47,7 +47,7 @@ class Chat: Object, Codable, Identifiable {
         
         self.chatSequence = chatSequence
         self.isUserMessage = isUserMessage
-        self.dateCreated = dateCreated
+//        self.dateCreated = dateCreated
     }
     
     override init() {
@@ -60,9 +60,9 @@ class Chat: Object, Codable, Identifiable {
         id = try container.decode(Int.self , forKey: .id)
         message = try container.decode(String.self , forKey: .message)
         conversationID = try container.decode(Int.self , forKey: .conversationID)
-        chatSequence = try container.decode(Int.self , forKey: .chatSequence)
+        chatSequence = try container.decode(Int?.self , forKey: .chatSequence)
         isUserMessage = try container.decode(Bool.self , forKey: .isUserMessage)
-        dateCreated = try container.decode(Date.self , forKey: .dateCreated)
+//        dateCreated = try container.decode(Date.self , forKey: .dateCreated)
     }
     
 }

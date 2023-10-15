@@ -70,62 +70,254 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "1B7CFFF8-BE91-4E88-AA7F-8691D2D58BF1"
+            uuid = "61B6DC69-BA30-4B9B-85D3-9E7D8F317771"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "AITherapist/Manager/MicManager.swift"
+            filePath = "AITherapist/Presentation/UI/TherapyChat/View/TherapyChatView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "28"
-            endingLineNumber = "28"
-            landmarkName = "init(numberOfSample:)"
+            startingLineNumber = "48"
+            endingLineNumber = "48"
+            landmarkName = "body"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E70DF60E-F143-4F66-94C9-671A3E710183"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "AITherapist/Presentation/UI/TherapyChat/View/TherapyChatView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "46"
+            endingLineNumber = "46"
+            landmarkName = "body"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "CA5122A4-F178-460D-918A-FAA0993AC0EB"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "AITherapist/Presentation/UI/TherapyChat/View/TherapyChatView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "44"
+            endingLineNumber = "44"
+            landmarkName = "body"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D1F2B9C3-8D15-4976-AB8F-C5E4DCFB2197"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "AITherapist/Presentation/UI/TherapyChat/View/TherapyChatView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "42"
+            endingLineNumber = "42"
+            landmarkName = "body"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "FD43F216-251D-40D1-9276-BD40FBDFFFBA"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "AITherapist/Presentation/UI/TherapyChat/View/TherapyChatView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "50"
+            endingLineNumber = "50"
+            landmarkName = "body"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "23086D4D-F8B6-4539-B383-BD62CCE09703"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "AITherapist/Service/ConversationService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "108"
+            endingLineNumber = "108"
+            landmarkName = "convertLazyListChatToConversation(publisher:conversation:)"
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "1B7CFFF8-BE91-4E88-AA7F-8691D2D58BF1 - 220467dfdf3d3207"
+                  uuid = "23086D4D-F8B6-4539-B383-BD62CCE09703 - 1125965808daa6d1"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "AITherapist.MicManager.init(numberOfSample: Swift.Int) -&gt; AITherapist.MicManager"
+                  symbolName = "closure #2 (RealmSwift.List&lt;AITherapist.Chat&gt;) -&gt; AITherapist.Conversation in AITherapist.MainConversationService.convertLazyListChatToConversation(publisher: Combine.AnyPublisher&lt;AITherapist.LazyList&lt;AITherapist.Chat&gt;, Swift.Error&gt;, conversation: SwiftUI.Binding&lt;AITherapist.Loadable&lt;AITherapist.Conversation&gt;&gt;) -&gt; Combine.AnyPublisher&lt;AITherapist.Conversation, Swift.Error&gt;"
                   moduleName = "AITherapist"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/cyrusrefahi/Documents/AITherapist/AITherapist/Manager/MicManager.swift"
+                  urlString = "file:///Users/cyrusrefahi/Documents/AITherapist/AITherapist/Service/ConversationService.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "28"
-                  endingLineNumber = "28"
-                  offsetFromSymbolStart = "692">
+                  startingLineNumber = "105"
+                  endingLineNumber = "105"
+                  offsetFromSymbolStart = "812">
                </Location>
                <Location
-                  uuid = "1B7CFFF8-BE91-4E88-AA7F-8691D2D58BF1 - 5cfaedea9cbd0c10"
+                  uuid = "23086D4D-F8B6-4539-B383-BD62CCE09703 - 1125965808daa65d"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Bool) -&gt; () in AITherapist.MicManager.init(numberOfSample: Swift.Int) -&gt; AITherapist.MicManager"
+                  symbolName = "closure #2 (RealmSwift.List&lt;AITherapist.Chat&gt;) -&gt; AITherapist.Conversation in AITherapist.MainConversationService.convertLazyListChatToConversation(publisher: Combine.AnyPublisher&lt;AITherapist.LazyList&lt;AITherapist.Chat&gt;, Swift.Error&gt;, conversation: SwiftUI.Binding&lt;AITherapist.Loadable&lt;AITherapist.Conversation&gt;&gt;) -&gt; Combine.AnyPublisher&lt;AITherapist.Conversation, Swift.Error&gt;"
                   moduleName = "AITherapist"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/cyrusrefahi/Documents/AITherapist/AITherapist/Manager/MicManager.swift"
+                  urlString = "file:///Users/cyrusrefahi/Documents/AITherapist/AITherapist/Service/ConversationService.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "28"
-                  endingLineNumber = "28"
-                  offsetFromSymbolStart = "68">
+                  startingLineNumber = "109"
+                  endingLineNumber = "109"
+                  offsetFromSymbolStart = "828">
                </Location>
                <Location
-                  uuid = "1B7CFFF8-BE91-4E88-AA7F-8691D2D58BF1 - 220467dfdf3d3207"
+                  uuid = "23086D4D-F8B6-4539-B383-BD62CCE09703 - 1125965808daa65d"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "AITherapist.MicManager.init(numberOfSample: Swift.Int) -&gt; AITherapist.MicManager"
+                  symbolName = "closure #2 (RealmSwift.List&lt;AITherapist.Chat&gt;) -&gt; AITherapist.Conversation in AITherapist.MainConversationService.convertLazyListChatToConversation(publisher: Combine.AnyPublisher&lt;AITherapist.LazyList&lt;AITherapist.Chat&gt;, Swift.Error&gt;, conversation: SwiftUI.Binding&lt;AITherapist.Loadable&lt;AITherapist.Conversation&gt;&gt;) -&gt; Combine.AnyPublisher&lt;AITherapist.Conversation, Swift.Error&gt;"
                   moduleName = "AITherapist"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/cyrusrefahi/Documents/AITherapist/AITherapist/Manager/MicManager.swift"
+                  urlString = "file:///Users/cyrusrefahi/Documents/AITherapist/AITherapist/Service/ConversationService.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "28"
-                  endingLineNumber = "28"
-                  offsetFromSymbolStart = "740">
+                  startingLineNumber = "109"
+                  endingLineNumber = "109"
+                  offsetFromSymbolStart = "1892">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "11F6FC8E-3EFA-4FE9-808C-B61824868E14"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "AITherapist/Service/ConversationService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "103"
+            endingLineNumber = "103"
+            landmarkName = "convertLazyListChatToConversation(publisher:conversation:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "11F6FC8E-3EFA-4FE9-808C-B61824868E14 - 1125965808daa717"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #2 (RealmSwift.List&lt;AITherapist.Chat&gt;) -&gt; AITherapist.Conversation in AITherapist.MainConversationService.convertLazyListChatToConversation(publisher: Combine.AnyPublisher&lt;AITherapist.LazyList&lt;AITherapist.Chat&gt;, Swift.Error&gt;, conversation: SwiftUI.Binding&lt;AITherapist.Loadable&lt;AITherapist.Conversation&gt;&gt;) -&gt; Combine.AnyPublisher&lt;AITherapist.Conversation, Swift.Error&gt;"
+                  moduleName = "AITherapist"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/cyrusrefahi/Documents/AITherapist/AITherapist/Service/ConversationService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "103"
+                  endingLineNumber = "103"
+                  offsetFromSymbolStart = "304">
+               </Location>
+               <Location
+                  uuid = "11F6FC8E-3EFA-4FE9-808C-B61824868E14 - 1125965808daa717"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #2 (RealmSwift.List&lt;AITherapist.Chat&gt;) -&gt; AITherapist.Conversation in AITherapist.MainConversationService.convertLazyListChatToConversation(publisher: Combine.AnyPublisher&lt;AITherapist.LazyList&lt;AITherapist.Chat&gt;, Swift.Error&gt;, conversation: SwiftUI.Binding&lt;AITherapist.Loadable&lt;AITherapist.Conversation&gt;&gt;) -&gt; Combine.AnyPublisher&lt;AITherapist.Conversation, Swift.Error&gt;"
+                  moduleName = "AITherapist"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/cyrusrefahi/Documents/AITherapist/AITherapist/Service/ConversationService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "103"
+                  endingLineNumber = "103"
+                  offsetFromSymbolStart = "236">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "4603D8D9-5188-4026-B1AA-31B0DEC91392"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "AITherapist/Service/ConversationService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "100"
+            endingLineNumber = "100"
+            landmarkName = "convertLazyListChatToConversation(publisher:conversation:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D2C48B96-8B5E-4A74-8094-5A1A4040B62D"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "AITherapist/Service/ConversationService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "105"
+            endingLineNumber = "105"
+            landmarkName = "convertLazyListChatToConversation(publisher:conversation:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "D2C48B96-8B5E-4A74-8094-5A1A4040B62D - 1125965808daa6d1"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #2 (RealmSwift.List&lt;AITherapist.Chat&gt;) -&gt; AITherapist.Conversation in AITherapist.MainConversationService.convertLazyListChatToConversation(publisher: Combine.AnyPublisher&lt;AITherapist.LazyList&lt;AITherapist.Chat&gt;, Swift.Error&gt;, conversation: SwiftUI.Binding&lt;AITherapist.Loadable&lt;AITherapist.Conversation&gt;&gt;) -&gt; Combine.AnyPublisher&lt;AITherapist.Conversation, Swift.Error&gt;"
+                  moduleName = "AITherapist"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/cyrusrefahi/Documents/AITherapist/AITherapist/Service/ConversationService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "105"
+                  endingLineNumber = "105"
+                  offsetFromSymbolStart = "884">
+               </Location>
+               <Location
+                  uuid = "D2C48B96-8B5E-4A74-8094-5A1A4040B62D - 1125965808daa6d1"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #2 (RealmSwift.List&lt;AITherapist.Chat&gt;) -&gt; AITherapist.Conversation in AITherapist.MainConversationService.convertLazyListChatToConversation(publisher: Combine.AnyPublisher&lt;AITherapist.LazyList&lt;AITherapist.Chat&gt;, Swift.Error&gt;, conversation: SwiftUI.Binding&lt;AITherapist.Loadable&lt;AITherapist.Conversation&gt;&gt;) -&gt; Combine.AnyPublisher&lt;AITherapist.Conversation, Swift.Error&gt;"
+                  moduleName = "AITherapist"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/cyrusrefahi/Documents/AITherapist/AITherapist/Service/ConversationService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "105"
+                  endingLineNumber = "105"
+                  offsetFromSymbolStart = "1972">
                </Location>
             </Locations>
          </BreakpointContent>

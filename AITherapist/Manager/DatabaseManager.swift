@@ -17,7 +17,6 @@ protocol DataBase {
     func Write<T: Object>(writeData: T) -> AnyPublisher<Void, Error>
     
     func Update<T: Object>(value: T) -> AnyPublisher<Void,  Error>
-    func UpdateOrWrite<T: Object>(data: T) -> AnyPublisher<Void, Error>
     func EntityExist<Element: Object>(id: Int, ofType: Element.Type) -> Bool
 }
 
@@ -29,13 +28,13 @@ class DataBaseManager: DataBase {
     
     func GetByTypeID<T: Object>(ofType: T.Type, id: Int, query: @escaping (Query<T>) -> Query<Bool>) -> AnyPublisher<Results<T>, Error> {
         return Future<Results<T>, Error> { promise in
-            let value: Results<T> = self.realm.objects(T.self).where(query)
-            
-            if (value.isEmpty){
+            let value: Results<T> = self.realm.objects(T.self)
+            #warning("FIX!!!")
+//            if (value.count <= 0){
                 promise(.success(value))
-            }else{
-                promise(.failure(DataBaseError.NotFound))
-            }
+//            }else{
+//                promise(.failure(DataBaseError.NotFound))
+//            }
         }
         .eraseToAnyPublisher()
     }
@@ -66,27 +65,11 @@ class DataBaseManager: DataBase {
         .eraseToAnyPublisher()
     }
     
-    func UpdateOrWrite<T: Object>(data: T) -> AnyPublisher<Void, Error> {
-        return Future<Void, Error> {  promise in
-            
-            do {
-                try self.realm.write {
-                    self.realm.delete(data)
-                    self.realm.add(data)
-                }
-                promise(.success(()))
-            } catch {
-                promise(.failure(error))
-            }
-        }
-        .eraseToAnyPublisher()
-    }
-    
     func Write<T: Object>(writeData: T) -> AnyPublisher<Void, Error> {
         return Future<Void, Error> {  promise in
             do {
                 try self.realm.write {
-                    self.realm.add(writeData)
+                    self.realm.add(writeData, update: .all)
                 }
                 promise(.success(()))
             } catch {

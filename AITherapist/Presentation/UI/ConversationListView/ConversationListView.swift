@@ -28,7 +28,7 @@ struct ConversationListView: View {
             loadedView(conversations)
         case let .failed(error):
             failedView(error)
-        case .PartialLoaded(_):
+        case .partialLoaded(_):
             notRequestedView
         }
     }

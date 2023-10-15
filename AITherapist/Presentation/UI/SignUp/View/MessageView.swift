@@ -32,7 +32,7 @@ struct MessageView : View {
 
 struct MessageView_Previews: PreviewProvider {
     static var previews: some View {
-        let chat = Chat(id: 0, message: "Hello User I am AITherapist, Hello User I am AITherapist, Hello User I am AITherapist, Hello User I am AITherapist", conversationID: 10, chatSequence: 1, isUserMessage: false, dateCreated: .now)
+        let chat = Chat(id: 0, message: "Hello User I am AITherapist, Hello User I am AITherapist, Hello User I am AITherapist, Hello User I am AITherapist", conversationID: 10, chatSequence: 1, isUserMessage: false)
         MessageView(chat: chat)
     }
 }

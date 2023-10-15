@@ -48,7 +48,7 @@ extension MainChatDBRepository {
     }
     
     private func writeChatData(chat: Chat) -> AnyPublisher<Void, Error> {
-        return DataBaseManager.Instance.UpdateOrWrite(data: chat)
+        return DataBaseManager.Instance.Write(writeData: chat)
     }
 }
 

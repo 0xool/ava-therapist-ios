@@ -52,7 +52,7 @@ extension MainConversationDBRepository {
             return DataBaseManager.Instance.Write(writeData: conversation)
                     .eraseToAnyPublisher()
         }else{
-            return DataBaseManager.Instance.UpdateOrWrite(data: conversation)
+            return DataBaseManager.Instance.Update(value: conversation)
                 .eraseToAnyPublisher()
         }
     }

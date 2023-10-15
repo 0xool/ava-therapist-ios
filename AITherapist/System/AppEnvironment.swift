@@ -102,7 +102,7 @@ extension AppEnvironment {
         let insightService = MainInsightService(insightRepository: webRepositories.insightRepository, appState: appState, conversationDBRepository: dbRepositories.insightRepository)
         let authenticationService = MainAuthenticateService(appState: appState, authenticateRepository: webRepositories.authenticationRepository, userDBRepository: dbRepositories.userRepository)
         let chatService = MainChatService(chatRepository: webRepositories.chatRepository, appState: appState, chatDBRepository: dbRepositories.chatRepository)
-        let conversationService = MainConversationService(conversationRepository: webRepositories.conversationRepository, appState: appState, conversationDBRepository: dbRepositories.conversationRepository, chatDBRepository: dbRepositories.chatRepository)
+        let conversationService = MainConversationService(conversationRepository: webRepositories.conversationRepository, appState: appState, conversationDBRepository: dbRepositories.conversationRepository, chatDBRepository: dbRepositories.chatRepository, chatWebRepository: webRepositories.chatRepository)
         let userPermissionsService = MainUserPermissionsService(
             appState: appState, openAppSettings: {
                 URL(string: UIApplication.openSettingsURLString).flatMap {

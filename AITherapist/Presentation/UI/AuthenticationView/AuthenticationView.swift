@@ -34,7 +34,7 @@ struct AuthenticationView: View {
             loadedView(user, showLoading: false)
         case let .failed(error):
             failedView(error)
-        case .PartialLoaded(_):
+        case .partialLoaded(_):
             SplashScreen()
         }
     }

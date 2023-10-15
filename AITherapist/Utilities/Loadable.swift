@@ -15,13 +15,14 @@ enum Loadable<T> {
     case notRequested
     case isLoading(last: T?, cancelBag: CancelBag)
     case loaded(T)
-    case PartialLoaded(T)
+    case partialLoaded(T)
     case failed(Error)
 
     var value: T? {
         switch self {
         case let .loaded(value): return value
         case let .isLoading(last, _): return last
+        case let .partialLoaded(value): return value
         default: return nil
         }
     }
@@ -66,7 +67,7 @@ extension Loadable {
                                   cancelBag: cancelBag)
             case let .loaded(value):
                 return .loaded(try transform(value))
-            case .PartialLoaded(_):
+            case .partialLoaded(_):
                 return .notRequested
             }
         } catch {

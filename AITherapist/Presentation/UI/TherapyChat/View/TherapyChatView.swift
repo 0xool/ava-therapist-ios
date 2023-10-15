@@ -46,7 +46,7 @@ struct TherapyChatView: View {
             mainChatView(conversation: conversation)
         case let .failed(error):
             failedView(error)
-        case .PartialLoaded(_):
+        case .partialLoaded(_):
             notRequestedView
         }
     }
@@ -140,7 +140,9 @@ struct TherapyChatView: View {
 
 private extension TherapyChatView {
     private var notRequestedView: some View {
-        Text("").onAppear(perform: self.viewModel.loadConversationChat)
+        Text("").onAppear{ 
+//            self.viewModel.loadConversationChat
+        }
     }
     
     func failedView(_ error: Error) -> some View {
@@ -238,8 +240,6 @@ private extension TherapyChatView {
 }
 
 extension TherapyChatView {
-    
-    
     struct ChatWithAiTextField: TextFieldStyle {
         func _body(configuration: TextField<Self._Label>) -> some View {
             configuration
@@ -268,8 +268,6 @@ extension TherapyChatView {
         private let initialAiMessage = "Hi this is Ava your personal therapist. How do you feel today?"
         
         func sendMessage(_ chatMessage: String){
-//            let message = Message(content: chatMessage, isUser: true)
-    //        conversation.messages.append(message)
             didChange.send(())
             isUserTurnToSpeak = false
             sendConversation()
@@ -298,9 +296,10 @@ extension TherapyChatView {
         }
     
         init(conversation: Conversation, container: DIContainer, isRunningTests: Bool = ProcessInfo.processInfo.isRunningTests) {
-            _conversation = .init(initialValue: .PartialLoaded(conversation))
+            _conversation = .init(initialValue: .partialLoaded(conversation))
             self.container = container
             self.isRunningTests = isRunningTests
+            loadConversationChat()
         }
     }
 }

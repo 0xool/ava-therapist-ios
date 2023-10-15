@@ -48,7 +48,7 @@ struct MainContentView: View {
             MainView(viewModel: .init(container: viewModel.container))
         case let .failed(error): // if the request failed
             Text(error.localizedDescription)
-        case .PartialLoaded(_):
+        case .partialLoaded(_):
             Text("Not requested")
         }
     }
