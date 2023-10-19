@@ -46,10 +46,8 @@ private extension ConversationListView {
     
     func failedView(_ error: Error) -> some View {
         ErrorView(error: error, retryAction: {
-//            self.viewModel.loadConversationList()
             #warning("Handle Conversation ERROR")
             print("Handle Conversation ERROR")
-            
         })
     }
 }
@@ -75,7 +73,6 @@ private extension ConversationListView {
                 .frame(width: UIViewController().view.bounds.width)
             }
         }
-
     }
 }
 
@@ -145,9 +142,9 @@ extension ConversationListView {
         
         init(coninater: DIContainer, isRunningTests: Bool = ProcessInfo.processInfo.isRunningTests, conversations: Loadable<LazyList<Conversation>> = .notRequested) {
             self.coninater = coninater
+            
             self.isRunningTests = isRunningTests
             _conversations = .init(initialValue: conversations)
-//            conversationList.append(conversations[0])
         }
         
         func loadConversationList() {
@@ -158,8 +155,8 @@ extension ConversationListView {
             guard let convos = conversations.value else {
                 return
             }
+            
             listIndex += 1
-        
             if listIndex >= convos.count { return }
             conversationList.append(convos[self.listIndex])
         }

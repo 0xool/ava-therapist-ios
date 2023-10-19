@@ -18,12 +18,40 @@ protocol DataBase {
     
     func Update<T: Object>(value: T) -> AnyPublisher<Void,  Error>
     func EntityExist<Element: Object>(id: Int, ofType: Element.Type) -> Bool
+    func DeleteLast<T: Object>(ofType: T.Type)
 }
 
 class DataBaseManager: DataBase {
     
+    static let Instance = DataBaseManager()
+    private let realm: Realm
+    private var cancellable: AnyCancellable?
+    
+    init() {
+        realm = try! Realm()
+    }
+    
+    func getDB() -> Realm {
+        return realm
+    }
+    
     func GetAll<T: RealmFetchable>() -> LazyList<T> {
         return realm.objects(T.self).lazyList
+    }
+    
+    func DeleteLast<T: Object>(ofType: T.Type) {
+        guard let last = realm.objects(T.self).last else{
+            return
+        }        
+        
+        do {
+            try self.realm.write {
+                self.realm.delete(last)
+            }
+        } catch {
+            #warning("FIX")
+            print("ERROR WHILE DELETING OBJECT")
+        }
     }
     
     func GetByTypeID<T: Object>(ofType: T.Type, id: Int, query: @escaping (Query<T>) -> Query<Bool>) -> AnyPublisher<Results<T>, Error> {
@@ -37,6 +65,14 @@ class DataBaseManager: DataBase {
 //            }
         }
         .eraseToAnyPublisher()
+    }
+    
+    func IncrementaChatID() -> Int{
+        if let retNext = realm.objects(Chat.self).sorted(byKeyPath: "id").first?.id {
+            return retNext + 1
+        }else{
+            return 1
+        }
     }
     
     func GetByID<T: Object>(id: Int) -> T? {
@@ -77,18 +113,6 @@ class DataBaseManager: DataBase {
             }
         }
         .eraseToAnyPublisher()
-    }
-    
-    static let Instance = DataBaseManager()
-    private let realm: Realm
-    private var cancellable: AnyCancellable?
-    
-    init() {
-        realm = try! Realm()
-    }
-    
-    func getDB() -> Realm {
-        return realm
     }
     
     func hasLoadedUser() -> AnyPublisher<Bool, Error> {

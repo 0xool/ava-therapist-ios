@@ -16,6 +16,8 @@ protocol ChatService {
     func getChatsForConversationFromServer(conversationID: Int) -> AnyPublisher<LazyList<Chat>, Error>
     
     func saveChatInDB(chat: Chat)
+    func sendChatToServer(message: String, conversation: Conversation) -> AnyPublisher<Chat, Error>
+    func deletePreviousUserMessage()
 }
 
 struct MainChatService: ChatService {
@@ -64,21 +66,55 @@ struct MainChatService: ChatService {
         return ProcessInfo.processInfo.isRunningTests ? 0 : 0.5
     }
     
+    func sendChatToServer(message: String, conversation: Conversation) -> AnyPublisher<Chat, Error>{
+    
+        let userChat = Chat(message: message, conversationID: conversation.id, chatSequence: nil, isUserMessage: true, isSentToserver: .NoStatus)
+
+        return chatRepository.sendChatToServer(data: .init(chat: .init(message: message, conversationID: conversation.id)))
+            .map{
+                userChat.isSentToServer = .NoStatus
+                _ = chatDBRepository.store(chat: userChat)
+                saveChatInDB(chat: $0)
+                
+                return $0
+            }
+            .mapError{
+                userChat.isSentToServer = .ErrorWhileSending
+                _ = chatDBRepository.store(chat: userChat)
+                
+                return $0
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func deletePreviousUserMessage() {
+        self.chatDBRepository.deletePreviousChat()
+    }
 }
 
 struct StubChatService: ChatService {
+    func sendChatToServer(message: String, conversation: Conversation) -> AnyPublisher<Chat, Error> {
+        Just(Chat())
+        .setFailureType(to: Error.self)
+        .eraseToAnyPublisher()
+    }
+    
+    func deletePreviousUserMessage() {
+//        self.chatDBRepository.deletePreviousChat(
+    }
+    
     func saveChatInDB(chat: Chat) {
         
     }
     
     func getChatsForConversationFromServer(conversationID: Int) -> AnyPublisher<LazyList<Chat>, Error> {
-        return Just([].lazyList)
+        Just([].lazyList)
         .setFailureType(to: Error.self)
         .eraseToAnyPublisher()
     }
     
     func loadChatFromDBBy(conversationID: Int) -> AnyPublisher<LazyList<Chat>, Error> {
-        return Just([].lazyList)
+        Just([].lazyList)
         .setFailureType(to: Error.self)
         .eraseToAnyPublisher()
     }

@@ -28,7 +28,6 @@ struct MainConversationRepository: ConversationRepository {
         
         return request
             .map{
-                print($0)
                 return $0.conversations
             }
             .eraseToAnyPublisher()

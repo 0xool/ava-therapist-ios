@@ -23,7 +23,7 @@ struct TherapyChatView: View {
     @State private var setPlaceHolder = false
     
     private let MessageViewLineLimitMax = 6
-        
+    
     private var keyboardHeightPublisher: AnyPublisher<CGFloat, Never> {
         Publishers.Merge(
             NotificationCenter.default
@@ -50,7 +50,7 @@ struct TherapyChatView: View {
             notRequestedView
         }
     }
-
+    
     func sendMessage() {
         viewModel.sendMessage(userMessage)
         viewModel.speechRecognizer.transcript = ""
@@ -63,7 +63,9 @@ struct TherapyChatView: View {
     
     private func speechBtnView() -> some View {
         Button {
-            isRecording.toggle()
+            withAnimation {
+                isRecording.toggle()
+            }
             
             if isRecording {
                 micManager.startMonitoring()
@@ -76,13 +78,10 @@ struct TherapyChatView: View {
         } label: {
             Image(systemName: isRecording ? "stop.fill" : "mic.fill")
                 .font(.system(size: 20))
-                .padding()
                 .cornerRadius(10)
                 .foregroundColor(ColorPallet.darkColor)
         }
     }
-    
-    
     
     private func sendBtnView() -> some View {
         Button {
@@ -91,7 +90,6 @@ struct TherapyChatView: View {
         } label: {
             Image(systemName: "paperplane.circle.fill")
                 .font(.system(size: 20))
-                .padding()
                 .cornerRadius(10)
                 .foregroundColor(ColorPallet.darkColor)
         }
@@ -109,9 +107,8 @@ struct TherapyChatView: View {
                 }
                 .opacity(isRecording ? 1 : 0)
             
-        }.frame(height: isRecording ? CGFloat(50) : CGFloat(0))
-            .padding(isRecording ? CGFloat(10) : CGFloat(0))
-            .background(ColorPallet.BackgroundColorLight)
+        }
+        .frame(maxHeight: .infinity, alignment: .center)
     }
     
     private func visualizerView() -> some View {
@@ -140,14 +137,14 @@ struct TherapyChatView: View {
 
 private extension TherapyChatView {
     private var notRequestedView: some View {
-        Text("").onAppear{ 
-//            self.viewModel.loadConversationChat
+        Text("").onAppear{
+            //            self.viewModel.loadConversationChat
         }
     }
     
     func failedView(_ error: Error) -> some View {
         ErrorView(error: error, retryAction: {
-//            self.viewModel.loadConversationList()
+            //            self.viewModel.loadConversationList()
             #warning("Handle Conversation ERROR")
             print("Handle Conversation ERROR")
             
@@ -165,16 +162,14 @@ private extension TherapyChatView {
                     if conversation.chats.count > 0 {
                         ScrollViewReader{ proxy in
                             ScrollView {
-                                ForEach(conversation.chats.map{$0}) { chat in
-                                    MessageView(chat: chat)
+                                ForEach(conversation.chats) { chat in
+                                    MessageView(chat: chat, onResendMessageClicked: self.viewModel.resendMessage)
                                         .listRowSeparator(.hidden)
                                 }.listRowBackground(ColorPallet.BackgroundColorLight)
                             }
                             .scrollContentBackground(.hidden)
                             .background(ColorPallet.BackgroundColorLight)
-                            .padding([.top], 20)
-                            .padding([.bottom], 15)
-                            .padding([.leading, .trailing], 16)
+                            .padding([.leading, .trailing], 8)
                             .onReceive(keyboardHeightPublisher) { _ in
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
                                     withAnimation {
@@ -197,35 +192,22 @@ private extension TherapyChatView {
                     
                     if viewModel.isUserTurnToSpeak {
                         VStack{
-                            self.isRecording ? speechInputView() : nil
-                            HStack {
-                                Text(userMessage.count.description)
-                                withAnimation {
-                                    
-                                    TextField("", text: $userMessage, axis: .vertical)
-                                        .textFieldStyle(ChatWithAiTextField())
-                                        .modifier(PlaceholderStyle(showPlaceHolder: userMessage.isEmpty,
-                                                                   placeholder: setPlaceHolder ? "" : "What's on your mind today?", isLargeChatbox: (userMessage.count > MessageViewLineLimitMax)))
-                                        .padding(8)
-                                        .background(.gray)
-                                        .frame(height: (userMessage.count > 30) ? 75 : 35)
-                                        .padding([.top], 4)
-                                        .cornerRadius(15)
-                                        .foregroundColor(.white)
+                            HStack(alignment: .center) {
+                                
+                                if self.isRecording {
+                                    speechInputView()
+                                }else{
+                                    textInputView()
                                 }
-                                HStack {
-                                    sendBtnView()
+                                
+                                HStack(spacing: 8) {
+                                    !isRecording ? sendBtnView() : nil
                                     speechBtnView()
                                 }
-                            }.frame(height: 70, alignment: .bottom)
-                                .padding()
-                                .padding([.top], 0)
-//                                .background(ColorPallet.greenBackground)
-                            
+                            }.frame(maxHeight: 70, alignment: .center)                       .padding(8)
                         }
-                        .frame(height: 70)
-                        .padding([.bottom], isRecording ? 10 : 0)
-                        .offset(y: -10)
+                        .frame(maxHeight: 70, alignment: .center)
+                        .background(ColorPallet.greenBackground)
                     }else{
                         CircleLoading()
                     }
@@ -236,6 +218,20 @@ private extension TherapyChatView {
             self.hideKeyboard()
         }
         .background(ColorPallet.BackgroundColorLight)
+    }
+    
+    private func textInputView() -> some View{
+        TextField("", text: $userMessage, axis: .vertical)
+            .textFieldStyle(ChatWithAiTextField())
+            .modifier(PlaceholderStyle(showPlaceHolder: userMessage.isEmpty,
+                                       placeholder: setPlaceHolder ? "" : "What's on your mind today?", isLargeChatbox: (userMessage.count > MessageViewLineLimitMax)))
+            .padding(8)
+            .background(.gray)
+            .frame(height: (userMessage.count > 30) ? 62 : 35)
+            .padding([.top], 4)
+            .cornerRadius(15)
+            .foregroundColor(.white)
+        
     }
 }
 
@@ -262,53 +258,56 @@ extension TherapyChatView {
         
         @Published var isUserTurnToSpeak: Bool = true
         var speechRecognizer = SpeechManager()
-        var didChange = PassthroughSubject<Void, Never>()
-        let isRunningTests: Bool
+//        var didChange = PassthroughSubject<Void, Never>()
         
+        let isRunningTests: Bool
         private let initialAiMessage = "Hi this is Ava your personal therapist. How do you feel today?"
         
         func sendMessage(_ chatMessage: String){
-            didChange.send(())
+//            didChange.send(())
             isUserTurnToSpeak = false
-            sendConversation()
+            
+            self.container.services.chatService.sendChatToServer(message: chatMessage, conversation: self.conversation.value!)
+                .sink { [weak self] error in
+                    self!.isUserTurnToSpeak = true
+                    #warning("Handel error message")
+                    // Set Last chat as Error proned ( Server had error)
+                    print("Error while sending message \(error)")
+                    self!.loadConversationChat()
+                } receiveValue: { chat in
+                    self.loadConversationChat()
+                }
+                .store(in: self.cancelBag)
         }
-    
-        func sendConversation() {
-//            var conversationList: [String] = []
-//            for message in conversation.messages {
-//                conversationList.append(message.content)
-            }
         
         func loadConversationChat() {
             self.container.services.conversationService.loadConversationChat(conversation: loadableSubject(\.conversation))
         }
-    
+        
+        func resendMessage(chat: Chat) {
+            self.container.services.chatService.deletePreviousUserMessage()
+            sendMessage(chat.message)
+        }
+        
         func setAiMessage(_ msg: String){
             let message = Message(content: msg, isUser: false)
-    //        conversation.messages.append(message)
+            //        conversation.messages.append(message)
             self.speechRecognizer.readOut(text: message.content)
         }
-    
+        
         public func restart() {
-//            self.conversation = Conversation()
             setAiMessage("Hi i'm Ava the AI Therapist! How do you feel today?")
             isUserTurnToSpeak = true
         }
-    
+        
         init(conversation: Conversation, container: DIContainer, isRunningTests: Bool = ProcessInfo.processInfo.isRunningTests) {
             _conversation = .init(initialValue: .partialLoaded(conversation))
             self.container = container
             self.isRunningTests = isRunningTests
+            
             loadConversationChat()
         }
     }
 }
-//
-//struct TherapyChatView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        TherapyChatView()
-//    }
-//}
-//
 
 

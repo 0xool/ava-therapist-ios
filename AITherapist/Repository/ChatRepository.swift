@@ -10,6 +10,7 @@ import Combine
 
 protocol ChatRepository: WebRepository {
     func loadChatsForConversation(conversationID: Int) -> AnyPublisher<LazyList<Chat>, Error>
+    func sendChatToServer(data: SaveChatRequset) -> AnyPublisher<Chat, Error>
 }
 
 struct MainChatRepository: ChatRepository {
@@ -21,14 +22,30 @@ struct MainChatRepository: ChatRepository {
         self.baseURL = baseURL
     }
     
+    func sendChatToServer(data: SaveChatRequset) -> AnyPublisher<Chat, Error> {
+        
+        let url = getPath(api: .addChat)
+        do {
+            let parameters = try JSONEncoder().encode(data)
+            let params = try JSONSerialization.jsonObject(with: parameters, options: []) as? [String: Any] ?? [:]
+            let request: AnyPublisher<AddChatServerResponse, Error> = SendRequest(pathVariable: nil, params: params, url: url)
+            return request
+                .map{
+                    Chat(message: $0.chat.message, conversationID: $0.chat.conversationID, chatSequence: $0.chat.chatSequence, isUserMessage: false, isSentToserver: .NoStatus)
+                }
+                .eraseToAnyPublisher()
+        } catch {
+            return Fail(error: error).eraseToAnyPublisher()
+        }
+    }
+    
     func loadChatsForConversation(conversationID: Int) -> AnyPublisher<LazyList<Chat>, Error> {
         
         let url = getPath(api: .getConversationChats) + "/\(conversationID)"
-        let request: AnyPublisher<ChatServerResponse, Error> = GetRequest(pathVariable: nil, params: nil, url: url)
+        let request: AnyPublisher<GetConversationChatServerResponse, Error> = GetRequest(pathVariable: nil, params: nil, url: url)
         
         return request
             .map{
-                print($0)
                 return $0.chats.lazyList
             }
             .eraseToAnyPublisher()
@@ -39,7 +56,7 @@ extension MainChatRepository {
     
     enum API: String {
         case getConversationChats = "getConversationChat"
-        case addChat = "addChat"
+        case addChat = "addUserChat"
     }
     
     func getPath(api: API) -> String {

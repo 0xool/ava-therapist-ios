@@ -91,12 +91,14 @@ class Conversation: Object, Decodable {
         self.dateCreated = date
         self.chats = List<Chat>()
         
-        let chat = Chat(id: 0, message: "Hi, How can I help you?", conversationID: 1, chatSequence: 0, isUserMessage: false)
-        let chat1 = Chat(id: 1, message: "I'm good how are you?", conversationID: 1, chatSequence: 1, isUserMessage: true)
-        let chat2 = Chat(id: 2, message: "Glad to hear that", conversationID: 1, chatSequence: 2, isUserMessage: false)
-        self.chats.append(chat)
-        self.chats.append(chat1)
-        self.chats.append(chat2)
+        #warning("Remove test")
+        // Tests Remove
+//        let chat = Chat(id: 0, message: "Hi, How can I help you?", conversationID: 1, chatSequence: 0, isUserMessage: false)
+//        let chat1 = Chat(id: 1, message: "I'm good how are you?", conversationID: 1, chatSequence: 1, isUserMessage: true)
+//        let chat2 = Chat(id: 2, message: "Glad to hear that", conversationID: 1, chatSequence: 2, isUserMessage: false)
+//        self.chats.append(chat)
+//        self.chats.append(chat1)
+//        self.chats.append(chat2)
     }
     
     required init(from decoder: Decoder) throws {

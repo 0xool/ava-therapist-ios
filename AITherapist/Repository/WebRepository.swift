@@ -9,19 +9,6 @@ import Foundation
 import Alamofire
 import Combine
 
-//Protocol WebRepository {
-//    var baseURL: String { get }
-//    var networkManager: NetworkManager
-//}
-//
-//extension WebRepository {
-//
-//    func Test() {
-//
-//    }
-//
-//}
-
 protocol WebRepository {
     var baseURL: String { get }
     func GetRequest<D>(pathVariable: String?, params: [String : Any]?, url: String) -> AnyPublisher<D, Error> where D : Decodable
@@ -72,8 +59,6 @@ extension WebRepository {
         .mapError{
             $0 as Error
         }
-        .print("DEBBUGING")
-        .breakpoint()
         .receive(on: DispatchQueue.main)
         .eraseToAnyPublisher()
     }
