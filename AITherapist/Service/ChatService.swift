@@ -55,7 +55,8 @@ struct MainChatService: ChatService {
     }
     
     func loadChatFromDBBy(conversationID: Int) -> AnyPublisher<LazyList<Chat>, Error> {
-        return chatDBRepository.loadChatsBy(conversationID: conversationID)
+        return chatDBRepository.loadChatsBy(conversationID: conversationID)            
+            .eraseToAnyPublisher()
     }
     
     func getChatsForConversationFromServer(conversationID: Int) -> AnyPublisher<LazyList<Chat>, Error>{
@@ -78,11 +79,11 @@ struct MainChatService: ChatService {
                 
                 return $0
             }
-            .mapError{
+            .catch { error in
                 userChat.isSentToServer = .ErrorWhileSending
                 _ = chatDBRepository.store(chat: userChat)
                 
-                return $0
+                return Fail<Chat, Error>(error: error)
             }
             .eraseToAnyPublisher()
     }

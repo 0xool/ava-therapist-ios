@@ -13,7 +13,6 @@ struct ConversationListView: View {
     //    @Namespace var conversationListNamespace
     //    @State var show = false
     
-    
     var body: some View {
         mainContent
     }
@@ -36,7 +35,7 @@ struct ConversationListView: View {
 
 // MARK: Loading Content
 private extension ConversationListView {
-    var notRequestedView: some View {
+    private var notRequestedView: some View {
         Text("").onAppear(perform: self.viewModel.loadConversationList)
     }
     
@@ -46,7 +45,7 @@ private extension ConversationListView {
     
     func failedView(_ error: Error) -> some View {
         ErrorView(error: error, retryAction: {
-            #warning("Handle Conversation ERROR")
+#warning("Handle Conversation ERROR")
             print("Handle Conversation ERROR")
         })
     }
@@ -56,11 +55,23 @@ private extension ConversationListView {
 private extension ConversationListView {
     func loadedView(_ conversationList: LazyList<Conversation>) -> some View {
         NavigationStack {
+            Button {
+                self.viewModel.createNewConversation()
+            } label: {
+                Text("Create new conversation")
+                    .background(
+                        RoundedRectangle(cornerRadius: 25)
+                            .foregroundStyle(.green)
+                            .padding(2)
+                    )
+                    .foregroundColor(.white)
+            }
+            
             ZStack{
                 List{
                     ForEach (conversationList, id: \.id){ conversation in
                         NavigationLink {
-                            TherapyChatView(viewModel: .init(conversation: conversation, container: self.viewModel.coninater))
+                            TherapyChatView(viewModel: .init(conversation: conversation, container: self.viewModel.container))
                         } label: {
                             ConversationCell(conversation: conversation)
                         }
@@ -68,6 +79,7 @@ private extension ConversationListView {
                             self.viewModel.loadMore()
                         }
                     }
+                    .onDelete(perform: self.viewModel.deleteConversation)
                 }
                 .frame(maxHeight: .infinity, alignment: .top)
                 .frame(width: UIViewController().view.bounds.width)
@@ -122,33 +134,60 @@ extension ConversationListView{
 
 extension ConversationListView {
     class ViewModel: ObservableObject {
-        let coninater: DIContainer
+        let container: DIContainer
         let isRunningTests: Bool
-        @Published var conversations: Loadable<LazyList<Conversation>>
-//        [
-//            Conversation(id: 1, conversationName: "First Conversation", date: .now),
-//            Conversation(id: 2, conversationName: "Second Conversation", date: .now + 1),
-//            Conversation(id: 3, conversationName: "Third Conversation", date: .now + 2),
-//            Conversation(id: 4, conversationName: "Fourth Conversation", date: .now + 3),
-//            Conversation(id: 5, conversationName: "Fifth Conversation", date: .now + 4),
-//            Conversation(id: 6, conversationName: "Six Conversation", date: .now + 5),
-//            Conversation(id: 7, conversationName: "Seventh Conversation", date: .now + 6),
-//            Conversation(id: 8, conversationName: "Eighth Conversation", date: .now + 7),
-//        ]
+        private var cancelBag = CancelBag()
         
-        @Published var conversationList: [Conversation] = []
+        @Published var conversations: Loadable<LazyList<Conversation>>
+        //        @Published var conversationList: [Conversation] = []
         
         private var listIndex = 0
         
         init(coninater: DIContainer, isRunningTests: Bool = ProcessInfo.processInfo.isRunningTests, conversations: Loadable<LazyList<Conversation>> = .notRequested) {
-            self.coninater = coninater
+            self.container = coninater
             
             self.isRunningTests = isRunningTests
             _conversations = .init(initialValue: conversations)
         }
         
         func loadConversationList() {
-            coninater.services.conversationService.loadConversationList(conversations: loadableSubject(\.conversations))
+            container.services.conversationService.loadConversationList(conversations: loadableSubject(\.conversations))
+        }
+        
+        func createNewConversation() {
+            self.container.services.conversationService.createNewConversation()
+                .breakpoint()
+                .sink { error in
+#warning("Handle Error")
+                    print("Error while creating new conversation \(error)")
+                } receiveValue: {
+                    self.loadConversationList()
+                }
+                .store(in: self.cancelBag)
+        }
+        
+        func deleteConversation(at offsets: IndexSet) {
+            
+            guard let index = offsets.first?.codingKey.intValue else{
+                return
+            }
+            
+            do {
+                let conversation = try self.conversations.value?.element(at: index)
+                self.container.services.conversationService.deleteConversation(conversationID: conversation!.id)
+                    .sink { error in
+#warning("Handel error")
+                        print("error: \(error)")
+                    } receiveValue: { [weak self] in
+                        //                    self!.conversationList.remove(at: index)
+                        self!.loadConversationList()
+                    }
+                    .store(in: self.cancelBag)
+            }catch {
+                print("Error while getting conversation")
+            }
+            // conversationList[index]
+            
         }
         
         func loadMore() {
@@ -156,9 +195,9 @@ extension ConversationListView {
                 return
             }
             
-            listIndex += 1
-            if listIndex >= convos.count { return }
-            conversationList.append(convos[self.listIndex])
+//            listIndex += 1
+//            if listIndex >= convos.count { return }
+//            conversationList.append(convos[self.listIndex])
         }
     }
 }

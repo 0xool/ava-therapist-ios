@@ -31,7 +31,7 @@ struct MainChatRepository: ChatRepository {
             let request: AnyPublisher<AddChatServerResponse, Error> = SendRequest(pathVariable: nil, params: params, url: url)
             return request
                 .map{
-                    Chat(message: $0.chat.message, conversationID: $0.chat.conversationID, chatSequence: $0.chat.chatSequence, isUserMessage: false, isSentToserver: .NoStatus)
+                    Chat(message: $0.data.message!, conversationID: $0.data.conversationID!, chatSequence: nil, isUserMessage: false, isSentToserver: .NoStatus)
                 }
                 .eraseToAnyPublisher()
         } catch {
@@ -41,7 +41,7 @@ struct MainChatRepository: ChatRepository {
     
     func loadChatsForConversation(conversationID: Int) -> AnyPublisher<LazyList<Chat>, Error> {
         
-        let url = getPath(api: .getConversationChats) + "/\(conversationID)"
+        let url = getPath(api: .getConversationChats, chatID: conversationID)
         let request: AnyPublisher<GetConversationChatServerResponse, Error> = GetRequest(pathVariable: nil, params: nil, url: url)
         
         return request
@@ -59,12 +59,17 @@ extension MainChatRepository {
         case addChat = "addUserChat"
     }
     
-    func getPath(api: API) -> String {
+    func getPath(api: API, chatID: Int? = nil) -> String {
+        let mainUrl = "\(baseURL)\(chatAPI)/\(api.rawValue)"
         switch api {
         case .getConversationChats:
-            return "\(baseURL)\(chatAPI)/\(api.rawValue)"
+            guard let id = chatID else{
+                return mainUrl
+            }
+            
+            return "\(mainUrl)/\(id)"
         case .addChat:
-            return "\(baseURL)\(chatAPI)/\(api.rawValue)"
+            return mainUrl
         }
     }
 }

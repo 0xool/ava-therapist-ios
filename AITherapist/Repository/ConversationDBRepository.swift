@@ -36,7 +36,9 @@ struct MainConversationDBRepository: ConversationDBRepository {
 
 extension MainConversationDBRepository {
     private func readAllConversations() -> AnyPublisher<LazyList<Conversation>, Error> {
-        let conversations: LazyList<Conversation> = DataBaseManager.Instance.GetAll()
+        let conversations: LazyList<Conversation> = DataBaseManager.Instance.GetAll().sorted(byKeyPath: "id", ascending: false)
+            .lazyList
+
         
         return Just(conversations)
             .setFailureType(to: Error.self)

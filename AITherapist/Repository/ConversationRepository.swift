@@ -10,6 +10,8 @@ import Combine
 
 protocol ConversationRepository: WebRepository {
     func loadConversationList() -> AnyPublisher<[Conversation], Error>
+    func addConversation(data: AddConversationRequest) -> AnyPublisher<Void, Error>
+    func deleteConversation(conversationID: Int) -> AnyPublisher<Void, Error>
 //    func loadConversationChat(conversation: Conversation) -> AnyPublisher<[Message], Error>
 }
 
@@ -32,6 +34,34 @@ struct MainConversationRepository: ConversationRepository {
             }
             .eraseToAnyPublisher()
     }
+    
+    func addConversation(data: AddConversationRequest) -> AnyPublisher<Void, Error> {
+        let url = getPath(api: .addConversation)
+        do {
+            let parameters = try JSONEncoder().encode(data)
+            let params = try JSONSerialization.jsonObject(with: parameters, options: []) as? [String: Any] ?? [:]
+            let request: AnyPublisher<AddConversationResponse, Error> = SendRequest(pathVariable: nil, params: params, url: url)
+            return request
+                .map{ _ in
+                    
+                }
+                .eraseToAnyPublisher()
+        } catch {
+            return Fail(error: error).eraseToAnyPublisher()
+        }
+    }
+    
+    func deleteConversation(conversationID: Int) -> AnyPublisher<Void, Error>{
+        let url = getPath(api: .deleteConversation, conversationID: conversationID)
+        
+        let request: AnyPublisher<DeleteConversationResponse, Error> = DeleteRequest(pathVariable: nil, params: nil, url: url)
+            
+        return request
+            .map{ _ in
+                
+            }
+            .eraseToAnyPublisher()
+    }
 }
 
 extension MainConversationRepository {
@@ -39,14 +69,22 @@ extension MainConversationRepository {
     enum API: String {
         case allConversations = "getConversationList"
         case addConversation = "addConversation"
+        case deleteConversation = "deleteConversation"
     }
     
-    func getPath(api: API) -> String {
+    func getPath(api: API, conversationID: Int? = nil) -> String {
+        let mainUrl = "\(baseURL)\(ConversationAPI)/\(api.rawValue)"
         switch api {
         case .addConversation:
-            return "\(baseURL)\(ConversationAPI)/\(api.rawValue)"
+            return mainUrl
         case .allConversations:
-            return "\(baseURL)\(ConversationAPI)/\(api.rawValue)"
+            return mainUrl
+        case .deleteConversation:
+            guard let id = conversationID else {
+                return mainUrl
+            }
+            
+            return "\(mainUrl)/\(id)"
         }
     }
 }

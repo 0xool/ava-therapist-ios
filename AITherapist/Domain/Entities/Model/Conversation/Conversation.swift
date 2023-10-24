@@ -43,6 +43,7 @@ class Conversations: Decodable{
 //    }
 //}
 
+
 struct ConversationsResponse: Decodable {
     var code: Int
     var message: String
@@ -53,6 +54,32 @@ struct ConversationsResponse: Decodable {
         case code = "code"
         case conversations = "conversations"
     }
+}
+
+struct AddConversationResponse: Decodable, ServerResponseData{
+    var message: String?
+    var code: Int?
+    var conversationID: Int
+    
+    enum CodingKeys: String, CodingKey {
+        case message = "message"
+        case code = "code"
+        case conversationID = "conversationID"
+    }
+}
+
+struct DeleteConversationResponse: Decodable, ServerResponseData{
+    var message: String?
+    var code: Int?
+}
+
+struct AddConversationRequest: Encodable{
+    
+    struct AddConversationRequestContainer: Encodable {
+        var conversationName: String
+    }
+    
+    var conversation: AddConversationRequestContainer
 }
 
 class Conversation: Object, Decodable {

@@ -145,7 +145,7 @@ private extension TherapyChatView {
     func failedView(_ error: Error) -> some View {
         ErrorView(error: error, retryAction: {
             //            self.viewModel.loadConversationList()
-            #warning("Handle Conversation ERROR")
+#warning("Handle Conversation ERROR")
             print("Handle Conversation ERROR")
             
         })
@@ -204,7 +204,7 @@ private extension TherapyChatView {
                                     !isRecording ? sendBtnView() : nil
                                     speechBtnView()
                                 }
-                            }.frame(maxHeight: 70, alignment: .center)                       .padding(8)
+                            }.frame(maxHeight: 75, alignment: .center)                       .padding(8)
                         }
                         .frame(maxHeight: 70, alignment: .center)
                         .background(ColorPallet.greenBackground)
@@ -227,7 +227,8 @@ private extension TherapyChatView {
                                        placeholder: setPlaceHolder ? "" : "What's on your mind today?", isLargeChatbox: (userMessage.count > MessageViewLineLimitMax)))
             .padding(8)
             .background(.gray)
-            .frame(height: (userMessage.count > 30) ? 62 : 35)
+            .frame(height: (userMessage.count > 40) ? 62 : 35)
+            .animation(.easeIn, value: userMessage)
             .padding([.top], 4)
             .cornerRadius(15)
             .foregroundColor(.white)
@@ -258,22 +259,21 @@ extension TherapyChatView {
         
         @Published var isUserTurnToSpeak: Bool = true
         var speechRecognizer = SpeechManager()
-//        var didChange = PassthroughSubject<Void, Never>()
+        //        var didChange = PassthroughSubject<Void, Never>()
         
         let isRunningTests: Bool
         private let initialAiMessage = "Hi this is Ava your personal therapist. How do you feel today?"
         
         func sendMessage(_ chatMessage: String){
-//            didChange.send(())
+            //            didChange.send(())
             isUserTurnToSpeak = false
             
             self.container.services.chatService.sendChatToServer(message: chatMessage, conversation: self.conversation.value!)
                 .sink { [weak self] error in
                     self!.isUserTurnToSpeak = true
-                    #warning("Handel error message")
+#warning("Handel error message")
                     // Set Last chat as Error proned ( Server had error)
                     print("Error while sending message \(error)")
-                    self!.loadConversationChat()
                 } receiveValue: { chat in
                     self.loadConversationChat()
                 }

@@ -20,15 +20,16 @@ struct GetConversationChatServerResponse: Decodable {
     }
 }
 
-struct AddChatServerResponse: Decodable {
-    var code: Int
-    var message: String
-    var chat: Chat
+struct AddChatServerResponse: Decodable, ServerResponseData {
     
-    enum CodingKeys: String, CodingKey {
-        case message = "message"
-        case code = "code"
-        case chat = "chat"
+    var message: String?
+    var code: Int?
+    var data: AddChatServerResponseData
+    
+    struct AddChatServerResponseData: Decodable {
+        var message: String?
+        var conversationID: Int?
+        var transcription: String?
     }
 }
 

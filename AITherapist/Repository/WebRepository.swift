@@ -13,6 +13,7 @@ protocol WebRepository {
     var baseURL: String { get }
     func GetRequest<D>(pathVariable: String?, params: [String : Any]?, url: String) -> AnyPublisher<D, Error> where D : Decodable
     func SendRequest<D>(pathVariable: String?, params: [String : Any]?, url: String) -> AnyPublisher<D, Error> where D : Decodable
+    func DeleteRequest<D>(pathVariable: String?, params: [String : Any]?, url: String) -> AnyPublisher<D, Error> where D : Decodable
     func SetCookie(cookie: String)
 }
 
@@ -37,7 +38,7 @@ extension WebRepository {
             HTTPCookiePropertyKey.domain: Constants.BaseUrl,
             HTTPCookiePropertyKey.path: "/",
             HTTPCookiePropertyKey.name: "jwt",
-            HTTPCookiePropertyKey.value: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3MDkxMTI2LCJleHAiOjE3MDA2OTExMjZ9.iwscIb8HOWlhdXu6zljCUgxHzsO7T2LjQDDlmSh1Zpo"
+            HTTPCookiePropertyKey.value: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk4MDE5NjIzLCJleHAiOjE3MDE2MTk2MjN9.TwyB9yFJjNBOsFVPItRt36gzaw6LCBH6CybuPHbVBs8"
         ]
         
         if let cookie = HTTPCookie(properties: cookieProps) {
@@ -46,9 +47,27 @@ extension WebRepository {
         
     }
     
+    func DeleteRequest<D>(pathVariable: String?, params: [String : Any]?, url: String) -> AnyPublisher<D, Error> where D : Decodable  {
+        
+#warning ("REMOVE TESTS")
+        generateTestCookie()
+        
+        return AF.request(url,
+                          method: .delete, parameters: params)
+        .validate()
+        .publishDecodable(type: D.self)
+        .value()
+        .mapError{
+            $0 as Error
+        }
+        .receive(on: DispatchQueue.main)
+        .eraseToAnyPublisher()
+        
+    }
+    
     func GetRequest<D>(pathVariable: String?, params: [String : Any]?, url: String) -> AnyPublisher<D, Error> where D : Decodable  {
         
-        #warning ("REMOVE TESTS")
+#warning ("REMOVE TESTS")
         generateTestCookie()
         
         return AF.request(url,
@@ -65,7 +84,7 @@ extension WebRepository {
     
     func SendRequest<D>(pathVariable: String?, params: [String : Any]?, url: String) -> AnyPublisher<D, Error> where D : Decodable  {
         
-        #warning ("REMOVE TESTS")
+#warning ("REMOVE TESTS")
         generateTestCookie()
         
         return AF.request(url,
@@ -82,7 +101,6 @@ extension WebRepository {
     
 }
 
-
 enum ClientError: Error {
     case invalidURL
     case httpCode(HTTPCode)
@@ -90,7 +108,7 @@ enum ClientError: Error {
     case imageDeserialization
 }
 
-struct ServerResponse<T: Decodable>: Decodable {
+struct ServerResponse<T: Decodable>: Decodable, ServerResponseData {
     var data: T
     var message: String?
     var code: Int?
@@ -102,52 +120,7 @@ struct ServerResponse<T: Decodable>: Decodable {
     }
 }
 
-
-//
-//protocol WebRepository {
-//    var session: URLSession { get }
-//    var baseURL: String { get }
-//    var bgQueue: DispatchQueue { get }
-//}
-//
-//extension WebRepository {
-//    func call<Value>(endpoint: APICall, httpCodes: HTTPCodes = .success) -> AnyPublisher<Value, Error>
-//        where Value: Decodable {
-//        do {
-//            let request = try endpoint.urlRequest(baseURL: baseURL)
-//            return session
-//                .dataTaskPublisher(for: request)
-//                .requestJSON(httpCodes: httpCodes)
-//        } catch let error {
-//            return Fail<Value, Error>(error: error).eraseToAnyPublisher()
-//        }
-//    }
-//}
-//
-//// MARK: - Helpers
-//
-//extension Publisher where Output == URLSession.DataTaskPublisher.Output {
-//    func requestData(httpCodes: HTTPCodes = .success) -> AnyPublisher<Data, Error> {
-//        return tryMap {
-//                assert(!Thread.isMainThread)
-//                guard let code = ($0.1 as? HTTPURLResponse)?.statusCode else {
-//                    throw APIError.unexpectedResponse
-//                }
-//                guard httpCodes.contains(code) else {
-//                    throw APIError.httpCode(code)
-//                }
-//                return $0.0
-//            }
-//            .extractUnderlyingError()
-//            .eraseToAnyPublisher()
-//    }
-//}
-//
-//private extension Publisher where Output == URLSession.DataTaskPublisher.Output {
-//    func requestJSON<Value>(httpCodes: HTTPCodes) -> AnyPublisher<Value, Error> where Value: Decodable {
-//        return requestData(httpCodes: httpCodes)
-//            .decode(type: Value.self, decoder: JSONDecoder())
-//            .receive(on: DispatchQueue.main)
-//            .eraseToAnyPublisher()
-//    }
-//}
+protocol ServerResponseData {
+    var message: String? { get set }
+    var code: Int? { get set }
+}

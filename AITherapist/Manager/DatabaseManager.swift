@@ -10,7 +10,7 @@ import RealmSwift
 import Combine
 
 protocol DataBase {
-    func GetAll<T: RealmFetchable>() -> LazyList<T>
+    func GetAll<T: RealmFetchable>() -> Results<T>
     func GetByID<T: Object>(id: Int) -> T?
     func GetByTypeID<T: Object>(ofType: T.Type, id: Int, query: @escaping (Query<T>) -> Query<Bool>) -> AnyPublisher<Results<T>, Error>
     func GetCount<T: RealmFetchable>(value: T.Type) -> Int
@@ -35,8 +35,8 @@ class DataBaseManager: DataBase {
         return realm
     }
     
-    func GetAll<T: RealmFetchable>() -> LazyList<T> {
-        return realm.objects(T.self).lazyList
+    func GetAll<T: RealmFetchable>() -> Results<T> {
+        return realm.objects(T.self)
     }
     
     func DeleteLast<T: Object>(ofType: T.Type) {
@@ -56,7 +56,7 @@ class DataBaseManager: DataBase {
     
     func GetByTypeID<T: Object>(ofType: T.Type, id: Int, query: @escaping (Query<T>) -> Query<Bool>) -> AnyPublisher<Results<T>, Error> {
         return Future<Results<T>, Error> { promise in
-            let value: Results<T> = self.realm.objects(T.self)
+            let value: Results<T> = self.realm.objects(T.self) .where(query)
             #warning("FIX!!!")
 //            if (value.count <= 0){
                 promise(.success(value))

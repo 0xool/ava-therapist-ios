@@ -12,6 +12,8 @@ import RealmSwift
 protocol ConversationService {
     func loadConversationList(conversations: LoadableSubject<LazyList<Conversation>>)
     func loadConversationChat(conversation: LoadableSubject<Conversation>)
+    func createNewConversation() -> AnyPublisher<Void, Error>
+    func deleteConversation(conversationID: Int) -> AnyPublisher<Void, Error>
 }
 
 struct MainConversationService: ConversationService {
@@ -36,21 +38,21 @@ struct MainConversationService: ConversationService {
         
         Just<Void>
             .withErrorType(Error.self)
-            .flatMap { [conversationDBRepository] _ -> AnyPublisher<Bool, Error> in
-                conversationDBRepository.hasLoadedConversation()
-            }
-            .flatMap { hasLoaded -> AnyPublisher<Void, Error> in
-                if hasLoaded {
-                    return Just<Void>.withErrorType(Error.self)
-                } else {
-                    return self.refreshConversationList()
-                }
+            .flatMap { _ -> AnyPublisher<Void, Error> in
+                self.refreshConversationList()
             }
             .flatMap({ [conversationDBRepository] in
                 conversationDBRepository.loadConversations()
             })
             .sinkToLoadable { conversations.wrappedValue = $0 }
             .store(in: cancelBag)
+    }
+    
+    func deleteConversation(conversationID: Int) -> AnyPublisher<Void, Error> {
+        
+        return conversationRepository.deleteConversation(conversationID: conversationID)
+            .eraseToAnyPublisher()
+            
     }
     
     func loadConversationChat(conversation: LoadableSubject<Conversation>){
@@ -87,6 +89,12 @@ struct MainConversationService: ConversationService {
                    chatService.saveChatInDB(chat: chat)
                 }
             }
+            .eraseToAnyPublisher()
+    }
+    
+    func createNewConversation() -> AnyPublisher<Void, Error> {
+        #warning("Handle name accordingly")
+        return conversationRepository.addConversation(data: .init(conversation: .init(conversationName: "New Conversation")))
             .eraseToAnyPublisher()
     }
     
@@ -133,6 +141,14 @@ struct MainConversationService: ConversationService {
 }
 
 struct StubCountriesService: ConversationService {
+    func deleteConversation(conversationID: Int) -> AnyPublisher<Void, Error> {
+        return Just<Void>.withErrorType(Error.self)
+    }
+    
+    func createNewConversation() -> AnyPublisher<Void, Error> {
+        return Just<Void>.withErrorType(Error.self)
+    }
+    
     func loadConversationList(conversations: LoadableSubject<LazyList<Conversation>>) {
     }
     

@@ -38,6 +38,7 @@ struct MainChatDBRepository: ChatDBRepository {
 
 extension MainChatDBRepository {    
     private func getChatBy(conversationID: Int) -> AnyPublisher<LazyList<Chat>, Error> {
+        
         DataBaseManager.Instance.GetByTypeID(ofType: Chat.self, id: conversationID) { $0.conversationID == conversationID }
             .map{ $0.lazyList }
             .eraseToAnyPublisher()
@@ -48,7 +49,7 @@ extension MainChatDBRepository {
     }
     
     private func readAllChats() -> AnyPublisher<LazyList<Chat>, Error> {
-        let chats: LazyList<Chat> = DataBaseManager.Instance.GetAll()
+        let chats: LazyList<Chat> = DataBaseManager.Instance.GetAll().lazyList
         
         return Just(chats)
             .setFailureType(to: Error.self)
