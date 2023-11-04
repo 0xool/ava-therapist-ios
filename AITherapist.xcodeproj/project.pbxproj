@@ -67,7 +67,7 @@
 		A59C64012ACA37EE00B76256 /* MessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A59C63E52ACA37EE00B76256 /* MessageView.swift */; };
 		A59C64022ACA37EE00B76256 /* BreathingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A59C63E72ACA37EE00B76256 /* BreathingView.swift */; };
 		A59C64032ACA37EE00B76256 /* ConversationListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A59C63E92ACA37EE00B76256 /* ConversationListView.swift */; };
-		A59C64042ACA37EE00B76256 /* MainContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A59C63EB2ACA37EE00B76256 /* MainContentView.swift */; };
+		A59C64042ACA37EE00B76256 /* MainAppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A59C63EB2ACA37EE00B76256 /* MainAppView.swift */; };
 		A59C64052ACA37EE00B76256 /* TherapyChatModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A59C63EE2ACA37EE00B76256 /* TherapyChatModel.swift */; };
 		A59C64072ACA3DA300B76256 /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = A59C64062ACA3DA300B76256 /* Fonts.swift */; };
 		A59C64092ACA58E500B76256 /* ChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A59C64082ACA58E500B76256 /* ChartView.swift */; };
@@ -171,7 +171,7 @@
 		A59C63E52ACA37EE00B76256 /* MessageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageView.swift; sourceTree = "<group>"; };
 		A59C63E72ACA37EE00B76256 /* BreathingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BreathingView.swift; sourceTree = "<group>"; };
 		A59C63E92ACA37EE00B76256 /* ConversationListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationListView.swift; sourceTree = "<group>"; };
-		A59C63EB2ACA37EE00B76256 /* MainContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainContentView.swift; sourceTree = "<group>"; };
+		A59C63EB2ACA37EE00B76256 /* MainAppView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainAppView.swift; sourceTree = "<group>"; };
 		A59C63EE2ACA37EE00B76256 /* TherapyChatModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TherapyChatModel.swift; sourceTree = "<group>"; };
 		A59C64062ACA3DA300B76256 /* Fonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
 		A59C64082ACA58E500B76256 /* ChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartView.swift; sourceTree = "<group>"; };
@@ -530,12 +530,12 @@
 			path = ConversationListView;
 			sourceTree = "<group>";
 		};
-		A59C63EA2ACA37EE00B76256 /* MainContentView */ = {
+		A59C63EA2ACA37EE00B76256 /* MainAppView */ = {
 			isa = PBXGroup;
 			children = (
-				A59C63EB2ACA37EE00B76256 /* MainContentView.swift */,
+				A59C63EB2ACA37EE00B76256 /* MainAppView.swift */,
 			);
-			path = MainContentView;
+			path = MainAppView;
 			sourceTree = "<group>";
 		};
 		A59C63EC2ACA37EE00B76256 /* TherapyChat */ = {
@@ -572,7 +572,7 @@
 				A59C63E82ACA37EE00B76256 /* ConversationListView */,
 				A59C63DA2ACA37EE00B76256 /* HomeView */,
 				A59C63C92ACA37EE00B76256 /* Login */,
-				A59C63EA2ACA37EE00B76256 /* MainContentView */,
+				A59C63EA2ACA37EE00B76256 /* MainAppView */,
 				A59C63DC2ACA37EE00B76256 /* MainView */,
 				A59C63D32ACA37EE00B76256 /* Root */,
 				A59C63DE2ACA37EE00B76256 /* SignUp */,
@@ -959,7 +959,7 @@
 				A5EFC5932AC10F0C00D6097B /* Quote.swift in Sources */,
 				A5CA948D2AA7FA6D00E25A46 /* PushNotificationsHandler.swift in Sources */,
 				A57AD7D02AA64AB8008EC1FB /* ConversationRepository.swift in Sources */,
-				A59C64042ACA37EE00B76256 /* MainContentView.swift in Sources */,
+				A59C64042ACA37EE00B76256 /* MainAppView.swift in Sources */,
 				A569DF072AA448E9006D39AA /* Store.swift in Sources */,
 				A516527F2AA43A87005E9BC6 /* Diary.swift in Sources */,
 				A59C63F92ACA37EE00B76256 /* ActivityIndicatorView.swift in Sources */,

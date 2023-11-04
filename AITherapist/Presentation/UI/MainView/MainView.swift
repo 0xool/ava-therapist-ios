@@ -7,40 +7,83 @@
 
 import SwiftUI
 
+enum MainViewState {
+    case Home
+    case ChatHistory
+    case Journal
+    case Profile
+}
+
 struct MainView: View {
     
     @ObservedObject private(set) var viewModel: ViewModel
+    @State var mainViewState: MainViewState = .Home
+    @State var showNewChat: Bool = false
+        
+    @ViewBuilder var homeTabIcon: some View {
+        TabIcon(imageName: "house", title: "Home", isSelected: self.mainViewState == .Home) {
+            self.mainViewState = .Home
+        }
+    }
+    
+    @ViewBuilder var chatHistoryTabIcon: some View {
+        TabIcon(imageName: "bubble.left.and.bubble.right", title: "Chat History", isSelected: self.mainViewState == .ChatHistory) {
+            self.mainViewState = .ChatHistory
+        }
+    }
+    
+    @ViewBuilder var journalTabIcon: some View {
+        TabIcon(imageName: "magazine.fill", title: "Journal", isSelected: self.mainViewState == .Journal) {
+            self.mainViewState = .Journal
+        }
+    }
+    
+    @ViewBuilder var profileTabIcon: some View {
+        TabIcon(imageName: "person.crop.circle", title: "Profile", isSelected: self.mainViewState == .Profile) {
+            self.mainViewState = .Profile
+        }
+    }
+    
+    @ViewBuilder var mainContentView: some View {
+        switch self.mainViewState {
+        case .Home:
+            InsightView()
+        case .ChatHistory:
+            ConversationListView(viewModel: .init(coninater: viewModel.container))
+        case .Journal:
+            InsightView()
+        case .Profile:
+            BreathingView()
+        }
+    }
     
     var body: some View {
-        TabView{
-            InsightView()
-                .tabItem {
-                    Label("Insight", systemImage: "figure.mind.and.body")
-                }
-            //            TherapyChatView(viewModel: .init(conversation: Conversation, container: viewModel.container))
-            ConversationListView(viewModel: .init(coninater: viewModel.container))
-                .tabItem {
-                    ZStack {
-                        Label("ConversationList", systemImage: "list.dash")
-                            .overlay {
-                                Circle()
-                                    .frame(width: 50, height: 50)
-                                    .background(.green)
-                            }
-                        
+        
+        VStack{
+            Spacer()
+            mainContentView
+            Spacer()
+            
+            HStack{
+                self.homeTabIcon
+                self.chatHistoryTabIcon
+                NewChatTabIconMenu()
+                    .onTapGesture {
+                        withAnimation{
+                            showNewChat.toggle()
+                        }
                     }
-                }
-            BreathingView()
-                .tabItem{
-                    Label("Meditation", systemImage: "camera.macro")
-                }
+                self.journalTabIcon
+                self.profileTabIcon
+            }
+            .frame(height: 75)
+            .frame(maxWidth: .infinity)
+            .background(Color(.systemGray5))
         }
-        .onAppear() {
-            UITabBar.appearance().barTintColor = .white
-            UITabBar.appearance().backgroundColor = .white
-        }
-        //        .background(Color(red: 180/255, green: 255/255, blue: 150/255))
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+//        .fullScreenCover(isPresented: $showNewChat, content: {
+        .sheet(isPresented: $showNewChat, content: {
+            Text("New Chat")
+        })
     }
 }
 
@@ -50,6 +93,54 @@ extension MainView {
         
         init(container: DIContainer) {
             self.container = container
+        }
+    }
+}
+
+extension MainView {
+    struct TabIcon: View {
+        var imageName: String = ""
+        var title: String = ""
+        var isSelected: Bool = false
+        var onTabClick: () -> ()
+        
+        var body: some View {
+            Button {
+                onTabClick()
+            } label: {
+                VStack{
+                    Image(systemName: self.imageName)
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: 20, height: 20)
+                    Text(self.title)
+                        .lineLimit(1)
+                        .font(.caption)
+                }
+                .foregroundStyle(isSelected ? ColorPallet.SecondaryColorGreen : .gray)
+                .frame(maxWidth: .infinity)
+            }
+
+        }
+    }
+}
+
+extension MainView {
+    struct NewChatTabIconMenu: View {
+        var body: some View {
+            ZStack{
+                Circle()
+                    .frame(width: 80, height: 80)
+                    .foregroundColor(.white)
+                Circle()
+                    .frame(width: 75, height: 75)
+                    .foregroundColor(ColorPallet.SecondaryColorGreen)
+                Image(systemName: "plus")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 40, height: 40)
+                    .foregroundStyle(.white)
+            }
+            .offset(y: -30)
         }
     }
 }

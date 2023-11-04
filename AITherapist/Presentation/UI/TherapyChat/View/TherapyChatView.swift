@@ -13,7 +13,6 @@ import Combine
 import Foundation
 
 struct TherapyChatView: View {
-    //    @EnvironmentObject var chatHelper: ChatHelper
     @ObservedObject private(set) var viewModel: ViewModel
     @ObservedObject var micManager: MicManager = MicManager(numberOfSample: 30)
     @State private var isUsingMic = false
@@ -56,11 +55,7 @@ struct TherapyChatView: View {
         viewModel.speechRecognizer.transcript = ""
         userMessage = ""
     }
-    
-    func onAiResponse() {
-        
-    }
-    
+
     private func speechBtnView() -> some View {
         Button {
             withAnimation {
@@ -158,36 +153,21 @@ private extension TherapyChatView {
     private func mainChatView(conversation: Conversation) -> some View {
         ZStack {
             GeometryReader { geo in
-                VStack {
-                    if conversation.chats.count > 0 {
-                        ScrollViewReader{ proxy in
-                            ScrollView {
-                                ForEach(conversation.chats) { chat in
-                                    MessageView(chat: chat, onResendMessageClicked: self.viewModel.resendMessage)
-                                        .listRowSeparator(.hidden)
-                                }.listRowBackground(ColorPallet.BackgroundColorLight)
-                            }
-                            .scrollContentBackground(.hidden)
-                            .background(ColorPallet.BackgroundColorLight)
-                            .padding([.leading, .trailing], 8)
-                            .onReceive(keyboardHeightPublisher) { _ in
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
-                                    withAnimation {
-                                        proxy.scrollTo(conversation.chats.last?.id)
-                                    }
-                                }
-                            }
-                            .onReceive(viewModel.$isUserTurnToSpeak, perform: { _ in
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
-                                    withAnimation {
-                                        proxy.scrollTo(conversation.chats.last?.id)
-                                    }
-                                }
-                            })
+                ScrollViewReader{ proxy in
+                    VStack {
+                        ScrollView {
+                            ForEach(conversation.chats.lazyList, id: \.id) { chat in
+                                MessageView(chat: chat, onResendMessageClicked: self.viewModel.resendMessage)
+                                    .listRowSeparator(.hidden)
+                            }.listRowBackground(ColorPallet.BackgroundColorLight)
                         }
-                    }else{
-                        Rectangle()
-                            .foregroundColor(ColorPallet.BackgroundColorLight)
+                        .scrollContentBackground(.hidden)
+                        .background(ColorPallet.BackgroundColorLight)
+                        .padding([.leading, .trailing], 8)
+                        
+                    }
+                    .onAppear{
+                        proxy.scrollTo(conversation.chats.last , anchor: .bottom)
                     }
                     
                     if viewModel.isUserTurnToSpeak {

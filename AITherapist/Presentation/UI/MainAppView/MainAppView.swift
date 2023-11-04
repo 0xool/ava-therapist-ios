@@ -10,7 +10,7 @@ import Combine
 import EnvironmentOverrides
 
 // MARK: - View
-struct MainContentView: View {
+struct MainAppView: View {
     
     @ObservedObject private(set) var viewModel: ViewModel
     
@@ -56,7 +56,7 @@ struct MainContentView: View {
 
 // MARK: - ViewModel
 
-extension MainContentView {
+extension MainAppView {
     class ViewModel: ObservableObject {
         
         let container: DIContainer
@@ -81,10 +81,6 @@ extension MainContentView {
                 }
             }
         }
-        
-        //        func loadCountries() {
-        //            self.container.services.conversationService.loadConversationList(conversations: loadableSubject(\.conversations))
-        //        }
     }
 }
 
@@ -93,7 +89,7 @@ extension MainContentView {
 #if DEBUG
 struct MainContentView_Previews: PreviewProvider {
     static var previews: some View {
-        MainContentView(viewModel: MainContentView.ViewModel(container: .preview))
+        MainAppView(viewModel: MainAppView.ViewModel(container: .preview))
     }
 }
 #endif
