@@ -21,6 +21,7 @@
 		A516527F2AA43A87005E9BC6 /* Diary.swift in Sources */ = {isa = PBXBuildFile; fileRef = A516527E2AA43A87005E9BC6 /* Diary.swift */; };
 		A51B4E342AD0F14500A14AFA /* AITherapistTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51B4E332AD0F14500A14AFA /* AITherapistTests.swift */; };
 		A51B4E3B2AD0F1C300A14AFA /* ConversationsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51B4E3A2AD0F1C200A14AFA /* ConversationsTests.swift */; };
+		A51CF3BD2AF805BA0006F275 /* AvaNavBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51CF3BC2AF805BA0006F275 /* AvaNavBarView.swift */; };
 		A525EEAA29B172BC00A57CE8 /* AITherapistApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A525EEA929B172BC00A57CE8 /* AITherapistApp.swift */; };
 		A525EEAC29B172BC00A57CE8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A525EEAB29B172BC00A57CE8 /* ContentView.swift */; };
 		A566DCA12AA503A200920940 /* WebRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A566DCA02AA503A200920940 /* WebRepository.swift */; };
@@ -125,6 +126,7 @@
 		A51B4E312AD0F14500A14AFA /* AITherapistTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AITherapistTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A51B4E332AD0F14500A14AFA /* AITherapistTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AITherapistTests.swift; sourceTree = "<group>"; };
 		A51B4E3A2AD0F1C200A14AFA /* ConversationsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsTests.swift; sourceTree = "<group>"; };
+		A51CF3BC2AF805BA0006F275 /* AvaNavBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvaNavBarView.swift; sourceTree = "<group>"; };
 		A525EEA629B172BC00A57CE8 /* AITherapist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AITherapist.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A525EEA929B172BC00A57CE8 /* AITherapistApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AITherapistApp.swift; sourceTree = "<group>"; };
 		A525EEAB29B172BC00A57CE8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -467,6 +469,7 @@
 				A59C63D92ACA37EE00B76256 /* ErrorView.swift */,
 				A59C64082ACA58E500B76256 /* ChartView.swift */,
 				A58AA4962AD7A9D9001F7253 /* Loading.swift */,
+				A51CF3BC2AF805BA0006F275 /* AvaNavBarView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -963,6 +966,7 @@
 				A569DF072AA448E9006D39AA /* Store.swift in Sources */,
 				A516527F2AA43A87005E9BC6 /* Diary.swift in Sources */,
 				A59C63F92ACA37EE00B76256 /* ActivityIndicatorView.swift in Sources */,
+				A51CF3BD2AF805BA0006F275 /* AvaNavBarView.swift in Sources */,
 				A59C63FF2ACA37EE00B76256 /* TherapyChatView.swift in Sources */,
 				A5AE6FEF2AA3F37600168037 /* AppState.swift in Sources */,
 				A566DCA12AA503A200920940 /* WebRepository.swift in Sources */,

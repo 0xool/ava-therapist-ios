@@ -14,7 +14,11 @@ struct ConversationListView: View {
     //    @State var show = false
     
     var body: some View {
-        mainContent
+        AvaNavBarView{
+            mainContent
+                .frame(width: UIViewController().view.bounds.width)
+        }
+        
     }
     
     @ViewBuilder var mainContent: some View {
@@ -55,40 +59,94 @@ private extension ConversationListView {
 private extension ConversationListView {
     func loadedView(_ conversationList: LazyList<Conversation>) -> some View {
         NavigationStack {
-            Button {
-                self.viewModel.createNewConversation()
-            } label: {
-                Text("Create new conversation")
-                    .background(
-                        RoundedRectangle(cornerRadius: 25)
-                            .foregroundStyle(.green)
-                            .padding(2)
-                    )
-                    .foregroundColor(.white)
-            }
+            //            Button {
+            //                self.viewModel.createNewConversation()
+            //            } label: {
+            //                Text("Create new conversation")
+            //                    .background(
+            //                        RoundedRectangle(cornerRadius: 25)
+            //                            .foregroundStyle(.green)
+            //                            .padding(2)
+            //                    )
+            //                    .foregroundColor(.white)
+            //            }
             
-            ZStack{
-                List{
-                    ForEach (conversationList, id: \.id){ conversation in
-                        NavigationLink {
-                            TherapyChatView(viewModel: .init(conversation: conversation, container: self.viewModel.container))
-                        } label: {
-                            ConversationCell(conversation: conversation)
+            VStack(spacing: 0){
+                ConversationCellHeader()
+                ZStack{
+                    List{
+                        ForEach (conversationList, id: \.id){ conversation in
+                            ZStack{
+                                ConversationCell(conversation: conversation)
+                                NavigationLink(destination: TherapyChatView(viewModel: .init(conversation: conversation, container: self.viewModel.container))) {
+                                    EmptyView()
+                                }
+                                .opacity(0)
+                            }
+                            .listRowSeparator(.hidden)
+                            .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
+                            //                        .onAppear {
+                            //                            self.viewModel.loadMore()
+                            //                        }
                         }
-                        .onAppear {
-                            self.viewModel.loadMore()
-                        }
+                        .onDelete(perform: self.viewModel.deleteConversation)
                     }
-                    .onDelete(perform: self.viewModel.deleteConversation)
+                    .scrollContentBackground(.hidden)
+                    .background(.white)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+                    .listStyle(.grouped)
+                    .listRowSpacing(10)
+                    //                .frame(width: UIViewController().view.bounds.width + 10)
                 }
-                .frame(maxHeight: .infinity, alignment: .top)
-                .frame(width: UIViewController().view.bounds.width)
             }
+
         }
     }
 }
 
 extension ConversationListView{
+    
+    struct ConversationCellHeader: View {
+        var body: some View {
+            header
+        }
+        
+        @ViewBuilder private var header: some View {
+            HStack(alignment: .center, spacing: 10) {
+                // Regular/Caption2
+                Text("Date")
+                  .font(
+                    Font.custom("Inter", size: 12)
+                      .weight(.medium)
+                  )
+                  .foregroundColor(.black)
+                
+                Divider()
+                  
+                // Regular/Caption2
+                Text("Summary")
+                  .font(
+                    Font.custom("Inter", size: 12)
+                      .weight(.medium)
+                  )
+                  .foregroundColor(.black)
+                
+                Divider()
+                
+                Text("Mood")
+                  .font(
+                    Font.custom("Inter", size: 12)
+                      .weight(.medium)
+                  )
+                  .foregroundColor(.black)
+            }
+            .frame(width: UIViewController().view.bounds.width, height: 25)
+            .frame(maxWidth: .infinity)
+            .padding(0)
+
+        }
+    }
+    
     struct ConversationCell: View {
         var conversation: Conversation
         
@@ -109,6 +167,47 @@ extension ConversationListView{
         }
         
         @ViewBuilder private var cellView: some View {
+            HStack(alignment: .center, spacing: 0) {
+                HStack(alignment: .center, spacing: 10) {
+                    // Regular/Caption2
+                    Text("10/29/2023")
+                      .font(Font.custom("SF Pro Text", size: 11))
+                      .kerning(0.066)
+                      .multilineTextAlignment(.center)
+                      .foregroundColor(Color(red: 0.36, green: 0.36, blue: 0.36))
+                    
+                    Divider()
+                      
+                    // Regular/Caption2
+                    Text("We talked about.... dolor sit amet consectetur. Tempus dui vitae vivamus diam habitasse metus aliquet rhoncus. Potenti nulla pulvinar neque tellus lectus sit.vivamus diam habitasse metus aliquet rhonc Llorem ipsum dolor s")
+                      .font(Font.custom("SF Pro Text", size: 11))
+                      .kerning(0.066)
+                      .foregroundColor(Color(red: 0.36, green: 0.36, blue: 0.36))
+                      .frame(width: 232, alignment: .topLeading)
+                    
+                    Divider()
+                    
+                    Image(systemName: "face.smiling.inverse")
+                    .frame(width: 50, height: 50)
+                }
+                .padding(0)
+            }
+            .padding(.leading, 8)
+            .padding(.trailing, 11)
+            .padding(.top, 24)
+            .padding(.bottom, 28)
+            .frame(width: UIViewController().view.bounds.width, height: 117)
+            .frame(maxWidth: .infinity)
+            
+            .background(Color(red: 0.95, green: 0.95, blue: 0.95))
+            .overlay(
+                Rectangle()
+                    .inset(by: 0.25)
+                    .stroke(Color(red: 0.5, green: 0.5, blue: 0.5), lineWidth: 0.5)
+            )
+        }
+        
+        @ViewBuilder private var cellView2: some View {
             ZStack{
                 RoundedRectangle(cornerRadius: 25)
                     .padding([.leading, .trailing], 16)
@@ -145,7 +244,6 @@ extension ConversationListView {
         
         init(coninater: DIContainer, isRunningTests: Bool = ProcessInfo.processInfo.isRunningTests, conversations: Loadable<LazyList<Conversation>> = .notRequested) {
             self.container = coninater
-            
             self.isRunningTests = isRunningTests
             _conversations = .init(initialValue: conversations)
         }
@@ -191,13 +289,13 @@ extension ConversationListView {
         }
         
         func loadMore() {
-            guard let convos = conversations.value else {
+            guard let _ = conversations.value else {
                 return
             }
             
-//            listIndex += 1
-//            if listIndex >= convos.count { return }
-//            conversationList.append(convos[self.listIndex])
+            //            listIndex += 1
+            //            if listIndex >= convos.count { return }
+            //            conversationList.append(convos[self.listIndex])
         }
     }
 }

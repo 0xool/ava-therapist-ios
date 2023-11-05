@@ -12,29 +12,27 @@ struct InsightView: View {
     @State private var showingModalSheet = false
     
     var body: some View {
-        ScrollView{
-            WelcomeToHomeTitleView()
-            QuoteView
-            Divider()
-            MoodAnalyticsView()
-                .onTapGesture{
-                    withAnimation {
-                        showingModalSheet.toggle()
+        AvaNavBarView{
+            ScrollView{
+                WelcomeToHomeTitleView()
+                QuoteView
+                Divider()
+                MoodAnalyticsView()
+                    .onTapGesture{
+                        withAnimation {
+                            showingModalSheet.toggle()
+                        }
                     }
-                }
-                .sheet(isPresented: $showingModalSheet) {
-                    MoodAnalyticsView()
-                }
+                    .sheet(isPresented: $showingModalSheet) {
+                        MoodAnalyticsView()
+                    }
                 
-            Divider()
-            GeneralSummaryView()
-            Divider()
-        }
-        .padding([.top], 75)        
-        .frame(width: UIViewController().view.bounds.width)
-        .frame(maxHeight: .infinity)
-        .overlay{
-            NavBarView()
+                Divider()
+                GeneralSummaryView()
+                Divider()
+            }
+            .frame(width: UIViewController().view.bounds.width)
+            .frame(maxHeight: .infinity)
         }
     }
     
@@ -77,7 +75,6 @@ struct GeneralSummaryView: View {
                 .padding([.top], 8)
         }
         .padding()
-        
     }
 }
 
@@ -89,56 +86,6 @@ struct WelcomeToHomeTitleView: View {
             .font(.title2)
             .lineLimit(1)
             .padding()
-    }
-}
-
-struct NavBarView: View {
-    
-    var body: some View {
-        Content
-    }
-    
-    @ViewBuilder var HelpLineView: some View {
-        ZStack{
-
-            Text("Helplines")
-                .foregroundStyle(.black)
-                .font(helpLineFont)
-                .padding(8)
-        }
-        .background{
-            RoundedRectangle(cornerSize: CGSize(width: 50, height: 50))
-                .foregroundStyle(.green)
-                
-        }
-        .padding(8)
-
-    }
-    
-    @ViewBuilder var Content: some View {
-        ZStack {
-            HStack(alignment: .center){
-                Button {
-                    // Open
-                } label: {
-                    Image(systemName: "gearshape.fill")
-                        .font(.largeTitle)
-                        .foregroundStyle(.gray)
-                        .padding([.leading], 8)
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                
-                LogoIcon()
-                    .frame(maxWidth: .infinity, alignment: .center)
-                
-                HelpLineView
-                    .frame(maxWidth: .infinity, alignment: .trailing)
-                
-            }
-            
-        }
-        .frame(width: UIScreen.main.bounds.width, height: 70)
-        .frame(maxHeight: .infinity, alignment: .top)
     }
 }
 

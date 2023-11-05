@@ -62,6 +62,7 @@ struct MainView: View {
         VStack{
             Spacer()
             mainContentView
+                .frame(width: UIViewController().view.bounds.width)
             Spacer()
             
             HStack{
@@ -80,7 +81,6 @@ struct MainView: View {
             .frame(maxWidth: .infinity)
             .background(Color(.systemGray5))
         }
-//        .fullScreenCover(isPresented: $showNewChat, content: {
         .sheet(isPresented: $showNewChat, content: {
             Text("New Chat")
         })
@@ -108,12 +108,17 @@ extension MainView {
             Button {
                 onTabClick()
             } label: {
-                VStack{
+                VStack(spacing: 5){
                     Image(systemName: self.imageName)
                         .aspectRatio(contentMode: .fill)
-                        .frame(width: 20, height: 20)
+                        .frame(width: 32, height: 32)
                     Text(self.title)
-                        .lineLimit(1)
+                    .font(
+                    Font.custom("SF Pro Text", size: 10)
+                    .weight(.medium)
+                    )
+                    .multilineTextAlignment(.center)
+                    
                         .font(.caption)
                 }
                 .foregroundStyle(isSelected ? ColorPallet.SecondaryColorGreen : .gray)
@@ -127,20 +132,29 @@ extension MainView {
 extension MainView {
     struct NewChatTabIconMenu: View {
         var body: some View {
-            ZStack{
-                Circle()
-                    .frame(width: 80, height: 80)
-                    .foregroundColor(.white)
-                Circle()
-                    .frame(width: 75, height: 75)
-                    .foregroundColor(ColorPallet.SecondaryColorGreen)
-                Image(systemName: "plus")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 40, height: 40)
-                    .foregroundStyle(.white)
-            }
-            .offset(y: -30)
+                ZStack{
+                    Circle()
+                        .frame(width: 80, height: 80)
+                        .foregroundColor(.white)
+                    Circle()
+                        .frame(width: 75, height: 75)
+                        .foregroundColor(ColorPallet.SecondaryColorGreen)
+                    Image(systemName: "plus")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 40, height: 40)
+                        .foregroundStyle(.white)
+                    Text("New chat")
+                      .font(
+                        Font.custom("SF Pro Text", size: 10)
+                          .weight(.medium)
+                      )
+                      .multilineTextAlignment(.center)
+                      .foregroundColor(Color(red: 0.55, green: 0.55, blue: 0.55))
+                      .offset(y: 54.5)
+                }
+                .offset(y: -36)
+                
         }
     }
 }
