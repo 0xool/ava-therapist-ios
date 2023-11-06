@@ -13,19 +13,9 @@ struct MessageView : View {
     
     var body: some View {
         HStack(alignment: chat.isUserMessage ? .center : .top, spacing: 15) {
-            if !chat.isUserMessage {
-                ZStack {
-                    Circle()
-                        .foregroundColor(ColorPallet.SecondaryColorBlue)
-                .frame(width: 40, height: 40, alignment: .top)
-                    Text("Ava")
-                        .foregroundColor(.black)
-                }
-            } else {
                 if chat.isSentToServer == .ErrorWhileSending {
                     errorSendingMessageView
                 }
-            }
 
             ContentMessageView(contentMessage: chat.message,
                                isUser: chat.isUserMessage)
