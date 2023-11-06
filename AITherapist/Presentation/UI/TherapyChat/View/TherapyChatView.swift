@@ -21,6 +21,14 @@ struct TherapyChatView: View {
     @State private var userMessage = ""
     @State private var setPlaceHolder = false
     
+    @State private var circleAnimationOffsetX: CGFloat = 0
+    @State private var circleAnimationOffsetY: CGFloat = 0
+    private let animationAmount: CGFloat = 36
+    
+    private let backgroundCircleRadius = UIViewController().view.bounds.height / 2
+    private let topCircleBackgroundOfsett: CGSize = .init(width: UIViewController().view.bounds.width / 3, height: -UIViewController().view.bounds.height / 4)
+    private let bottomCircleBackgroundOfsett: CGSize = .init(width: -UIViewController().view.bounds.width / 2 + 45, height: UIViewController().view.bounds.height / 2 - 100)
+    
     private let MessageViewLineLimitMax = 6
     private var keyboardHeightPublisher: AnyPublisher<CGFloat, Never> {
         Publishers.Merge(
@@ -92,7 +100,7 @@ struct TherapyChatView: View {
             sendMessage()
         } label: {
             Image(systemName: "arrow.up.circle.fill")
-                .font(.system(size: 20))
+                .font(.system(size: 30))
                 .foregroundColor(.green)
         }
         .hiddenModifier(isHide: isHidden)
@@ -160,12 +168,14 @@ private extension TherapyChatView {
                             ForEach(conversation.chats.lazyList, id: \.id) { chat in
                                 MessageView(chat: chat, onResendMessageClicked: self.viewModel.resendMessage)
                                     .listRowSeparator(.hidden)
-                            }.listRowBackground(ColorPallet.BackgroundColorLight)
+                            }
+                        }
+                        .safeAreaInset(edge: .top, spacing: 0){
+                            Spacer()
+                                .frame(height: 20)
                         }
                         .scrollContentBackground(.hidden)
-                        .background(ColorPallet.BackgroundColorLight)
                         .padding([.leading, .trailing], 8)
-                        
                     }
                     .onAppear{
                         proxy.scrollTo(conversation.chats.last , anchor: .bottom)
@@ -189,17 +199,43 @@ private extension TherapyChatView {
                                 .padding(8)
                         }
                         .frame(maxHeight: 70, alignment: .center)
-                        .background(ColorPallet.greenBackground)
+//                        .background(ColorPallet.BackgroundColorLight)
                     }else{
                         CircleLoading()
                     }
+                    
+                }
+                .background{
+                    ZStack{
+                        ColorPallet.BackgroundColorLight
+                        Circle()
+                            .frame(width: backgroundCircleRadius, height: backgroundCircleRadius)
+                            .foregroundStyle(.green)
+                            .offset(topCircleBackgroundOfsett)
+                            .offset(x: circleAnimationOffsetX, y: circleAnimationOffsetY)
+                        Circle()
+                            .frame(width: backgroundCircleRadius * 0.66 , height: backgroundCircleRadius * 0.66)
+                            .foregroundStyle(.green)
+                            .offset(bottomCircleBackgroundOfsett)
+                            .offset(x: circleAnimationOffsetX, y: circleAnimationOffsetY)
+                            .onAppear{
+                                #warning("Test the time")
+                                withAnimation(.easeOut(duration: 0.75)) {
+                                    circleAnimationOffsetX = animationAmount
+                                    circleAnimationOffsetY = animationAmount
+                                }
+                            }
+                    }
+                    .clipped()
+                    .ignoresSafeArea()
                 }
             }
         }
+        
         .onTapGesture {
             self.hideKeyboard()
         }
-        .background(ColorPallet.BackgroundColorLight)
+//        .background(ColorPallet.BackgroundColorLight)
     }
     
     private func textInputView() -> some View{
