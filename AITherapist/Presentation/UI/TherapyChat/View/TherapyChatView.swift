@@ -22,7 +22,6 @@ struct TherapyChatView: View {
     @State private var setPlaceHolder = false
     
     private let MessageViewLineLimitMax = 6
-    
     private var keyboardHeightPublisher: AnyPublisher<CGFloat, Never> {
         Publishers.Merge(
             NotificationCenter.default
@@ -33,6 +32,14 @@ struct TherapyChatView: View {
                 .publisher(for: UIResponder.keyboardWillHideNotification)
                 .map { _ in CGFloat(0) }
         ).eraseToAnyPublisher()
+    }
+    
+    init(viewModel: ViewModel) {
+        self.viewModel = viewModel
+        UITableView.appearance().separatorStyle = .none
+        UITableView.appearance().tableFooterView = UIView()
+        UITableViewCell.appearance().backgroundColor = UIColor(ColorPallet.BackgroundColorLight) //ColorPallet.greenBackground
+        UITableView.appearance().backgroundColor = UIColor(ColorPallet.BackgroundColorLight)
     }
     
     var body: some View {
@@ -56,7 +63,7 @@ struct TherapyChatView: View {
         userMessage = ""
     }
 
-    private func speechBtnView() -> some View {
+    private func speechBtnView(isHidden: Bool = false) -> some View {
         Button {
             withAnimation {
                 isRecording.toggle()
@@ -76,18 +83,19 @@ struct TherapyChatView: View {
                 .cornerRadius(10)
                 .foregroundColor(ColorPallet.darkColor)
         }
+        .hiddenModifier(isHide: isHidden)
     }
     
-    private func sendBtnView() -> some View {
+    private func sendBtnView(isHidden: Bool) -> some View {
         Button {
             setPlaceHolder = true
             sendMessage()
         } label: {
-            Image(systemName: "paperplane.circle.fill")
+            Image(systemName: "arrow.up.circle.fill")
                 .font(.system(size: 20))
-                .cornerRadius(10)
-                .foregroundColor(ColorPallet.darkColor)
+                .foregroundColor(.green)
         }
+        .hiddenModifier(isHide: isHidden)
     }
     
     private func speechInputView() -> some View {
@@ -121,13 +129,6 @@ struct TherapyChatView: View {
         return CGFloat(level)
     }
     
-    init(viewModel: ViewModel) {
-        self.viewModel = viewModel
-        UITableView.appearance().separatorStyle = .none
-        UITableView.appearance().tableFooterView = UIView()
-        UITableViewCell.appearance().backgroundColor = UIColor(ColorPallet.BackgroundColorLight) //ColorPallet.greenBackground
-        UITableView.appearance().backgroundColor = UIColor(ColorPallet.BackgroundColorLight)
-    }
 }
 
 private extension TherapyChatView {
@@ -180,11 +181,12 @@ private extension TherapyChatView {
                                     textInputView()
                                 }
                                 
-                                HStack(spacing: 8) {
-                                    !isRecording ? sendBtnView() : nil
-                                    speechBtnView()
+                                ZStack{
+                                    !isRecording ? sendBtnView(isHidden: userMessage.isEmpty) : nil
+                                    speechBtnView(isHidden: !userMessage.isEmpty)
                                 }
-                            }.frame(maxHeight: 75, alignment: .center)                       .padding(8)
+                            }.frame(maxHeight: 75, alignment: .center)                       
+                                .padding(8)
                         }
                         .frame(maxHeight: 70, alignment: .center)
                         .background(ColorPallet.greenBackground)
@@ -206,13 +208,11 @@ private extension TherapyChatView {
             .modifier(PlaceholderStyle(showPlaceHolder: userMessage.isEmpty,
                                        placeholder: setPlaceHolder ? "" : "What's on your mind today?", isLargeChatbox: (userMessage.count > MessageViewLineLimitMax)))
             .padding(8)
-            .background(.gray)
+            .background(.white)
             .frame(height: (userMessage.count > 40) ? 62 : 35)
             .animation(.easeIn, value: userMessage)
             .padding([.top], 4)
             .cornerRadius(15)
-            .foregroundColor(.white)
-        
     }
 }
 

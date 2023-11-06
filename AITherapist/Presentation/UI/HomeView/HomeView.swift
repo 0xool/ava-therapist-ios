@@ -12,7 +12,6 @@ struct InsightView: View {
     @State private var showingModalSheet = false
     
     var body: some View {
-        AvaNavBarView{
             ScrollView{
                 WelcomeToHomeTitleView()
                 QuoteView
@@ -33,7 +32,6 @@ struct InsightView: View {
             }
             .frame(width: UIViewController().view.bounds.width)
             .frame(maxHeight: .infinity)
-        }
     }
     
     @ViewBuilder var QuoteView: some View {

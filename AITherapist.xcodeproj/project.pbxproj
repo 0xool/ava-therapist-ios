@@ -22,6 +22,10 @@
 		A51B4E342AD0F14500A14AFA /* AITherapistTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51B4E332AD0F14500A14AFA /* AITherapistTests.swift */; };
 		A51B4E3B2AD0F1C300A14AFA /* ConversationsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51B4E3A2AD0F1C200A14AFA /* ConversationsTests.swift */; };
 		A51CF3BD2AF805BA0006F275 /* AvaNavBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51CF3BC2AF805BA0006F275 /* AvaNavBarView.swift */; };
+		A51CF3C02AF8394D0006F275 /* AvaNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51CF3BF2AF8394D0006F275 /* AvaNavigationView.swift */; };
+		A51CF3C22AF850010006F275 /* AvaNavigationLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51CF3C12AF850010006F275 /* AvaNavigationLink.swift */; };
+		A51CF3C42AF8577A0006F275 /* AvaNavigationBarRefrenceKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51CF3C32AF8577A0006F275 /* AvaNavigationBarRefrenceKeys.swift */; };
+		A51CF3C82AF85DCF0006F275 /* Modififers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51CF3C72AF85DCE0006F275 /* Modififers.swift */; };
 		A525EEAA29B172BC00A57CE8 /* AITherapistApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A525EEA929B172BC00A57CE8 /* AITherapistApp.swift */; };
 		A525EEAC29B172BC00A57CE8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A525EEAB29B172BC00A57CE8 /* ContentView.swift */; };
 		A566DCA12AA503A200920940 /* WebRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A566DCA02AA503A200920940 /* WebRepository.swift */; };
@@ -127,6 +131,10 @@
 		A51B4E332AD0F14500A14AFA /* AITherapistTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AITherapistTests.swift; sourceTree = "<group>"; };
 		A51B4E3A2AD0F1C200A14AFA /* ConversationsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsTests.swift; sourceTree = "<group>"; };
 		A51CF3BC2AF805BA0006F275 /* AvaNavBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvaNavBarView.swift; sourceTree = "<group>"; };
+		A51CF3BF2AF8394D0006F275 /* AvaNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvaNavigationView.swift; sourceTree = "<group>"; };
+		A51CF3C12AF850010006F275 /* AvaNavigationLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvaNavigationLink.swift; sourceTree = "<group>"; };
+		A51CF3C32AF8577A0006F275 /* AvaNavigationBarRefrenceKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvaNavigationBarRefrenceKeys.swift; sourceTree = "<group>"; };
+		A51CF3C72AF85DCE0006F275 /* Modififers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Modififers.swift; sourceTree = "<group>"; };
 		A525EEA629B172BC00A57CE8 /* AITherapist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AITherapist.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A525EEA929B172BC00A57CE8 /* AITherapistApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AITherapistApp.swift; sourceTree = "<group>"; };
 		A525EEAB29B172BC00A57CE8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -265,6 +273,34 @@
 				A51B4E332AD0F14500A14AFA /* AITherapistTests.swift */,
 			);
 			path = AITherapistTests;
+			sourceTree = "<group>";
+		};
+		A51CF3BE2AF8390A0006F275 /* AvaNavigation */ = {
+			isa = PBXGroup;
+			children = (
+				A51CF3BC2AF805BA0006F275 /* AvaNavBarView.swift */,
+				A51CF3BF2AF8394D0006F275 /* AvaNavigationView.swift */,
+				A51CF3C12AF850010006F275 /* AvaNavigationLink.swift */,
+				A51CF3C32AF8577A0006F275 /* AvaNavigationBarRefrenceKeys.swift */,
+			);
+			name = AvaNavigation;
+			path = AITherapist/Presentation/UI/Components/AvaNavigation;
+			sourceTree = SOURCE_ROOT;
+		};
+		A51CF3C52AF85D970006F275 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				A51CF3C62AF85DA00006F275 /* Modifiers */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		A51CF3C62AF85DA00006F275 /* Modifiers */ = {
+			isa = PBXGroup;
+			children = (
+				A51CF3C72AF85DCE0006F275 /* Modififers.swift */,
+			);
+			path = Modifiers;
 			sourceTree = "<group>";
 		};
 		A525EE9D29B172BC00A57CE8 = {
@@ -463,16 +499,17 @@
 		A59C63D52ACA37EE00B76256 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				A51CF3BE2AF8390A0006F275 /* AvaNavigation */,
 				A59C63D62ACA37EE00B76256 /* Logo.swift */,
 				A59C63D72ACA37EE00B76256 /* CustomTabBar.swift */,
 				A59C63D82ACA37EE00B76256 /* ActivityIndicatorView.swift */,
 				A59C63D92ACA37EE00B76256 /* ErrorView.swift */,
 				A59C64082ACA58E500B76256 /* ChartView.swift */,
 				A58AA4962AD7A9D9001F7253 /* Loading.swift */,
-				A51CF3BC2AF805BA0006F275 /* AvaNavBarView.swift */,
 			);
-			path = Components;
-			sourceTree = "<group>";
+			name = Components;
+			path = AITherapist/Presentation/UI/Components;
+			sourceTree = SOURCE_ROOT;
 		};
 		A59C63DA2ACA37EE00B76256 /* HomeView */ = {
 			isa = PBXGroup;
@@ -569,6 +606,7 @@
 		A59EB1512ACA28A900F31A12 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				A51CF3C52AF85D970006F275 /* Helpers */,
 				A59C63D02ACA37EE00B76256 /* AuthenticationView */,
 				A59C63E62ACA37EE00B76256 /* BreathingView */,
 				A59C63D52ACA37EE00B76256 /* Components */,
@@ -910,6 +948,7 @@
 				A5EFC5962AC10FC600D6097B /* Mood.swift in Sources */,
 				A59C64002ACA37EE00B76256 /* SignUpView.swift in Sources */,
 				A58AA49E2AD8E9B1001F7253 /* ChatService.swift in Sources */,
+				A51CF3C22AF850010006F275 /* AvaNavigationLink.swift in Sources */,
 				A59C63FE2ACA37EE00B76256 /* SpeechVisualBarView.swift in Sources */,
 				A5EFC5912AC1072300D6097B /* Insight.swift in Sources */,
 				A505865529BD003B001F1970 /* PersistentManager.swift in Sources */,
@@ -931,6 +970,7 @@
 				A505865329BCFF2A001F1970 /* AuthenticateMessage.swift in Sources */,
 				A5CA94932AA8039D00E25A46 /* UserPermissionsService.swift in Sources */,
 				A569DEFD2AA4423C006D39AA /* Chat.swift in Sources */,
+				A51CF3C82AF85DCF0006F275 /* Modififers.swift in Sources */,
 				A5A708CC29C5342B001BCF2F /* SpeechManager.swift in Sources */,
 				A59C64032ACA37EE00B76256 /* ConversationListView.swift in Sources */,
 				A59C63F72ACA37EE00B76256 /* Logo.swift in Sources */,
@@ -951,6 +991,7 @@
 				A5CA94A22AA959BD00E25A46 /* AuthenticateService.swift in Sources */,
 				A50A1A6B2AA44C9400A6AD6D /* Helper.swift in Sources */,
 				A59C63F42ACA37EE00B76256 /* AuthenticationView.swift in Sources */,
+				A51CF3C42AF8577A0006F275 /* AvaNavigationBarRefrenceKeys.swift in Sources */,
 				A50B167B2AC26D3300571D27 /* InsightDBRepository.swift in Sources */,
 				A569DF002AA447B0006D39AA /* AppDelegate.swift in Sources */,
 				A59C64022ACA37EE00B76256 /* BreathingView.swift in Sources */,
@@ -959,6 +1000,7 @@
 				A57AD7D82AA6781F008EC1FB /* ConversationService.swift in Sources */,
 				A58AA4992AD7C86B001F7253 /* Constants.swift in Sources */,
 				A5B7D5D029B3B03C001D7113 /* Enums.swift in Sources */,
+				A51CF3C02AF8394D0006F275 /* AvaNavigationView.swift in Sources */,
 				A5EFC5932AC10F0C00D6097B /* Quote.swift in Sources */,
 				A5CA948D2AA7FA6D00E25A46 /* PushNotificationsHandler.swift in Sources */,
 				A57AD7D02AA64AB8008EC1FB /* ConversationRepository.swift in Sources */,

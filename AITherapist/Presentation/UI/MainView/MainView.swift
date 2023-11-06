@@ -59,31 +59,34 @@ struct MainView: View {
     
     var body: some View {
         
-        VStack{
-            Spacer()
-            mainContentView
-                .frame(width: UIViewController().view.bounds.width)
-            Spacer()
-            
-            HStack{
-                self.homeTabIcon
-                self.chatHistoryTabIcon
-                NewChatTabIconMenu()
-                    .onTapGesture {
-                        withAnimation{
-                            showNewChat.toggle()
+        AvaNavigationView{
+            VStack{
+                Spacer()
+                mainContentView
+                    .frame(width: UIViewController().view.bounds.width)
+                Spacer()
+                
+                HStack{
+                    self.homeTabIcon
+                    self.chatHistoryTabIcon
+                    NewChatTabIconMenu()
+                        .onTapGesture {
+                            withAnimation{
+                                showNewChat.toggle()
+                            }
                         }
-                    }
-                self.journalTabIcon
-                self.profileTabIcon
+                    self.journalTabIcon
+                    self.profileTabIcon
+                }
+                .frame(height: 75)
+                .frame(maxWidth: .infinity)
+                .background(Color(.systemGray5))
             }
-            .frame(height: 75)
-            .frame(maxWidth: .infinity)
-            .background(Color(.systemGray5))
+            .avaNavigationBarBackButtonHidden(true)
+            .sheet(isPresented: $showNewChat, content: {
+                Text("New Chat")
+            })
         }
-        .sheet(isPresented: $showNewChat, content: {
-            Text("New Chat")
-        })
     }
 }
 

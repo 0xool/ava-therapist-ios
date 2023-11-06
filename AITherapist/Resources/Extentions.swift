@@ -33,8 +33,8 @@ public struct PlaceholderStyle: ViewModifier {
         ZStack(alignment: isLargeChatbox ? .topLeading : .leading) {
             if showPlaceHolder {
                 Text(placeholder)
-                    .foregroundColor(.white)
-                    .font(.system(size: 10))
+                    .foregroundColor(.gray)
+                    .font(.system(size: 15))
                     .padding(.horizontal, isLargeChatbox ? 15 : 8)
                 .offset(y: isLargeChatbox ? 15 : 0)
             }

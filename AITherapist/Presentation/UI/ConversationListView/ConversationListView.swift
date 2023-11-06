@@ -14,11 +14,8 @@ struct ConversationListView: View {
     //    @State var show = false
     
     var body: some View {
-        AvaNavBarView{
             mainContent
-                .frame(width: UIViewController().view.bounds.width)
-        }
-        
+                .frame(width: UIViewController().view.bounds.width)        
     }
     
     @ViewBuilder var mainContent: some View {
@@ -78,7 +75,10 @@ private extension ConversationListView {
                         ForEach (conversationList, id: \.id){ conversation in
                             ZStack{
                                 ConversationCell(conversation: conversation)
-                                NavigationLink(destination: TherapyChatView(viewModel: .init(conversation: conversation, container: self.viewModel.container))) {
+                                AvaNavigationLink {
+                                    TherapyChatView(viewModel: .init(conversation: conversation, container: self.viewModel.container))
+                                        .avaNavigationBarBackButtonHidden(false)
+                                } label: {
                                     EmptyView()
                                 }
                                 .opacity(0)

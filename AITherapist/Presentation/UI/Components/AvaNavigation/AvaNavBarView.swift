@@ -10,6 +10,8 @@ import SwiftUI
 
 struct AvaNavBarView<Content: View>: View {
     
+    @Environment(\.dismiss) var dismiss
+    @State private var backButtonIsHidden: Bool = true
     let content: Content
     
     init (@ViewBuilder content: () -> Content){
@@ -17,9 +19,14 @@ struct AvaNavBarView<Content: View>: View {
     }
     
     var body: some View {
-        NavBar
-        content
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+        VStack{
+            NavBar(showBackButton: backButtonIsHidden)
+            content
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+        }
+        .onPreferenceChange(AvaNavigationBarBackButtonHiddenRefrenceKeys.self, perform: { value in
+            self.backButtonIsHidden = value
+        })
     }
     
     @ViewBuilder var HelpLineView: some View {
@@ -37,19 +44,20 @@ struct AvaNavBarView<Content: View>: View {
         .padding(8)
     }
     
-    @ViewBuilder var NavBar: some View {
+    func NavBar(showBackButton: Bool) -> some View {
         ZStack {
             HStack(alignment: .center){
                 Button {
-                    // Open
+                    dismiss()
                 } label: {
-                    Image(systemName: "gearshape.fill")
-                        .font(.largeTitle)
-                        .foregroundStyle(.gray)
+                    Image(systemName: "chevron.backward")
+                        .font(.subheadline)
+                        .foregroundStyle(.green)
                         .padding([.leading], 8)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .hidden()
+                .hiddenModifier(isHide: showBackButton)
+
                 
                 LogoIcon()
                     .frame(maxWidth: .infinity, alignment: .center)
@@ -60,5 +68,13 @@ struct AvaNavBarView<Content: View>: View {
         }
         .frame(maxHeight: .infinity, alignment: .top)
         .frame(width: UIScreen.main.bounds.width, height: 40)
+    }
+}
+
+
+#Preview{
+    AvaNavBarView{
+        Color.blue.ignoresSafeArea()
+            .avaNavigationBarBackButtonHidden(true)
     }
 }

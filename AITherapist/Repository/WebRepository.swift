@@ -38,7 +38,7 @@ extension WebRepository {
             HTTPCookiePropertyKey.domain: Constants.BaseUrl,
             HTTPCookiePropertyKey.path: "/",
             HTTPCookiePropertyKey.name: "jwt",
-            HTTPCookiePropertyKey.value: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk4MDE5NjIzLCJleHAiOjE3MDE2MTk2MjN9.TwyB9yFJjNBOsFVPItRt36gzaw6LCBH6CybuPHbVBs8"
+            HTTPCookiePropertyKey.value: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk5MjE3NDk0LCJleHAiOjE3MDI4MTc0OTR9.BWtu0Tr6AaUrBBHlHx2IkNX7W3aF2wzbSQT4nRbYqtI"
         ]
         
         if let cookie = HTTPCookie(properties: cookieProps) {
