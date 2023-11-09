@@ -14,6 +14,7 @@ struct AppState: Equatable {
     var routing = ViewRouting()
     var system = System()
     var permissions = Permissions()
+    var conversationData = ConversationData()
 }
 
 extension AppState {
@@ -30,6 +31,16 @@ extension AppState {
          which made the resulting variable used locally by just one screen (CountriesList)
          Otherwise, the list of countries could have remained here, available for the entire app.
          */
+    }
+}
+
+extension AppState{
+    class ConversationData: ObservableObject{
+        @Published var conversations: Loadable<LazyList<Conversation>> = .notRequested
+        
+        init(conversations: Loadable<LazyList<Conversation>> = .notRequested) {
+            self.conversations = conversations
+        }
     }
 }
 

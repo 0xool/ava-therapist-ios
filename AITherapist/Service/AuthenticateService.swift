@@ -27,30 +27,6 @@ class MainAuthenticateService: AuthenticateService {
         self.userDBRepository = userDBRepository
     }
     
-    //    func loadConversationList(conversations: LoadableSubject<[Conversation]>) {
-    //
-    //        let cancelBag = CancelBag()
-    //        conversations.wrappedValue.setIsLoading(cancelBag: cancelBag)
-    //
-    //        Just<Void>
-    //            .withErrorType(Error.self)
-    //            .flatMap { [conversationDBRepository] _ -> AnyPublisher<Bool, Error> in
-    //                conversationDBRepository.hasLoadedConversation()
-    //            }
-    //            .flatMap { hasLoaded -> AnyPublisher<Void, Error> in
-    //                if hasLoaded {
-    //                    return Just<Void>.withErrorType(Error.self)
-    //                } else {
-    //                    return self.refreshConversationList()
-    //                }
-    //            }
-    //            .flatMap({ [conversationDBRepository] in
-    //                conversationDBRepository.loadConversations()
-    //            })
-    //            .sinkToLoadable { conversations.wrappedValue = $0 }
-    //            .store(in: cancelBag)
-    //    }
-    
     func checkUserLoggedStatus() {
         let cancelBag = CancelBag()
         

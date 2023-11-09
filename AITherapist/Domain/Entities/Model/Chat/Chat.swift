@@ -80,10 +80,8 @@ class Chat: Object, Codable, Identifiable {
 //        self.dateCreated = dateCreated
     }
     
-    
-    
     override init() {
-        super.init()
+        
     }
     
     required init(from decoder: Decoder) throws {
@@ -91,11 +89,11 @@ class Chat: Object, Codable, Identifiable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.id = try container.decode(Int.self , forKey: .id)
         
-        message = try container.decode(String.self , forKey: .message)
-        conversationID = try container.decode(Int.self , forKey: .conversationID)
-        chatSequence = try container.decode(Int?.self , forKey: .chatSequence)
-        isUserMessage = try container.decode(Bool.self , forKey: .isUserMessage)
-        isSentToServer = .NoStatus
+        self.message = try container.decode(String.self , forKey: .message)
+        self.conversationID = try container.decode(Int.self , forKey: .conversationID)
+        self.chatSequence = try container.decode(Int?.self , forKey: .chatSequence)
+        self.isUserMessage = try container.decode(Bool.self , forKey: .isUserMessage)
+        self.isSentToServer = .NoStatus
 //        dateCreated = try container.decode(Date.self , forKey: .dateCreated)
     }
     

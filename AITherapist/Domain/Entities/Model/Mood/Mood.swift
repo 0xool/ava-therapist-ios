@@ -25,7 +25,7 @@ class Mood: EmbeddedObject, Decodable {
         let moodID = try container.decode(Int.self, forKey: .mood)
         
         let mood = MoodType(rawValue: moodID)
-        let dateCreated = convertStringToDate(try container.decode(String.self, forKey: .dateCreated))
+        let dateCreated = Date.convertStringToDate(try container.decode(String.self, forKey: .dateCreated))
         
         let moodString = try container.decode(String.self, forKey: .moodString)
         self.init(mood: mood, dateCreated: dateCreated, moodString: moodString)

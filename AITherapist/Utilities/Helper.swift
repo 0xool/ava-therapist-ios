@@ -18,7 +18,11 @@ extension ProcessInfo {
     }
 }
 
-
+extension UIApplication {
+    func endEditing() {
+        sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
+}
 
 //extension String {
 //    func localized(_ locale: Locale) -> String {
@@ -146,7 +150,6 @@ extension Publisher where Failure == Never {
 }
 
 extension UIApplication {
-    
     var keyWindow: UIWindow? {
         // Get connected scenes
         return self.connectedScenes
@@ -159,15 +162,6 @@ extension UIApplication {
             // Finally, keep only the key window
             .first(where: \.isKeyWindow)
     }
-    
-}
-
-func convertStringToDate(_ dateString: String) -> Date? {
-    let dateFormatter = DateFormatter()
-    dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-    dateFormatter.timeZone = TimeZone(identifier: "UTC") // Assuming the input string is in UTC
-    
-    return dateFormatter.date(from: dateString)
 }
 
 extension UIViewController {
@@ -191,6 +185,14 @@ extension Date {
 
     func get(_ component: Calendar.Component, calendar: Calendar = Calendar.current) -> Int {
         return calendar.component(component, from: self)
+    }
+    
+    static func convertStringToDate(_ dateString: String) -> Date? {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+        dateFormatter.timeZone = TimeZone(identifier: "UTC") // Assuming the input string is in UTC
+        
+        return dateFormatter.date(from: dateString)
     }
 }
 

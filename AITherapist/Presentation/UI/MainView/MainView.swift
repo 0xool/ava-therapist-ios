@@ -15,7 +15,6 @@ enum MainViewState {
 }
 
 struct MainView: View {
-    
     @ObservedObject private(set) var viewModel: ViewModel
     @State var mainViewState: MainViewState = .Home
     @State var showNewChat: Bool = false
@@ -83,8 +82,8 @@ struct MainView: View {
                 .background(Color(.systemGray5))
             }
             .avaNavigationBarBackButtonHidden(true)
-            .sheet(isPresented: $showNewChat, content: {
-                Text("New Chat")
+            .fullScreenCover(isPresented: $showNewChat, content: {
+                NewChatView(viewModel: .init(coninater: self.viewModel.container), show: $showNewChat)
             })
         }
     }

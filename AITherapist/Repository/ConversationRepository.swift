@@ -10,7 +10,7 @@ import Combine
 
 protocol ConversationRepository: WebRepository {
     func loadConversationList() -> AnyPublisher<[Conversation], Error>
-    func addConversation(data: AddConversationRequest) -> AnyPublisher<Void, Error>
+    func addConversation(data: AddConversationRequest) -> AnyPublisher<Conversation, Error>
     func deleteConversation(conversationID: Int) -> AnyPublisher<Void, Error>
 //    func loadConversationChat(conversation: Conversation) -> AnyPublisher<[Message], Error>
 }
@@ -35,16 +35,15 @@ struct MainConversationRepository: ConversationRepository {
             .eraseToAnyPublisher()
     }
     
-    func addConversation(data: AddConversationRequest) -> AnyPublisher<Void, Error> {
+    func addConversation(data: AddConversationRequest) -> AnyPublisher<Conversation, Error> {
         let url = getPath(api: .addConversation)
         do {
             let parameters = try JSONEncoder().encode(data)
             let params = try JSONSerialization.jsonObject(with: parameters, options: []) as? [String: Any] ?? [:]
             let request: AnyPublisher<AddConversationResponse, Error> = SendRequest(pathVariable: nil, params: params, url: url)
+            
             return request
-                .map{ _ in
-                    
-                }
+                .map{ $0.data }
                 .eraseToAnyPublisher()
         } catch {
             return Fail(error: error).eraseToAnyPublisher()

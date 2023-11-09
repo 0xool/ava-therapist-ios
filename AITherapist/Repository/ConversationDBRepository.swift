@@ -14,6 +14,7 @@ protocol ConversationDBRepository {
     func loadConversations() -> AnyPublisher<LazyList<Conversation>, Error>
     
     func addChatToConversation(chats: LazyList<Chat>) -> AnyPublisher<Void, Error>
+    func deleteConversation(conversationID: Int) -> AnyPublisher<Void, Error>
 }
 
 struct MainConversationDBRepository: ConversationDBRepository {
@@ -32,9 +33,21 @@ struct MainConversationDBRepository: ConversationDBRepository {
     func addChatToConversation(chats: LazyList<Chat>) -> AnyPublisher<Void, Error>{
         updateConversationChatsData(chats: chats)
     }
+    
+    func deleteConversation(conversationID: Int) -> AnyPublisher<Void, Error>{
+        deleteConversationFromDBWith(id: conversationID)
+    }
 }
 
 extension MainConversationDBRepository {
+    private func deleteConversationFromDBWith(id: Int) -> AnyPublisher<Void, Error>{
+        DataBaseManager.Instance.DeleteByID(ofType: Conversation.self, id: id)
+        
+        return Just<Void>
+            .withErrorType(Error.self)
+            .eraseToAnyPublisher()
+    }
+    
     private func readAllConversations() -> AnyPublisher<LazyList<Conversation>, Error> {
         let conversations: LazyList<Conversation> = DataBaseManager.Instance.GetAll().sorted(byKeyPath: "id", ascending: false)
             .lazyList
