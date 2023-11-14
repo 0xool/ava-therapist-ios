@@ -24,9 +24,12 @@ struct ColorPallet{
 extension ColorPallet {
     static let PrimaryColor: Color = Color(red: 76/255, green: 161/255, blue: 163/255)
     static let SecondaryColorGreen: Color = Color(red: 169/255, green: 201/255, blue: 164/255)
+    static let LightGreen: Color = Color(red: 166/255, green: 195/255, blue: 138/255)
+    
     static let SecondaryColorBlue: Color = Color(red: 109/255, green: 174/255, blue: 219/255)
     static let AccentColor: Color = Color(red: 242/255, green: 194/255, blue: 203/255)
     static let BackgroundColorLight: Color = Color(red: 242/255, green: 239/255, blue: 234/255)
+    
     static let BackgroundColorDark: Color = Color(red: 16/255, green: 45/255, blue: 64/255)
 }
 

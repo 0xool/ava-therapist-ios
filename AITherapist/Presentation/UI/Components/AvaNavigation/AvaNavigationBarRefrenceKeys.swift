@@ -17,8 +17,21 @@ struct AvaNavigationBarBackButtonHiddenRefrenceKeys: PreferenceKey{
     }
 }
 
+struct AvaNavigationBarTitleRefrenceKeys: PreferenceKey{
+    static var defaultValue: String = ""
+    
+    static func reduce(value: inout String, nextValue: () -> String) {
+        value = nextValue()
+    }
+}
+
+
 extension View {
     func avaNavigationBarBackButtonHidden(_ hidden: Bool) -> some View{
         preference(key: AvaNavigationBarBackButtonHiddenRefrenceKeys.self, value: hidden)
+    }
+    
+    func avaNavigationBarTitle(_ title: String) -> some View{
+        preference(key: AvaNavigationBarTitleRefrenceKeys.self, value: title)
     }
 }

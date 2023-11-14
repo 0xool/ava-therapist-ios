@@ -9,10 +9,11 @@ import Foundation
 import Combine
 
 // Refactor this in both the backend and frontend to fix this respose setup
-struct AuthenticateResponse: Decodable {
+struct AuthenticateResponse: Decodable{
     var message: String
     var code: Int
     var auth: Bool
+    
     let token: String
     let id: Int
 //    enum CodingKeys: String, CodingKey {

@@ -15,6 +15,7 @@ struct HiddenModifier: ViewModifier{
     func body(content: Content) -> some View {
         if isHide{
             content
+                .frame(height: 0)
                 .hidden()
         }
         else{
@@ -23,9 +24,8 @@ struct HiddenModifier: ViewModifier{
     }
 }
 
-
 extension View{
     func hiddenModifier(isHide: Bool) -> some View{
-            return self.modifier(HiddenModifier(isHide: isHide))
+        return self.modifier(HiddenModifier(isHide: isHide))
         }
 }

@@ -17,9 +17,7 @@ protocol WebRepository {
     func SetCookie(cookie: String)
 }
 
-
 extension WebRepository {
-    
     func SetCookie(cookie: String) {
         let cookieProps = [
             HTTPCookiePropertyKey.domain: Constants.BaseUrl,
@@ -44,7 +42,6 @@ extension WebRepository {
         if let cookie = HTTPCookie(properties: cookieProps) {
             AF.session.configuration.httpCookieStorage?.setCookie(cookie)
         }
-        
     }
     
     func DeleteRequest<D>(pathVariable: String?, params: [String : Any]?, url: String) -> AnyPublisher<D, Error> where D : Decodable  {

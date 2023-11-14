@@ -21,13 +21,8 @@ struct TherapyChatView: View {
     @State private var userMessage = ""
     @State private var setPlaceHolder = false
     
-    @State private var circleAnimationOffsetX: CGFloat = 0
-    @State private var circleAnimationOffsetY: CGFloat = 0
-    private let animationAmount: CGFloat = 36
-    
-    private let backgroundCircleRadius = UIViewController().view.bounds.height / 2
-    private let topCircleBackgroundOfsett: CGSize = .init(width: UIViewController().view.bounds.width / 3, height: -UIViewController().view.bounds.height / 4)
-    private let bottomCircleBackgroundOfsett: CGSize = .init(width: -UIViewController().view.bounds.width / 2 + 45, height: UIViewController().view.bounds.height / 2 - 100)
+    let withBackButton: Bool
+    @Binding var showSheet: Bool
     
     private let MessageViewLineLimitMax = 6
     private var keyboardHeightPublisher: AnyPublisher<CGFloat, Never> {
@@ -42,12 +37,15 @@ struct TherapyChatView: View {
         ).eraseToAnyPublisher()
     }
     
-    init(viewModel: ViewModel) {
+    init(viewModel: ViewModel, withBackButton: Bool = false, showSheet: Binding<Bool> = .constant(false)) {
         self.viewModel = viewModel
-        UITableView.appearance().separatorStyle = .none
-        UITableView.appearance().tableFooterView = UIView()
-        UITableViewCell.appearance().backgroundColor = UIColor(ColorPallet.BackgroundColorLight) //ColorPallet.greenBackground
-        UITableView.appearance().backgroundColor = UIColor(ColorPallet.BackgroundColorLight)
+        self.withBackButton = withBackButton
+        self._showSheet = showSheet
+//        UITableView.appearance().separatorStyle = .none
+//        
+//        UITableView.appearance().tableFooterView = UIView()
+//        UITableViewCell.appearance().backgroundColor = UIColor(ColorPallet.BackgroundColorLight)
+//        UITableView.appearance().backgroundColor = UIColor(ColorPallet.BackgroundColorLight)
     }
     
     var body: some View {
@@ -65,7 +63,7 @@ struct TherapyChatView: View {
         }
     }
     
-    func sendMessage() {
+    private func sendMessage() {
         viewModel.sendMessage(userMessage)
         viewModel.speechRecognizer.transcript = ""
         userMessage = ""
@@ -136,7 +134,6 @@ struct TherapyChatView: View {
         let level = max(0.2, CGFloat(level) + 50) / 2
         return CGFloat(level)
     }
-    
 }
 
 private extension TherapyChatView {
@@ -164,6 +161,8 @@ private extension TherapyChatView {
             GeometryReader { geo in
                 ScrollViewReader{ proxy in
                     VStack {
+
+                        backButton
                         ScrollView {
                             ForEach(conversation.chats.lazyList, id: \.id) { chat in
                                 MessageView(chat: chat, onResendMessageClicked: self.viewModel.resendMessage)
@@ -199,35 +198,13 @@ private extension TherapyChatView {
                                 .padding(8)
                         }
                         .frame(maxHeight: 70, alignment: .center)
-//                        .background(ColorPallet.BackgroundColorLight)
                     }else{
                         CircleLoading()
                     }
                     
                 }
                 .background{
-                    ZStack{
-                        ColorPallet.BackgroundColorLight
-                        Circle()
-                            .frame(width: backgroundCircleRadius, height: backgroundCircleRadius)
-                            .foregroundStyle(.green)
-                            .offset(topCircleBackgroundOfsett)
-                            .offset(x: circleAnimationOffsetX, y: circleAnimationOffsetY)
-                        Circle()
-                            .frame(width: backgroundCircleRadius * 0.66 , height: backgroundCircleRadius * 0.66)
-                            .foregroundStyle(.green)
-                            .offset(bottomCircleBackgroundOfsett)
-                            .offset(x: circleAnimationOffsetX, y: circleAnimationOffsetY)
-                            .onAppear{
-                                #warning("Test the time")
-                                withAnimation(.easeOut(duration: 0.75)) {
-                                    circleAnimationOffsetX = animationAmount
-                                    circleAnimationOffsetY = animationAmount
-                                }
-                            }
-                    }
-                    .clipped()
-                    .ignoresSafeArea()
+                    ChatBackgroundView()
                 }
             }
         }
@@ -235,7 +212,21 @@ private extension TherapyChatView {
         .onTapGesture {
             self.hideKeyboard()
         }
-//        .background(ColorPallet.BackgroundColorLight)
+    }
+    
+    @ViewBuilder private var backButton: some View{
+        if self.withBackButton{
+            Button {
+                self.showSheet.toggle()
+            } label: {
+                Image(systemName: "chevron.backward")
+                    .font(.subheadline)
+                    .foregroundStyle(.green)
+                    .padding([.leading], 16)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .frame(height: 36)
+            }
+        }
     }
     
     private func textInputView() -> some View{
@@ -250,9 +241,7 @@ private extension TherapyChatView {
             .padding([.top], 4)
             .cornerRadius(15)
     }
-}
 
-extension TherapyChatView {
     struct ChatWithAiTextField: TextFieldStyle {
         func _body(configuration: TextField<Self._Label>) -> some View {
             configuration
@@ -261,9 +250,43 @@ extension TherapyChatView {
     }
 }
 
-extension UIApplication {
-    func endEditing() {
-        sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+extension TherapyChatView {
+    struct ChatBackgroundView: View {
+        @State private var circleAnimationOffsetX: CGFloat = 0
+        @State private var circleAnimationOffsetY: CGFloat = 0
+        private var animationAmount: CGFloat {
+            let randomNumber = 36 + Int(arc4random_uniform(UInt32(72 - 36 + 1)))
+            let signMultiplier = (Int.random(in: 0...1) == 0) ? 1 : -1
+            return CGFloat(randomNumber * signMultiplier)
+        }
+        
+        private let backgroundCircleRadius = UIViewController().view.bounds.height / 2
+        private let topCircleBackgroundOfsett: CGSize = .init(width: UIViewController().view.bounds.width / 3, height: -UIViewController().view.bounds.height / 4)
+        private let bottomCircleBackgroundOfsett: CGSize = .init(width: -UIViewController().view.bounds.width / 2 + 45, height: UIViewController().view.bounds.height / 2 - 100)
+        
+        var body: some View {
+            ZStack{
+                ColorPallet.BackgroundColorLight
+                Circle()
+                    .frame(width: backgroundCircleRadius, height: backgroundCircleRadius)
+                    .foregroundStyle(.green)
+                    .offset(topCircleBackgroundOfsett)
+                    .offset(x: circleAnimationOffsetX, y: circleAnimationOffsetY)
+                Circle()
+                    .frame(width: backgroundCircleRadius * 0.66 , height: backgroundCircleRadius * 0.66)
+                    .foregroundStyle(.green)
+                    .offset(bottomCircleBackgroundOfsett)
+                    .offset(x: circleAnimationOffsetX, y: circleAnimationOffsetY)
+                    .onAppear{
+                        withAnimation(.easeOut(duration: 0.65)) {
+                            circleAnimationOffsetX = animationAmount
+                            circleAnimationOffsetY = animationAmount
+                        }
+                    }
+            }
+            .clipped()
+            .ignoresSafeArea()
+        }
     }
 }
 
@@ -271,8 +294,8 @@ extension TherapyChatView {
     class ViewModel: ObservableObject {
         let container: DIContainer
         private var cancelBag = CancelBag()
-        @Published var conversation: Loadable<Conversation>
         
+        @Published var conversation: Loadable<Conversation>
         @Published var isUserTurnToSpeak: Bool = true
         var speechRecognizer = SpeechManager()
         //        var didChange = PassthroughSubject<Void, Never>()
