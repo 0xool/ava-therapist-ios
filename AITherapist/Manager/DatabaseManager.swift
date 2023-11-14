@@ -22,7 +22,7 @@ protocol DataBase {
     func EntityExist<Element: Object>(id: Int, ofType: Element.Type) -> Bool
     func DeleteLast<T: Object>(ofType: T.Type)
     
-    func DeleteByID<T: Object>(ofType: T.Type, id: Int)
+    func DeleteByID<T: Object>(ofType: T.Type, id: Int) -> AnyPublisher<Void,  Error>
 }
 
 class DataBaseManager: DataBase {
@@ -46,42 +46,45 @@ class DataBaseManager: DataBase {
     func DeleteLast<T: Object>(ofType: T.Type) {
         guard let last = realm.objects(T.self).last else{
             return
-        }        
+        }
         
         do {
             try self.realm.write {
                 self.realm.delete(last)
             }
         } catch {
-            #warning("FIX")
+#warning("FIX")
             print("ERROR WHILE DELETING OBJECT")
         }
     }
     
-    func DeleteByID<T: Object>(ofType: T.Type, id: Int) {
+    func DeleteByID<T: Object>(ofType: T.Type, id: Int) -> AnyPublisher<Void, Error> {
         guard let entity = realm.objects(T.self).last else{
-            return
+            return Just<Void>.withErrorType(Error.self)
         }
         
-        do {
-            try self.realm.write {
-                self.realm.delete(entity)
+        return Future<Void, Error> { promise in
+            do {
+                try self.realm.write {
+                    self.realm.delete(entity)
+                }
+            } catch {
+    #warning("FIX")
+                print("ERROR WHILE DELETING OBJECT")
             }
-        } catch {
-            #warning("FIX")
-            print("ERROR WHILE DELETING OBJECT")
         }
+        .eraseToAnyPublisher()
     }
     
     func GetByTypeID<T: Object>(ofType: T.Type, id: Int, query: @escaping (Query<T>) -> Query<Bool>) -> AnyPublisher<Results<T>, Error> {
         return Future<Results<T>, Error> { promise in
             let value: Results<T> = self.realm.objects(T.self) .where(query)
-            #warning("FIX!!!")
-//            if (value.count <= 0){
-                promise(.success(value))
-//            }else{
-//                promise(.failure(DataBaseError.NotFound))
-//            }
+#warning("FIX!!!")
+            //            if (value.count <= 0){
+            promise(.success(value))
+            //            }else{
+            //                promise(.failure(DataBaseError.NotFound))
+            //            }
         }
         .eraseToAnyPublisher()
     }

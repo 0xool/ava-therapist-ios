@@ -68,6 +68,7 @@ private extension ConversationListView {
                                 AvaNavigationLink {
                                     TherapyChatView(viewModel: .init(conversation: conversation, container: self.viewModel.container))
                                         .avaNavigationBarBackButtonHidden(false)
+                                        .avaNavigationBarTitle("")
                                 } label: {
                                     EmptyView()
                                 }
@@ -84,7 +85,7 @@ private extension ConversationListView {
                     .scrollContentBackground(.hidden)
                     .background(.white)
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-                    .listStyle(.grouped)
+//                    .listStyle(.grouped)
                     .listRowSpacing(10)
                 }
             }
@@ -153,43 +154,36 @@ extension ConversationListView{
         }
         
         @ViewBuilder private var cellView: some View {
+            
             HStack(alignment: .center, spacing: 0) {
                 HStack(alignment: .center, spacing: 10) {
-                    // Regular/Caption2
                     Text(getDateString())
                         .font(Font.custom("SF Pro Text", size: 11))
                         .kerning(0.066)
                         .multilineTextAlignment(.center)
                         .foregroundColor(Color(red: 0.36, green: 0.36, blue: 0.36))
-                    
                     Divider()
-                    
-                    // Regular/Caption2
                     Text("We talked about.... dolor sit amet consectetur. Tempus dui vitae vivamus diam habitasse metus aliquet rhoncus. Potenti nulla pulvinar neque tellus lectus sit.vivamus diam habitasse metus aliquet rhonc Llorem ipsum dolor s")
                         .font(Font.custom("SF Pro Text", size: 11))
                         .kerning(0.066)
                         .foregroundColor(Color(red: 0.36, green: 0.36, blue: 0.36))
                         .frame(width: 232, alignment: .topLeading)
-                    
                     Divider()
-                    
                     Image(systemName: "face.smiling.inverse")
                         .frame(width: 50, height: 50)
                 }
-                .padding(0)
             }
-            .padding(.leading, 8)
-            .padding(.trailing, 11)
-            .padding(.top, 24)
-            .padding(.bottom, 28)
-            .frame(width: UIViewController().view.bounds.width, height: 117)
-            .frame(maxWidth: .infinity)
-            .background(Color(red: 0.95, green: 0.95, blue: 0.95))
+            .padding(.horizontal, 16)
+            .padding(.vertical, 26)
+            .frame(width: 392, height: 117, alignment: .center)
+            .background(Color(red: 0.98, green: 0.98, blue: 0.98))
+            .cornerRadius(10)
             .overlay(
-                Rectangle()
-                    .inset(by: 0.25)
-                    .stroke(Color(red: 0.5, green: 0.5, blue: 0.5), lineWidth: 0.5)
+              RoundedRectangle(cornerRadius: 10)
+                .inset(by: 0.25)
+                .stroke(Color(red: 0.5, green: 0.5, blue: 0.5), lineWidth: 0.5)
             )
+            .padding([.leading, .trailing], 16)
         }
         
         private func getDateString() -> String {
@@ -222,7 +216,7 @@ extension ConversationListView {
             self.isRunningTests = isRunningTests
             
             container.appState.value.conversationData.objectWillChange.sink { value in
-                self.objectWillChange.send()
+                 self.objectWillChange.send()
             }
             .store(in: self.cancelBag)
         }
@@ -239,22 +233,18 @@ extension ConversationListView {
             guard let conversation = self.conversations.value?[index] else {
                 return
             }
-                        
-            self.conversations = .loaded((self.conversations.value?.filter{ $0 != conversation}.lazyList)!)
+            
             self.container.services.conversationService.deleteConversation(conversationID: conversation.id)
-                .sink { error in
-#warning("Handel error")
-                    print("error: \(error)")
-                } receiveValue: { //[weak self] in
-                    //                        self!.loadConversationList()
-                }
+                .sink(receiveCompletion: { completion in
+                    switch completion {
+                    case .finished:
+                        self.conversations = .loaded((self.conversations.value?.filter{ $0 != conversation}.lazyList)!)
+                    default:
+                        break
+                    }
+                }, receiveValue: {
+                })
                 .store(in: self.cancelBag)
-        }
-        
-        func loadMore() {
-            guard let _ = conversations.value else {
-                return
-            }
         }
     }
 }

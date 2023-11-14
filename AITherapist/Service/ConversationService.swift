@@ -35,25 +35,29 @@ struct MainConversationService: ConversationService {
         
         let cancelBag = CancelBag()
         conversations.wrappedValue.setIsLoading(cancelBag: cancelBag)
-        
-        self.refreshConversationList()
-            .sinkToResult { _ in
-                Just<Void>
-                    .withErrorType(Error.self)
-                    .flatMap({ [conversationDBRepository] in
-                        conversationDBRepository.loadConversations()
-                    })
-                    .sinkToLoadable { conversations.wrappedValue = $0 }
-                    .store(in: cancelBag)
+  
+        Just<Void>
+            .withErrorType(Error.self)
+            .flatMap { _ -> AnyPublisher<Void, Error> in
+                self.refreshConversationList()
             }
+            .flatMap({ [conversationDBRepository] in
+                conversationDBRepository.loadConversations()
+            })
+            .sinkToLoadable { conversations.wrappedValue = $0 }
             .store(in: cancelBag)
+        
+//        self.refreshConversationList()
+//            .sinkToResult { _ in
+//                self.conversationDBRepository.loadConversations()
+//                    .sinkToLoadable { conversations.wrappedValue = $0 }
+//                    .store(in: cancelBag)
+//            }
+//            .store(in: cancelBag)
     }
     
     func deleteConversation(conversationID: Int) -> AnyPublisher<Void, Error> {
         return conversationRepository.deleteConversation(conversationID: conversationID)
-            .map{ [conversationDBRepository] in
-                _ = conversationDBRepository.deleteConversation(conversationID: conversationID)
-            }
             .eraseToAnyPublisher()
     }
     

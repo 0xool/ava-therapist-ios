@@ -41,11 +41,7 @@ struct MainConversationDBRepository: ConversationDBRepository {
 
 extension MainConversationDBRepository {
     private func deleteConversationFromDBWith(id: Int) -> AnyPublisher<Void, Error>{
-        DataBaseManager.Instance.DeleteByID(ofType: Conversation.self, id: id)
-        
-        return Just<Void>
-            .withErrorType(Error.self)
-            .eraseToAnyPublisher()
+        return DataBaseManager.Instance.DeleteByID(ofType: Conversation.self, id: id)
     }
     
     private func readAllConversations() -> AnyPublisher<LazyList<Conversation>, Error> {

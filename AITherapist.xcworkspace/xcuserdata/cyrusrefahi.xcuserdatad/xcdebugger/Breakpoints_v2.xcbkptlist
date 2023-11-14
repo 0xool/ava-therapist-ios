@@ -8,7 +8,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "99A01813-C225-48C6-8D08-32AD28B2622F"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AITherapist/Presentation/MainContentView/MainContentView.swift"
@@ -70,16 +70,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "8A0C2FCD-C43C-4769-B568-A3DC6DABC9F8"
+            uuid = "98717633-7A8C-4A1E-AC13-4A69E9C6A86C"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "AITherapist/Service/ConversationService.swift"
+            filePath = "AITherapist/Presentation/UI/Journal/JournalView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "41"
-            endingLineNumber = "41"
-            landmarkName = "loadConversationList(conversations:)"
+            startingLineNumber = "29"
+            endingLineNumber = "29"
+            landmarkName = "init(namespace:journal:index:hideDetail:viewModel:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

@@ -51,12 +51,12 @@ class Conversations: Decodable{
 struct ConversationsResponse: Decodable {
     var code: Int
     var message: String
-    var conversations: [Conversation]
+    var data: [Conversation]
     
     enum CodingKeys: String, CodingKey {
         case message = "message"
         case code = "code"
-        case conversations = "conversations"
+        case data = "data"
     }
 }
 
@@ -129,7 +129,7 @@ class Conversation: Object, Decodable {
     required init(from decoder: Decoder) throws {
         super.init()
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        id = try container.decode(Int.self , forKey: .id)        
+        id = try container.decode(Int.self , forKey: .id)
         conversationName = try container.decode(String.self , forKey: .conversationName)
         let dateCreated = try container.decode(String.self , forKey: .dateCreated)
     }

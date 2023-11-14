@@ -18,28 +18,33 @@ struct MainView: View {
     @ObservedObject private(set) var viewModel: ViewModel
     @State var mainViewState: MainViewState = .Home
     @State var showNewChat: Bool = false
+    @State var navigationTitle: String = ""
         
     @ViewBuilder var homeTabIcon: some View {
         TabIcon(imageName: "house", title: "Home", isSelected: self.mainViewState == .Home) {
             self.mainViewState = .Home
+            self.navigationTitle = ""
         }
     }
     
     @ViewBuilder var chatHistoryTabIcon: some View {
-        TabIcon(imageName: "bubble.left.and.bubble.right", title: "Chat History", isSelected: self.mainViewState == .ChatHistory) {
+        TabIcon(imageName: "bubble.left.and.bubble.right", title: "Conversations", isSelected: self.mainViewState == .ChatHistory) {
             self.mainViewState = .ChatHistory
+            self.navigationTitle = "Conversation"
         }
     }
     
     @ViewBuilder var journalTabIcon: some View {
         TabIcon(imageName: "magazine.fill", title: "Journal", isSelected: self.mainViewState == .Journal) {
             self.mainViewState = .Journal
+            self.navigationTitle = "Journal"
         }
     }
     
     @ViewBuilder var profileTabIcon: some View {
         TabIcon(imageName: "person.crop.circle", title: "Profile", isSelected: self.mainViewState == .Profile) {
             self.mainViewState = .Profile
+            self.navigationTitle = ""
         }
     }
     
@@ -50,7 +55,7 @@ struct MainView: View {
         case .ChatHistory:
             ConversationListView(viewModel: .init(coninater: viewModel.container))
         case .Journal:
-            InsightView()
+            JournalListView()
         case .Profile:
             BreathingView()
         }
@@ -67,7 +72,9 @@ struct MainView: View {
                 
                 HStack{
                     self.homeTabIcon
+                        .navigationTitle("")
                     self.chatHistoryTabIcon
+                        .avaNavigationBarTitle("Conversations")
                     NewChatTabIconMenu()
                         .onTapGesture {
                             withAnimation{
@@ -75,13 +82,16 @@ struct MainView: View {
                             }
                         }
                     self.journalTabIcon
+                        .navigationTitle("Journal")
                     self.profileTabIcon
+                        .avaNavigationBarTitle("")
                 }
                 .frame(height: 75)
                 .frame(maxWidth: .infinity)
                 .background(Color(.systemGray5))
             }
             .avaNavigationBarBackButtonHidden(true)
+            .avaNavigationBarTitle(self.navigationTitle)
             .fullScreenCover(isPresented: $showNewChat, content: {
                 NewChatView(viewModel: .init(coninater: self.viewModel.container), show: $showNewChat)
             })

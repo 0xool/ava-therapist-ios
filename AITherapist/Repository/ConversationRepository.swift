@@ -30,7 +30,7 @@ struct MainConversationRepository: ConversationRepository {
         
         return request
             .map{
-                return $0.conversations
+                return $0.data
             }
             .eraseToAnyPublisher()
     }

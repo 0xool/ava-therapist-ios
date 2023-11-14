@@ -12,6 +12,7 @@ struct AvaNavBarView<Content: View>: View {
     
     @Environment(\.dismiss) var dismiss
     @State private var backButtonIsHidden: Bool = true
+    @State private var title: String = ""
     let content: Content
     
     init (@ViewBuilder content: () -> Content){
@@ -20,13 +21,15 @@ struct AvaNavBarView<Content: View>: View {
     
     var body: some View {
         VStack{
-            NavBar(showBackButton: backButtonIsHidden)
+            NavBar()
             content
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
         .onPreferenceChange(AvaNavigationBarBackButtonHiddenRefrenceKeys.self, perform: { value in
             self.backButtonIsHidden = value
         })
+        .onPreferenceChange(AvaNavigationBarTitleRefrenceKeys.self) { self.title = $0 }
+        
     }
     
     @ViewBuilder var HelpLineView: some View {
@@ -44,30 +47,44 @@ struct AvaNavBarView<Content: View>: View {
         .padding(8)
     }
     
-    func NavBar(showBackButton: Bool) -> some View {
+    func NavBar() -> some View {
         ZStack {
             HStack(alignment: .center){
-                Button {
-                    dismiss()
-                } label: {
-                    Image(systemName: "chevron.backward")
-                        .font(.subheadline)
-                        .foregroundStyle(.green)
-                        .padding([.leading], 8)
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .hiddenModifier(isHide: showBackButton)
-
+                    Button {
+                        dismiss()
+                    } label: {
+                        Image(systemName: "chevron.backward")
+                            .font(.subheadline)
+                            .foregroundStyle(.green)
+                            .padding([.leading], 8)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .frame(width: 75)
+                    .hiddenModifier(isHide: self.backButtonIsHidden)
                 
-                LogoIcon()
+                middleSection
                     .frame(maxWidth: .infinity, alignment: .center)
                 
                 HelpLineView
-                    .frame(maxWidth: .infinity, alignment: .trailing)
+                    .frame(alignment: .trailing)
             }
         }
         .frame(maxHeight: .infinity, alignment: .top)
         .frame(width: UIScreen.main.bounds.width, height: 40)
+    }
+    
+    @ViewBuilder var middleSection: some View{
+        if self.title.isEmpty {
+            LogoIcon()
+        }else{
+            Text(title)
+                .font(
+                    Font.custom("SF Pro Display", size: 22)
+                        .weight(.bold)
+                )
+                .kerning(0.35)
+                .foregroundColor(.black)
+        }
     }
 }
 
@@ -76,5 +93,6 @@ struct AvaNavBarView<Content: View>: View {
     AvaNavBarView{
         Color.blue.ignoresSafeArea()
             .avaNavigationBarBackButtonHidden(true)
+            .avaNavigationBarTitle("Conversations")
     }
 }
