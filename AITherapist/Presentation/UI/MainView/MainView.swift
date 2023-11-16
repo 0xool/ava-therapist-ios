@@ -57,7 +57,8 @@ struct MainView: View {
         case .Journal:
             JournalListView()
         case .Profile:
-            BreathingView()
+            ProfileView()
+//            BreathingView()
         }
     }
     
