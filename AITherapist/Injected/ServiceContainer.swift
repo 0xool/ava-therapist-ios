@@ -15,19 +15,21 @@ extension DIContainer {
         
         let insightService: InsightService
         let chatService: ChatService
+        let journalService: JournalService
         
-        init(conversationService: ConversationService, userPermissionsService: UserPermissionsService, authenticationService: AuthenticateService, insightService: InsightService, chatService: ChatService) {
+        init(conversationService: ConversationService, userPermissionsService: UserPermissionsService, authenticationService: AuthenticateService, insightService: InsightService, chatService: ChatService, journalService: JournalService) {
             self.conversationService = conversationService
             self.userPermissionsService = userPermissionsService
             self.authenticationService = authenticationService
             
             self.insightService = insightService
             self.chatService = chatService
+            self.journalService = journalService
         }
         
         static var stub: Self {
-            .init(conversationService: StubCountriesService(),
-                  userPermissionsService: StubUserPermissionsService(), authenticationService: StubAuthenticateService(), insightService: StubInsightService(), chatService: StubChatService())
+            .init(conversationService: StubConversationService(),
+                  userPermissionsService: StubUserPermissionsService(), authenticationService: StubAuthenticateService(), insightService: StubInsightService(), chatService: StubChatService(), journalService: StubJournalService())
         }
     }
 }

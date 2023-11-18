@@ -36,7 +36,7 @@ extension MainJournalDBRepository {
     }
     
     private func deleteJournalData(journalID: Int) {
-        DataBaseManager.Instance.DeleteByID(ofType: Journal.self, id: journalID)
+        _ = DataBaseManager.Instance.DeleteByID(ofType: Journal.self, id: journalID)
     }
     
     private func readAllJournals() -> AnyPublisher<LazyList<Journal>, Error> {

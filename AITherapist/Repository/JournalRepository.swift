@@ -10,7 +10,7 @@ import Foundation
 
 protocol JournalRepository: WebRepository {
     func loadJournalList() -> AnyPublisher<DiaryBook, Error>
-//    func addJournal(data: AddJournalRequest) -> AnyPublisher<Void, Error>
+    func addJournal(journal: Journal) -> AnyPublisher<Void, Error>
     func deleteJournal(journalID: Int) -> AnyPublisher<Void, Error>
 }
 
@@ -29,15 +29,17 @@ struct MainJournalRepository: JournalRepository {
         
         return request
             .map{
-                return $0.data
+                DiaryBook(journals: $0.data)
             }
             .eraseToAnyPublisher()
     }
     
-    func addJournal(data: AddJournalRequset) -> AnyPublisher<Void, Error> {
+    func addJournal(journal: Journal) -> AnyPublisher<Void, Error> {
+        let request: AddJournalRequest = AddJournalRequest(diaryName: journal.dateCreated!.description, diaryMessage: journal.diaryMessage)
+        
         let url = getPath(api: .addJournal)
         do {
-            let parameters = try JSONEncoder().encode(data)
+            let parameters = try JSONEncoder().encode(request)
             let params = try JSONSerialization.jsonObject(with: parameters, options: []) as? [String: Any] ?? [:]
             let request: AnyPublisher<AddJournalResponse, Error> = SendRequest(pathVariable: nil, params: params, url: url)
             return request

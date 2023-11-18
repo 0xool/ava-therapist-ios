@@ -287,7 +287,7 @@ struct JournalView_Preview: PreviewProvider {
     @Namespace static var namespace
     
     static var previews: some View{
-        JournalView(namespace: namespace, journal: Journal(id: 1, diaryMessage: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.", diaryName: "Entry one", moodID: 1, userID: 1, summary: "", dateCreated: .now - 2), index: 1, hideDetail: .constant(false), viewModel: .init())
+        JournalView(namespace: namespace, journal: Journal(id: 1, diaryMessage: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.", diaryName: "Entry one", moodID: 1, summary: "", dateCreated: .now - 2), index: 1, hideDetail: .constant(false), viewModel: .init())
     }
 }
 

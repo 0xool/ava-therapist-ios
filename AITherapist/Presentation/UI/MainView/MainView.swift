@@ -18,33 +18,36 @@ struct MainView: View {
     @ObservedObject private(set) var viewModel: ViewModel
     @State var mainViewState: MainViewState = .Home
     @State var showNewChat: Bool = false
+    
     @State var navigationTitle: String = ""
+    @Namespace var tabTopViewNameSpace
         
     @ViewBuilder var homeTabIcon: some View {
-        TabIcon(imageName: "house", title: "Home", isSelected: self.mainViewState == .Home) {
-            self.mainViewState = .Home
-            self.navigationTitle = ""
+        TabIcon(imageName: "house", title: "Home", isSelected: self.mainViewState == .Home, tabTopViewNameSpace: tabTopViewNameSpace) {
+                self.mainViewState = .Home
+                self.navigationTitle = ""
         }
     }
     
     @ViewBuilder var chatHistoryTabIcon: some View {
-        TabIcon(imageName: "bubble.left.and.bubble.right", title: "Conversations", isSelected: self.mainViewState == .ChatHistory) {
-            self.mainViewState = .ChatHistory
-            self.navigationTitle = "Conversation"
+        TabIcon(imageName: "bubble.left.and.bubble.right", title: "Conversations", isSelected: self.mainViewState == .ChatHistory, tabTopViewNameSpace: tabTopViewNameSpace) {
+                self.mainViewState = .ChatHistory
+                self.navigationTitle = "Conversation"
+            
         }
     }
     
     @ViewBuilder var journalTabIcon: some View {
-        TabIcon(imageName: "magazine.fill", title: "Journal", isSelected: self.mainViewState == .Journal) {
-            self.mainViewState = .Journal
-            self.navigationTitle = "Journal"
+        TabIcon(imageName: "magazine.fill", title: "Journal", isSelected: self.mainViewState == .Journal, tabTopViewNameSpace: tabTopViewNameSpace) {
+                self.mainViewState = .Journal
+                self.navigationTitle = "Journal"
         }
     }
     
     @ViewBuilder var profileTabIcon: some View {
-        TabIcon(imageName: "person.crop.circle", title: "Profile", isSelected: self.mainViewState == .Profile) {
-            self.mainViewState = .Profile
-            self.navigationTitle = ""
+        TabIcon(imageName: "person.crop.circle", title: "Profile", isSelected: self.mainViewState == .Profile, tabTopViewNameSpace: tabTopViewNameSpace) {
+                self.mainViewState = .Profile
+                self.navigationTitle = ""
         }
     }
     
@@ -55,14 +58,13 @@ struct MainView: View {
         case .ChatHistory:
             ConversationListView(viewModel: .init(coninater: viewModel.container))
         case .Journal:
-            JournalListView()
+            JournalListView(viewModel: .init(container: self.viewModel.container))
         case .Profile:
             BreathingView()
         }
     }
     
     var body: some View {
-        
         AvaNavigationView{
             VStack{
                 Spacer()
@@ -70,25 +72,26 @@ struct MainView: View {
                     .frame(width: UIViewController().view.bounds.width)
                 Spacer()
                 
-                HStack{
-                    self.homeTabIcon
-                        .navigationTitle("")
-                    self.chatHistoryTabIcon
-                        .avaNavigationBarTitle("Conversations")
-                    NewChatTabIconMenu()
-                        .onTapGesture {
-                            withAnimation{
-                                showNewChat.toggle()
+                    HStack{
+                        self.homeTabIcon
+                            .navigationTitle("")
+                        self.chatHistoryTabIcon
+                            .avaNavigationBarTitle("Conversations")
+                        NewChatTabIconMenu()
+                            .onTapGesture {
+                                withAnimation{
+                                    showNewChat.toggle()
+                                }
                             }
-                        }
-                    self.journalTabIcon
-                        .navigationTitle("Journal")
-                    self.profileTabIcon
-                        .avaNavigationBarTitle("")
-                }
-                .frame(height: 75)
-                .frame(maxWidth: .infinity)
-                .background(Color(.systemGray5))
+                        self.journalTabIcon
+                            .navigationTitle("Journal")
+                        self.profileTabIcon
+                            .avaNavigationBarTitle("")
+                    }
+                    .frame(height: 75)
+                    .frame(maxWidth: .infinity)
+                    .background(Color(.systemGray5))
+                
             }
             .avaNavigationBarBackButtonHidden(true)
             .avaNavigationBarTitle(self.navigationTitle)
@@ -114,13 +117,20 @@ extension MainView {
         var imageName: String = ""
         var title: String = ""
         var isSelected: Bool = false
+        
+        let tabTopViewNameSpace: Namespace.ID
+        
         var onTabClick: () -> ()
         
         var body: some View {
+            
             Button {
                 onTabClick()
             } label: {
                 VStack(spacing: 5){
+                    Rectangle().fill(ColorPallet.SecondaryColorGreen).frame(height: 5).offset(x: 0, y: -8)
+                        .matchedGeometryEffect(id: "TabIconEffect", in: tabTopViewNameSpace, isSource: isSelected)
+                        .animation(.bouncy, value: isSelected)
                     Image(systemName: self.imageName)
                         .aspectRatio(contentMode: .fill)
                         .frame(width: 32, height: 32)
@@ -166,6 +176,7 @@ extension MainView {
                       .offset(y: 54.5)
                 }
                 .offset(y: -36)
+                .zIndex(20)
                 
         }
     }

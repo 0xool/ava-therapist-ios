@@ -11,12 +11,10 @@ import Combine
 struct ConversationListView: View {
     
     @ObservedObject private(set) var viewModel: ViewModel
-    //    @Namespace var conversationListNamespace
-    //    @State var show = false
     
     var body: some View {
         mainContent
-            .frame(width: UIViewController().view.bounds.width)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
     
     @ViewBuilder var mainContent: some View {
@@ -38,7 +36,7 @@ struct ConversationListView: View {
 // MARK: Loading Content
 private extension ConversationListView {
     private var notRequestedView: some View {
-        Text("").onAppear(perform: self.viewModel.loadConversationList)
+        Text("No Requested")
     }
     
     private func loadingView() -> some View {
@@ -47,7 +45,7 @@ private extension ConversationListView {
     
     func failedView(_ error: Error) -> some View {
         ErrorView(error: error, retryAction: {
-
+            
 #warning("Handle Conversation ERROR")
             print("Handle Conversation ERROR")
         })
@@ -56,8 +54,9 @@ private extension ConversationListView {
 
 // MARK: Displaying Content
 private extension ConversationListView {
+    
     func loadedView(_ conversationList: LazyList<Conversation>) -> some View {
-        NavigationStack {
+        return NavigationStack {
             VStack(spacing: 0){
                 ConversationCellHeader()
                 ZStack{
@@ -65,6 +64,7 @@ private extension ConversationListView {
                         ForEach (conversationList, id: \.id){ conversation in
                             ZStack{
                                 ConversationCell(conversation: conversation)
+                                //                                    .padding([.leading, .trailing], 16)
                                 AvaNavigationLink {
                                     TherapyChatView(viewModel: .init(conversation: conversation, container: self.viewModel.container))
                                         .avaNavigationBarBackButtonHidden(false)
@@ -75,21 +75,17 @@ private extension ConversationListView {
                                 .opacity(0)
                             }
                             .listRowSeparator(.hidden)
-                            .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
-                            //                        .onAppear {
-                            //                            self.viewModel.loadMore()
-                            //                        }
+                            .listRowInsets(.init(top: -25, leading: 10, bottom: 40, trailing: 10))
                         }
                         .onDelete(perform: self.viewModel.deleteConversation)
                     }
                     .scrollContentBackground(.hidden)
                     .background(.white)
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-//                    .listStyle(.grouped)
+                    .listStyle(.grouped)
                     .listRowSpacing(10)
                 }
             }
-            
         }
     }
 }
@@ -108,8 +104,11 @@ extension ConversationListView{
                             .weight(.medium)
                     )
                     .foregroundColor(.black)
+                    .frame(width: 67)
                 
                 Divider()
+                Spacer()
+                
                 
                 Text("Summary")
                     .font(
@@ -117,7 +116,9 @@ extension ConversationListView{
                             .weight(.medium)
                     )
                     .foregroundColor(.black)
+                    .padding([.trailing], 30)
                 
+                Spacer()
                 Divider()
                 
                 Text("Mood")
@@ -127,10 +128,9 @@ extension ConversationListView{
                     )
                     .foregroundColor(.black)
             }
-            .frame(width: UIViewController().view.bounds.width, height: 25)
+            .frame(height: 25)
             .frame(maxWidth: .infinity)
-            .padding(0)
-            
+            .padding([.leading, .trailing], 16)
         }
     }
     
@@ -167,23 +167,23 @@ extension ConversationListView{
                         .font(Font.custom("SF Pro Text", size: 11))
                         .kerning(0.066)
                         .foregroundColor(Color(red: 0.36, green: 0.36, blue: 0.36))
-                        .frame(width: 232, alignment: .topLeading)
                     Divider()
                     Image(systemName: "face.smiling.inverse")
-                        .frame(width: 50, height: 50)
                 }
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 26)
-            .frame(width: 392, height: 117, alignment: .center)
-            .background(Color(red: 0.98, green: 0.98, blue: 0.98))
+            .frame(height: 117, alignment: .center)
+            .frame(maxWidth: .infinity)
+            .background(ColorPallet.SecondaryColorGreen.gradient)
             .cornerRadius(10)
             .overlay(
-              RoundedRectangle(cornerRadius: 10)
-                .inset(by: 0.25)
-                .stroke(Color(red: 0.5, green: 0.5, blue: 0.5), lineWidth: 0.5)
+                RoundedRectangle(cornerRadius: 10)
+                    .inset(by: 0.25)
+                    .stroke(Color(red: 0.5, green: 0.5, blue: 0.5), lineWidth: 0)
+                
             )
-            .padding([.leading, .trailing], 16)
+            .shadow(color: Color(hex: 0x7F7F7F, alpha: 1), radius: 1, x: 0, y: 1.5)
         }
         
         private func getDateString() -> String {
@@ -194,6 +194,7 @@ extension ConversationListView{
             
             return ""
         }
+        
     }
 }
 
@@ -216,13 +217,17 @@ extension ConversationListView {
             self.isRunningTests = isRunningTests
             
             container.appState.value.conversationData.objectWillChange.sink { value in
-                 self.objectWillChange.send()
+                self.objectWillChange.send()
             }
             .store(in: self.cancelBag)
+            
+            loadConversationList()
         }
         
         func loadConversationList() {
-            container.services.conversationService.loadConversationList(conversations: loadableSubject(\.container.appState[\.conversationData.conversations]))
+            if conversations == .notRequested {
+                container.services.conversationService.loadConversationList(conversations: loadableSubject(\.container.appState[\.conversationData.conversations]))
+            }
         }
         
         func deleteConversation(at offsets: IndexSet) {
@@ -243,6 +248,7 @@ extension ConversationListView {
                         break
                     }
                 }, receiveValue: {
+                    
                 })
                 .store(in: self.cancelBag)
         }

@@ -105,6 +105,7 @@
 		A5CA94A22AA959BD00E25A46 /* AuthenticateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5CA94A12AA959BD00E25A46 /* AuthenticateService.swift */; };
 		A5CA94A42AA9646500E25A46 /* UserDBRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5CA94A32AA9646500E25A46 /* UserDBRepository.swift */; };
 		A5CA94BA2AAAB6F400E25A46 /* splashScreen.json in Resources */ = {isa = PBXBuildFile; fileRef = A5CA94B52AAAA4E300E25A46 /* splashScreen.json */; };
+		A5EF5C942B05B2D00048CAD0 /* JournalService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5EF5C932B05B2D00048CAD0 /* JournalService.swift */; };
 		A5EFC5912AC1072300D6097B /* Insight.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5EFC5902AC1072300D6097B /* Insight.swift */; };
 		A5EFC5932AC10F0C00D6097B /* Quote.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5EFC5922AC10F0C00D6097B /* Quote.swift */; };
 		A5EFC5962AC10FC600D6097B /* Mood.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5EFC5952AC10FC600D6097B /* Mood.swift */; };
@@ -225,6 +226,7 @@
 		A5CA94A12AA959BD00E25A46 /* AuthenticateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticateService.swift; sourceTree = "<group>"; };
 		A5CA94A32AA9646500E25A46 /* UserDBRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDBRepository.swift; sourceTree = "<group>"; };
 		A5CA94B52AAAA4E300E25A46 /* splashScreen.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = splashScreen.json; path = AITherapist/Resources/Assets/AfterEffects/splashScreen.json; sourceTree = SOURCE_ROOT; };
+		A5EF5C932B05B2D00048CAD0 /* JournalService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalService.swift; sourceTree = "<group>"; };
 		A5EFC5902AC1072300D6097B /* Insight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Insight.swift; sourceTree = "<group>"; };
 		A5EFC5922AC10F0C00D6097B /* Quote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Quote.swift; sourceTree = "<group>"; };
 		A5EFC5952AC10FC600D6097B /* Mood.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mood.swift; sourceTree = "<group>"; };
@@ -502,6 +504,7 @@
 				A5CA94A12AA959BD00E25A46 /* AuthenticateService.swift */,
 				A50B16782AC26BA400571D27 /* InsightService.swift */,
 				A58AA49D2AD8E9B1001F7253 /* ChatService.swift */,
+				A5EF5C932B05B2D00048CAD0 /* JournalService.swift */,
 			);
 			name = Service;
 			path = /Users/cyrusrefahi/Documents/AITherapist/AITherapist/Service;
@@ -1032,6 +1035,7 @@
 				A569DF022AA44822006D39AA /* SystemEventsHandler.swift in Sources */,
 				A505865329BCFF2A001F1970 /* AuthenticateMessage.swift in Sources */,
 				A5CA94932AA8039D00E25A46 /* UserPermissionsService.swift in Sources */,
+				A5EF5C942B05B2D00048CAD0 /* JournalService.swift in Sources */,
 				A569DEFD2AA4423C006D39AA /* Chat.swift in Sources */,
 				A51CF3C82AF85DCF0006F275 /* Modififers.swift in Sources */,
 				A5A708CC29C5342B001BCF2F /* SpeechManager.swift in Sources */,

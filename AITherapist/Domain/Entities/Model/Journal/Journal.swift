@@ -13,31 +13,28 @@ struct DiaryBook: Decodable {
 }
 
 class Journal: Object, Decodable {
-    @Persisted(primaryKey: true) private var id: Int
+    @Persisted(primaryKey: true) var id: Int
     @Persisted var diaryMessage: String
     @Persisted var diaryName: String
-    @Persisted var moodID: Int
-    @Persisted var userID: Int
-    @Persisted var summary: String
+    @Persisted var moodID: Int?
+    @Persisted var summary: String?
     @Persisted var dateCreated: Date?
 
     enum CodingKeys: String, CodingKey {
-        case id = "DiaryID"
-        case diaryMessage = "DiaryMessage"
-        case diaryName = "DiaryName"
-        case moodID = "MoodID"
-        case userID = "UserID"
-        case summary = "Summary"
-        case dateCreated = "DateCreated"
+        case id = "diaryID"
+        case diaryMessage = "diaryMessage"
+        case diaryName = "diaryName"
+        case moodID = "moodID"
+        case summary = "summary"
+        case dateCreated = "dateCreated"
     }
     
-    init(id: Int, diaryMessage: String, diaryName: String, moodID: Int, userID: Int, summary: String, dateCreated: Date?) {
+    init(id: Int, diaryMessage: String, diaryName: String, moodID: Int?, summary: String?, dateCreated: Date?) {
         super.init()
         self.id = id
         self.diaryMessage = diaryMessage
         self.diaryName = diaryName
         self.moodID = moodID
-        self.userID = userID
         self.summary = summary
         self.dateCreated = dateCreated
     } 
@@ -51,19 +48,22 @@ class Journal: Object, Decodable {
         
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.id = try container.decode(Int.self, forKey: .id)
-
         self.diaryMessage = try container.decode(String.self, forKey: .diaryMessage)
+        
         self.diaryName = try container.decode(String.self, forKey: .diaryName)
-        self.moodID = try container.decode(Int.self, forKey: .moodID)
-        self.userID = try container.decode(Int.self, forKey: .userID)
-        self.summary = try container.decode(String.self, forKey: .summary)
+        self.moodID = try container.decode(Int?.self, forKey: .moodID)
+        self.summary = try container.decode(String?.self, forKey: .summary)
+        
         self.dateCreated = Date.convertStringToDate(try container.decode(String.self, forKey: .dateCreated))
     }
-
 }
 
-struct AddJournalRequset: Encodable{
+struct AddJournalRequest: Encodable{
     var diary: SaveJournalRequsetBody
+    
+    init(diaryName: String, diaryMessage: String){
+        self.diary = SaveJournalRequsetBody(diaryName: diaryName, diaryMessage: diaryMessage)
+    }
     
     struct SaveJournalRequsetBody: Encodable {
         var diaryName: String
@@ -83,9 +83,9 @@ struct DeleteJournalResponse: Decodable, ServerResponseData{
 
 struct GetAllJournalResponse: Decodable, ServerResponseData {
 
-    var message: String?
     var code: Int?
-    var data: DiaryBook
+    var message: String?
+    var data: [Journal]
     
     struct AddChatServerResponseData: Decodable {
         var message: String?
