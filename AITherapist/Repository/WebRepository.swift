@@ -95,7 +95,6 @@ extension WebRepository {
         .receive(on: DispatchQueue.main)
         .eraseToAnyPublisher()
     }
-    
 }
 
 enum ClientError: Error {

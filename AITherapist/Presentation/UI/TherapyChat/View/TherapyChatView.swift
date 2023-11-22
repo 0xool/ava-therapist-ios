@@ -161,7 +161,6 @@ private extension TherapyChatView {
             GeometryReader { geo in
                 ScrollViewReader{ proxy in
                     VStack {
-
                         backButton
                         ScrollView {
                             ForEach(conversation.chats.lazyList, id: \.id) { chat in
@@ -204,7 +203,7 @@ private extension TherapyChatView {
                     
                 }
                 .background{
-                    ChatBackgroundView()
+                    TwoCircleBackgroundView()
                 }
             }
         }
@@ -246,46 +245,6 @@ private extension TherapyChatView {
         func _body(configuration: TextField<Self._Label>) -> some View {
             configuration
                 .frame(height: 70)
-        }
-    }
-}
-
-extension TherapyChatView {
-    struct ChatBackgroundView: View {
-        @State private var circleAnimationOffsetX: CGFloat = 0
-        @State private var circleAnimationOffsetY: CGFloat = 0
-        private var animationAmount: CGFloat {
-            let randomNumber = 36 + Int(arc4random_uniform(UInt32(72 - 36 + 1)))
-            let signMultiplier = (Int.random(in: 0...1) == 0) ? 1 : -1
-            return CGFloat(randomNumber * signMultiplier)
-        }
-        
-        private let backgroundCircleRadius = UIViewController().view.bounds.height / 2
-        private let topCircleBackgroundOfsett: CGSize = .init(width: UIViewController().view.bounds.width / 3, height: -UIViewController().view.bounds.height / 4)
-        private let bottomCircleBackgroundOfsett: CGSize = .init(width: -UIViewController().view.bounds.width / 2 + 45, height: UIViewController().view.bounds.height / 2 - 100)
-        
-        var body: some View {
-            ZStack{
-                ColorPallet.BackgroundColorLight
-                Circle()
-                    .frame(width: backgroundCircleRadius, height: backgroundCircleRadius)
-                    .foregroundStyle(.green)
-                    .offset(topCircleBackgroundOfsett)
-                    .offset(x: circleAnimationOffsetX, y: circleAnimationOffsetY)
-                Circle()
-                    .frame(width: backgroundCircleRadius * 0.66 , height: backgroundCircleRadius * 0.66)
-                    .foregroundStyle(.green)
-                    .offset(bottomCircleBackgroundOfsett)
-                    .offset(x: circleAnimationOffsetX, y: circleAnimationOffsetY)
-                    .onAppear{
-                        withAnimation(.easeOut(duration: 0.65)) {
-                            circleAnimationOffsetX = animationAmount
-                            circleAnimationOffsetY = animationAmount
-                        }
-                    }
-            }
-            .clipped()
-            .ignoresSafeArea()
         }
     }
 }

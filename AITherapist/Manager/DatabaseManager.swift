@@ -15,6 +15,7 @@ protocol DataBase {
     func GetLast<T: Object>(ofType: T.Type) -> T?
     
     func GetByTypeID<T: Object>(ofType: T.Type, id: Int, query: @escaping (Query<T>) -> Query<Bool>) -> AnyPublisher<Results<T>, Error>
+    func GetByQuery<T: Object>(ofType: T.Type, query: @escaping (Query<T>) -> Query<Bool>) -> AnyPublisher<Results<T>, Error>
     func GetCount<T: RealmFetchable>(value: T.Type) -> Int
     func Write<T: Object>(writeData: T) -> AnyPublisher<Void, Error>
     
@@ -26,7 +27,7 @@ protocol DataBase {
 }
 
 class DataBaseManager: DataBase {
-    
+
     static let Instance = DataBaseManager()
     private let realm: Realm
     private var cancellable: AnyCancellable?
@@ -78,6 +79,20 @@ class DataBaseManager: DataBase {
     
     func GetByTypeID<T: Object>(ofType: T.Type, id: Int, query: @escaping (Query<T>) -> Query<Bool>) -> AnyPublisher<Results<T>, Error> {
         return Future<Results<T>, Error> { promise in
+            let value: Results<T> = self.realm.objects(T.self) .where(query)
+#warning("FIX!!!")
+            //            if (value.count <= 0){
+            promise(.success(value))
+            //            }else{
+            //                promise(.failure(DataBaseError.NotFound))
+            //            }
+        }
+        .eraseToAnyPublisher()
+    }
+    
+    func GetByQuery<T: Object>(ofType: T.Type, query: @escaping (Query<T>) -> Query<Bool>) -> AnyPublisher<Results<T>, Error> {
+        
+        Future<Results<T>, Error> { promise in
             let value: Results<T> = self.realm.objects(T.self) .where(query)
 #warning("FIX!!!")
             //            if (value.count <= 0){

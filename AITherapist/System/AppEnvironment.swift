@@ -79,7 +79,10 @@ extension AppEnvironment {
         let conversationWebRepository = MainConversationRepository(baseURL: baseURL)
         let insightWebRepository = MainIsightRepository(baseURL: baseURL)
         let chatWebRepoistory = MainChatRepository(baseURL: baseURL)
-        return .init(conversationRepository: conversationWebRepository, pushTokenWebRepository: pushTokenWebRepository, authenticationRepository: authenticationWebRepository, insightRepository: insightWebRepository, chatRepository: chatWebRepoistory)
+        
+        let journalWebRepository = MainJournalRepository(baseURL: baseURL)
+        
+        return .init(conversationRepository: conversationWebRepository, pushTokenWebRepository: pushTokenWebRepository, authenticationRepository: authenticationWebRepository, insightRepository: insightWebRepository, chatRepository: chatWebRepoistory, journalRepository: journalWebRepository)
     }
     
     private static func configuredDBRepositories(appState: Store<AppState>) -> DIContainer.DBRepositories {
@@ -88,8 +91,9 @@ extension AppEnvironment {
         let insightDBRepository = MainInsightDBRepository()
         
         let chatDBRepository = MainChatDBRepository()
+        let journalDBRepository = MainJournalDBRepository()
         
-        return .init(conversationRepository: conversationDBRepository, userRepository: userDBRepository, insightRepository: insightDBRepository, chatRepository: chatDBRepository)
+        return .init(conversationRepository: conversationDBRepository, userRepository: userDBRepository, insightRepository: insightDBRepository, chatRepository: chatDBRepository, journalRepository: journalDBRepository)
     }
     
     private static func configuredServices(appState: Store<AppState>,
@@ -101,6 +105,7 @@ extension AppEnvironment {
         let authenticationService = MainAuthenticateService(appState: appState, authenticateRepository: webRepositories.authenticationRepository, userDBRepository: dbRepositories.userRepository)
         let chatService = MainChatService(chatRepository: webRepositories.chatRepository, appState: appState, chatDBRepository: dbRepositories.chatRepository)
         let conversationService = MainConversationService(conversationRepository: webRepositories.conversationRepository, appState: appState, conversationDBRepository: dbRepositories.conversationRepository, chatService: chatService)
+        let journalService = MainJournalService(journalRepository: webRepositories.journalRepository, journalDBRepository: dbRepositories.journalRepository, appState: appState)
         let userPermissionsService = MainUserPermissionsService(
             appState: appState, openAppSettings: {
                 URL(string: UIApplication.openSettingsURLString).flatMap {
@@ -108,8 +113,7 @@ extension AppEnvironment {
                 }
             })
         
-        
-        return .init(conversationService: conversationService, userPermissionsService: userPermissionsService, authenticationService: authenticationService, insightService: insightService, chatService: chatService)
+        return .init(conversationService: conversationService, userPermissionsService: userPermissionsService, authenticationService: authenticationService, insightService: insightService, chatService: chatService, journalService: journalService)
     }
 }
 
@@ -122,6 +126,7 @@ extension DIContainer {
         
         let insightRepository: InsightRepository
         let chatRepository: ChatRepository
+        let journalRepository: JournalRepository
     }
 
     struct DBRepositories {
@@ -129,5 +134,6 @@ extension DIContainer {
         let userRepository: UserDBRepository
         let insightRepository: InsightDBRepository
         let chatRepository: ChatDBRepository
+        let journalRepository: JournalDBRepository
     }
 }

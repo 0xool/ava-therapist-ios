@@ -10,8 +10,10 @@ import Foundation
 
 protocol JournalRepository: WebRepository {
     func loadJournalList() -> AnyPublisher<DiaryBook, Error>
-//    func addJournal(data: AddJournalRequest) -> AnyPublisher<Void, Error>
+    func addJournal(journal: Journal) -> AnyPublisher<Void, Error>
     func deleteJournal(journalID: Int) -> AnyPublisher<Void, Error>
+    
+    func getJournalByDate(date: Date) -> AnyPublisher<Journal, Error>
 }
 
 struct MainJournalRepository: JournalRepository {
@@ -29,21 +31,24 @@ struct MainJournalRepository: JournalRepository {
         
         return request
             .map{
-                return $0.data
+                DiaryBook(journals: $0.data)
             }
             .eraseToAnyPublisher()
     }
     
-    func addJournal(data: AddJournalRequset) -> AnyPublisher<Void, Error> {
+    func addJournal(journal: Journal) -> AnyPublisher<Void, Error> {
+        let request: AddJournalRequest = AddJournalRequest(diary: journal)
+        
         let url = getPath(api: .addJournal)
         do {
-            let parameters = try JSONEncoder().encode(data)
+            let parameters = try JSONEncoder().encode(request)
             let params = try JSONSerialization.jsonObject(with: parameters, options: []) as? [String: Any] ?? [:]
             let request: AnyPublisher<AddJournalResponse, Error> = SendRequest(pathVariable: nil, params: params, url: url)
+            
             return request
-                .map{ _ in
-                    
-                }
+                .map{
+                    print($0.message!)
+                }    
                 .eraseToAnyPublisher()
         } catch {
             return Fail(error: error).eraseToAnyPublisher()
@@ -61,6 +66,18 @@ struct MainJournalRepository: JournalRepository {
             }
             .eraseToAnyPublisher()
     }
+    
+    func getJournalByDate(date: Date) -> AnyPublisher<Journal, Error>{
+        let url = getPath(api: .getDiaryByDate, date: date.description)
+        
+            let request: AnyPublisher<GetJournalByDateResponse, Error> =  GetRequest(pathVariable: nil, params: nil, url: url)
+            
+            return request
+                .map{
+                    $0.data
+                }
+                .eraseToAnyPublisher()
+    }
 }
 
 extension MainJournalRepository {
@@ -69,15 +86,22 @@ extension MainJournalRepository {
         case allJournals = "getDiaryList"
         case addJournal = "addDiary"
         case deleteJournal = "deleteDiary"
+        case getDiaryByDate = "getDiaryByDate"
     }
     
-    func getPath(api: API, journalID: Int? = nil) -> String {
+    func getPath(api: API, journalID: Int? = nil, date: String? = nil) -> String {
         let mainUrl = "\(baseURL)\(JournalAPI)/\(api.rawValue)"
         switch api {
         case .addJournal:
             return mainUrl
         case .allJournals:
             return mainUrl
+        case .getDiaryByDate:
+            guard let date = date else {
+                return mainUrl
+            }
+            
+            return "\(mainUrl)/\(date)"
         case .deleteJournal:
             guard let id = journalID else {
                 return mainUrl

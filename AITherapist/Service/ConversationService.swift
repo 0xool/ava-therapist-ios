@@ -170,7 +170,7 @@ extension MainConversationService{
     }
 }
 
-struct StubCountriesService: ConversationService {
+struct StubConversationService: ConversationService {
     func createNewConversation(conversation: LoadableSubject<Conversation>, conversationName: String) {
         
     }
@@ -184,6 +184,13 @@ struct StubCountriesService: ConversationService {
     }
     
     func loadConversationList(conversations: LoadableSubject<LazyList<Conversation>>) {
+        let cancelBag = CancelBag()
+        conversations.wrappedValue.setIsLoading(cancelBag: cancelBag)
+        let convos = [
+            Conversation(id: 1, conversationName: "Conversation 1", date: .now),
+        ].lazyList
+        
+        conversations.wrappedValue = .loaded(convos)
     }
     
     func loadConversationChat(conversation: LoadableSubject<Conversation>) {

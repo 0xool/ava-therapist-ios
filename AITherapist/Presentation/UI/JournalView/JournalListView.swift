@@ -12,24 +12,66 @@ struct JournalListView: View {
     @State var showJournalEditView = false
     @State var selectedIndex = 0
     @State var selectedJournal: Journal = .init()
-        
-    let diaryBook: DiaryBook = .init(journals:  [
-        Journal(id: 0, diaryMessage: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", diaryName: "Entry one", moodID: 1, userID: 1, summary: "", dateCreated: .now),
-        
-        Journal(id: 1, diaryMessage: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.", diaryName: "Entry one", moodID: 1, userID: 1, summary: "", dateCreated: .now - 2)
-    ])
     
+    @ObservedObject var viewModel: ViewModel
+            
     var body: some View {
+        mainContent
+    }
+    
+    @ViewBuilder var mainContent: some View {
+        switch self.viewModel.diaryBook {
+        case .notRequested:
+            notRequestedView
+        case .isLoading(last: _, cancelBag: _):
+            loadingView()
+        case let .loaded(diaryBook):
+            loadedView(diaryBook)
+        case let .failed(error):
+            failedView(error)
+        case .partialLoaded(_):
+            notRequestedView
+        }
+    }
+    
+//    @ViewBuilder var listCellBackground: some View {
+//        RoundedRectangle(cornerRadius: 15)
+//            .fill(ColorPallet.SecondaryColorGreen.gradient)
+//    }
+}
+
+// MARK: Loading Content
+private extension JournalListView {
+    private var notRequestedView: some View {
+        Text("")
+    }
+    
+    private func loadingView() -> some View {
+        CircleLoading()
+    }
+    
+    func failedView(_ error: Error) -> some View {
+        ErrorView(error: error, retryAction: {
+
+#warning("Handle Journal ERROR")
+            print("Handle Journal ERROR")
+        })
+    }
+}
+
+// MARK: Displaying Content
+private extension JournalListView{
+    func loadedView(_ diaryBook: DiaryBook) -> some View {
         ZStack{
             if !self.showJournalEditView{
-                journalList
+                journalList(diaryBook: diaryBook)
             }else{
-                JournalView(namespace: journalNameSpace, journal: selectedJournal, index: selectedIndex, hideDetail: $showJournalEditView, viewModel: .init())
+//                JournalView(namespace: journalNameSpace, journal: selectedJournal, index: selectedIndex, viewModel: .init())
             }
         }
     }
     
-    @ViewBuilder var journalList: some View {
+    func journalList(diaryBook: DiaryBook) -> some View {
         ScrollView{
             VStack{
                 ForEach(Array(diaryBook.journals.enumerated()), id: \.offset){ index, journal in
@@ -45,11 +87,6 @@ struct JournalListView: View {
                 }
             }
         }
-    }
-    
-    @ViewBuilder var listCellBackground: some View {
-        RoundedRectangle(cornerRadius: 15)
-            .fill(ColorPallet.SecondaryColorGreen.gradient)
     }
 }
 
@@ -67,7 +104,7 @@ extension JournalListView{
             VStack{
                 ZStack{
                     VStack{
-                        Text(journal.dateCreated!.description)
+                        Text(journal.dateCreated.description)
                             .font(
                                 Font.custom("SF Pro Text", size: 25)
                                     .weight(.bold)
@@ -98,7 +135,6 @@ extension JournalListView{
                         }
                     }
 
-
                     Button {
                         withAnimation{
                             onClickJournal(index, journal)
@@ -112,8 +148,7 @@ extension JournalListView{
                 
                 Spacer()
                 expandButton
-
-
+                
             }
             .background(ColorPallet.LightGreen.gradient)
             .clipShape(RoundedRectangle(cornerRadius: 15))
@@ -145,19 +180,30 @@ extension JournalListView{
     }
 }
 
-
-
 extension JournalListView{
     class ViewModel: ObservableObject {
-        @Published var diaryBook: DiaryBook
+        let container: DIContainer
+        let isRunningTests: Bool
+        private var cancelBag = CancelBag()
         
-        init(diaryBook: DiaryBook) {
+        @Published var diaryBook: Loadable<DiaryBook>
+        
+        init(container: DIContainer, isRunningTests: Bool = false, cancelBag: CancelBag = CancelBag(), diaryBook: Loadable<DiaryBook> = .notRequested) {
+            self.container = container
+            self.isRunningTests = isRunningTests
+            self.cancelBag = cancelBag
             self.diaryBook = diaryBook
+
+            loadJournals()
+        }
+        
+        func loadJournals(){
+            self.container.services.journalService.loadJournalList(journals: loadableSubject(\.diaryBook))
         }
         
     }
 }
 
 #Preview {
-    JournalListView()
+    JournalListView(viewModel: .init(container: .init(appState: .preview, services: .stub)))
 }
