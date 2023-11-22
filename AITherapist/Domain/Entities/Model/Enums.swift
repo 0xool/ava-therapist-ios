@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 enum UserFeeling {
     case Sad
     case Happy
@@ -22,24 +21,25 @@ enum WeekDay: String {
     case Saturday = "Sat"
     case Sunday = "Sun"
     
-    init?(day: Int) {
+    init(day: Int) {
+        let day = day % 7
         switch day {
-        case 0:
-            self = .Monday
-        case 1:
-            self = .Tuesday
         case 2:
-            self = .Wednesday
+            self = .Monday
         case 3:
-            self = .Thursday
+            self = .Tuesday
         case 4:
-            self = .Friday
+            self = .Wednesday
         case 5:
-            self = .Saturday
+            self = .Thursday
         case 6:
+            self = .Friday
+        case 0:
+            self = .Saturday
+        case 1:
             self = .Sunday
         default:
-            return nil
+            self = .Monday
         }
     }
 }

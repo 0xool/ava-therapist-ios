@@ -10,7 +10,6 @@ import SwiftUI
 struct AvaNavigationView<Content: View>: View {
     let content: Content
     
-    
     init(content: () -> Content) {
         self.content = content()
     }

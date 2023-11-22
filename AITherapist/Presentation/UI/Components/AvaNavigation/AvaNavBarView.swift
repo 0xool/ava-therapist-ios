@@ -13,6 +13,8 @@ struct AvaNavBarView<Content: View>: View {
     @Environment(\.dismiss) var dismiss
     @State private var backButtonIsHidden: Bool = true
     @State private var title: String = ""
+    
+    @State private var showBackground: Bool = false
     let content: Content
     
     init (@ViewBuilder content: () -> Content){
@@ -20,16 +22,24 @@ struct AvaNavBarView<Content: View>: View {
     }
     
     var body: some View {
-        VStack{
-            NavBar()
-            content
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+        ZStack{
+            TwoCircleBackgroundView(backgroundColor: .white, animate: false)
+                .opacity(0.3)
+                .hiddenModifier(isHide: !self.showBackground)
+
+            VStack{
+                NavBar()
+                    .backgroundStyle(.clear)
+                content
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .backgroundStyle(.clear)
+            }
         }
-        .onPreferenceChange(AvaNavigationBarBackButtonHiddenRefrenceKeys.self, perform: { value in
-            self.backButtonIsHidden = value
-        })
+        .backgroundStyle(.red)
+        .toolbarBackground(.hidden, for: .navigationBar)
+        .onPreferenceChange(AvaNavigationBarBackButtonHiddenRefrenceKeys.self, perform: { self.backButtonIsHidden = $0 })
         .onPreferenceChange(AvaNavigationBarTitleRefrenceKeys.self) { self.title = $0 }
-        
+        .onPreferenceChange(AvaNavigationBarShowBackgroundRefrenceKeys.self, perform: { self.showBackground = $0 })
     }
     
     @ViewBuilder var HelpLineView: some View {
@@ -42,32 +52,30 @@ struct AvaNavBarView<Content: View>: View {
         .background{
             RoundedRectangle(cornerSize: CGSize(width: 50, height: 50))
                 .foregroundStyle(.green)
-                
+            
         }
         .padding(8)
     }
     
     func NavBar() -> some View {
-        ZStack {
-            HStack(alignment: .center){
-                    Button {
-                        dismiss()
-                    } label: {
-                        Image(systemName: "chevron.backward")
-                            .font(.subheadline)
-                            .foregroundStyle(.green)
-                            .padding([.leading], 8)
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .frame(width: 75)
-                    .hiddenModifier(isHide: self.backButtonIsHidden)
-                
-                middleSection
-                    .frame(maxWidth: .infinity, alignment: .center)
-                
-                HelpLineView
-                    .frame(alignment: .trailing)
+        HStack(alignment: .center){
+            Button {
+                dismiss()
+            } label: {
+                Image(systemName: "chevron.backward")
+                    .font(.subheadline)
+                    .foregroundStyle(.green)
+                    .padding([.leading], 8)
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .frame(width: 75)
+            .hiddenModifier(isHide: self.backButtonIsHidden)
+            
+            middleSection
+                .frame(maxWidth: .infinity, alignment: .center)
+            
+            HelpLineView
+                .frame(alignment: .trailing)
         }
         .frame(maxHeight: .infinity, alignment: .top)
         .frame(width: UIScreen.main.bounds.width, height: 40)
@@ -91,8 +99,10 @@ struct AvaNavBarView<Content: View>: View {
 
 #Preview{
     AvaNavBarView{
-        Color.blue.ignoresSafeArea()
+        Color.clear.ignoresSafeArea()
             .avaNavigationBarBackButtonHidden(true)
             .avaNavigationBarTitle("Conversations")
+                    
+        //            .toolbarBackground(.hidden, for: .navigationBar)
     }
 }

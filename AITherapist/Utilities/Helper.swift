@@ -164,20 +164,6 @@ extension UIApplication {
     }
 }
 
-extension UIViewController {
-  func screen() -> UIScreen? {
-    var parent = self.parent
-    var lastParent = parent
-    
-    while parent != nil {
-      lastParent = parent
-      parent = parent!.parent
-    }
-    
-    return lastParent?.view.window?.windowScene?.screen
-  }
-}
-
 extension Date {
     func get(_ components: Calendar.Component..., calendar: Calendar = Calendar.current) -> DateComponents {
         return calendar.dateComponents(Set(components), from: self)
@@ -187,12 +173,27 @@ extension Date {
         return calendar.component(component, from: self)
     }
     
-    static func convertStringToDate(_ dateString: String) -> Date? {
+    static func convertStringToDate(_ dateString: String) -> Date {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
         dateFormatter.timeZone = TimeZone(identifier: "UTC") // Assuming the input string is in UTC
         
-        return dateFormatter.date(from: dateString)
+        return dateFormatter.date(from: dateString) ?? .now
+    }
+    
+    static func yesterday() -> Date? {
+        // Get the current date and time
+        let currentDate = Date()
+
+        // Create a Calendar instance
+        let calendar = Calendar.current
+
+        // Use DateComponents to represent one day
+        var oneDay = DateComponents()
+        oneDay.day = -1
+
+        // Use calendar.date(byAdding:to:) to get yesterday
+        return calendar.date(byAdding: oneDay, to: currentDate)
     }
 }
 

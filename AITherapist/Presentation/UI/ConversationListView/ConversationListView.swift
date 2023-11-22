@@ -64,7 +64,6 @@ private extension ConversationListView {
                         ForEach (conversationList, id: \.id){ conversation in
                             ZStack{
                                 ConversationCell(conversation: conversation)
-                                //                                    .padding([.leading, .trailing], 16)
                                 AvaNavigationLink {
                                     TherapyChatView(viewModel: .init(conversation: conversation, container: self.viewModel.container))
                                         .avaNavigationBarBackButtonHidden(false)
@@ -76,14 +75,17 @@ private extension ConversationListView {
                             }
                             .listRowSeparator(.hidden)
                             .listRowInsets(.init(top: -25, leading: 10, bottom: 40, trailing: 10))
+                            .listRowBackground(Color.clear)
+
                         }
                         .onDelete(perform: self.viewModel.deleteConversation)
                     }
+                    .background(.clear)
                     .scrollContentBackground(.hidden)
-                    .background(.white)
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-                    .listStyle(.grouped)
+                    .listStyle(.grouped)                    
                     .listRowSpacing(10)
+
                 }
             }
         }

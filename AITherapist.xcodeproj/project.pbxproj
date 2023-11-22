@@ -29,6 +29,7 @@
 		A51CF3CB2AF8A48E0006F275 /* JournalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51CF3CA2AF8A48E0006F275 /* JournalView.swift */; };
 		A51CF3CE2AF8A64E0006F275 /* Journal.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51CF3CD2AF8A64E0006F275 /* Journal.swift */; };
 		A51CF3D02AF8AEC00006F275 /* JournalRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51CF3CF2AF8AEC00006F275 /* JournalRepository.swift */; };
+		A51F46D42B09349300E6C2D2 /* ViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51F46D32B09349300E6C2D2 /* ViewExtensions.swift */; };
 		A525EEAA29B172BC00A57CE8 /* AITherapistApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A525EEA929B172BC00A57CE8 /* AITherapistApp.swift */; };
 		A525EEAC29B172BC00A57CE8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A525EEAB29B172BC00A57CE8 /* ContentView.swift */; };
 		A566DCA12AA503A200920940 /* WebRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A566DCA02AA503A200920940 /* WebRepository.swift */; };
@@ -61,6 +62,7 @@
 		A58AA49E2AD8E9B1001F7253 /* ChatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A58AA49D2AD8E9B1001F7253 /* ChatService.swift */; };
 		A58AA49F2AD8E9B1001F7253 /* ChatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A58AA49D2AD8E9B1001F7253 /* ChatService.swift */; };
 		A596AD1229B4385100C19DA6 /* MicManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A596AD1129B4385100C19DA6 /* MicManager.swift */; };
+		A59B81052B0B59EA00FC4661 /* BackgroundViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = A59B81042B0B59EA00FC4661 /* BackgroundViews.swift */; };
 		A59C63F02ACA37EE00B76256 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A59C63CB2ACA37EE00B76256 /* LoginViewModel.swift */; };
 		A59C63F12ACA37EE00B76256 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A59C63CD2ACA37EE00B76256 /* LoginView.swift */; };
 		A59C63F22ACA37EE00B76256 /* UsernameInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A59C63CE2ACA37EE00B76256 /* UsernameInputView.swift */; };
@@ -148,6 +150,7 @@
 		A51CF3CA2AF8A48E0006F275 /* JournalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalView.swift; sourceTree = "<group>"; };
 		A51CF3CD2AF8A64E0006F275 /* Journal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Journal.swift; sourceTree = "<group>"; };
 		A51CF3CF2AF8AEC00006F275 /* JournalRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalRepository.swift; sourceTree = "<group>"; };
+		A51F46D32B09349300E6C2D2 /* ViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtensions.swift; sourceTree = "<group>"; };
 		A525EEA629B172BC00A57CE8 /* AITherapist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AITherapist.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A525EEA929B172BC00A57CE8 /* AITherapistApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AITherapistApp.swift; sourceTree = "<group>"; };
 		A525EEAB29B172BC00A57CE8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -180,6 +183,7 @@
 		A58AA49A2AD8D8A3001F7253 /* ChatRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRepository.swift; sourceTree = "<group>"; };
 		A58AA49D2AD8E9B1001F7253 /* ChatService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatService.swift; sourceTree = "<group>"; };
 		A596AD1129B4385100C19DA6 /* MicManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicManager.swift; sourceTree = "<group>"; };
+		A59B81042B0B59EA00FC4661 /* BackgroundViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundViews.swift; sourceTree = "<group>"; };
 		A59C63CB2ACA37EE00B76256 /* LoginViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		A59C63CD2ACA37EE00B76256 /* LoginView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		A59C63CE2ACA37EE00B76256 /* UsernameInputView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsernameInputView.swift; sourceTree = "<group>"; };
@@ -323,14 +327,14 @@
 			path = Modifiers;
 			sourceTree = "<group>";
 		};
-		A51CF3C92AF8A3FE0006F275 /* Journal */ = {
+		A51CF3C92AF8A3FE0006F275 /* JournalView */ = {
 			isa = PBXGroup;
 			children = (
 				A51CF3CA2AF8A48E0006F275 /* JournalView.swift */,
 				A56C8C2A2B00316200D586E6 /* DaySelectorView.swift */,
 				A56C8C2E2B00C2F200D586E6 /* JournalListView.swift */,
 			);
-			path = Journal;
+			path = JournalView;
 			sourceTree = "<group>";
 		};
 		A51CF3CC2AF8A6200006F275 /* Journal */ = {
@@ -510,6 +514,14 @@
 			path = /Users/cyrusrefahi/Documents/AITherapist/AITherapist/Service;
 			sourceTree = "<absolute>";
 		};
+		A59B81032B0B59AE00FC4661 /* Background */ = {
+			isa = PBXGroup;
+			children = (
+				A59B81042B0B59EA00FC4661 /* BackgroundViews.swift */,
+			);
+			path = Background;
+			sourceTree = "<group>";
+		};
 		A59C63C92ACA37EE00B76256 /* Login */ = {
 			isa = PBXGroup;
 			children = (
@@ -557,6 +569,8 @@
 		A59C63D52ACA37EE00B76256 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				A59B81032B0B59AE00FC4661 /* Background */,
+				A51CF3C52AF85D970006F275 /* Helpers */,
 				A51CF3BE2AF8390A0006F275 /* AvaNavigation */,
 				A59C63D62ACA37EE00B76256 /* Logo.swift */,
 				A59C63D72ACA37EE00B76256 /* CustomTabBar.swift */,
@@ -565,6 +579,7 @@
 				A59C64082ACA58E500B76256 /* ChartView.swift */,
 				A58AA4962AD7A9D9001F7253 /* Loading.swift */,
 				A56C8C2C2B0053B100D586E6 /* WrappedHStack.swift */,
+				A51F46D32B09349300E6C2D2 /* ViewExtensions.swift */,
 			);
 			name = Components;
 			path = AITherapist/Presentation/UI/Components;
@@ -667,8 +682,7 @@
 			children = (
 				A574F5112B0316D500624890 /* ProfileView */,
 				A56D938F2AFB31EE00A66366 /* NewChatView */,
-				A51CF3C92AF8A3FE0006F275 /* Journal */,
-				A51CF3C52AF85D970006F275 /* Helpers */,
+				A51CF3C92AF8A3FE0006F275 /* JournalView */,
 				A59C63D02ACA37EE00B76256 /* AuthenticationView */,
 				A59C63E62ACA37EE00B76256 /* BreathingView */,
 				A59C63D52ACA37EE00B76256 /* Components */,
@@ -1055,6 +1069,7 @@
 				A56D938E2AFB288D00A66366 /* JournalDBRepository.swift in Sources */,
 				A5AE6FDA2AA3E9AE00168037 /* ConversationSummary.swift in Sources */,
 				A59C64052ACA37EE00B76256 /* TherapyChatModel.swift in Sources */,
+				A51F46D42B09349300E6C2D2 /* ViewExtensions.swift in Sources */,
 				A51CF3D02AF8AEC00006F275 /* JournalRepository.swift in Sources */,
 				A50A1A662AA44A2D00A6AD6D /* ServiceContainer.swift in Sources */,
 				A5C55FDB2AA55DBD00154ED0 /* CancelBag.swift in Sources */,
@@ -1079,6 +1094,7 @@
 				A57AD7D02AA64AB8008EC1FB /* ConversationRepository.swift in Sources */,
 				A59C64042ACA37EE00B76256 /* MainAppView.swift in Sources */,
 				A569DF072AA448E9006D39AA /* Store.swift in Sources */,
+				A59B81052B0B59EA00FC4661 /* BackgroundViews.swift in Sources */,
 				A516527F2AA43A87005E9BC6 /* Diary.swift in Sources */,
 				A59C63F92ACA37EE00B76256 /* ActivityIndicatorView.swift in Sources */,
 				A51CF3BD2AF805BA0006F275 /* AvaNavBarView.swift in Sources */,

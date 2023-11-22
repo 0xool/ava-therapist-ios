@@ -20,34 +20,40 @@ struct MainView: View {
     @State var showNewChat: Bool = false
     
     @State var navigationTitle: String = ""
+    @State var showNavigationBackground: Bool = false
     @Namespace var tabTopViewNameSpace
-        
+#warning("Handel this namespace accordingly")
+    @Namespace var journalViewNameSpace
+    
     @ViewBuilder var homeTabIcon: some View {
         TabIcon(imageName: "house", title: "Home", isSelected: self.mainViewState == .Home, tabTopViewNameSpace: tabTopViewNameSpace) {
-                self.mainViewState = .Home
-                self.navigationTitle = ""
+            self.mainViewState = .Home
+            self.navigationTitle = ""
+            self.showNavigationBackground = false
         }
     }
     
     @ViewBuilder var chatHistoryTabIcon: some View {
         TabIcon(imageName: "bubble.left.and.bubble.right", title: "Conversations", isSelected: self.mainViewState == .ChatHistory, tabTopViewNameSpace: tabTopViewNameSpace) {
-                self.mainViewState = .ChatHistory
-                self.navigationTitle = "Conversation"
-            
+            self.mainViewState = .ChatHistory
+            self.navigationTitle = "Conversation"
+            self.showNavigationBackground = false
         }
     }
     
     @ViewBuilder var journalTabIcon: some View {
         TabIcon(imageName: "magazine.fill", title: "Journal", isSelected: self.mainViewState == .Journal, tabTopViewNameSpace: tabTopViewNameSpace) {
-                self.mainViewState = .Journal
-                self.navigationTitle = "Journal"
+            self.mainViewState = .Journal
+            self.navigationTitle = "Journal"
+            self.showNavigationBackground = true
         }
     }
     
     @ViewBuilder var profileTabIcon: some View {
         TabIcon(imageName: "person.crop.circle", title: "Profile", isSelected: self.mainViewState == .Profile, tabTopViewNameSpace: tabTopViewNameSpace) {
-                self.mainViewState = .Profile
-                self.navigationTitle = ""
+            self.mainViewState = .Profile
+            self.navigationTitle = ""
+            self.showNavigationBackground = false
         }
     }
     
@@ -58,7 +64,7 @@ struct MainView: View {
         case .ChatHistory:
             ConversationListView(viewModel: .init(coninater: viewModel.container))
         case .Journal:
-            JournalListView(viewModel: .init(container: self.viewModel.container))
+            JournalView(namespace: journalViewNameSpace, viewModel: .init(container: self.viewModel.container))
         case .Profile:
             BreathingView()
         }
@@ -72,29 +78,28 @@ struct MainView: View {
                     .frame(width: UIViewController().view.bounds.width)
                 Spacer()
                 
-                    HStack{
-                        self.homeTabIcon
-                            .navigationTitle("")
-                        self.chatHistoryTabIcon
-                            .avaNavigationBarTitle("Conversations")
-                        NewChatTabIconMenu()
-                            .onTapGesture {
-                                withAnimation{
-                                    showNewChat.toggle()
-                                }
+                HStack{
+                    self.homeTabIcon
+                        .navigationTitle("")
+                    self.chatHistoryTabIcon
+                    NewChatTabIconMenu()
+                        .onTapGesture {
+                            withAnimation{
+                                showNewChat.toggle()
                             }
-                        self.journalTabIcon
-                            .navigationTitle("Journal")
-                        self.profileTabIcon
-                            .avaNavigationBarTitle("")
-                    }
-                    .frame(height: 75)
-                    .frame(maxWidth: .infinity)
-                    .background(Color(.systemGray5))
+                        }
+                    self.journalTabIcon
+                        .navigationTitle("Journal")
+                    self.profileTabIcon
+                }
+                .frame(height: 75)
+                .frame(maxWidth: .infinity)
+                .background(Color(.systemGray5))
                 
             }
             .avaNavigationBarBackButtonHidden(true)
             .avaNavigationBarTitle(self.navigationTitle)
+            .avaNavigationBarBackground(self.showNavigationBackground)
             .fullScreenCover(isPresented: $showNewChat, content: {
                 NewChatView(viewModel: .init(coninater: self.viewModel.container), show: $showNewChat)
             })
@@ -135,18 +140,18 @@ extension MainView {
                         .aspectRatio(contentMode: .fill)
                         .frame(width: 32, height: 32)
                     Text(self.title)
-                    .font(
-                    Font.custom("SF Pro Text", size: 10)
-                    .weight(.medium)
-                    )
-                    .multilineTextAlignment(.center)
+                        .font(
+                            Font.custom("SF Pro Text", size: 10)
+                                .weight(.medium)
+                        )
+                        .multilineTextAlignment(.center)
                     
                         .font(.caption)
                 }
                 .foregroundStyle(isSelected ? ColorPallet.SecondaryColorGreen : .gray)
                 .frame(maxWidth: .infinity)
             }
-
+            
         }
     }
 }
@@ -154,30 +159,30 @@ extension MainView {
 extension MainView {
     struct NewChatTabIconMenu: View {
         var body: some View {
-                ZStack{
-                    Circle()
-                        .frame(width: 80, height: 80)
-                        .foregroundColor(.white)
-                    Circle()
-                        .frame(width: 75, height: 75)
-                        .foregroundColor(ColorPallet.SecondaryColorGreen)
-                    Image(systemName: "plus")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 40, height: 40)
-                        .foregroundStyle(.white)
-                    Text("New chat")
-                      .font(
+            ZStack{
+                Circle()
+                    .frame(width: 80, height: 80)
+                    .foregroundColor(.white)
+                Circle()
+                    .frame(width: 75, height: 75)
+                    .foregroundColor(ColorPallet.SecondaryColorGreen)
+                Image(systemName: "plus")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 40, height: 40)
+                    .foregroundStyle(.white)
+                Text("New chat")
+                    .font(
                         Font.custom("SF Pro Text", size: 10)
-                          .weight(.medium)
-                      )
-                      .multilineTextAlignment(.center)
-                      .foregroundColor(Color(red: 0.55, green: 0.55, blue: 0.55))
-                      .offset(y: 54.5)
-                }
-                .offset(y: -36)
-                .zIndex(20)
-                
+                            .weight(.medium)
+                    )
+                    .multilineTextAlignment(.center)
+                    .foregroundColor(Color(red: 0.55, green: 0.55, blue: 0.55))
+                    .offset(y: 54.5)
+            }
+            .offset(y: -36)
+            .zIndex(20)
+            
         }
     }
 }

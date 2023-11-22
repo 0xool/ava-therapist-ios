@@ -40,6 +40,10 @@ extension Loadable {
         self = .isLoading(last: value, cancelBag: cancelBag)
     }
     
+    mutating func setIsPartialyLoaded(val: T, cancelBag: CancelBag) {
+        self = .isLoading(last: val, cancelBag: cancelBag)
+    }
+    
     mutating func cancelLoading() {
         switch self {
         case let .isLoading(last, cancelBag):

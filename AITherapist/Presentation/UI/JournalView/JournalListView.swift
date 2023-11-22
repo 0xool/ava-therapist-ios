@@ -66,7 +66,7 @@ private extension JournalListView{
             if !self.showJournalEditView{
                 journalList(diaryBook: diaryBook)
             }else{
-                JournalView(namespace: journalNameSpace, journal: selectedJournal, index: selectedIndex, hideDetail: $showJournalEditView, viewModel: .init())
+//                JournalView(namespace: journalNameSpace, journal: selectedJournal, index: selectedIndex, viewModel: .init())
             }
         }
     }
@@ -104,7 +104,7 @@ extension JournalListView{
             VStack{
                 ZStack{
                     VStack{
-                        Text(journal.dateCreated!.description)
+                        Text(journal.dateCreated.description)
                             .font(
                                 Font.custom("SF Pro Text", size: 25)
                                     .weight(.bold)
