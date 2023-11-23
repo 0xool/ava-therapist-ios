@@ -29,7 +29,7 @@ extension ColorPallet {
     static let SecondaryColorBlue: Color = Color(red: 109/255, green: 174/255, blue: 219/255)
     static let AccentColor: Color = Color(red: 242/255, green: 194/255, blue: 203/255)
     static let BackgroundColorLight: Color = Color(red: 242/255, green: 239/255, blue: 234/255)
-    
+    static let HelpLineColor: Color = Color(red: 0.45, green: 0.05, blue: 0.03)
     static let BackgroundColorDark: Color = Color(red: 16/255, green: 45/255, blue: 64/255)
 }
 

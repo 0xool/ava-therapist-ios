@@ -45,14 +45,14 @@ struct AvaNavBarView<Content: View>: View {
     @ViewBuilder var HelpLineView: some View {
         ZStack{
             Text("Helplines")
-                .foregroundStyle(.black)
+                .foregroundStyle(Color(red: 0.71, green: 0.99, blue: 0.99))
                 .font(helpLineFont)
                 .padding(8)
         }
         .background{
             RoundedRectangle(cornerSize: CGSize(width: 50, height: 50))
-                .foregroundStyle(.green)
-            
+                .foregroundStyle(ColorPallet.HelpLineColor)
+
         }
         .padding(8)
     }

@@ -19,8 +19,10 @@ struct MainView: View {
     @State var mainViewState: MainViewState = .Home
     @State var showNewChat: Bool = false
     
+    @State private var isAnimatingTabBar: Bool = false
     @State var navigationTitle: String = ""
     @State var showNavigationBackground: Bool = false
+    
     @Namespace var tabTopViewNameSpace
 #warning("Handel this namespace accordingly")
     @Namespace var journalViewNameSpace
@@ -72,30 +74,31 @@ struct MainView: View {
     
     var body: some View {
         AvaNavigationView{
-            VStack{
+            VStack(spacing: 0){
                 Spacer()
                 mainContentView
                     .frame(width: UIViewController().view.bounds.width)
-                Spacer()
-                
-                HStack{
-                    self.homeTabIcon
-                        .navigationTitle("")
-                    self.chatHistoryTabIcon
-                    NewChatTabIconMenu()
-                        .onTapGesture {
-                            withAnimation{
-                                showNewChat.toggle()
+                VStack{
+                    HStack{
+                        self.homeTabIcon
+                            .navigationTitle("")
+                        self.chatHistoryTabIcon
+                        NewChatTabIconMenu()
+                            .onTapGesture {
+                                withAnimation{
+                                    showNewChat.toggle()
+                                }
                             }
-                        }
-                    self.journalTabIcon
-                        .navigationTitle("Journal")
-                    self.profileTabIcon
+                        self.journalTabIcon
+                            .navigationTitle("Journal")
+                        self.profileTabIcon
+                    }
+                    .frame(height: 75)
+                    .frame(maxWidth: .infinity)
+                    .background(Color(.systemGray5))
                 }
-                .frame(height: 75)
-                .frame(maxWidth: .infinity)
-                .background(Color(.systemGray5))
-                
+                .offset(x: 0, y: isAnimatingTabBar ? 0 : 200)
+
             }
             .avaNavigationBarBackButtonHidden(true)
             .avaNavigationBarTitle(self.navigationTitle)
@@ -103,6 +106,13 @@ struct MainView: View {
             .fullScreenCover(isPresented: $showNewChat, content: {
                 NewChatView(viewModel: .init(coninater: self.viewModel.container), show: $showNewChat)
             })
+        }
+        .onAppear{
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                withAnimation(.linear(duration: 0.75)) {
+                    isAnimatingTabBar.toggle()
+                }
+            }
         }
     }
 }
@@ -162,14 +172,15 @@ extension MainView {
             ZStack{
                 Circle()
                     .frame(width: 80, height: 80)
-                    .foregroundColor(.white)
+                    .foregroundColor(Color(.systemGray5))
+                    .shadow(color: .black, radius: 0.5, x: 0, y: 1)
                 Circle()
                     .frame(width: 75, height: 75)
                     .foregroundColor(ColorPallet.SecondaryColorGreen)
-                Image(systemName: "plus")
+                Image(systemName: "plus.message")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .frame(width: 40, height: 40)
+                    .frame(width: 50, height: 50)
                     .foregroundStyle(.white)
                 Text("New chat")
                     .font(
