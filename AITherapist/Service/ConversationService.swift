@@ -44,6 +44,7 @@ struct MainConversationService: ConversationService {
             .flatMap({ [conversationDBRepository] in
                 conversationDBRepository.loadConversations()
             })
+            .ensureTimeSpan(requestHoldBackTimeInterval)
             .sinkToLoadable { conversations.wrappedValue = $0 }
             .store(in: cancelBag)
         
@@ -160,7 +161,7 @@ struct MainConversationService: ConversationService {
     }
     
     private var requestHoldBackTimeInterval: TimeInterval {
-        return ProcessInfo.processInfo.isRunningTests ? 0 : 0.5
+        return ProcessInfo.processInfo.isRunningTests ? 0 : 2
     }
 }
 

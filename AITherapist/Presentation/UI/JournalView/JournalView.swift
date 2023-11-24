@@ -9,12 +9,10 @@ import Foundation
 import SwiftUI
 
 struct JournalView: View {
-    let namespace: Namespace.ID
     @ObservedObject private(set) var viewModel: ViewModel
     @State private var showAnimation: Bool = true
     
-    init(namespace: Namespace.ID, viewModel: ViewModel) {
-        self.namespace = namespace
+    init( viewModel: ViewModel) {
         self.viewModel = viewModel
     }
     
@@ -26,7 +24,7 @@ struct JournalView: View {
             
             DaySelectorView(currentDate: $viewModel.selectedDate)
             
-            JournalEntryView(namespace: namespace, journalEntryText: $viewModel.journalEntryText)
+            JournalEntryView(journalEntryText: $viewModel.journalEntryText)
             
             JournalTagView(viewModel: viewModel)
             
@@ -35,7 +33,6 @@ struct JournalView: View {
             sendButton
         }
 
-        .matchedGeometryEffect(id: "journalDetailView", in: namespace)
         .frame(maxWidth: .infinity)
         .padding([.bottom], 35)
         .onAppear(perform: {
@@ -70,7 +67,6 @@ struct JournalView: View {
         .padding(.vertical, 5)
         .frame(height: 50, alignment: .center)
         .frame(maxWidth: .infinity)
-        .matchedGeometryEffect(id: "journalButton", in: namespace)
     }
 }
 
@@ -182,7 +178,6 @@ extension JournalView{
 
 extension JournalView{
     struct JournalEntryView: View {
-        var namespace: Namespace.ID
         @Binding var journalEntryText: String
 //        let index: Int
         var body: some View {
@@ -192,7 +187,6 @@ extension JournalView{
                         .font(Font.custom("SF Pro Text", size: 20))
                         .foregroundColor(Color(red: 0.5, green: 0.5, blue: 0.5))
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-                        .matchedGeometryEffect(id: "journalContent", in: namespace)
                     VStack{
                         Image(systemName: "paperclip")
                             .frame(width: 25, height: 25)
@@ -400,7 +394,7 @@ struct JournalView_Preview: PreviewProvider {
     @Namespace static var namespace
     
     static var previews: some View{
-        JournalView(namespace: namespace, viewModel: .init(container: .preview))
+        JournalView(viewModel: .init(container: .preview))
     }
 }
 

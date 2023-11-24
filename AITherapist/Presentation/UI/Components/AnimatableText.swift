@@ -34,7 +34,7 @@ struct AnimatableText: View {
             }
         }
         .onAppear{
-            withAnimation(.easeOut(duration: Double(self.letters.count) * 0.04)) {
+            withAnimation(.easeInOut(duration: Double(self.letters.count) * 0.025).delay(0.8)) {
                 isAnimating.toggle()
             }
         }

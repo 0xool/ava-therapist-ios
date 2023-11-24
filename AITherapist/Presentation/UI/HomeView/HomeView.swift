@@ -9,6 +9,8 @@ import SwiftUI
 import Combine
 
 struct InsightView: View {
+    @ObservedObject private(set) var viewModel: ViewModel
+
     @State private var showingModalSheet = false
     @State private var isAnimatingQuote = false
     @State private var isAnimatingMood = false
@@ -61,7 +63,7 @@ struct InsightView: View {
     @ViewBuilder var QuoteView: some View {
             ZStack{
                 if isAnimatingQuote {
-                    AnimatableText(text: "Lorem ipsum dolor sit amet consectetur. Lorem ipsum dolor sit amet consectetur. Lorem ipsum dolor sit amet consectetur. Lorem ipsum dolor sit amet consectetur. Lorem ipsum dolor sit amet consectetur. Lorem ipsum dolor sit amet consectetur.")
+                    AnimatableText(text: "Happiness is not something ready     made. It comes from your own actions")
                         .frame(maxHeight: .infinity, alignment: .center)
                 }
         }
@@ -111,7 +113,7 @@ struct GeneralSummaryView: View {
         VStack{
             Text("General Summary")
                 .font(.title3)
-            Text("Last time we talk, you were sad about Llorem ipsum dolor sit amet consectetur. Tempus dui vitae vivamus diam habitasse metus aliquet rhoncus. Potenti nulla pulvinar neque tellus lectus sit.")
+            Text("You have been seeing therapist Ava and have shared your emotions and concerns with her. You discussed feeling blessed and the importance of positivity and gratitude. You also talked about having a good day and the positive emotions you experienced. Ava encouraged you to focus on enjoyable activities to manage stress. You read a book suggested by Ava and found it helpful in improving your mood. It made you realize the power you have to change your thoughts and emotions. One quote that resonated with you was Happiness is not something ready made. It comes from your own actions.")
                 .font(.caption)
                 .padding([.top], 8)
         }
@@ -134,21 +136,22 @@ extension InsightView {
     class ViewModel: ObservableObject {
         let container: DIContainer
         let isRunningTests: Bool
-        var anyCancellable: AnyCancellable? = nil
+        private var cancelBag: CancelBag = CancelBag()
         
-        init(container: DIContainer, isRunningTests: Bool, anyCancellable: AnyCancellable? = nil) {
+        init(container: DIContainer, isRunningTests: Bool = false, anyCancellable: AnyCancellable? = nil) {
             self.container = container
             self.isRunningTests = isRunningTests
             
-            self.anyCancellable = container.appState.value.userData.objectWillChange.sink { (_) in
+            container.appState.value.userData.objectWillChange.sink { (_) in
                 self.objectWillChange.send()
             }
+            .store(in: cancelBag)            
         }
     }
 }
 
 struct InsightView_Previews: PreviewProvider {
     static var previews: some View {
-        InsightView()
+        InsightView(viewModel: .init(container: .preview))
     }
 }
