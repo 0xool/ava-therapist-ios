@@ -11,6 +11,10 @@ import Charts
 
 struct ChartView: View {
     @State var chartType: ChartType = .pie
+    let isSource: Bool
+    let chartNamespace: Namespace.ID
+    let withChartOption: Bool
+    
     var moods = [Mood(mood: .Happy, dateCreated: .now, moodString: "Happy"),
                  Mood(mood: .Excited, dateCreated: .now + 1, moodString: "Happy"),
                  Mood(mood: .Anxious, dateCreated: .now + 2, moodString: "Happy"),
@@ -30,8 +34,9 @@ struct ChartView: View {
                 .pickerStyle(.segmented)
                 .labelsHidden()
             }
+            .hiddenModifier(isHide: !withChartOption)
             
-            MoodQuantityChart(moodChartDatas: convertMoodToMoodQuantityChartData(moods: moods), chartType: chartType)
+            MoodQuantityChart(chartNamespace: chartNamespace, moodChartDatas: convertMoodToMoodQuantityChartData(moods: moods), chartType: chartType, isSource: isSource)
             Spacer(minLength: 0)
 //            WeeklyMoodChart(moodChartDatas: moods, chartType: .bar)
         }
@@ -81,8 +86,11 @@ extension ChartView {
 
 extension ChartView {
     struct MoodQuantityChart: View {
+        let chartNamespace: Namespace.ID
         var moodChartDatas: [QuantityMoodChartData] = []
         var chartType: ChartType = .pie
+        
+        let isSource: Bool
         
         var body: some View {
             if #available(iOS 17.0, *) {
@@ -107,6 +115,7 @@ extension ChartView {
                         }
                     }
                 }
+                .matchedGeometryEffect(id: "chart", in: self.chartNamespace, isSource: isSource)
                 .frame(height: 300)
                 .padding(.top, 16)
                 
@@ -144,7 +153,8 @@ func convertMoodToMoodQuantityChartData(moods: [Mood]) -> [QuantityMoodChartData
 
 struct ChartView_Previews: PreviewProvider {
     static var previews: some View {
-        ChartView()
+        let namespace = Namespace().wrappedValue
+        ChartView(isSource: true, chartNamespace: namespace, withChartOption: true)
     }
 }
 

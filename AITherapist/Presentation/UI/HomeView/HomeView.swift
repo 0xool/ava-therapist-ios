@@ -10,62 +10,65 @@ import Combine
 
 struct InsightView: View {
     @ObservedObject private(set) var viewModel: ViewModel
-
+    
     @State private var showingModalSheet = false
     @State private var isAnimatingQuote = false
     @State private var isAnimatingMood = false
     
+    @Namespace private var chartNamespace
     private let animationTime = 1.25
     
     var body: some View {
-        ScrollView{
-            VStack{
-                WelcomeToHomeTitleView()
-                    .opacity(isAnimatingMood ? 1 : 0)
-                QuoteView
+        MoodAnalyticsView(namespace: chartNamespace, isSource: showingModalSheet, showBackButton: true, withOptions: true, shown: $showingModalSheet)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+                .opacity(showingModalSheet ? 1 : 0)
+            
+            ScrollView{
                 VStack{
-                    Divider()
-                    MoodAnalyticsView()
+                    WelcomeToHomeTitleView()
                         .opacity(isAnimatingMood ? 1 : 0)
-                        .offset(x: isAnimatingMood ? 0 : -50, y: 0)
-                        .onTapGesture{
-                            withAnimation {
-                                showingModalSheet.toggle()
+                    QuoteView
+                    VStack{
+                        Divider()
+                        MoodAnalyticsView(namespace: chartNamespace, isSource: !showingModalSheet, showBackButton: false, withOptions: false, shown: $showingModalSheet)
+                            .opacity(isAnimatingMood ? 1 : 0)
+                            .offset(x: isAnimatingMood ? 0 : -50, y: 0)
+                            .onTapGesture{
+                                withAnimation {
+                                    showingModalSheet.toggle()
+                                }
                             }
-                        }
-                        .sheet(isPresented: $showingModalSheet) {
-                            MoodAnalyticsView()
-                        }
+                        
+                        Divider()
+                        GeneralSummaryView()
+                        Divider()
+                    }
+                    .opacity(isAnimatingMood ? 1 : 0)
+                    .offset(x: isAnimatingMood ? 0 : -50, y: 0)
+                }
+            }
+            .opacity(showingModalSheet ? 0 : 1)
+            .frame(width: UIViewController().view.bounds.width)
+            .frame(maxHeight: .infinity)
+            .onAppear {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    withAnimation(.spring(duration: animationTime)) {
+                        self.isAnimatingQuote = true
+                    }
                     
-                    Divider()
-                    GeneralSummaryView()
-                    Divider()
-                }
-                .opacity(isAnimatingMood ? 1 : 0)
-                .offset(x: isAnimatingMood ? 0 : -50, y: 0)
-            }
-        }
-        .frame(width: UIViewController().view.bounds.width)
-        .frame(maxHeight: .infinity)
-        .onAppear {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                withAnimation(.spring(duration: animationTime)) {
-                    isAnimatingQuote.toggle()
-                }
-                
-                withAnimation(.spring.delay(1)) {
-                    isAnimatingMood.toggle()
+                    withAnimation(.spring.delay(1)) {
+                        self.isAnimatingMood = true
+                    }
                 }
             }
-        }
     }
     
     @ViewBuilder var QuoteView: some View {
-            ZStack{
-                if isAnimatingQuote {
-                    AnimatableText(text: "Happiness is not something ready     made. It comes from your own actions")
-                        .frame(maxHeight: .infinity, alignment: .center)
-                }
+        ZStack{
+            if isAnimatingQuote {
+                AnimatableText(text: "Happiness is not something ready     made. It comes from your own actions")
+                    .frame(maxHeight: .infinity, alignment: .center)
+            }
         }
         .padding(10)
         .background{
@@ -103,8 +106,31 @@ struct InsightView: View {
 }
 
 struct MoodAnalyticsView: View {
+    var namespace: Namespace.ID
+    let isSource: Bool
+    let showBackButton: Bool
+    
+    let withOptions: Bool
+    @Binding var shown: Bool
+    
     var body: some View {
-        ChartView()
+        VStack{
+            Button {
+                withAnimation(Animation.spring) {
+                    shown.toggle()
+                }
+            } label: {
+                Image(systemName: "x.circle.fill")
+                    .resizable()
+                    .frame(width: 25, height: 25)
+                    .padding([.leading], 8)
+            }
+            .foregroundStyle(.red)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .hiddenModifier(isHide: !showBackButton)
+            
+            ChartView(isSource: isSource, chartNamespace: self.namespace, withChartOption: withOptions)
+        }
     }
 }
 
@@ -145,7 +171,7 @@ extension InsightView {
             container.appState.value.userData.objectWillChange.sink { (_) in
                 self.objectWillChange.send()
             }
-            .store(in: cancelBag)            
+            .store(in: cancelBag)
         }
     }
 }

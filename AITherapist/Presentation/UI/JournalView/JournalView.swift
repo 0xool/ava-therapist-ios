@@ -18,7 +18,6 @@ struct JournalView: View {
     
     var body: some View {
         VStack{
-            
             DatePicker("Select Date", selection: $viewModel.selectedDate, displayedComponents: [.date])
                 .padding(.horizontal)
             
@@ -41,7 +40,6 @@ struct JournalView: View {
             }
         })
     }
-    
     
     @ViewBuilder var sendButton: some View{
         
@@ -179,7 +177,7 @@ extension JournalView{
 extension JournalView{
     struct JournalEntryView: View {
         @Binding var journalEntryText: String
-//        let index: Int
+
         var body: some View {
             ZStack {
                 GeometryReader{ geo in
@@ -200,13 +198,10 @@ extension JournalView{
                 .padding([.top, .bottom], 8)
             }
             .frame(minHeight: 200, maxHeight: 400)
-//            .background(.white)
             .cornerRadius(10)
             .background(
                 RoundedRectangle(cornerRadius: 10)
                     .fill(.white)
-//                    .inset(by: 0.5)
-//                    .stroke(Color(red: 0.75, green: 0.75, blue: 0.75), lineWidth: 1)
                     .background{
                         RoundedRectangle(cornerRadius: 10)
                                         .stroke(Color.black, lineWidth: 1)
