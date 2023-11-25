@@ -20,16 +20,11 @@ struct MainView: View {
     
     var body: some View {
         AvaNavigationView{
-            VStack{
-                VStack(spacing: 0){
-                    Spacer()
-                    MainTabContentView()
-                        .padding([.leading, .trailing], 16)
-                        .environmentObject(viewModel)
-                }
-                .avaNavigationBarBackButtonHidden(true)
-                .avaNavigationBarTitle(self.viewModel.navigationTitle)
-                .avaNavigationBarBackground(self.viewModel.showNavigationBackground)
+            VStack(spacing: 0){
+                MainTabContentView()
+                    .padding([.leading, .trailing], 16)
+                    .environmentObject(viewModel)
+                
                 TabView()
                     .environmentObject(viewModel)
             }
@@ -66,7 +61,9 @@ extension MainView {
                 .frame(height: 75)
                 .frame(maxWidth: .infinity)
                 .background(Color(.systemGray5))
-                
+                .avaNavigationBarBackButtonHidden(true)
+                .avaNavigationBarTitle(self.viewModel.navigationTitle)
+                .avaNavigationBarBackground(self.viewModel.showNavigationBackground)
             }
             .offset(x: 0, y: isAnimatingTabBar ? 0 : 200)
             .onAppear{
@@ -84,8 +81,8 @@ extension MainView {
             TabIcon(imageName: "house", title: "Home", isSelected: self.mainViewState == .Home, tabTopViewNameSpace: tabTopViewNameSpace) {
                 self.viewModel.mainViewState.send(.Home)
                 self.mainViewState = .Home
-                //            self.viewModel.navigationTitle = ""
-                //            self.viewModel.showNavigationBackground = false
+                self.viewModel.navigationTitle = ""
+                self.viewModel.showNavigationBackground = false
             }
         }
         
@@ -93,8 +90,8 @@ extension MainView {
             TabIcon(imageName: "bubble.left.and.bubble.right", title: "Conversations", isSelected: self.mainViewState == .ChatHistory, tabTopViewNameSpace: tabTopViewNameSpace) {
                 self.viewModel.mainViewState.send(.ChatHistory)
                 self.mainViewState = .ChatHistory
-                //            self.viewModel.navigationTitle = "Conversation"
-                //            self.viewModel.showNavigationBackground = false
+                self.viewModel.navigationTitle = "Conversation"
+                self.viewModel.showNavigationBackground = false
             }
         }
         
@@ -102,8 +99,8 @@ extension MainView {
             TabIcon(imageName: "magazine.fill", title: "Journal", isSelected: self.mainViewState == .Journal, tabTopViewNameSpace: tabTopViewNameSpace) {
                 self.viewModel.mainViewState.send(.Journal)
                 self.mainViewState = .Journal
-                //            self.viewModel.navigationTitle = "Journal"
-                //            self.viewModel.showNavigationBackground = true
+                self.viewModel.navigationTitle = "Journal"
+                self.viewModel.showNavigationBackground = true
             }
         }
         
@@ -111,8 +108,8 @@ extension MainView {
             TabIcon(imageName: "person.crop.circle", title: "Profile", isSelected: self.mainViewState == .Profile, tabTopViewNameSpace: tabTopViewNameSpace) {
                 self.viewModel.mainViewState.send(.Profile)
                 self.mainViewState = .Profile
-                //            self.viewModel.navigationTitle = ""
-                //            self.viewModel.showNavigationBackground = false
+                self.viewModel.navigationTitle = ""
+                self.viewModel.showNavigationBackground = false
             }
         }
         
@@ -122,9 +119,7 @@ extension MainView {
             var isSelected: Bool = false
             
             let tabTopViewNameSpace: Namespace.ID
-            
             var onTabClick: () -> ()
-            
             var body: some View {
                 
                 Button {
@@ -149,7 +144,6 @@ extension MainView {
                     .foregroundStyle(isSelected ? ColorPallet.SecondaryColorGreen : .gray)
                     .frame(maxWidth: .infinity)
                 }
-                
             }
         }
     }
@@ -183,53 +177,15 @@ extension MainView {
             }
             .offset(y: -36)
             .zIndex(20)
-            
-            
         }
     }
 }
 
 extension MainView {
-    enum LoadableTabViw<T> {
-        case notLoaded
-        case loaded(T)
-        
-        var value: T? {
-            switch self {
-            case let .loaded(value): return value
-            default: return nil
-            }
-        }
-    }
-    
-    struct LodableTabView<Content>: View where Content: View{
-        @EnvironmentObject var viewModel: ViewModel
-        @State var lodableView: LoadableTabViw<Content> = .notLoaded
-        
-        var content: Content
-        var viewState: MainViewState
-        
-        init(viewState: MainViewState, @ViewBuilder content: () -> Content) {
-            self.viewState = viewState
-            self.content = content()
-        }
-        
-        var body: some View {
-            lodableView.value
-                .id(viewState)
-                .onReceive(viewModel.mainViewState) { value in
-                    if value == viewState {
-                        lodableView = .loaded(content)
-                        
-                    }
-                }
-        }
-    }
-    
     struct MainTabContentView: View {
         @EnvironmentObject var viewModel: ViewModel
         @State var viewState: MainViewState = .Home
-        @State var insightView: LoadableTabViw<InsightView> = .notLoaded
+        @State fileprivate var insightView: LoadableTabViw<InsightView> = .notLoaded
         
         var body: some View {
             mainContentView
@@ -241,11 +197,11 @@ extension MainView {
         @ViewBuilder var mainContentView: some View {
             
             ZStack{
-                LodableTabView(viewState: .Home){
+                LodableTabView(viewState: .Home, initialDelay: 0){
                     InsightView(viewModel: .init(container: self.viewModel.container))
                 }
                 .opacity(self.viewState == .Home ? 1 : 0)
-
+                
                 LodableTabView(viewState: .ChatHistory){
                     ConversationListView(viewModel: .init(coninater: self.viewModel.container))
                 }
@@ -256,7 +212,7 @@ extension MainView {
                 }
                 .opacity(self.viewState == .Journal ? 1 : 0)
                 
-                LodableTabView(viewState: .Profile){
+                LodableTabView(viewState: .Profile, initialDelay: 0){
                     ProfileView()
                 }
                 .opacity(self.viewState == .Profile ? 1 : 0)
@@ -278,6 +234,51 @@ extension MainView {
         
         init(container: DIContainer) {
             self.container = container
+        }
+    }
+}
+
+private extension MainView {
+    enum LoadableTabViw<T> {
+        case notLoaded
+        case loaded(T)
+        
+        var value: T? {
+            switch self {
+            case let .loaded(value): return value
+            default: return nil
+            }
+        }
+    }
+    
+    struct LodableTabView<Content>: View where Content: View{
+        @EnvironmentObject var viewModel: ViewModel
+        @State var lodableView: LoadableTabViw<Content> = .notLoaded
+        
+        var content: Content
+        var viewState: MainViewState
+        let initialDelay: Double
+        
+        init(viewState: MainViewState, initialDelay: Double = 0.05, @ViewBuilder content: () -> Content) {
+            self.viewState = viewState
+            self.content = content()
+            self.initialDelay = initialDelay
+        }
+        
+        var body: some View {
+            lodableView.value
+                .id(viewState)
+                .onReceive(viewModel.mainViewState) { value in
+                    if value == viewState {
+                        if self.initialDelay == 0 {
+                            lodableView = .loaded(content)
+                        }else{
+                            DispatchQueue.main.asyncAfter(deadline: .now() + self.initialDelay) {
+                                lodableView = .loaded(content)
+                            }
+                        }
+                    }
+                }
         }
     }
 }

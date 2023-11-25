@@ -25,9 +25,9 @@ struct NewChatView: View {
             loadedView(conversation)
         case let .failed(error):
             failedView(error)
-//                .onAppear{
-//                    show.toggle()
-//                }
+                .onAppear{
+                    show.toggle()
+                }
         case .partialLoaded(_):
             notRequestedView
         }

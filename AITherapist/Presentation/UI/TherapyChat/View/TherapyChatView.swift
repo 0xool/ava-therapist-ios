@@ -41,11 +41,6 @@ struct TherapyChatView: View {
         self.viewModel = viewModel
         self.withBackButton = withBackButton
         self._showSheet = showSheet
-//        UITableView.appearance().separatorStyle = .none
-//        
-//        UITableView.appearance().tableFooterView = UIView()
-//        UITableViewCell.appearance().backgroundColor = UIColor(ColorPallet.BackgroundColorLight)
-//        UITableView.appearance().backgroundColor = UIColor(ColorPallet.BackgroundColorLight)
     }
     
     var body: some View {
@@ -144,11 +139,10 @@ private extension TherapyChatView {
     }
     
     func failedView(_ error: Error) -> some View {
-        ErrorView(error: error, retryAction: {
-            //            self.viewModel.loadConversationList()
+        self.showSheet.toggle()
+        return ErrorView(error: error, retryAction: {
 #warning("Handle Conversation ERROR")
             print("Handle Conversation ERROR")
-            
         })
     }
     
@@ -200,7 +194,6 @@ private extension TherapyChatView {
                     }else{
                         CircleLoading()
                     }
-                    
                 }
                 .background{
                     TwoCircleBackgroundView()

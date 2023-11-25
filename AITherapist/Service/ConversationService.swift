@@ -75,7 +75,7 @@ struct MainConversationService: ConversationService {
         Just<Void>
             .withErrorType(Error.self)
             .flatMap{
-                return self.loadConversationChatFromWeb(conversationID: id)
+                self.loadConversationChatFromWeb(conversationID: id)
             }
             .map { [chatService] in
                 chatService.loadChatFromDBBy(conversationID: id)
@@ -161,7 +161,7 @@ struct MainConversationService: ConversationService {
     }
     
     private var requestHoldBackTimeInterval: TimeInterval {
-        return ProcessInfo.processInfo.isRunningTests ? 0 : 2
+        return ProcessInfo.processInfo.isRunningTests ? 0 : 1
     }
 }
 
@@ -189,6 +189,9 @@ struct StubConversationService: ConversationService {
         conversations.wrappedValue.setIsLoading(cancelBag: cancelBag)
         let convos = [
             Conversation(id: 1, conversationName: "Conversation 1", date: .now),
+            Conversation(id: 2, conversationName: "Conversation 1", date: .now + 1),
+            Conversation(id: 3, conversationName: "Conversation 1", date: .now + 2),
+            Conversation(id: 4, conversationName: "Conversation 1", date: .now + 3)
         ].lazyList
         
         conversations.wrappedValue = .loaded(convos)

@@ -31,8 +31,6 @@
 		A51CF3D02AF8AEC00006F275 /* JournalRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51CF3CF2AF8AEC00006F275 /* JournalRepository.swift */; };
 		A51F46D42B09349300E6C2D2 /* ViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51F46D32B09349300E6C2D2 /* ViewExtensions.swift */; };
 		A5206EC62B0FEC3E00C0296B /* FlexibleStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5206EC52B0FEC3E00C0296B /* FlexibleStack.swift */; };
-		A525EEAA29B172BC00A57CE8 /* AITherapistApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A525EEA929B172BC00A57CE8 /* AITherapistApp.swift */; };
-		A525EEAC29B172BC00A57CE8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A525EEAB29B172BC00A57CE8 /* ContentView.swift */; };
 		A52EF6D52B0DEAC4007D17CE /* AnimatingBorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52EF6D42B0DEAC4007D17CE /* AnimatingBorder.swift */; };
 		A52EF6D72B0EE50F007D17CE /* AnimatableText.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52EF6D62B0EE50E007D17CE /* AnimatableText.swift */; };
 		A566DCA12AA503A200920940 /* WebRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A566DCA02AA503A200920940 /* WebRepository.swift */; };
@@ -156,8 +154,6 @@
 		A51F46D32B09349300E6C2D2 /* ViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtensions.swift; sourceTree = "<group>"; };
 		A5206EC52B0FEC3E00C0296B /* FlexibleStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexibleStack.swift; sourceTree = "<group>"; };
 		A525EEA629B172BC00A57CE8 /* AITherapist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AITherapist.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		A525EEA929B172BC00A57CE8 /* AITherapistApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AITherapistApp.swift; sourceTree = "<group>"; };
-		A525EEAB29B172BC00A57CE8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		A525EEAD29B172BF00A57CE8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A525EEB029B172BF00A57CE8 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		A52EF6D42B0DEAC4007D17CE /* AnimatingBorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatingBorder.swift; sourceTree = "<group>"; };
@@ -385,8 +381,6 @@
 				A5AE6FDE2AA3EDD900168037 /* Domain */,
 				A5B7D5E629B41915001D7113 /* Resources */,
 				A5B7D5D729B3B610001D7113 /* Manager */,
-				A525EEA929B172BC00A57CE8 /* AITherapistApp.swift */,
-				A525EEAB29B172BC00A57CE8 /* ContentView.swift */,
 				A525EEAF29B172BF00A57CE8 /* Preview Content */,
 			);
 			name = AITherapist;
@@ -1057,7 +1051,6 @@
 				A51CF3CE2AF8A64E0006F275 /* Journal.swift in Sources */,
 				A59C63F82ACA37EE00B76256 /* CustomTabBar.swift in Sources */,
 				A578EACC2AA418A200D992AD /* Message.swift in Sources */,
-				A525EEAC29B172BC00A57CE8 /* ContentView.swift in Sources */,
 				A59C64092ACA58E500B76256 /* ChartView.swift in Sources */,
 				A5CA948B2AA7D74300E25A46 /* ConversationDBRepository.swift in Sources */,
 				A58AA4972AD7A9DA001F7253 /* Loading.swift in Sources */,
@@ -1074,7 +1067,6 @@
 				A5A708CC29C5342B001BCF2F /* SpeechManager.swift in Sources */,
 				A59C64032ACA37EE00B76256 /* ConversationListView.swift in Sources */,
 				A59C63F72ACA37EE00B76256 /* Logo.swift in Sources */,
-				A525EEAA29B172BC00A57CE8 /* AITherapistApp.swift in Sources */,
 				A56C8C2D2B0053B100D586E6 /* WrappedHStack.swift in Sources */,
 				A57AD7DA2AA678CB008EC1FB /* LazyList.swift in Sources */,
 				A505865729BD00C8001F1970 /* Extentions.swift in Sources */,

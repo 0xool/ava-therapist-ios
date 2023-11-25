@@ -36,7 +36,7 @@ struct ConversationListView: View {
 // MARK: Loading Content
 private extension ConversationListView {
     private var notRequestedView: some View {
-        Text("No Requested")
+        CircleLoading()
     }
     
     private func loadingView() -> some View {
@@ -54,11 +54,13 @@ private extension ConversationListView {
 
 // MARK: Displaying Content
 private extension ConversationListView {
-    
     func loadedView(_ conversationList: LazyList<Conversation>) -> some View {
         return NavigationStack {
-            VStack(spacing: 0){
+            VStack(spacing: -40){
                 ConversationCellHeader()
+                    .background(.white)
+                    .frame(height: 60)
+                    .zIndex(5)
                 ZStack{
                     List{
                         ForEach (conversationList, id: \.id){ conversation in
@@ -73,13 +75,13 @@ private extension ConversationListView {
                                 }
                                 .opacity(0)
                             }
+                            .padding([.top, .bottom], 0)
                             .listRowSeparator(.hidden)
-                            .listRowInsets(.init(top: -25, leading: 10, bottom: 40, trailing: 10))
                             .listRowBackground(Color.clear)
-
                         }
                         .onDelete(perform: self.viewModel.deleteConversation)
                     }
+
                     .background(.clear)
                     .scrollContentBackground(.hidden)
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
@@ -106,7 +108,7 @@ extension ConversationListView{
                             .weight(.medium)
                     )
                     .foregroundColor(.black)
-                    .frame(width: 67)
+                    .frame(width: 77)
                 
                 Divider()
                 Spacer()
@@ -129,6 +131,7 @@ extension ConversationListView{
                             .weight(.medium)
                     )
                     .foregroundColor(.black)
+                    .frame(width: 40)
             }
             .frame(height: 25)
             .frame(maxWidth: .infinity)
@@ -223,12 +226,13 @@ extension ConversationListView {
             }
             .store(in: self.cancelBag)
             
+            
             loadConversationList()
         }
         
         func loadConversationList() {
             if conversations == .notRequested {
-                container.services.conversationService.loadConversationList(conversations: loadableSubject(\.container.appState[\.conversationData.conversations]))
+                    self.container.services.conversationService.loadConversationList(conversations: self.loadableSubject(\.container.appState[\.conversationData.conversations]))
             }
         }
         

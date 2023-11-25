@@ -95,6 +95,16 @@ extension Publisher {
         })
     }
     
+    func sinkEmptyAndStore(cancelBag: CancelBag = CancelBag()) {
+        return sink(receiveCompletion: { subscriptionCompletion in
+            if let error = subscriptionCompletion.error {
+            }
+        }, receiveValue: { value in
+            
+        })
+        .store(in: cancelBag)
+    }
+    
     func extractUnderlyingError() -> Publishers.MapError<Self, Failure> {
         mapError {
             ($0.underlyingError as? Failure) ?? $0

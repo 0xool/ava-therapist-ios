@@ -51,7 +51,7 @@ struct MainJournalService: JournalService {
                 case .finished:
                     print("Finished")
                 case .failure(let error):
-                    journal.wrappedValue = .failed(error)
+//                    journal.wrappedValue = .failed(error)
                     print(error)
                 }
             } receiveValue: {
@@ -124,10 +124,14 @@ struct MainJournalService: JournalService {
             .withErrorType(Error.self)
             .flatMap { _ -> AnyPublisher<Void, Error> in
                 self.refreshJournal(byDate: byDate)
+                    .sinkEmptyAndStore()
+                
+                return Just<Void>
+                    .withErrorType(Error.self)
             }
-            .flatMap({ [journalDBRepository] in
+            .flatMap { _ -> AnyPublisher<Journal, Error> in
                 journalDBRepository.getJournal(byDate: byDate)
-            })
+            }
             .sinkToLoadable { journal.wrappedValue = $0 }
             .store(in: cancelBag)
     }
@@ -138,12 +142,7 @@ struct MainJournalService: JournalService {
             .ensureTimeSpan(requestHoldBackTimeInterval)
             .map { [journalDBRepository] in
                 journalDBRepository.store(journal: $0, fromServer: true)
-                    .sink { _ in
-                        
-                    } receiveValue: { _ in
-                        
-                    }
-                    .store(in: CancelBag())
+                    .sinkEmptyAndStore()
             }
             .eraseToAnyPublisher()
     }

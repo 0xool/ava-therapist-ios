@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import Combine
 
 struct JournalView: View {
     @ObservedObject private(set) var viewModel: ViewModel
@@ -20,18 +21,23 @@ struct JournalView: View {
         VStack{
             DatePicker("Select Date", selection: $viewModel.selectedDate, displayedComponents: [.date])
                 .padding(.horizontal)
+                .id(viewModel.selectedDate)
             
-            DaySelectorView(currentDate: $viewModel.selectedDate)
-            
-            JournalEntryView(journalEntryText: $viewModel.journalEntryText)
-            
-            JournalTagView(viewModel: viewModel)
-            
-            Spacer()
-            
-            sendButton
+            VStack{
+                DaySelectorView(currentDate: $viewModel.selectedDate)
+                
+                JournalEntryView(journalEntryText: $viewModel.journalEntryText)
+                
+                JournalTagView(viewModel: viewModel)
+                
+                Spacer()
+                
+                sendButton
+            }
+            .onTapGesture {
+                self.hideKeyboard()
+            }
         }
-
         .frame(maxWidth: .infinity)
         .padding([.bottom], 35)
         .onAppear(perform: {
@@ -42,7 +48,6 @@ struct JournalView: View {
     }
     
     @ViewBuilder var sendButton: some View{
-        
         Button {
             self.viewModel.saveJournalEntry()
         } label: {
@@ -177,7 +182,7 @@ extension JournalView{
 extension JournalView{
     struct JournalEntryView: View {
         @Binding var journalEntryText: String
-
+        
         var body: some View {
             ZStack {
                 GeometryReader{ geo in
@@ -193,7 +198,7 @@ extension JournalView{
                     }
                     .offset(x: geo.size.width - 20, y: geo.size.height - 60)
                 }
-
+                
                 .padding([.leading, .trailing], 24)
                 .padding([.top, .bottom], 8)
             }
@@ -204,11 +209,11 @@ extension JournalView{
                     .fill(.white)
                     .background{
                         RoundedRectangle(cornerRadius: 10)
-                                        .stroke(Color.black, lineWidth: 1)
+                            .stroke(Color.black, lineWidth: 1)
                     }
-                        .padding([.leading, .trailing], 16)
-
-                    
+                    .padding([.leading, .trailing], 16)
+                
+                
             )
         }
     }
@@ -231,7 +236,6 @@ extension JournalView {
                                 }
                         }
                     }
-                    
                 }
                 .scrollIndicators(.hidden)
                 .padding([.leading, .trailing], 8)
@@ -246,9 +250,7 @@ extension JournalView {
                         proxy.scrollTo(getDaysOfMonth(for: currentDate).filter{ $0.get(.day) == currentDate.get(.day) }.first )
                     }
                 }
-                
             }
-            
         }
         
         func isSelected(date: Date) -> Bool { date.get(.day) == currentDate.get(.day) }
@@ -365,7 +367,7 @@ extension JournalView {
             
         }
         
-        private func getJournal(date: Date){                        
+        private func getJournal(date: Date){
             self.container.services.journalService.getJournal(byDate: date, journal: loadableSubject(\.journalLodable))
         }
         
