@@ -26,6 +26,7 @@ enum Loadable<T> {
         default: return nil
         }
     }
+    
     var error: Error? {
         switch self {
         case let .failed(error): return error
@@ -35,7 +36,6 @@ enum Loadable<T> {
 }
 
 extension Loadable {
-    
     mutating func setIsLoading(cancelBag: CancelBag) {
         self = .isLoading(last: value, cancelBag: cancelBag)
     }
@@ -112,8 +112,8 @@ extension Loadable: Equatable where T: Equatable {
         case (.notRequested, .notRequested): return true
         case let (.isLoading(lhsV, _), .isLoading(rhsV, _)): return lhsV == rhsV
         case let (.loaded(lhsV), .loaded(rhsV)): return lhsV == rhsV
-        case let (.failed(lhsE), .failed(rhsE)):
-            return lhsE.localizedDescription == rhsE.localizedDescription
+        case (.failed(_/*lhsE*/), .failed(_/*rhsE*/)):
+            return true //lhsE.localizedDescription == rhsE.localizedDescription
         default: return false
         }
     }

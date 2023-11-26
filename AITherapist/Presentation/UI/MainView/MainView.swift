@@ -8,13 +8,6 @@
 import SwiftUI
 import Combine
 
-enum MainViewState {
-    case Home
-    case ChatHistory
-    case Journal
-    case Profile
-}
-
 struct MainView: View {
     @ObservedObject private(set) var viewModel: ViewModel
     
@@ -32,6 +25,15 @@ struct MainView: View {
                 NewChatView(viewModel: .init(coninater: self.viewModel.container), show: $viewModel.showNewChat)
             })
         }
+    }
+}
+
+extension MainView{
+    enum MainViewState {
+        case Home
+        case ChatHistory
+        case Journal
+        case Profile
     }
 }
 
@@ -79,6 +81,7 @@ extension MainView {
         
         @ViewBuilder var homeTabIcon: some View {
             TabIcon(imageName: "house", title: "Home", isSelected: self.mainViewState == .Home, tabTopViewNameSpace: tabTopViewNameSpace) {
+                if self.mainViewState == .Home { return }
                 self.viewModel.mainViewState.send(.Home)
                 self.mainViewState = .Home
                 self.viewModel.navigationTitle = ""
@@ -88,6 +91,7 @@ extension MainView {
         
         @ViewBuilder var chatHistoryTabIcon: some View {
             TabIcon(imageName: "bubble.left.and.bubble.right", title: "Conversations", isSelected: self.mainViewState == .ChatHistory, tabTopViewNameSpace: tabTopViewNameSpace) {
+                if self.mainViewState == .ChatHistory { return }
                 self.viewModel.mainViewState.send(.ChatHistory)
                 self.mainViewState = .ChatHistory
                 self.viewModel.navigationTitle = "Conversation"
@@ -97,6 +101,7 @@ extension MainView {
         
         @ViewBuilder var journalTabIcon: some View {
             TabIcon(imageName: "magazine.fill", title: "Journal", isSelected: self.mainViewState == .Journal, tabTopViewNameSpace: tabTopViewNameSpace) {
+                if self.mainViewState == .Journal { return }
                 self.viewModel.mainViewState.send(.Journal)
                 self.mainViewState = .Journal
                 self.viewModel.navigationTitle = "Journal"
@@ -106,6 +111,7 @@ extension MainView {
         
         @ViewBuilder var profileTabIcon: some View {
             TabIcon(imageName: "person.crop.circle", title: "Profile", isSelected: self.mainViewState == .Profile, tabTopViewNameSpace: tabTopViewNameSpace) {
+                if self.mainViewState == .Profile { return }
                 self.viewModel.mainViewState.send(.Profile)
                 self.mainViewState = .Profile
                 self.viewModel.navigationTitle = ""
@@ -213,7 +219,7 @@ extension MainView {
                 .opacity(self.viewState == .Journal ? 1 : 0)
                 
                 LodableTabView(viewState: .Profile, initialDelay: 0){
-                    ProfileView()
+                    ProfileView(viewModel: .init(container: self.viewModel.container))
                 }
                 .opacity(self.viewState == .Profile ? 1 : 0)
             }
@@ -224,7 +230,7 @@ extension MainView {
 
 extension MainView {
     class ViewModel: ObservableObject {
-        @Published var mainViewState: CurrentValueSubject<MainViewState, Never> = .init(.Home)
+        var mainViewState: CurrentValueSubject<MainViewState, Never> = .init(.Home)
         @Published var showNewChat: Bool = false
         
         @Published var navigationTitle: String = ""

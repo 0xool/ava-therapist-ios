@@ -46,9 +46,7 @@ struct MainJournalRepository: JournalRepository {
             let request: AnyPublisher<AddJournalResponse, Error> = SendRequest(pathVariable: nil, params: params, url: url)
             
             return request
-                .map{
-                    print($0.message!)
-                }    
+                .map{ _ in }
                 .eraseToAnyPublisher()
         } catch {
             return Fail(error: error).eraseToAnyPublisher()

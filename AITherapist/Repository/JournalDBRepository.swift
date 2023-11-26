@@ -34,11 +34,9 @@ struct MainJournalDBRepository: JournalDBRepository {
     }
 }
 
-
 extension MainJournalDBRepository {
     private func writeJournalData(journal: Journal, fromServer: Bool = false) -> AnyPublisher<Void, Error> {
         var journal = journal
-        print(journal.tags)
         return Just<Void>
             .withErrorType(Error.self)
             .flatMap { _ in

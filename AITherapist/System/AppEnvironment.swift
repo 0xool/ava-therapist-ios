@@ -35,9 +35,11 @@ extension AppEnvironment {
         let session = configuredURLSession()
         let webRepositories = configuredWebRepositories(session: session)
         let dbRepositories = configuredDBRepositories(appState: appState)
+        let persistenceRepositories = configurePersistenceRepositories(app: appState)
+        
         let services = configuredServices(appState: appState,
                                                 dbRepositories: dbRepositories,
-                                                webRepositories: webRepositories)
+                                          webRepositories: webRepositories, persistenceRepositories: persistenceRepositories)
         let diContainer = DIContainer(appState: appState, services: services)
         let deepLinksHandler = MainDeepLinksHandler(container: diContainer)
         let pushNotificationsHandler = MainPushNotificationsHandler(deepLinksHandler: deepLinksHandler)
@@ -96,16 +98,24 @@ extension AppEnvironment {
         return .init(conversationRepository: conversationDBRepository, userRepository: userDBRepository, insightRepository: insightDBRepository, chatRepository: chatDBRepository, journalRepository: journalDBRepository)
     }
     
+    private static func configurePersistenceRepositories(app: Store<AppState>) -> DIContainer.PersistenceRepositories {
+        .init(imagePersistenceRepository: MainImagePersistenceRepository())
+    }
+    
     private static func configuredServices(appState: Store<AppState>,
                                            dbRepositories: DIContainer.DBRepositories,
-                                           webRepositories: DIContainer.WebRepositories
+                                           webRepositories: DIContainer.WebRepositories,
+                                           persistenceRepositories: DIContainer.PersistenceRepositories
     ) -> DIContainer.Services {
 
         let insightService = MainInsightService(insightRepository: webRepositories.insightRepository, appState: appState, conversationDBRepository: dbRepositories.insightRepository)
         let authenticationService = MainAuthenticateService(appState: appState, authenticateRepository: webRepositories.authenticationRepository, userDBRepository: dbRepositories.userRepository)
         let chatService = MainChatService(chatRepository: webRepositories.chatRepository, appState: appState, chatDBRepository: dbRepositories.chatRepository)
+        
         let conversationService = MainConversationService(conversationRepository: webRepositories.conversationRepository, appState: appState, conversationDBRepository: dbRepositories.conversationRepository, chatService: chatService)
         let journalService = MainJournalService(journalRepository: webRepositories.journalRepository, journalDBRepository: dbRepositories.journalRepository, appState: appState)
+        let profileService = MainProfileService(imagePersistenceRepository: persistenceRepositories.imagePersistenceRepository, appState: appState)
+
         let userPermissionsService = MainUserPermissionsService(
             appState: appState, openAppSettings: {
                 URL(string: UIApplication.openSettingsURLString).flatMap {
@@ -113,7 +123,7 @@ extension AppEnvironment {
                 }
             })
         
-        return .init(conversationService: conversationService, userPermissionsService: userPermissionsService, authenticationService: authenticationService, insightService: insightService, chatService: chatService, journalService: journalService)
+        return .init(conversationService: conversationService, userPermissionsService: userPermissionsService, authenticationService: authenticationService, insightService: insightService, chatService: chatService, journalService: journalService, profileService: profileService)
     }
 }
 
@@ -135,5 +145,9 @@ extension DIContainer {
         let insightRepository: InsightDBRepository
         let chatRepository: ChatDBRepository
         let journalRepository: JournalDBRepository
+    }
+    
+    struct PersistenceRepositories {
+        let imagePersistenceRepository: ImagePersistenceRepository
     }
 }

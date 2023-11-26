@@ -11,7 +11,6 @@ import Combine
 
 struct JournalView: View {
     @ObservedObject private(set) var viewModel: ViewModel
-    @State private var showAnimation: Bool = true
     
     init( viewModel: ViewModel) {
         self.viewModel = viewModel
@@ -40,11 +39,6 @@ struct JournalView: View {
         }
         .frame(maxWidth: .infinity)
         .padding([.bottom], 35)
-        .onAppear(perform: {
-            withAnimation(.easeIn(duration: 0.3).delay(0.2)) {
-                self.showAnimation.toggle()
-            }
-        })
     }
     
     @ViewBuilder var sendButton: some View{
@@ -354,7 +348,6 @@ extension JournalView {
                 .debounce(for: .seconds(0.1), scheduler: DispatchQueue.main)
                 .sink{ [self] data in
                     if let newJournal = data.value {
-                        print(newJournal.tags)
                         self.journal = Journal(id: newJournal.id, diaryMessage: newJournal.diaryMessage, diaryName: newJournal.diaryName, moodID: newJournal.moodID, summary: newJournal.summary, dateCreated: newJournal.dateCreated, tags: newJournal.tags)
                     }else{
                         self.journal = Journal()

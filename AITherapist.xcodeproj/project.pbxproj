@@ -97,6 +97,8 @@
 		A5B7D5D929B3B640001D7113 /* DatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5B7D5D829B3B640001D7113 /* DatabaseManager.swift */; };
 		A5B7D5DF29B3D4B3001D7113 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5B7D5DE29B3D4B3001D7113 /* NetworkManager.swift */; };
 		A5B7D5E829B41997001D7113 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5B7D5E729B41997001D7113 /* Utilities.swift */; };
+		A5BBCED12B1291B9000AC83C /* ImagePersistenceRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BBCED02B1291B9000AC83C /* ImagePersistenceRepository.swift */; };
+		A5BBCED42B129F83000AC83C /* ProfileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BBCED32B129F83000AC83C /* ProfileService.swift */; };
 		A5C55FDB2AA55DBD00154ED0 /* CancelBag.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C55FDA2AA55DBD00154ED0 /* CancelBag.swift */; };
 		A5CA948B2AA7D74300E25A46 /* ConversationDBRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5CA948A2AA7D74300E25A46 /* ConversationDBRepository.swift */; };
 		A5CA948D2AA7FA6D00E25A46 /* PushNotificationsHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5CA948C2AA7FA6D00E25A46 /* PushNotificationsHandler.swift */; };
@@ -219,6 +221,8 @@
 		A5B7D5D829B3B640001D7113 /* DatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseManager.swift; sourceTree = "<group>"; };
 		A5B7D5DE29B3D4B3001D7113 /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		A5B7D5E729B41997001D7113 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Utilities.swift; path = AITherapist/Utilities.swift; sourceTree = SOURCE_ROOT; };
+		A5BBCED02B1291B9000AC83C /* ImagePersistenceRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePersistenceRepository.swift; sourceTree = "<group>"; };
+		A5BBCED32B129F83000AC83C /* ProfileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileService.swift; sourceTree = "<group>"; };
 		A5C55FDA2AA55DBD00154ED0 /* CancelBag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelBag.swift; sourceTree = "<group>"; };
 		A5CA948A2AA7D74300E25A46 /* ConversationDBRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationDBRepository.swift; sourceTree = "<group>"; };
 		A5CA948C2AA7FA6D00E25A46 /* PushNotificationsHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationsHandler.swift; sourceTree = "<group>"; };
@@ -426,6 +430,7 @@
 				A58AA49A2AD8D8A3001F7253 /* ChatRepository.swift */,
 				A51CF3CF2AF8AEC00006F275 /* JournalRepository.swift */,
 				A56D938D2AFB288D00A66366 /* JournalDBRepository.swift */,
+				A5BBCED02B1291B9000AC83C /* ImagePersistenceRepository.swift */,
 			);
 			path = Repository;
 			sourceTree = "<group>";
@@ -517,6 +522,7 @@
 				A50B16782AC26BA400571D27 /* InsightService.swift */,
 				A58AA49D2AD8E9B1001F7253 /* ChatService.swift */,
 				A5EF5C932B05B2D00048CAD0 /* JournalService.swift */,
+				A5BBCED32B129F83000AC83C /* ProfileService.swift */,
 			);
 			name = Service;
 			path = /Users/cyrusrefahi/Documents/AITherapist/AITherapist/Service;
@@ -1029,7 +1035,9 @@
 				A574F5132B03171D00624890 /* ProfileView.swift in Sources */,
 				A5B7D5D929B3B640001D7113 /* DatabaseManager.swift in Sources */,
 				A50F0E552AC1233B0081AD4C /* GeneralUserSummary.swift in Sources */,
+				A5BBCED12B1291B9000AC83C /* ImagePersistenceRepository.swift in Sources */,
 				A5AE6FDD2AA3ECF100168037 /* Conversation.swift in Sources */,
+				A5BBCED42B129F83000AC83C /* ProfileService.swift in Sources */,
 				A59C63FA2ACA37EE00B76256 /* ErrorView.swift in Sources */,
 				A5B7D5E829B41997001D7113 /* Utilities.swift in Sources */,
 				A59C63FC2ACA37EE00B76256 /* MainView.swift in Sources */,
