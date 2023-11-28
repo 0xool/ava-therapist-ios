@@ -164,6 +164,14 @@ extension InsightView {
         let isRunningTests: Bool
         private var cancelBag: CancelBag = CancelBag()
         
+        var insight: Loadable<Insight>{
+            get{
+                return self.container.appState[\.userData.insight]
+            }set{
+                self.container.appState[\.userData.insight] = newValue
+            }
+        }
+        
         init(container: DIContainer, isRunningTests: Bool = false, anyCancellable: AnyCancellable? = nil) {
             self.container = container
             self.isRunningTests = isRunningTests

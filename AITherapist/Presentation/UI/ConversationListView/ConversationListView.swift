@@ -9,7 +9,6 @@ import SwiftUI
 import Combine
 
 struct ConversationListView: View {
-    
     @ObservedObject private(set) var viewModel: ViewModel
     
     var body: some View {
@@ -45,7 +44,7 @@ private extension ConversationListView {
     
     func failedView(_ error: Error) -> some View {
         ErrorView(error: error, retryAction: {
-            
+            self.viewModel.loadConversationListOnRetry()
 #warning("Handle Conversation ERROR")
             print("Handle Conversation ERROR")
         })
@@ -112,8 +111,7 @@ extension ConversationListView{
                 
                 Divider()
                 Spacer()
-                
-                
+                                
                 Text("Summary")
                     .font(
                         Font.custom("Inter", size: 12)
@@ -159,20 +157,24 @@ extension ConversationListView{
         }
         
         @ViewBuilder private var cellView: some View {
-            
             HStack(alignment: .center, spacing: 0) {
                 HStack(alignment: .center, spacing: 10) {
+                    
                     Text(getDateString())
                         .font(Font.custom("SF Pro Text", size: 11))
                         .kerning(0.066)
                         .multilineTextAlignment(.center)
                         .foregroundColor(Color(red: 0.36, green: 0.36, blue: 0.36))
+                    
                     Divider()
+                    
                     Text("We talked about.... dolor sit amet consectetur. Tempus dui vitae vivamus diam habitasse metus aliquet rhoncus. Potenti nulla pulvinar neque tellus lectus sit.vivamus diam habitasse metus aliquet rhonc Llorem ipsum dolor s")
                         .font(Font.custom("SF Pro Text", size: 11))
                         .kerning(0.066)
                         .foregroundColor(Color(red: 0.36, green: 0.36, blue: 0.36))
+                   
                     Divider()
+                    
                     Image(systemName: "face.smiling.inverse")
                 }
             }
@@ -199,7 +201,6 @@ extension ConversationListView{
             
             return ""
         }
-        
     }
 }
 
@@ -225,15 +226,18 @@ extension ConversationListView {
                 self.objectWillChange.send()
             }
             .store(in: self.cancelBag)
-            
-            
+                        
             loadConversationList()
         }
         
-        func loadConversationList() {
-            if conversations == .notRequested {
+        private func loadConversationList() {
+            if (conversations == .notRequested) {
                     self.container.services.conversationService.loadConversationList(conversations: self.loadableSubject(\.container.appState[\.conversationData.conversations]))
             }
+        }
+        
+        func loadConversationListOnRetry(){
+            loadConversationList()
         }
         
         func deleteConversation(at offsets: IndexSet) {

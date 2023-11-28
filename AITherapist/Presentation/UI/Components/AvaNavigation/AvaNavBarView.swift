@@ -12,6 +12,7 @@ struct AvaNavBarView<Content: View>: View {
     
     @Environment(\.dismiss) var dismiss
     @State private var backButtonIsHidden: Bool = true
+    @State private var logOutButtonIsHidden: Bool = true
     @State private var title: String = ""
     
     @State private var showBackground: Bool = false
@@ -38,6 +39,7 @@ struct AvaNavBarView<Content: View>: View {
         .backgroundStyle(.red)
         .toolbarBackground(.hidden, for: .navigationBar)
         .onPreferenceChange(AvaNavigationBarBackButtonHiddenRefrenceKeys.self, perform: { self.backButtonIsHidden = $0 })
+        .onPreferenceChange(AvaNavigationBarLogOutButtonHiddenRefrenceKeys.self, perform: { self.logOutButtonIsHidden = $0 })
         .onPreferenceChange(AvaNavigationBarTitleRefrenceKeys.self) { self.title = $0 }
         .onPreferenceChange(AvaNavigationBarShowBackgroundRefrenceKeys.self, perform: { self.showBackground = $0 })
     }
@@ -59,17 +61,34 @@ struct AvaNavBarView<Content: View>: View {
     
     func NavBar() -> some View {
         HStack(alignment: .center){
-            Button {
-                dismiss()
-            } label: {
-                Image(systemName: "chevron.backward")
-                    .font(.subheadline)
-                    .foregroundStyle(.green)
-                    .padding([.leading], 8)
+            ZStack{
+                Button {
+//                    dismiss()
+//                    LogOut
+                } label: {
+                    Image(systemName: "rectangle.portrait.and.arrow.right")
+                        .font(.title3)
+                        .foregroundStyle(.gray)
+                        .padding([.leading], 8)
+                        .rotation3DEffect( .degrees(180),axis: (x: 0.0, y: 1.0, z: 0.0) )
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .frame(width: 75)
+                .padding([.leading], 8)
+                .hiddenModifier(isHide: self.logOutButtonIsHidden)
+                
+                Button {
+                    dismiss()
+                } label: {
+                    Image(systemName: "chevron.backward")
+                        .font(.subheadline)
+                        .foregroundStyle(.green)
+                        .padding([.leading], 8)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .frame(width: 75)
+                .hiddenModifier(isHide: self.backButtonIsHidden)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .frame(width: 75)
-            .hiddenModifier(isHide: self.backButtonIsHidden)
             
             middleSection
                 .frame(maxWidth: .infinity, alignment: .center)
@@ -102,7 +121,6 @@ struct AvaNavBarView<Content: View>: View {
         Color.clear.ignoresSafeArea()
             .avaNavigationBarBackButtonHidden(true)
             .avaNavigationBarTitle("Conversations")
-                    
-        //            .toolbarBackground(.hidden, for: .navigationBar)
+            .avaNavigationLogOutBackButtonHidden(false)
     }
 }

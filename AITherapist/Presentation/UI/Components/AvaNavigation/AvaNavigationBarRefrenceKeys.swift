@@ -8,6 +8,13 @@
 import Foundation
 import SwiftUI
 
+struct AvaNavigationBarLogOutButtonHiddenRefrenceKeys: PreferenceKey{
+    static var defaultValue: Bool = false
+    
+    static func reduce(value: inout Bool, nextValue: () -> Bool) {
+        value = nextValue()
+    }
+}
 
 struct AvaNavigationBarBackButtonHiddenRefrenceKeys: PreferenceKey{
     static var defaultValue: Bool = false
@@ -37,6 +44,10 @@ struct AvaNavigationBarTitleRefrenceKeys: PreferenceKey{
 extension View {
     func avaNavigationBarBackButtonHidden(_ hidden: Bool) -> some View{
         preference(key: AvaNavigationBarBackButtonHiddenRefrenceKeys.self, value: hidden)
+    }
+    
+    func avaNavigationLogOutBackButtonHidden(_ hidden: Bool) -> some View{
+        preference(key: AvaNavigationBarLogOutButtonHiddenRefrenceKeys.self.self, value: hidden)
     }
     
     func avaNavigationBarTitle(_ title: String) -> some View{
