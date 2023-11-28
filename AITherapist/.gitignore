@@ -29,7 +29,8 @@ DerivedData/
 *.ipa
 *.dSYM.zip
 *.dSYM
-
+.DS_Store
+*.xcuserstate
 ## Playgrounds
 timeline.xctimeline
 playground.xcworkspace
