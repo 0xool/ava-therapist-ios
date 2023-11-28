@@ -66,6 +66,7 @@ extension MainView {
                 .avaNavigationBarBackButtonHidden(true)
                 .avaNavigationBarTitle(self.viewModel.navigationTitle)
                 .avaNavigationBarBackground(self.viewModel.showNavigationBackground)
+                .avaNavigationLogOutBackButtonHidden(self.mainViewState != .Profile)
             }
             .offset(x: 0, y: isAnimatingTabBar ? 0 : 200)
             .onAppear{
@@ -223,6 +224,7 @@ extension MainView {
                 }
                 .opacity(self.viewState == .Profile ? 1 : 0)
             }
+//            .avaNavigationLogOutBackButtonHidden(s true)
             .environmentObject(viewModel)
         }
     }

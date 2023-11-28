@@ -115,53 +115,5 @@
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "4580E4F0-EB68-48DA-A2FB-6E83F851AA21"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "AITherapist/Presentation/UI/NewChatView/NewChatView.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "27"
-            endingLineNumber = "27"
-            landmarkName = "content"
-            landmarkType = "24">
-            <Locations>
-               <Location
-                  uuid = "4580E4F0-EB68-48DA-A2FB-6E83F851AA21 - 1636cbcc481644dd"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "AITherapist.NewChatView.content.getter : some"
-                  moduleName = "AITherapist"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/cyrusrefahi/Documents/AITherapist/AITherapist/Presentation/UI/NewChatView/NewChatView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "27"
-                  endingLineNumber = "27"
-                  offsetFromSymbolStart = "4136">
-               </Location>
-               <Location
-                  uuid = "4580E4F0-EB68-48DA-A2FB-6E83F851AA21 - 1636cbcc481644dd"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "AITherapist.NewChatView.content.getter : some"
-                  moduleName = "AITherapist"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/cyrusrefahi/Documents/AITherapist/AITherapist/Presentation/UI/NewChatView/NewChatView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "27"
-                  endingLineNumber = "27"
-                  offsetFromSymbolStart = "4152">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

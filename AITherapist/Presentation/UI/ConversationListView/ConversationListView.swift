@@ -9,7 +9,6 @@ import SwiftUI
 import Combine
 
 struct ConversationListView: View {
-    
     @ObservedObject private(set) var viewModel: ViewModel
     
     var body: some View {
