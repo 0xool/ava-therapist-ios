@@ -2,7 +2,7 @@
 //  SpeechManager.swift
 //  AITherapist
 //
-//  Created by cyrus refahi on 3/3/23.
+//  Created by Cyrus Refahi on 3/3/23.
 //
 
 import Foundation

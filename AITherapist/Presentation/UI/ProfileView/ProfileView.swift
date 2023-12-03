@@ -2,7 +2,7 @@
 //  ProfileView.swift
 //  AITherapist
 //
-//  Created by cyrus refahi on 11/13/23.
+//  Created by Cyrus Refahi on 11/13/23.
 //
 
 import SwiftUI

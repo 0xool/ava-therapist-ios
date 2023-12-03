@@ -2,13 +2,13 @@
 //  JournalRepository.swift
 //  AITherapist
 //
-//  Created by cyrus refahi on 11/5/23.
+//  Created by Cyrus Refahi on 11/5/23.
 //
 
 import Combine
 import Foundation
 
-protocol JournalRepository: WebRepository {
+protocol JournalWebRepository: WebRepository {
     func loadJournalList() -> AnyPublisher<DiaryBook, Error>
     func addJournal(journal: Journal) -> AnyPublisher<Void, Error>
     func deleteJournal(journalID: Int) -> AnyPublisher<Void, Error>
@@ -16,7 +16,7 @@ protocol JournalRepository: WebRepository {
     func getJournalByDate(date: Date) -> AnyPublisher<Journal, Error>
 }
 
-struct MainJournalRepository: JournalRepository {
+struct MainJournalWebRepository: JournalWebRepository {
     
     var baseURL: String
     let JournalAPI = "diary"
@@ -78,7 +78,7 @@ struct MainJournalRepository: JournalRepository {
     }
 }
 
-extension MainJournalRepository {
+extension MainJournalWebRepository {
     
     enum API: String {
         case allJournals = "getDiaryList"

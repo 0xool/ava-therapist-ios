@@ -2,7 +2,7 @@
 //  ConversationsTests.swift
 //  AITherapistTests
 //
-//  Created by cyrus refahi on 10/6/23.
+//  Created by Cyrus Refahi on 10/6/23.
 //
 
 import XCTest

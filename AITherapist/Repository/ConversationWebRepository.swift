@@ -2,20 +2,19 @@
 //  ConversationRepository.swift
 //  AITherapist
 //
-//  Created by cyrus refahi on 9/4/23.
+//  Created by Cyrus Refahi on 9/4/23.
 //
 
 import Foundation
 import Combine
 
-protocol ConversationRepository: WebRepository {
+protocol ConversationWebRepository: WebRepository {
     func loadConversationList() -> AnyPublisher<[Conversation], Error>
     func addConversation(data: AddConversationRequest) -> AnyPublisher<Conversation, Error>
     func deleteConversation(conversationID: Int) -> AnyPublisher<Void, Error>
-//    func loadConversationChat(conversation: Conversation) -> AnyPublisher<[Message], Error>
 }
 
-struct MainConversationRepository: ConversationRepository {
+struct MainConversationWebRepository: ConversationWebRepository {
     
     var baseURL: String
     let ConversationAPI = "conversation"
@@ -63,7 +62,7 @@ struct MainConversationRepository: ConversationRepository {
     }
 }
 
-extension MainConversationRepository {
+extension MainConversationWebRepository {
     
     enum API: String {
         case allConversations = "getConversationList"

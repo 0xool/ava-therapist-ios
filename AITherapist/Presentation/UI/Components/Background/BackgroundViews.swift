@@ -2,7 +2,7 @@
 //  BackgroundViews.swift
 //  AITherapist
 //
-//  Created by cyrus refahi on 11/20/23.
+//  Created by Cyrus Refahi on 11/20/23.
 //
 
 import Foundation

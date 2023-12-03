@@ -2,7 +2,7 @@
 //  AuthenticateService.swift
 //  AITherapist
 //
-//  Created by cyrus refahi on 9/6/23.
+//  Created by Cyrus Refahi on 9/6/23.
 //
 
 import Foundation
@@ -17,11 +17,11 @@ protocol AuthenticateService {
 
 class MainAuthenticateService: AuthenticateService {
     
-    let authenticateRepository: AuthenticateRepository
+    let authenticateRepository: AuthenticateWebRepository
     let userDBRepository: UserDBRepository
     let appState: Store<AppState>
     
-    init(appState: Store<AppState>, authenticateRepository: AuthenticateRepository, userDBRepository: UserDBRepository){
+    init(appState: Store<AppState>, authenticateRepository: AuthenticateWebRepository, userDBRepository: UserDBRepository){
         self.appState = appState
         self.authenticateRepository = authenticateRepository
         self.userDBRepository = userDBRepository

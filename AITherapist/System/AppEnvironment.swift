@@ -2,7 +2,7 @@
 //  AppEnvironment.swift
 //  AITherapist
 //
-//  Created by cyrus refahi on 9/2/23.
+//  Created by Cyrus Refahi on 9/2/23.
 //
 
 import UIKit
@@ -74,15 +74,15 @@ extension AppEnvironment {
 //            session: session,
 //            baseURL: "https://ezgif.com")
         
-        let authenticationWebRepository = MainAuthenticateRepository(baseURL: baseURL)
+        let authenticationWebRepository = MainAuthenticateWebRepository(baseURL: baseURL)
         let pushTokenWebRepository = RealPushTokenWebRepository(
             session: session,
             baseURL: "https://fake.backend.com")
-        let conversationWebRepository = MainConversationRepository(baseURL: baseURL)
-        let insightWebRepository = MainIsightRepository(baseURL: baseURL)
-        let chatWebRepoistory = MainChatRepository(baseURL: baseURL)
+        let conversationWebRepository = MainConversationWebRepository(baseURL: baseURL)
+        let insightWebRepository = MainInsightWebRepository(baseURL: baseURL)
+        let chatWebRepoistory = MainChatWebRepository(baseURL: baseURL)
         
-        let journalWebRepository = MainJournalRepository(baseURL: baseURL)
+        let journalWebRepository = MainJournalWebRepository(baseURL: baseURL)
         
         return .init(conversationRepository: conversationWebRepository, pushTokenWebRepository: pushTokenWebRepository, authenticationRepository: authenticationWebRepository, insightRepository: insightWebRepository, chatRepository: chatWebRepoistory, journalRepository: journalWebRepository)
     }
@@ -130,13 +130,13 @@ extension AppEnvironment {
 extension DIContainer {
     struct WebRepositories {
 //        let imageRepository: ImageWebRepository
-        let conversationRepository: ConversationRepository
+        let conversationRepository: ConversationWebRepository
         let pushTokenWebRepository: PushTokenWebRepository
-        let authenticationRepository: AuthenticateRepository
+        let authenticationRepository: AuthenticateWebRepository
         
-        let insightRepository: InsightRepository
-        let chatRepository: ChatRepository
-        let journalRepository: JournalRepository
+        let insightRepository: InsightWebRepository
+        let chatRepository: ChatWebRepository
+        let journalRepository: JournalWebRepository
     }
 
     struct DBRepositories {

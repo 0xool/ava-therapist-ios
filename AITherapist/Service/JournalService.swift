@@ -2,7 +2,7 @@
 //  JournalService.swift
 //  AITherapist
 //
-//  Created by cyrus refahi on 11/15/23.
+//  Created by Cyrus Refahi on 11/15/23.
 //
 
 
@@ -20,11 +20,11 @@ protocol JournalService {
 }
 
 struct MainJournalService: JournalService {
-    let journalRepository: JournalRepository
+    let journalRepository: JournalWebRepository
     let journalDBRepository: JournalDBRepository
     let appState: Store<AppState>
     
-    init(journalRepository: JournalRepository, journalDBRepository: JournalDBRepository, appState: Store<AppState>) {
+    init(journalRepository: JournalWebRepository, journalDBRepository: JournalDBRepository, appState: Store<AppState>) {
         self.journalRepository = journalRepository
         self.journalDBRepository = journalDBRepository
         self.appState = appState

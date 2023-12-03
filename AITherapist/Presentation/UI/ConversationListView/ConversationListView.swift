@@ -2,7 +2,7 @@
 //  ConversationListView.swift
 //  AITherapist
 //
-//  Created by cyrus refahi on 9/17/23.
+//  Created by Cyrus Refahi on 9/17/23.
 //
 
 import SwiftUI

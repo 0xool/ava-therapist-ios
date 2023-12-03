@@ -2,7 +2,7 @@
 //  ConversationDBRepository.swift
 //  AITherapist
 //
-//  Created by cyrus refahi on 9/5/23.
+//  Created by Cyrus Refahi on 9/5/23.
 //
 
 import Foundation
@@ -18,6 +18,13 @@ protocol ConversationDBRepository {
 }
 
 struct MainConversationDBRepository: ConversationDBRepository {
+    
+    let persistentStore: DataBase
+    
+    init(persistentStore: DataBase = DataBaseManager.Instance) {
+        self.persistentStore = persistentStore
+    }
+    
     func hasLoadedConversation() -> AnyPublisher<Bool, Error> {
         return hasLoadedConversations()
     }
@@ -41,11 +48,11 @@ struct MainConversationDBRepository: ConversationDBRepository {
 
 extension MainConversationDBRepository {
     private func deleteConversationFromDBWith(id: Int) -> AnyPublisher<Void, Error>{
-        return DataBaseManager.Instance.DeleteByID(ofType: Conversation.self, id: id)
+        persistentStore.DeleteByID(ofType: Conversation.self, id: id)
     }
     
     private func readAllConversations() -> AnyPublisher<LazyList<Conversation>, Error> {
-        let conversations: LazyList<Conversation> = DataBaseManager.Instance.GetAll().sorted(byKeyPath: "id", ascending: false)
+        let conversations: LazyList<Conversation> = persistentStore.GetAll().sorted(byKeyPath: "id", ascending: false)
             .lazyList
 
         
@@ -55,15 +62,15 @@ extension MainConversationDBRepository {
     }
     
     private func conversationExist(id: Int) -> Bool {
-        return DataBaseManager.Instance.EntityExist(id: id, ofType: Conversation.self)
+        persistentStore.EntityExist(id: id, ofType: Conversation.self)
     }
     
     private func writeConversationData(conversation: Conversation) -> AnyPublisher<Void, Error> {
         if !self.conversationExist(id: conversation.id)  {
-            return DataBaseManager.Instance.Write(writeData: conversation)
+            return persistentStore.Write(writeData: conversation)
                     .eraseToAnyPublisher()
         }else{
-            return DataBaseManager.Instance.Update(value: conversation)
+            return persistentStore.Update(value: conversation)
                 .eraseToAnyPublisher()
         }
     }
@@ -85,7 +92,7 @@ extension MainConversationDBRepository {
     }
     
     private func hasLoadedConversations() -> AnyPublisher<Bool, Error> {
-        let conversationCount = DataBaseManager.Instance.GetCount(value: Conversation.self)
+        let conversationCount = persistentStore.GetCount(value: Conversation.self)
         return Just(conversationCount > 0)
             .setFailureType(to: Error.self)
             .eraseToAnyPublisher()

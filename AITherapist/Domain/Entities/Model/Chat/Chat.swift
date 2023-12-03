@@ -2,7 +2,7 @@
 //  Chat.swift
 //  AITherapist
 //
-//  Created by cyrus refahi on 9/2/23.
+//  Created by Cyrus Refahi on 9/2/23.
 //
 
 import Foundation

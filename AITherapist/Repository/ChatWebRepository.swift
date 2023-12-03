@@ -2,18 +2,18 @@
 //  ChatRepository.swift
 //  AITherapist
 //
-//  Created by cyrus refahi on 10/12/23.
+//  Created by Cyrus Refahi on 10/12/23.
 //
 
 import Foundation
 import Combine
 
-protocol ChatRepository: WebRepository {
+protocol ChatWebRepository: WebRepository {
     func loadChatsForConversation(conversationID: Int) -> AnyPublisher<LazyList<Chat>, Error>
     func sendChatToServer(data: SaveChatRequset) -> AnyPublisher<Chat, Error>
 }
 
-struct MainChatRepository: ChatRepository {
+struct MainChatWebRepository: ChatWebRepository {
     
     var baseURL: String
     let chatAPI = "chat"
@@ -52,7 +52,7 @@ struct MainChatRepository: ChatRepository {
     }
 }
 
-extension MainChatRepository {
+extension MainChatWebRepository {
     
     enum API: String {
         case getConversationChats = "getConversationChat"

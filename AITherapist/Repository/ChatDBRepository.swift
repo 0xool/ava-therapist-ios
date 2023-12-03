@@ -2,7 +2,7 @@
 //  ChatDBRepository.swift
 //  AITherapist
 //
-//  Created by cyrus refahi on 10/10/23.
+//  Created by Cyrus Refahi on 10/10/23.
 //
 
 import Foundation
@@ -18,6 +18,12 @@ protocol ChatDBRepository {
 }
 
 struct MainChatDBRepository: ChatDBRepository {
+    
+    let persistentStore: DataBase
+    
+    init(persistentStore: DataBase = DataBaseManager.Instance) {
+        self.persistentStore = persistentStore
+    }
 
     func store(chat: Chat) -> AnyPublisher<Void, Error>{
         writeChatData(chat: chat)
@@ -37,19 +43,18 @@ struct MainChatDBRepository: ChatDBRepository {
 }
 
 extension MainChatDBRepository {    
-    private func getChatBy(conversationID: Int) -> AnyPublisher<LazyList<Chat>, Error> {
-        
-        DataBaseManager.Instance.GetByTypeID(ofType: Chat.self, id: conversationID) { $0.conversationID == conversationID }
+    private func getChatBy(conversationID: Int) -> AnyPublisher<LazyList<Chat>, Error> {        
+        persistentStore.GetByTypeID(ofType: Chat.self, id: conversationID) { $0.conversationID == conversationID }
             .map{ $0.lazyList }
             .eraseToAnyPublisher()
     }
     
     private func deleteLastChat() {
-        DataBaseManager.Instance.DeleteLast(ofType: Chat.self)
+        persistentStore.DeleteLast(ofType: Chat.self)
     }
     
     private func readAllChats() -> AnyPublisher<LazyList<Chat>, Error> {
-        let chats: LazyList<Chat> = DataBaseManager.Instance.GetAll().lazyList
+        let chats: LazyList<Chat> = persistentStore.GetAll().lazyList
         
         return Just(chats)
             .setFailureType(to: Error.self)
@@ -57,7 +62,7 @@ extension MainChatDBRepository {
     }
     
     private func writeChatData(chat: Chat) -> AnyPublisher<Void, Error> {
-        return DataBaseManager.Instance.Write(writeData: chat)
+        persistentStore.Write(writeData: chat)
     }
 }
 

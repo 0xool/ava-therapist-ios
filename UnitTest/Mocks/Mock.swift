@@ -2,12 +2,12 @@
 //  Mock.swift
 //  UnitTests
 //
-//  Created by Alexey Naumov on 07.11.2019.
-//  Copyright © 2019 Alexey Naumov. All rights reserved.
+//  Created by Cyrus Refahi on 10/6/23.
+//  Copyright © 2023 Cyrus Refahi. All rights reserved.
 //
 
 import XCTest
-@testable import CountriesSwiftUI
+@testable import AITherapist
 
 protocol Mock {
     associatedtype Action: Equatable

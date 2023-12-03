@@ -2,13 +2,13 @@
 //  LoadableTests.swift
 //  UnitTests
 //
-//  Created by Alexey Naumov on 31.10.2019.
-//  Copyright © 2019 Alexey Naumov. All rights reserved.
+//  Created by Cyrus Refahi on 31.10.2019.
+//  Copyright © 2019 Cyrus Refahi. All rights reserved.
 //
 
 import XCTest
 import Combine
-@testable import CountriesSwiftUI
+@testable import AITherapist
 
 final class LoadableTests: XCTestCase {
 

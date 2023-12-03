@@ -2,7 +2,7 @@
 //  APICall.swift
 //  AITherapist
 //
-//  Created by cyrus refahi on 9/3/23.
+//  Created by Cyrus Refahi on 9/3/23.
 //
 
 import Foundation

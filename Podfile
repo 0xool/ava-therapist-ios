@@ -6,6 +6,7 @@ target 'AITherapist' do
   use_frameworks!
 
 #  pod 'ViewInspector'
+  pod 'ViewInspector', '~> 0.9'
   pod 'lottie-ios', '~> 4.2'
   pod 'Alamofire', '~> 5.8'
   pod 'AlamofireImage', '~> 4.2'

@@ -2,13 +2,13 @@
 //  SceneDelegateTests.swift
 //  UnitTests
 //
-//  Created by Alexey Naumov on 26.04.2020.
-//  Copyright © 2020 Alexey Naumov. All rights reserved.
+//  Created by Cyrus Refahi on 10/6/23.
+//  Copyright © 2020 Cyrus Refahi. All rights reserved.
 //
 
 import XCTest
 import UIKit
-@testable import CountriesSwiftUI
+@testable import AITherapist
 
 final class SceneDelegateTests: XCTestCase {
     

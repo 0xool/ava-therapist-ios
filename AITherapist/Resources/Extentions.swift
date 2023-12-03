@@ -2,7 +2,7 @@
 //  Extentions.swift
 //  AITherapist
 //
-//  Created by cyrus refahi on 3/11/23.
+//  Created by Cyrus Refahi on 3/11/23.
 //
 
 import Foundation

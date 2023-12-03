@@ -2,26 +2,28 @@
 //  MockedPersistentStore.swift
 //  UnitTests
 //
-//  Created by Alexey Naumov on 19.04.2020.
-//  Copyright © 2020 Alexey Naumov. All rights reserved.
+//  Created by Cyrus Refahi on 10/6/23.
+//  Copyright © 2020 Cyrus Refahi. All rights reserved.
 //
 
 import CoreData
 import Combine
-@testable import CountriesSwiftUI
+@testable import AITherapist
 
-final class MockedPersistentStore: Mock, PersistentStore {
+final class MockedPersistentStore: Mock, DataBase {
     struct ContextSnapshot: Equatable {
         let inserted: Int
         let updated: Int
         let deleted: Int
     }
+    
     enum Action: Equatable {
         case count
         case fetchCountries(ContextSnapshot)
         case fetchCountryDetails(ContextSnapshot)
         case update(ContextSnapshot)
     }
+    
     var actions = MockActions<Action>(expected: [])
     
     var countResult: Int = 0

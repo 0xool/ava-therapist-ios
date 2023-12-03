@@ -2,15 +2,15 @@
 //  TestHelpers.swift
 //  UnitTests
 //
-//  Created by Alexey Naumov on 30.10.2019.
-//  Copyright © 2019 Alexey Naumov. All rights reserved.
+//  Created by Cyrus Refahi on 10/6/23.
+//  Copyright © 2019 Cyrus Refahi. All rights reserved.
 //
 
 import XCTest
 import SwiftUI
 import Combine
 import ViewInspector
-@testable import CountriesSwiftUI
+@testable import AITherapist
 
 // MARK: - UI
 

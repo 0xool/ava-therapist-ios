@@ -2,7 +2,7 @@
 //  ConversationService.swift
 //  AITherapist
 //
-//  Created by cyrus refahi on 9/4/23.
+//  Created by Cyrus Refahi on 9/4/23.
 //
 
 import Combine
@@ -18,13 +18,13 @@ protocol ConversationService {
 
 struct MainConversationService: ConversationService {
     
-    let conversationRepository: ConversationRepository
+    let conversationRepository: ConversationWebRepository
     let conversationDBRepository: ConversationDBRepository
     let chatService: ChatService
     
     let appState: Store<AppState>
     
-    init(conversationRepository: ConversationRepository, appState: Store<AppState>, conversationDBRepository: ConversationDBRepository, chatService: ChatService) {
+    init(conversationRepository: ConversationWebRepository, appState: Store<AppState>, conversationDBRepository: ConversationDBRepository, chatService: ChatService) {
         self.conversationRepository = conversationRepository
         self.conversationDBRepository = conversationDBRepository
         self.chatService = chatService

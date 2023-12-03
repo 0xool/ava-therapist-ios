@@ -2,8 +2,8 @@
 //  SearchBarTests.swift
 //  UnitTests
 //
-//  Created by Alexey Naumov on 15.01.2020.
-//  Copyright © 2020 Alexey Naumov. All rights reserved.
+//  Created by Cyrus Refahi on 9/2/23.
+//  Copyright © 2020 Cyrus Refahi. All rights reserved.
 //
 
 import XCTest
@@ -12,7 +12,7 @@ import ViewInspector
 @testable import CountriesSwiftUI
 
 final class SearchBarTests: XCTestCase {
-
+    
     func test_searchBarCoordinator_beginEditing() {
         let text = Binding(wrappedValue: "abc")
         let sut = SearchBar.Coordinator(text: text)

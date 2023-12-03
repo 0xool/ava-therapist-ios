@@ -2,7 +2,7 @@
 //  ChatService.swift
 //  AITherapist
 //
-//  Created by cyrus refahi on 10/12/23.
+//  Created by Cyrus Refahi on 10/12/23.
 //
 
 
@@ -22,11 +22,11 @@ protocol ChatService {
 
 struct MainChatService: ChatService {
     
-    let chatRepository: ChatRepository
+    let chatRepository: ChatWebRepository
     let chatDBRepository: ChatDBRepository
     let appState: Store<AppState>
     
-    init(chatRepository: ChatRepository, appState: Store<AppState>, chatDBRepository: ChatDBRepository) {
+    init(chatRepository: ChatWebRepository, appState: Store<AppState>, chatDBRepository: ChatDBRepository) {
         self.chatRepository = chatRepository
         self.chatDBRepository = chatDBRepository
         self.appState = appState

@@ -2,7 +2,7 @@
 //  JournalDBRepository.swift
 //  AITherapist
 //
-//  Created by cyrus refahi on 11/7/23.
+//  Created by Cyrus Refahi on 11/7/23.
 //
 
 import Foundation
@@ -17,6 +17,13 @@ protocol JournalDBRepository {
 }
 
 struct MainJournalDBRepository: JournalDBRepository {
+    
+    let persistentStore: DataBase
+    
+    init(persistentStore: DataBase = DataBaseManager.Instance) {
+        self.persistentStore = persistentStore
+    }
+    
     func getJournal(byDate: Date) -> AnyPublisher<Journal, Error> {
         getJournalByDate(date: byDate)
     }
@@ -43,14 +50,14 @@ extension MainJournalDBRepository {
                 self.deleteJournalIfExistsByDate(journal: &journal, fromServer: fromServer)
             }
             .flatMap{ _ in
-                return DataBaseManager.Instance.Write(writeData: journal)
+                return persistentStore.Write(writeData: journal)
             }
             .eraseToAnyPublisher()
     }
     
     private func deleteJournalIfExistsByDate(journal: inout Journal,fromServer: Bool = false) -> AnyPublisher<Void, Error>{
         let dateString = journal.dateCreated.description.prefix(10).description
-        return DataBaseManager.Instance.GetByQuery(ofType: Journal.self) {
+        return persistentStore.GetByQuery(ofType: Journal.self) {
             $0.dateCreatedString == dateString
         }
             .map{ [journal] in
@@ -64,14 +71,14 @@ extension MainJournalDBRepository {
                     journal.tags = journalDB.tags
                 }
                 
-                _ = DataBaseManager.Instance.DeleteByID(ofType: Journal.self, id: journalDB.id )
+                _ = persistentStore.DeleteByID(ofType: Journal.self, id: journalDB.id )
             }
             .eraseToAnyPublisher()
     }
     
     private func getJournalByDate(date: Date) -> AnyPublisher<Journal, Error>{
         let dateString = date.description.prefix(10).description
-        return DataBaseManager.Instance.GetByQuery(ofType: Journal.self) {
+        return persistentStore.GetByQuery(ofType: Journal.self) {
             $0.dateCreatedString == dateString
         }
             .map{
@@ -85,11 +92,11 @@ extension MainJournalDBRepository {
     }
     
     private func deleteJournalData(journalID: Int) {
-        _ = DataBaseManager.Instance.DeleteByID(ofType: Journal.self, id: journalID)
+        _ = persistentStore.DeleteByID(ofType: Journal.self, id: journalID)
     }
     
     private func readAllJournals() -> AnyPublisher<LazyList<Journal>, Error> {
-        let journals: LazyList<Journal> = DataBaseManager.Instance.GetAll().lazyList
+        let journals: LazyList<Journal> = persistentStore.GetAll().lazyList
         
         return Just(journals)
             .setFailureType(to: Error.self)

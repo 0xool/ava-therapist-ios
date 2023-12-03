@@ -2,19 +2,18 @@
 //  InsightRepository.swift
 //  AITherapist
 //
-//  Created by cyrus refahi on 9/24/23.
+//  Created by Cyrus Refahi on 9/24/23.
 //
 
 import Foundation
 import Alamofire
 import Combine
 
-protocol InsightRepository: WebRepository {
+protocol InsightWebRepository: WebRepository {
     func loadInsight() -> AnyPublisher<Insight, Error>
-//    func loadConversationChat(conversation: Conversation) -> AnyPublisher<[Message], Error>
 }
 
-struct MainIsightRepository: InsightRepository {
+struct MainInsightWebRepository: InsightWebRepository {
     
     var baseURL: String
     let InsightAPI = "user"
@@ -35,7 +34,7 @@ struct MainIsightRepository: InsightRepository {
     }
 }
 
-extension MainIsightRepository {
+extension MainInsightWebRepository {
     
     enum API: String {
         case getInsight = "getUserInsight"

@@ -2,7 +2,7 @@
 //  Logo.swift
 //  AITherapist
 //
-//  Created by cyrus refahi on 10/1/23.
+//  Created by Cyrus Refahi on 10/1/23.
 //
 
 import SwiftUI

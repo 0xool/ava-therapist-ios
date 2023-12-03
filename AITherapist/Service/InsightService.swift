@@ -2,7 +2,7 @@
 //  InsightService.swift
 //  AITherapist
 //
-//  Created by cyrus refahi on 9/25/23.
+//  Created by Cyrus Refahi on 9/25/23.
 //
 
 import Combine
@@ -17,11 +17,11 @@ protocol InsightService {
 
 struct MainInsightService: InsightService {
     
-    let insightRepository: InsightRepository
+    let insightRepository: InsightWebRepository
     let insightDBRepository: InsightDBRepository
     let appState: Store<AppState>
     
-    init(insightRepository: InsightRepository, appState: Store<AppState>, conversationDBRepository: InsightDBRepository) {
+    init(insightRepository: InsightWebRepository, appState: Store<AppState>, conversationDBRepository: InsightDBRepository) {
         self.insightRepository = insightRepository
         self.insightDBRepository = conversationDBRepository
         self.appState = appState

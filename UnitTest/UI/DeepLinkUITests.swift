@@ -2,8 +2,8 @@
 //  DeepLinkUITests.swift
 //  UnitTests
 //
-//  Created by Alexey Naumov on 10.01.2020.
-//  Copyright © 2020 Alexey Naumov. All rights reserved.
+//  Created by Cyrus Refahi on 9/2/23.
+//  Copyright © 2020 Cyrus Refahi. All rights reserved.
 //
 
 import XCTest

@@ -2,7 +2,7 @@
 //  LoginViewModel.swift
 //  AITherapist
 //
-//  Created by cyrus refahi on 3/10/23.
+//  Created by Cyrus Refahi on 3/10/23.
 //
 
 import Foundation

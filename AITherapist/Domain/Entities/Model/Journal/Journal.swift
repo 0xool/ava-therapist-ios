@@ -2,7 +2,7 @@
 //  Journal.swift
 //  AITherapist
 //
-//  Created by cyrus refahi on 11/5/23.
+//  Created by Cyrus Refahi on 11/5/23.
 //
 
 import Foundation

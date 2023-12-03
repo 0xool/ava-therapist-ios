@@ -2,7 +2,7 @@
 //  AnimateableText.swift
 //  AITherapist
 //
-//  Created by cyrus refahi on 11/22/23.
+//  Created by Cyrus Refahi on 11/22/23.
 //
 
 import SwiftUI

@@ -2,7 +2,7 @@
 //  AuthenticateRepository.swift
 //  AITherapist
 //
-//  Created by cyrus refahi on 9/4/23.
+//  Created by Cyrus Refahi on 9/4/23.
 //
 
 import Foundation
@@ -34,12 +34,12 @@ struct AuthenticateResponse: Decodable{
 //    }
 }
 
-protocol AuthenticateRepository: WebRepository {
+protocol AuthenticateWebRepository: WebRepository {
     func login(email: String, password: String) -> AnyPublisher<User, Error>
     func register(email: String, password: String) -> AnyPublisher<User, Error>
 }
 
-struct MainAuthenticateRepository: AuthenticateRepository {
+struct MainAuthenticateWebRepository: AuthenticateWebRepository {
     var baseURL: String
     let AuthenticateAPI = "user/"
 
@@ -66,7 +66,7 @@ struct MainAuthenticateRepository: AuthenticateRepository {
     }
 }
 
-extension MainAuthenticateRepository {
+extension MainAuthenticateWebRepository {
     enum API: String {
         case login = "login"
         case register = "register/"

@@ -2,7 +2,7 @@
 //  InsightDBRepository.swift
 //  AITherapist
 //
-//  Created by cyrus refahi on 9/25/23.
+//  Created by Cyrus Refahi on 9/25/23.
 //
 
 import Foundation
@@ -16,7 +16,11 @@ protocol InsightDBRepository {
 
 struct MainInsightDBRepository: InsightDBRepository {
     
-    let db = DataBaseManager.Instance.getDB()
+    let persistentStore: DataBase
+    
+    init(persistentStore: DataBase = DataBaseManager.Instance) {
+        self.persistentStore = persistentStore
+    }
     
     func hasLoadedInsight() -> AnyPublisher<Bool, Error> {
         return hasInsight()
@@ -33,34 +37,24 @@ struct MainInsightDBRepository: InsightDBRepository {
 
 extension MainInsightDBRepository {
     private func writeInsightData(insight: Insight) -> AnyPublisher<Void, Error> {
-        return Future<Void, Error> { promise in
-            do {
-                try self.db.write {
-                    self.db.add(insight)
-                }
-                promise(.success(()))
-            } catch {
-                promise(.failure(error))
-            }
-        }
-        .eraseToAnyPublisher()
+        persistentStore.DeleteLast(ofType: Insight.self)
+        return persistentStore.Write(writeData: insight)
     }
     
     private func readInsight() -> AnyPublisher<Insight, Error> {
-        let insight = Array(db.objects(Insight.self))
-        
-        if insight.count == 0 {
+        guard let insight = persistentStore.GetLast(ofType: Insight.self) else{
             return Fail(error: DataBaseError.UserIsNil)
                 .eraseToAnyPublisher()
         }
         
-        return Just(insight.first!)
+        return Just(insight)
             .setFailureType(to: Error.self)
             .eraseToAnyPublisher()
     }
     
     private func hasInsight() -> AnyPublisher<Bool, Error> {
-        let insightCount = db.objects(Insight.self).count
+        let insightCount = persistentStore.GetCount(value: Insight.self)
+        
         return Just(insightCount > 0)
             .setFailureType(to: Error.self)
             .eraseToAnyPublisher()
