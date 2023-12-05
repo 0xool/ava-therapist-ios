@@ -48,9 +48,9 @@ class Conversations: Decodable{
 //}
 
 
-struct ConversationsResponse: Decodable {
-    var code: Int
-    var message: String
+struct ConversationsResponse: ServerResponse {
+    var code: Int?
+    var message: String?
     var data: [Conversation]
     
     enum CodingKeys: String, CodingKey {
@@ -60,7 +60,7 @@ struct ConversationsResponse: Decodable {
     }
 }
 
-struct AddConversationResponse: Decodable, ServerResponseData{
+struct AddConversationResponse: Decodable, ServerResponse{
     var message: String?
     var code: Int?
     var data: Conversation
@@ -72,9 +72,10 @@ struct AddConversationResponse: Decodable, ServerResponseData{
     }
 }
 
-struct DeleteConversationResponse: Decodable, ServerResponseData{
+struct DeleteConversationResponse: Decodable, ServerResponse{
     var message: String?
     var code: Int?
+    var data: String
 }
 
 struct AddConversationRequest: Encodable{

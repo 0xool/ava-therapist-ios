@@ -157,23 +157,25 @@ struct GetJournalByDateRequest: Encodable{
     var date: String
 }
 
-struct AddJournalResponse: Decodable, ServerResponseData {
+struct AddJournalResponse: ServerResponse {
     var message: String?
     var code: Int?
+    var data: String
 }
 
-struct DeleteJournalResponse: Decodable, ServerResponseData{
+struct DeleteJournalResponse: ServerResponse{
     var message: String?
     var code: Int?
+    var data: String
 }
 
-struct GetAllJournalResponse: Decodable, ServerResponseData {
+struct GetAllJournalResponse: ServerResponse {
     var code: Int?
     var message: String?
     var data: [Journal]
 }
 
-struct GetJournalByDateResponse: Decodable, ServerResponseData {
+struct GetJournalByDateResponse: ServerResponse {
     var code: Int?
     var message: String?
     var data: Journal

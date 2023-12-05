@@ -11,10 +11,31 @@ import Combine
 
 protocol WebRepository {
     var baseURL: String { get }
-    func GetRequest<D>(pathVariable: String?, params: [String : Any]?, url: String) -> AnyPublisher<D, Error> where D : Decodable
-    func SendRequest<D>(pathVariable: String?, params: [String : Any]?, url: String) -> AnyPublisher<D, Error> where D : Decodable
-    func DeleteRequest<D>(pathVariable: String?, params: [String : Any]?, url: String) -> AnyPublisher<D, Error> where D : Decodable
+    func WebRequest<D>(pathVariable: String?, params: [String : Any]?, url: String, method: HTTPMethod) -> AnyPublisher<D, Error> where D : ServerResponse
     func SetCookie(cookie: String)
+}
+
+extension WebRepository {    
+    func WebRequest<D>(pathVariable: String?, params: [String : Any]?, url: String, method: HTTPMethod) -> AnyPublisher<D, Error> where D : ServerResponse {
+        
+#warning ("REMOVE TESTS")
+        generateTestCookie()
+        
+        return AF.request(url,
+                          method: method, parameters: params)
+        .validate()
+        .publishDecodable(type: D.self)
+        .value()
+        .map{
+            $0.data as! D
+        }
+        .mapError{
+            $0 as Error
+        }
+        .receive(on: DispatchQueue.main)
+        .eraseToAnyPublisher()
+        
+    }
 }
 
 extension WebRepository {
@@ -43,58 +64,6 @@ extension WebRepository {
             AF.session.configuration.httpCookieStorage?.setCookie(cookie)
         }
     }
-    
-    func DeleteRequest<D>(pathVariable: String?, params: [String : Any]?, url: String) -> AnyPublisher<D, Error> where D : Decodable  {
-        
-#warning ("REMOVE TESTS")
-        generateTestCookie()
-        
-        return AF.request(url,
-                          method: .delete, parameters: params)
-        .validate()
-        .publishDecodable(type: D.self)
-        .value()
-        .mapError{
-            $0 as Error
-        }
-        .receive(on: DispatchQueue.main)
-        .eraseToAnyPublisher()
-        
-    }
-    
-    func GetRequest<D>(pathVariable: String?, params: [String : Any]?, url: String) -> AnyPublisher<D, Error> where D : Decodable  {
-        
-#warning ("REMOVE TESTS")
-        generateTestCookie()
-        
-        return AF.request(url,
-                          method: .get, parameters: params)
-        .validate()
-        .publishDecodable(type: D.self)
-        .value()
-        .mapError{
-            $0 as Error
-        }
-        .receive(on: DispatchQueue.main)
-        .eraseToAnyPublisher()
-    }
-    
-    func SendRequest<D>(pathVariable: String?, params: [String : Any]?, url: String) -> AnyPublisher<D, Error> where D : Decodable  {
-        
-#warning ("REMOVE TESTS")
-        generateTestCookie()
-        
-        return AF.request(url,
-                          method: .post, parameters: params, encoding: Alamofire.JSONEncoding.default)
-        .validate()
-        .publishDecodable(type: D.self)
-        .value()
-        .mapError{
-            $0 as Error
-        }
-        .receive(on: DispatchQueue.main)
-        .eraseToAnyPublisher()
-    }
 }
 
 enum ClientError: Error {
@@ -104,7 +73,7 @@ enum ClientError: Error {
     case imageDeserialization
 }
 
-struct ServerResponse<T: Decodable>: Decodable, ServerResponseData {
+struct ServerResponseModel<T: Decodable>: ServerResponse {
     var data: T
     var message: String?
     var code: Int?
@@ -116,7 +85,10 @@ struct ServerResponse<T: Decodable>: Decodable, ServerResponseData {
     }
 }
 
-protocol ServerResponseData {
+protocol ServerResponse: Decodable {
+    associatedtype T: Decodable
+
+    var data: T { get set }
     var message: String? { get set }
     var code: Int? { get set }
 }

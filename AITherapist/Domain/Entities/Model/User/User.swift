@@ -35,6 +35,12 @@ class User: Object, Decodable {
     }
 }
 
+struct UserServerResponse: ServerResponse {
+    var data: String
+    var message: String?
+    var code: Int?
+}
+
 class UserToBeReplaced: Object, Codable {
     
     @Persisted(primaryKey: true) var id: Int

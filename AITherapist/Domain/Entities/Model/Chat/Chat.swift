@@ -8,19 +8,13 @@
 import Foundation
 import RealmSwift
 
-struct GetConversationChatServerResponse: Decodable {
-    var code: Int
-    var message: String
-    var chats: [Chat]
-    
-    enum CodingKeys: String, CodingKey {
-        case message = "message"
-        case code = "code"
-        case chats = "chat"
-    }
+struct GetConversationChatServerResponse: ServerResponse {
+    var code: Int?
+    var message: String?
+    var data: [Chat]
 }
 
-struct AddChatServerResponse: Decodable, ServerResponseData {
+struct AddChatServerResponse: ServerResponse {
     
     var message: String?
     var code: Int?

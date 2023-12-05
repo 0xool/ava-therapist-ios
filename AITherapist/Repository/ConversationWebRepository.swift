@@ -25,7 +25,7 @@ struct MainConversationWebRepository: ConversationWebRepository {
     
     func loadConversationList() -> AnyPublisher<[Conversation], Error> {
         
-        let request: AnyPublisher<ConversationsResponse, Error> = GetRequest(pathVariable: nil, params: nil, url: getPath(api: .allConversations))
+        let request: AnyPublisher<ConversationsResponse, Error> = WebRequest(pathVariable: nil, params: nil, url: getPath(api: .allConversations), method: .get)
         
         return request
             .map{
@@ -39,7 +39,7 @@ struct MainConversationWebRepository: ConversationWebRepository {
         do {
             let parameters = try JSONEncoder().encode(data)
             let params = try JSONSerialization.jsonObject(with: parameters, options: []) as? [String: Any] ?? [:]
-            let request: AnyPublisher<AddConversationResponse, Error> = SendRequest(pathVariable: nil, params: params, url: url)
+            let request: AnyPublisher<AddConversationResponse, Error> = WebRequest(pathVariable: nil, params: params, url: url, method: .post)
             
             return request
                 .map{ $0.data }
@@ -52,7 +52,7 @@ struct MainConversationWebRepository: ConversationWebRepository {
     func deleteConversation(conversationID: Int) -> AnyPublisher<Void, Error>{
         let url = getPath(api: .deleteConversation, conversationID: conversationID)
         
-        let request: AnyPublisher<DeleteConversationResponse, Error> = DeleteRequest(pathVariable: nil, params: nil, url: url)
+        let request: AnyPublisher<DeleteConversationResponse, Error> = WebRequest(pathVariable: nil, params: nil, url: url, method: .delete)
             
         return request
             .map{ _ in

@@ -131,8 +131,8 @@ final class WebRepositoryTests: XCTestCase {
 }
 
 private extension TestWebRepository {
-    func load(_ api: API) -> AnyPublisher<TestData, Error> {
-        GetRequest(pathVariable: <#T##String?#>, params: <#T##[String : Any]?#>, url: <#T##String#>)
+    func load() -> AnyPublisher<TestData, Error> {
+        WebRequest(pathVariable: "", params: [:], url: "", method: .get)
     }
 }
 

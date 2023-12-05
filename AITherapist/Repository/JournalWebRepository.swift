@@ -27,7 +27,7 @@ struct MainJournalWebRepository: JournalWebRepository {
     
     func loadJournalList() -> AnyPublisher<DiaryBook, Error> {
         
-        let request: AnyPublisher<GetAllJournalResponse, Error> = GetRequest(pathVariable: nil, params: nil, url: getPath(api: .allJournals))
+        let request: AnyPublisher<GetAllJournalResponse, Error> = WebRequest(pathVariable: nil, params: nil, url: getPath(api: .allJournals), method: .get)
         
         return request
             .map{
@@ -43,7 +43,7 @@ struct MainJournalWebRepository: JournalWebRepository {
         do {
             let parameters = try JSONEncoder().encode(request)
             let params = try JSONSerialization.jsonObject(with: parameters, options: []) as? [String: Any] ?? [:]
-            let request: AnyPublisher<AddJournalResponse, Error> = SendRequest(pathVariable: nil, params: params, url: url)
+            let request: AnyPublisher<AddJournalResponse, Error> = WebRequest(pathVariable: nil, params: params, url: url, method: .post)
             
             return request
                 .map{ _ in }
@@ -56,7 +56,7 @@ struct MainJournalWebRepository: JournalWebRepository {
     func deleteJournal(journalID: Int) -> AnyPublisher<Void, Error>{
         let url = getPath(api: .deleteJournal, journalID: journalID)
         
-        let request: AnyPublisher<DeleteJournalResponse, Error> = DeleteRequest(pathVariable: nil, params: nil, url: url)
+        let request: AnyPublisher<DeleteJournalResponse, Error> = WebRequest(pathVariable: nil, params: nil, url: url, method: .delete)
             
         return request
             .map{ _ in
@@ -68,7 +68,7 @@ struct MainJournalWebRepository: JournalWebRepository {
     func getJournalByDate(date: Date) -> AnyPublisher<Journal, Error>{
         let url = getPath(api: .getDiaryByDate, date: date.description)
         
-            let request: AnyPublisher<GetJournalByDateResponse, Error> =  GetRequest(pathVariable: nil, params: nil, url: url)
+        let request: AnyPublisher<GetJournalByDateResponse, Error> =  WebRequest(pathVariable: nil, params: nil, url: url, method: .get)
             
             return request
                 .map{

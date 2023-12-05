@@ -8,14 +8,17 @@
 import Foundation
 import Combine
 
-// Refactor this in both the backend and frontend to fix this respose setup
-struct AuthenticateResponse: Decodable{
-    var message: String
-    var code: Int
-    var auth: Bool
-    
-    let token: String
-    let id: Int
+// Refactor this in both backend and frontend to fix this respose setup
+struct AuthenticateResponse: ServerResponse{
+    var message: String?
+    var code: Int?
+    var data: AuthenticateResponseData
+
+    struct AuthenticateResponseData: Decodable {
+        var auth: Bool
+        let token: String
+        let id: Int
+    }
 //    enum CodingKeys: String, CodingKey {
 //        case id = "id"
 //        case message = "message"
@@ -36,7 +39,7 @@ struct AuthenticateResponse: Decodable{
 
 protocol AuthenticateWebRepository: WebRepository {
     func login(email: String, password: String) -> AnyPublisher<User, Error>
-    func register(email: String, password: String) -> AnyPublisher<User, Error>
+    func register(email: String, password: String) -> AnyPublisher<UserServerResponse, Error>
 }
 
 struct MainAuthenticateWebRepository: AuthenticateWebRepository {
@@ -49,20 +52,20 @@ struct MainAuthenticateWebRepository: AuthenticateWebRepository {
     
     func login(email: String, password: String) -> AnyPublisher<User, Error> {
         let params = ["user": ["username" : email , "password" : password]]
-        let request: AnyPublisher<AuthenticateResponse, Error> = SendRequest(pathVariable: nil, params: params, url: getPath(api: .login))
+        let request: AnyPublisher<AuthenticateResponse, Error> = WebRequest(pathVariable: nil, params: params, url: getPath(api: .login), method: .post)
         
         // Refactor this code to remove setting variables inside this call back
         return request.map { (response) -> User in
-            let token = response.token
-            let id = response.id
+            let token = response.data.token
+            let id = response.data.id
             self.SetCookie(cookie: token)
             return User(id: id, token: token)
         }.eraseToAnyPublisher()
     }
     
-    func register(email: String, password: String) -> AnyPublisher<User, Error> {
+    func register(email: String, password: String) -> AnyPublisher<UserServerResponse, Error> {
         let params = ["email" : email , "password" : password]
-        return SendRequest(pathVariable: nil, params: params, url: getPath(api: .register))
+        return WebRequest(pathVariable: nil, params: params, url: getPath(api: .register), method: .post)
     }
 }
 

@@ -23,10 +23,7 @@ struct MainInsightWebRepository: InsightWebRepository {
     }
     
     func loadInsight() -> AnyPublisher<Insight, Error> {
-        print(AF.session.configuration.httpCookieStorage as Any)
-        
-        
-        let request: AnyPublisher<ServerResponse<Insight>, Error> = GetRequest(pathVariable: nil, params: nil, url: getPath(api: .getInsight))
+        let request: AnyPublisher<LoadInsightServerResponse, Error> = WebRequest(pathVariable: nil, params: nil, url: getPath(api: .getInsight), method: .get)
         
         return request
             .map{ $0.data }
@@ -48,3 +45,11 @@ extension MainInsightWebRepository {
     }
 }
 
+
+extension MainInsightWebRepository {
+    struct LoadInsightServerResponse: ServerResponse {
+        var data: Insight
+        var message: String?
+        var code: Int?
+    }
+}

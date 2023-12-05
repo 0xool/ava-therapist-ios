@@ -18,7 +18,7 @@ class TestWebRepository: WebRepository{
             return Just<D>.withErrorType(Error.self)
         }
         
-        func SendRequest<D>(pathVariable: String?, params: [String : Any]?, url: String) -> AnyPublisher<D, Error> where D : Decodable {
+        func PostRequest<D>(pathVariable: String?, params: [String : Any]?, url: String) -> AnyPublisher<D, Error> where D : Decodable {
             return Just<D>.withErrorType(Error.self)
         }
         

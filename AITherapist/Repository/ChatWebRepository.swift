@@ -28,7 +28,7 @@ struct MainChatWebRepository: ChatWebRepository {
         do {
             let parameters = try JSONEncoder().encode(data)
             let params = try JSONSerialization.jsonObject(with: parameters, options: []) as? [String: Any] ?? [:]
-            let request: AnyPublisher<AddChatServerResponse, Error> = SendRequest(pathVariable: nil, params: params, url: url)
+            let request: AnyPublisher<AddChatServerResponse, Error> = WebRequest(pathVariable: nil, params: params, url: url, method: .post)
             return request
                 .map{
                     Chat(message: $0.data.message!, conversationID: $0.data.conversationID!, chatSequence: nil, isUserMessage: false, isSentToserver: .NoStatus)
@@ -42,11 +42,11 @@ struct MainChatWebRepository: ChatWebRepository {
     func loadChatsForConversation(conversationID: Int) -> AnyPublisher<LazyList<Chat>, Error> {
         
         let url = getPath(api: .getConversationChats, chatID: conversationID)
-        let request: AnyPublisher<GetConversationChatServerResponse, Error> = GetRequest(pathVariable: nil, params: nil, url: url)
+        let request: AnyPublisher<GetConversationChatServerResponse, Error> = WebRequest(pathVariable: nil, params: nil, url: url, method: .get)
         
         return request
             .map{
-                return $0.chats.lazyList
+                return $0.data.lazyList
             }
             .eraseToAnyPublisher()
     }
