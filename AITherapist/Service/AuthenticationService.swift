@@ -9,13 +9,13 @@ import Foundation
 import SwiftUI
 import Combine
 
-protocol AuthenticateService {
+protocol AuthenticationService {
     func loginUser(email: String, password: String)
     func registerUser(auth: LoadableSubject<User>, email: String, password: String)
     func checkUserLoggedStatus()
 }
 
-class MainAuthenticateService: AuthenticateService {
+class MainAuthenticateService: AuthenticationService {
     
     let authenticateRepository: AuthenticateWebRepository
     let userDBRepository: UserDBRepository
@@ -90,7 +90,7 @@ class MainAuthenticateService: AuthenticateService {
     }
 }
 
-struct StubAuthenticateService: AuthenticateService {
+struct StubAuthenticateService: AuthenticationService {
     func checkUserLoggedStatus() {
     }
     
