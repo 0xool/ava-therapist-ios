@@ -5,32 +5,16 @@
 //  Created by Cyrus Refahi on 10/6/23.
 //  Copyright © 2023 Cyrus Refahi. All rights reserved.
 //
-
 import Foundation
+import Alamofire
 
 extension URLSession {
     static var mockedResponsesOnly: URLSession {
         let configuration = URLSessionConfiguration.default
-        configuration.protocolClasses = [RequestMocking.self, RequestBlocking.self]
+        configuration.protocolClasses = [RequestMocking.self]
         configuration.timeoutIntervalForRequest = 1
         configuration.timeoutIntervalForResource = 1
         return URLSession(configuration: configuration)
-    }
-}
-
-extension RequestMocking {
-    static private var mocks: [MockedResponse] = []
-    
-    static func add(mock: MockedResponse) {
-        mocks.append(mock)
-    }
-    
-    static func removeAllMocks() {
-        mocks.removeAll()
-    }
-    
-    static private func mock(for request: URLRequest) -> MockedResponse? {
-        return mocks.first { $0.url == request.url }
     }
 }
 
@@ -81,23 +65,40 @@ final class RequestMocking: URLProtocol {
 
 // MARK: - RequestBlocking
 
-private class RequestBlocking: URLProtocol {
-    enum Error: Swift.Error {
-        case requestBlocked
+//private class RequestBlocking: URLProtocol {
+//    enum Error: Swift.Error {
+//        case requestBlocked
+//    }
+//    
+//    override class func canInit(with request: URLRequest) -> Bool {
+//        return true
+//    }
+//
+//    override class func canonicalRequest(for request: URLRequest) -> URLRequest {
+//        return request
+//    }
+//
+//    override func startLoading() {
+//        DispatchQueue(label: "").async {
+//            self.client?.urlProtocol(self, didFailWithError: Error.requestBlocked)
+//        }
+//    }
+//    override func stopLoading() { }
+//}
+
+
+extension RequestMocking {
+    static private var mocks: [MockedResponse] = []
+    
+    static func add(mock: MockedResponse) {
+        mocks.append(mock)
     }
     
-    override class func canInit(with request: URLRequest) -> Bool {
-        return true
+    static func removeAllMocks() {
+        mocks.removeAll()
     }
-
-    override class func canonicalRequest(for request: URLRequest) -> URLRequest {
-        return request
+    
+    static private func mock(for request: URLRequest) -> MockedResponse? {
+        return mocks.first { $0.url == request.url }
     }
-
-    override func startLoading() {
-        DispatchQueue(label: "").async {
-            self.client?.urlProtocol(self, didFailWithError: Error.requestBlocked)
-        }
-    }
-    override func stopLoading() { }
 }

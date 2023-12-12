@@ -8,7 +8,7 @@
 import Foundation
 import RealmSwift
 
-struct DiaryBook: Decodable {
+struct DiaryBook: Decodable, Equatable {
     let journals: [Journal]
 }
 

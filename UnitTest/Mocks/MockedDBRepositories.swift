@@ -173,7 +173,7 @@ final class MockedUserDBRepository: Mock, UserDBRepository {
 
 // MARK: - InsightsDBRepository
 
-final class MockedInsightsDBRepository: Mock, InsightsDBRepository {
+final class MockedInsightsDBRepository: Mock, InsightDBRepository {
         
         enum Action: Equatable {
             case hasLoadedInsight

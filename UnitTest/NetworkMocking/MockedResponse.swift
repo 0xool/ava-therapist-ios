@@ -10,6 +10,7 @@ import Foundation
 @testable import AITherapist
 
 extension RequestMocking {
+    
     struct MockedResponse {
         let url: URL
         let result: Result<Data, Swift.Error>
@@ -25,13 +26,13 @@ extension RequestMocking.MockedResponse {
         case failedMockCreation
     }
     
-    init<T>(apiCall: APICall, baseURL: String,
+    init<T>(apiCall: APICall,
             result: Result<T, Swift.Error>,
             httpCode: HTTPCode = 200,
             headers: [String: String] = ["Content-Type": "application/json"],
             loadingTime: TimeInterval = 0.1
     ) throws where T: Encodable {
-        guard let url = try apiCall.urlRequest(baseURL: baseURL).url
+        guard let url = try apiCall.requestURL().url
             else { throw Error.failedMockCreation }
         self.url = url
         switch result {
@@ -46,8 +47,8 @@ extension RequestMocking.MockedResponse {
         customResponse = nil
     }
     
-    init(apiCall: APICall, baseURL: String, customResponse: URLResponse) throws {
-        guard let url = try apiCall.urlRequest(baseURL: baseURL).url
+    init(apiCall: APICall, customResponse: URLResponse) throws {
+        guard let url = try apiCall.requestURL().url
             else { throw Error.failedMockCreation }
         self.url = url
         result = .success(Data())

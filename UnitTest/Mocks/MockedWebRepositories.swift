@@ -8,29 +8,15 @@
 
 import XCTest
 import Combine
+import Alamofire
 @testable import AITherapist
 
 class TestWebRepository: WebRepository{
-        
-        let baseURL = "https://test.com"
-        
-        func GetRequest<D>(pathVariable: String?, params: [String : Any]?, url: String) -> AnyPublisher<D, Error> where D : Decodable {
-            return Just<D>.withErrorType(Error.self)
-        }
-        
-        func PostRequest<D>(pathVariable: String?, params: [String : Any]?, url: String) -> AnyPublisher<D, Error> where D : Decodable {
-            return Just<D>.withErrorType(Error.self)
-        }
-        
-        func DeleteRequest<D>(pathVariable: String?, params: [String : Any]?, url: String) -> AnyPublisher<D, Error> where D : Decodable {
-            return Just<D>.withErrorType(Error.self)
-        }
-        
-        func SetCookie(cookie: String) {
-            
-        }
-    }
-
+    var AFSession: Session = setAFSession(.mockedResponsesOnly, queue: DispatchQueue(label: "test"))
+    let baseURL = "https://test.com"
+    let session: URLSession = .mockedResponsesOnly
+    let bgQueue = DispatchQueue(label: "test")
+}
 
 // MARK: - JournalWebRepository
 
@@ -74,7 +60,7 @@ final class MockedJournalWebRepository: TestWebRepository, Mock, JournalWebRepos
 
 final class MockedConversationWebRepository: TestWebRepository, Mock, ConversationWebRepository {
     
-    enum Action: Equatable {
+    enum Action: Equatable {        
         case loadConversationList
         case addConversation(AddConversationRequest)
         case deleteConversation(Int)
@@ -109,6 +95,7 @@ final class MockedChatWebRepository: TestWebRepository, Mock, ChatWebRepository 
         case loadChatsForConversation(Int)
         case sendChatToServer(SaveChatRequset)
     }
+    
     var actions = MockActions<Action>(expected: [])
     
     var loadChatsForConversationResult: Result<LazyList<Chat>, Error> = .failure(MockError.valueNotSet)
@@ -129,21 +116,23 @@ final class MockedChatWebRepository: TestWebRepository, Mock, ChatWebRepository 
 
 final class MockedAuthenticateWebRepository: TestWebRepository, Mock, AuthenticateWebRepository {
     
+    
     enum Action: Equatable {
         case login(String, String)
         case register(String, String)
     }
+    
     var actions = MockActions<Action>(expected: [])
     
     var loginResult: Result<User, Error> = .failure(MockError.valueNotSet)
-    var registerResult: Result<User, Error> = .failure(MockError.valueNotSet)
+    var registerResult: Result<UserServerResponse, Error> = .failure(MockError.valueNotSet)
     
     func login(email: String, password: String) -> AnyPublisher<User, Error> {
         register(.login(email, password))
         return loginResult.publish()
     }
     
-    func register(email: String, password: String) -> AnyPublisher<User, Error> {
+    func register(email: String, password: String) -> AnyPublisher<UserServerResponse, Error> {
         register(.register(email, password))
         return registerResult.publish()
     }

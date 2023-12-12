@@ -43,16 +43,23 @@ protocol AuthenticateWebRepository: WebRepository {
 }
 
 struct MainAuthenticateWebRepository: AuthenticateWebRepository {
+    var AFSession: Session
+    
+    var session: URLSession
     var baseURL: String
+    var bgQueue: DispatchQueue = Constants.bgQueue
+    
     let AuthenticateAPI = "user/"
 
-    init(baseURL: String) {
+    init(baseURL: String, session: URLSession) {
         self.baseURL = baseURL
+        self.session = session
+        self.AFSession = setAFSession(session, queue: bgQueue)
     }
     
     func login(email: String, password: String) -> AnyPublisher<User, Error> {
         let params = ["user": ["username" : email , "password" : password]]
-        let request: AnyPublisher<AuthenticateResponse, Error> = WebRequest(pathVariable: nil, params: params, url: getPath(api: .login), method: .post)
+        let request: AnyPublisher<AuthenticateResponse, Error> = webRequest(url: getPath(api: .login), method: .post, parameters: params)
         
         // Refactor this code to remove setting variables inside this call back
         return request.map { (response) -> User in
@@ -64,8 +71,7 @@ struct MainAuthenticateWebRepository: AuthenticateWebRepository {
     }
     
     func register(email: String, password: String) -> AnyPublisher<UserServerResponse, Error> {
-        let params = ["email" : email , "password" : password]
-        return WebRequest(pathVariable: nil, params: params, url: getPath(api: .register), method: .post)
+        webRequest(url: getPath(api: .register), method: .post, parameters: ["email" : email , "password" : password])
     }
 }
 

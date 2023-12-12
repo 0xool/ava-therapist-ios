@@ -60,7 +60,7 @@ struct MainChatService: ChatService {
     }
     
     func getChatsForConversationFromServer(conversationID: Int) -> AnyPublisher<LazyList<Chat>, Error>{
-        return chatRepository.loadChatsForConversation(conversationID: conversationID)
+        chatRepository.loadChatsForConversation(conversationID: conversationID)
     }
 
     private var requestHoldBackTimeInterval: TimeInterval {

@@ -74,15 +74,16 @@ extension AppEnvironment {
 //            session: session,
 //            baseURL: "https://ezgif.com")
         
-        let authenticationWebRepository = MainAuthenticateWebRepository(baseURL: baseURL)
+        let authenticationWebRepository = MainAuthenticateWebRepository(baseURL: baseURL, session: session)
         let pushTokenWebRepository = RealPushTokenWebRepository(
             session: session,
             baseURL: "https://fake.backend.com")
-        let conversationWebRepository = MainConversationWebRepository(baseURL: baseURL)
-        let insightWebRepository = MainInsightWebRepository(baseURL: baseURL)
-        let chatWebRepoistory = MainChatWebRepository(baseURL: baseURL)
+        let conversationWebRepository = MainConversationWebRepository(baseURL: baseURL, session: session)
         
-        let journalWebRepository = MainJournalWebRepository(baseURL: baseURL)
+        let insightWebRepository = MainInsightWebRepository(session: session, baseURL: baseURL)
+        let chatWebRepoistory = MainChatWebRepository(baseURL: baseURL, session: session)
+        
+        let journalWebRepository = MainJournalWebRepository(baseURL: baseURL, session: session)
         
         return .init(conversationRepository: conversationWebRepository, pushTokenWebRepository: pushTokenWebRepository, authenticationRepository: authenticationWebRepository, insightRepository: insightWebRepository, chatRepository: chatWebRepoistory, journalRepository: journalWebRepository)
     }
@@ -109,7 +110,7 @@ extension AppEnvironment {
     ) -> DIContainer.Services {
 
         let insightService = MainInsightService(insightRepository: webRepositories.insightRepository, appState: appState, conversationDBRepository: dbRepositories.insightRepository)
-        let authenticationService = MainAuthenticateService(appState: appState, authenticateRepository: webRepositories.authenticationRepository, userDBRepository: dbRepositories.userRepository)
+        let authenticationService = MainAuthenticationService(appState: appState, authenticateRepository: webRepositories.authenticationRepository, userDBRepository: dbRepositories.userRepository)
         let chatService = MainChatService(chatRepository: webRepositories.chatRepository, appState: appState, chatDBRepository: dbRepositories.chatRepository)
         
         let conversationService = MainConversationService(conversationRepository: webRepositories.conversationRepository, appState: appState, conversationDBRepository: dbRepositories.conversationRepository, chatService: chatService)

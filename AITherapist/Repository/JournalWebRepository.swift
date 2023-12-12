@@ -17,17 +17,22 @@ protocol JournalWebRepository: WebRepository {
 }
 
 struct MainJournalWebRepository: JournalWebRepository {
-    
+    var AFSession: Session
+    var session: URLSession
     var baseURL: String
+    
+    var bgQueue: DispatchQueue = Constants.bgQueue
     let JournalAPI = "diary"
-
-    init(baseURL: String) {
+    
+    init(baseURL: String, session: URLSession) {
         self.baseURL = baseURL
+        self.session = session
+        self.AFSession = setAFSession(session, queue: bgQueue)
     }
     
     func loadJournalList() -> AnyPublisher<DiaryBook, Error> {
         
-        let request: AnyPublisher<GetAllJournalResponse, Error> = WebRequest(pathVariable: nil, params: nil, url: getPath(api: .allJournals), method: .get)
+        let request: AnyPublisher<GetAllJournalResponse, Error> = webRequest(url: getPath(api: .allJournals), method: .get, parameters: nil, headers: nil)
         
         return request
             .map{
@@ -43,7 +48,8 @@ struct MainJournalWebRepository: JournalWebRepository {
         do {
             let parameters = try JSONEncoder().encode(request)
             let params = try JSONSerialization.jsonObject(with: parameters, options: []) as? [String: Any] ?? [:]
-            let request: AnyPublisher<AddJournalResponse, Error> = WebRequest(pathVariable: nil, params: params, url: url, method: .post)
+            let request: AnyPublisher<AddJournalResponse, Error> =
+            webRequest(url: url, method: .post, parameters: params, headers: nil)
             
             return request
                 .map{ _ in }
@@ -56,8 +62,8 @@ struct MainJournalWebRepository: JournalWebRepository {
     func deleteJournal(journalID: Int) -> AnyPublisher<Void, Error>{
         let url = getPath(api: .deleteJournal, journalID: journalID)
         
-        let request: AnyPublisher<DeleteJournalResponse, Error> = WebRequest(pathVariable: nil, params: nil, url: url, method: .delete)
-            
+        let request: AnyPublisher<DeleteJournalResponse, Error> = webRequest(url: url, method: .delete, parameters: nil, headers: nil)
+        
         return request
             .map{ _ in
                 
@@ -68,13 +74,13 @@ struct MainJournalWebRepository: JournalWebRepository {
     func getJournalByDate(date: Date) -> AnyPublisher<Journal, Error>{
         let url = getPath(api: .getDiaryByDate, date: date.description)
         
-        let request: AnyPublisher<GetJournalByDateResponse, Error> =  WebRequest(pathVariable: nil, params: nil, url: url, method: .get)
-            
-            return request
-                .map{
-                    $0.data
-                }
-                .eraseToAnyPublisher()
+        let request: AnyPublisher<GetJournalByDateResponse, Error> = webRequest(url: url, method: .get, parameters: nil)
+        
+        return request
+            .map{
+                $0.data
+            }
+            .eraseToAnyPublisher()
     }
 }
 

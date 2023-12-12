@@ -15,7 +15,7 @@ protocol AuthenticationService {
     func checkUserLoggedStatus()
 }
 
-class MainAuthenticateService: AuthenticationService {
+class MainAuthenticationService: AuthenticationService {
     
     let authenticateRepository: AuthenticateWebRepository
     let userDBRepository: UserDBRepository

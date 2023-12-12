@@ -10,34 +10,66 @@ import Alamofire
 import Combine
 
 protocol WebRepository {
+    typealias Session = Alamofire.Session
     var baseURL: String { get }
-    func WebRequest<D>(pathVariable: String?, params: [String : Any]?, url: String, method: HTTPMethod) -> AnyPublisher<D, Error> where D : ServerResponse
-    func SetCookie(cookie: String)
+    var session: URLSession { get }
+    
+    var bgQueue: DispatchQueue { get }
+    var AFSession: Session { get }
 }
 
-extension WebRepository {    
-    func WebRequest<D>(pathVariable: String?, params: [String : Any]?, url: String, method: HTTPMethod) -> AnyPublisher<D, Error> where D : ServerResponse {
+// MARK: General Request
+extension WebRepository {
+    func webRequest<D: ServerResponse>(url: String, method: HTTPMethod, parameters: Parameters? = nil, encoding: ParameterEncoding = URLEncoding.default, headers: HTTPHeaders? = nil) -> AnyPublisher<D, Error> {
+        webRequest(webApi: WebAPI.init(url: url, method: method, headers: headers, encoding: encoding, parameters: parameters))
+    }
+    
+    func webRequest<D: ServerResponse>(webApi: APICall) -> AnyPublisher<D, Error> {
         
 #warning ("REMOVE TESTS")
         generateTestCookie()
         
-        return AF.request(url,
-                          method: method, parameters: params)
-        .validate()
-        .publishDecodable(type: D.self)
-        .value()
-        .map{
-            $0.data as! D
-        }
-        .mapError{
-            $0 as Error
+        return Future<D, Error> { promise in
+            AFSession.request(webApi.url, method: webApi.method, parameters: webApi.parameters, encoding: webApi.encoding, headers: webApi.headers)
+                .validate()
+                .responseDecodable(of: D.self) { response in
+                    switch response.result {
+                    case .success(let data):
+                        promise(.success(data))
+                    case .failure(let error):
+                        promise(.failure(error))
+                    }
+                }
         }
         .receive(on: DispatchQueue.main)
         .eraseToAnyPublisher()
-        
     }
+    
+    
 }
 
+func setAFSession(_ session: URLSession, queue: DispatchQueue) -> Session {
+        let delegateQueue = OperationQueue()
+        delegateQueue.underlyingQueue = queue
+
+        return Session(
+            configuration: session.configuration,
+            delegate: SessionDelegate(),
+            rootQueue: queue,
+            startRequestsImmediately: true,
+            requestQueue: nil,
+            serializationQueue: nil,
+            interceptor: nil,
+            serverTrustManager: nil,
+            redirectHandler: nil,
+            cachedResponseHandler: nil,
+            eventMonitors: []
+        )
+}
+
+
+
+// MARK: COOKIE
 extension WebRepository {
     func SetCookie(cookie: String) {
         let cookieProps = [
@@ -51,7 +83,10 @@ extension WebRepository {
             AF.session.configuration.httpCookieStorage?.setCookie(cookie)
         }
     }
-    
+}
+
+// MARK: TEST
+extension WebRepository {
     private func generateTestCookie() {
         let cookieProps = [
             HTTPCookiePropertyKey.domain: Constants.BaseUrl,
@@ -66,6 +101,11 @@ extension WebRepository {
     }
 }
 
+extension WebRepository {
+    
+}
+
+// MARK: Model
 enum ClientError: Error {
     case invalidURL
     case httpCode(HTTPCode)
@@ -87,8 +127,51 @@ struct ServerResponseModel<T: Decodable>: ServerResponse {
 
 protocol ServerResponse: Decodable {
     associatedtype T: Decodable
-
+    
     var data: T { get set }
     var message: String? { get set }
     var code: Int? { get set }
+}
+
+
+struct WebAPI: APICall {
+    var url: String
+    var method: HTTPMethod
+    var headers: HTTPHeaders? = nil
+    var encoding: ParameterEncoding = URLEncoding.default
+    var parameters: Parameters? = nil
+    
+    init(url: String, method: HTTPMethod, headers: HTTPHeaders? = nil, encoding: ParameterEncoding, parameters: Parameters? = nil) {
+        self.url = url
+        self.method = method
+        self.headers = headers
+        self.encoding = encoding
+        self.parameters = parameters
+    }
+}
+
+extension Publisher where Output == URLSession.DataTaskPublisher.Output {
+    func requestData(httpCodes: HTTPCodes = .success) -> AnyPublisher<Data, Error> {
+        return tryMap {
+                assert(!Thread.isMainThread)
+                guard let code = ($0.1 as? HTTPURLResponse)?.statusCode else {
+                    throw APIError.unexpectedResponse
+                }
+                guard httpCodes.contains(code) else {
+                    throw APIError.httpCode(code)
+                }
+                return $0.0
+            }
+            .extractUnderlyingError()
+            .eraseToAnyPublisher()
+    }
+}
+
+private extension Publisher where Output == URLSession.DataTaskPublisher.Output {
+    func requestJSON<Value>(httpCodes: HTTPCodes) -> AnyPublisher<Value, Error> where Value: Decodable {
+        return requestData(httpCodes: httpCodes)
+            .decode(type: Value.self, decoder: JSONDecoder())
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
+    }
 }

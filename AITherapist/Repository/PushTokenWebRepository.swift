@@ -13,14 +13,15 @@ protocol PushTokenWebRepository: WebRepository {
 }
 
 struct RealPushTokenWebRepository: PushTokenWebRepository {
-    
+    var AFSession: Session
     let session: URLSession
     let baseURL: String
-    let bgQueue = DispatchQueue(label: "bg_parse_queue")
-    
+    var bgQueue: DispatchQueue = Constants.bgQueue
+
     init(session: URLSession, baseURL: String) {
         self.session = session
         self.baseURL = baseURL
+        self.AFSession = setAFSession(session, queue: bgQueue)
     }
     
     func register(devicePushToken: Data) -> AnyPublisher<Void, Error> {

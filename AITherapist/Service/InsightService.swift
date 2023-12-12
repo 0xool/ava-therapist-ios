@@ -12,7 +12,6 @@ import SwiftUI
 protocol InsightService {
     func loadInsight()
     func checkInsight()
-//    func loadConversationChat(message: LoadableSubject<LazyList<Message>>)
 }
 
 struct MainInsightService: InsightService {

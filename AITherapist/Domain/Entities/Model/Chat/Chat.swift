@@ -27,7 +27,12 @@ struct AddChatServerResponse: ServerResponse {
     }
 }
 
-struct SaveChatRequset: Encodable{
+struct SaveChatRequset: Encodable, Equatable{
+    static func == (lhs: SaveChatRequset, rhs: SaveChatRequset) -> Bool {
+        lhs.chat.message == rhs.chat.message && lhs.chat.conversationID == rhs.chat.conversationID
+    }
+    
+    
     var chat: SaveChatRequsetBody
 }
 

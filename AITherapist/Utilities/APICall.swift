@@ -6,12 +6,14 @@
 //
 
 import Foundation
+import Alamofire
 
 protocol APICall {
-    var path: String { get }
-    var method: String { get }
-    var headers: [String: String]? { get }
-    func body() throws -> Data?
+    var url: String { get }
+    var method: HTTPMethod { get }
+    var headers: HTTPHeaders? { get }
+    var encoding: ParameterEncoding { get }
+    var parameters: Parameters? { get }
 }
 
 enum APIError: Swift.Error {
@@ -33,14 +35,13 @@ extension APIError: LocalizedError {
 }
 
 extension APICall {
-    func urlRequest(baseURL: String) throws -> URLRequest {
-        guard let url = URL(string: baseURL + path) else {
+    func requestURL() throws -> URLRequest {
+        guard let url = URL(string: url) else {
             throw APIError.invalidURL
         }
         var request = URLRequest(url: url)
-        request.httpMethod = method
-        request.allHTTPHeaderFields = headers
-        request.httpBody = try body()
+        request.httpMethod = method.rawValue
+        request.allHTTPHeaderFields = headers?.dictionary
         return request
     }
 }

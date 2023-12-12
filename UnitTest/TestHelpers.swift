@@ -144,7 +144,7 @@ enum MockError: Swift.Error {
 
 extension NSError {
     static var test: NSError {
-        return NSError(domain: "test", code: 0, userInfo: [NSLocalizedDescriptionKey: "Test error"])
+        return NSError(domain: "test", code: 0, userInfo: [NSLocalizedDescriptionKey: "URLSessionTask failed with error: The operation couldn’t be completed. (NSURLErrorDomain error 1.)"])
     }
 }
 

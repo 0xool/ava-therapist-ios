@@ -15,17 +15,25 @@ protocol ConversationWebRepository: WebRepository {
 }
 
 struct MainConversationWebRepository: ConversationWebRepository {
+    var AFSession: Session = .default
     
+    var session: URLSession
     var baseURL: String
+    var bgQueue: DispatchQueue = Constants.bgQueue
+    
     let ConversationAPI = "conversation"
 
-    init(baseURL: String) {
+    init(baseURL: String, session: URLSession) {
         self.baseURL = baseURL
+        self.session = session
+        self.bgQueue = Constants.bgQueue
+        self.AFSession = setAFSession(session, queue: bgQueue)
     }
     
     func loadConversationList() -> AnyPublisher<[Conversation], Error> {
         
-        let request: AnyPublisher<ConversationsResponse, Error> = WebRequest(pathVariable: nil, params: nil, url: getPath(api: .allConversations), method: .get)
+        let request: AnyPublisher<ConversationsResponse, Error> = 
+        webRequest(url: getPath(api: .allConversations), method: .get, parameters: nil, headers: nil)
         
         return request
             .map{
@@ -39,7 +47,7 @@ struct MainConversationWebRepository: ConversationWebRepository {
         do {
             let parameters = try JSONEncoder().encode(data)
             let params = try JSONSerialization.jsonObject(with: parameters, options: []) as? [String: Any] ?? [:]
-            let request: AnyPublisher<AddConversationResponse, Error> = WebRequest(pathVariable: nil, params: params, url: url, method: .post)
+            let request: AnyPublisher<AddConversationResponse, Error> = webRequest(url: url, method: .post, parameters: params, headers: nil)
             
             return request
                 .map{ $0.data }
@@ -52,7 +60,7 @@ struct MainConversationWebRepository: ConversationWebRepository {
     func deleteConversation(conversationID: Int) -> AnyPublisher<Void, Error>{
         let url = getPath(api: .deleteConversation, conversationID: conversationID)
         
-        let request: AnyPublisher<DeleteConversationResponse, Error> = WebRequest(pathVariable: nil, params: nil, url: url, method: .delete)
+        let request: AnyPublisher<DeleteConversationResponse, Error> = webRequest(url: url, method: .delete, parameters: nil, headers: nil)
             
         return request
             .map{ _ in

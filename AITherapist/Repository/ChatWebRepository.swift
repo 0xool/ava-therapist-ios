@@ -14,12 +14,18 @@ protocol ChatWebRepository: WebRepository {
 }
 
 struct MainChatWebRepository: ChatWebRepository {
+    var AFSession: Session
     
+    var session: URLSession
+    var bgQueue: DispatchQueue = Constants.bgQueue
     var baseURL: String
+    
     let chatAPI = "chat"
 
-    init(baseURL: String) {
+    init(baseURL: String, session: URLSession) {
         self.baseURL = baseURL
+        self.session = session
+        self.AFSession = setAFSession(session, queue: bgQueue)
     }
     
     func sendChatToServer(data: SaveChatRequset) -> AnyPublisher<Chat, Error> {
@@ -28,7 +34,8 @@ struct MainChatWebRepository: ChatWebRepository {
         do {
             let parameters = try JSONEncoder().encode(data)
             let params = try JSONSerialization.jsonObject(with: parameters, options: []) as? [String: Any] ?? [:]
-            let request: AnyPublisher<AddChatServerResponse, Error> = WebRequest(pathVariable: nil, params: params, url: url, method: .post)
+            let request: AnyPublisher<AddChatServerResponse, Error> = webRequest(url: url, method: .post, parameters: params)
+            
             return request
                 .map{
                     Chat(message: $0.data.message!, conversationID: $0.data.conversationID!, chatSequence: nil, isUserMessage: false, isSentToserver: .NoStatus)
@@ -42,7 +49,7 @@ struct MainChatWebRepository: ChatWebRepository {
     func loadChatsForConversation(conversationID: Int) -> AnyPublisher<LazyList<Chat>, Error> {
         
         let url = getPath(api: .getConversationChats, chatID: conversationID)
-        let request: AnyPublisher<GetConversationChatServerResponse, Error> = WebRequest(pathVariable: nil, params: nil, url: url, method: .get)
+        let request: AnyPublisher<GetConversationChatServerResponse, Error> = webRequest(url: url, method: .get, parameters: nil)
         
         return request
             .map{

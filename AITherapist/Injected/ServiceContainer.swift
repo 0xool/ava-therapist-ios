@@ -11,7 +11,7 @@ extension DIContainer {
     struct Services {
         let conversationService: ConversationService
         let userPermissionsService: UserPermissionsService
-        let authenticationService: AuthenticateService
+        let authenticationService: AuthenticationService
         
         let insightService: InsightService
         let chatService: ChatService
@@ -19,7 +19,7 @@ extension DIContainer {
         
         let profileService: ProfileService
         
-        init(conversationService: ConversationService, userPermissionsService: UserPermissionsService, authenticationService: AuthenticateService, insightService: InsightService, chatService: ChatService, journalService: JournalService, profileService: ProfileService) {
+        init(conversationService: ConversationService, userPermissionsService: UserPermissionsService, authenticationService: AuthenticationService, insightService: InsightService, chatService: ChatService, journalService: JournalService, profileService: ProfileService) {
             self.conversationService = conversationService
             self.userPermissionsService = userPermissionsService
             self.authenticationService = authenticationService

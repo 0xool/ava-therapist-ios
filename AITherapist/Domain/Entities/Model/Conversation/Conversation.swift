@@ -78,7 +78,13 @@ struct DeleteConversationResponse: Decodable, ServerResponse{
     var data: String
 }
 
-struct AddConversationRequest: Encodable{
+struct AddConversationRequest: Encodable, Equatable{
+    static func == (lhs: AddConversationRequest, rhs: AddConversationRequest) -> Bool {
+        lhs.conversation.conversationName == rhs.conversation.conversationName
+    }
+    
+    
+    
     
     struct AddConversationRequestContainer: Encodable {
         var conversationName: String

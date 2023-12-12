@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Alamofire
 import Combine
 
 protocol InsightWebRepository: WebRepository {
@@ -14,16 +13,24 @@ protocol InsightWebRepository: WebRepository {
 }
 
 struct MainInsightWebRepository: InsightWebRepository {
+    var AFSession: Session = .default
+    
+    var session: URLSession
+    var bgQueue: DispatchQueue = Constants.bgQueue
     
     var baseURL: String
     let InsightAPI = "user"
 
-    init(baseURL: String) {
+    init(session: URLSession, baseURL: String) {
+        self.session = session
         self.baseURL = baseURL
+        self.bgQueue = Constants.bgQueue
+        self.AFSession = setAFSession(session, queue: bgQueue)
+
     }
     
     func loadInsight() -> AnyPublisher<Insight, Error> {
-        let request: AnyPublisher<LoadInsightServerResponse, Error> = WebRequest(pathVariable: nil, params: nil, url: getPath(api: .getInsight), method: .get)
+        let request: AnyPublisher<LoadInsightServerResponse, Error> = webRequest(url: getPath(api: .getInsight), method: .get)
         
         return request
             .map{ $0.data }
@@ -40,7 +47,7 @@ extension MainInsightWebRepository {
     func getPath(api: API) -> String {
         switch api {
         case .getInsight:
-            return "\(baseURL)\(InsightAPI)/\(api.rawValue)"
+            return "\(baseURL)/\(InsightAPI)/\(api.rawValue)"
         }
     }
 }
