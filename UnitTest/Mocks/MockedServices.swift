@@ -44,27 +44,11 @@ extension DIContainer.Services {
 
 struct MockedJournalService: Mock, JournalService {
     enum Action: Equatable {
-        static func == (lhs: MockedJournalService.Action, rhs: MockedJournalService.Action) -> Bool {
-            switch (lhs, rhs) {
-            case (.loadJournalList(let lhsJournals), .loadJournalList(let rhsJournals)):
-                return lhsJournals.wrappedValue.value == rhsJournals.wrappedValue.value
-            case (.deleteJournal(let lhsJournalID, let lhsJournals), .deleteJournal(let rhsJournalID, let rhsJournals)):
-                return lhsJournalID == rhsJournalID && lhsJournals.wrappedValue.value == rhsJournals.wrappedValue.value
-            case (.getJournal(let lhsDate, let lhsJournal), .getJournal(let rhsDate, let rhsJournal)):
-                return lhsDate == rhsDate && lhsJournal.wrappedValue == rhsJournal.wrappedValue
-            case (.saveJournal(let lhsJournal), .saveJournal(let rhsJournal)):
-                return lhsJournal.wrappedValue == rhsJournal.wrappedValue
-            default:
-                return true
-            }
-        }
+        case loadJournalList
+        case deleteJournal(Int)
         
-        case saveJournal(journal: Journal, journals: LoadableSubject<DiaryBook>)
-        case loadJournalList(LoadableSubject<DiaryBook>)
-        case deleteJournal(journalID: Int, journals: LoadableSubject<DiaryBook>)
-        
-        case getJournal(byDate: Date, journal: LoadableSubject<Journal>)
-        case saveJournal(LoadableSubject<Journal>)
+        case getJournal(Date)
+        case saveJournal
     }
     
     let actions: MockActions<Action>
@@ -74,54 +58,34 @@ struct MockedJournalService: Mock, JournalService {
     }
     
     func loadJournalList(journals: LoadableSubject<DiaryBook>){
-        register(.loadJournalList(journals))
+        register(.loadJournalList)
     }
     
     func deleteJournal(journalID: Int, journals: LoadableSubject<DiaryBook>){
-        register(.deleteJournal(journalID: journalID, journals: journals))
+        register(.deleteJournal(journalID))
     }
     
     func saveJournal(journal: Journal, journals: LoadableSubject<DiaryBook>){
-        register(.saveJournal(journal: journal, journals: journals))
+//        register(.saveJournal(journal: journal, journals: journals))
     }
     
     func saveJournal(journal: LoadableSubject<Journal>){
-        register(.saveJournal(journal))
+        register(.saveJournal)
     }
     
     func getJournal(byDate: Date, journal: LoadableSubject<Journal>){
-        register(.getJournal(byDate: byDate, journal: journal))
+        register(.getJournal(byDate))
     }
-    
 }
 
 // MARK: ChatService
 
 struct MockChatService: Mock, ChatService {
 
-    enum Action: Equatable {
-        static func == (lhs: MockChatService.Action, rhs: MockChatService.Action) -> Bool {
-            switch (lhs, rhs) {
-            case (.loadConversationChat(let lhsChats, let lhsConversationID), .loadConversationChat(let rhsChats, let rhsConversationID)):
-                return lhsChats.wrappedValue.value == rhsChats.wrappedValue.value && lhsConversationID == rhsConversationID
-            case (.loadChatFromDBBy(let lhsConversationID), .loadChatFromDBBy(let rhsConversationID)):
-                return lhsConversationID == rhsConversationID
-            case (.getChatsForConversationFromServer(let lhsConversationID), .getChatsForConversationFromServer(let rhsConversationID)):
-                return lhsConversationID == rhsConversationID
-            case (.saveChatInDB(let lhsChat), .saveChatInDB(let rhsChat)):
-                return lhsChat == rhsChat
-            case (.sendChatToServer(let lhsMessage, let lhsConversation), .sendChatToServer(let rhsMessage, let rhsConversation)):
-                return lhsMessage == rhsMessage && lhsConversation == rhsConversation
-            case (.deletePreviousUserMessage, .deletePreviousUserMessage):
-                return true
-            default:
-                return false
-            }
-        }
-        
-        case loadConversationChat(chats: LoadableSubject<LazyList<Chat>>, conversationID: Int)
-        case loadChatFromDBBy(conversationID: Int)
-        case getChatsForConversationFromServer(conversationID: Int)
+    enum Action: Equatable {        
+        case loadConversationChat(Int)
+        case loadChatFromDBBy(Int)
+        case getChatsForConversationFromServer(Int)
         
         case saveChatInDB(chat: Chat)
         case sendChatToServer(message: String, conversation: Conversation)
@@ -139,16 +103,16 @@ struct MockChatService: Mock, ChatService {
     }
     
     func loadConversationChat(chats: LoadableSubject<LazyList<Chat>>, conversationID: Int){
-        register(.loadConversationChat(chats: chats, conversationID: conversationID))
+        register(.loadConversationChat(conversationID))
     }
     
     func loadChatFromDBBy(conversationID: Int) -> AnyPublisher<LazyList<Chat>, Error>{
-        register(.loadChatFromDBBy(conversationID: conversationID))
+        register(.loadChatFromDBBy(conversationID))
         return loadChatFromDBByResult.publish()
     }
     
     func getChatsForConversationFromServer(conversationID: Int) -> AnyPublisher<LazyList<Chat>, Error>{
-        register(.getChatsForConversationFromServer(conversationID: conversationID))
+        register(.getChatsForConversationFromServer(conversationID))
         return getChatsForConversationFromServerResult.publish()
     }
     
@@ -169,25 +133,10 @@ struct MockChatService: Mock, ChatService {
 // MARK: - ConversationService
 struct MockConversationService: Mock, ConversationService {
     enum Action: Equatable {
-        static func == (lhs: MockConversationService.Action, rhs: MockConversationService.Action) -> Bool {
-            switch (lhs, rhs) {
-            case (.loadConversationList(let lhsConversations), .loadConversationList(let rhsConversations)):
-                return lhsConversations.wrappedValue.value == rhsConversations.wrappedValue.value
-            case (.loadConversationChat(let lhsConversation), .loadConversationChat(let rhsConversation)):
-                return lhsConversation.wrappedValue == rhsConversation.wrappedValue
-            case (.createNewConversation(let lhsConversation, let lhsConversationName), .createNewConversation(let rhsConversation, let rhsConversationName)):
-                return lhsConversation.wrappedValue == rhsConversation.wrappedValue && lhsConversationName == rhsConversationName
-            case (.deleteConversation(let lhsConversationID), .deleteConversation(let rhsConversationID)):
-                return lhsConversationID == rhsConversationID
-            default:
-                return false
-            }
-        }
-        
-        case loadConversationList(conversations: LoadableSubject<LazyList<Conversation>>)
-        case loadConversationChat(conversation: LoadableSubject<Conversation>)
-        case createNewConversation(conversation: LoadableSubject<Conversation>, conversationName: String)
-        case deleteConversation(conversationID: Int)
+        case loadConversationList
+        case loadConversationChat
+        case createNewConversation(String)
+        case deleteConversation(Int)
     }
     
     init(expected: [Action]) {
@@ -199,19 +148,19 @@ struct MockConversationService: Mock, ConversationService {
     var deleteConversationResult: Result<Void, Error> = .failure(MockError.valueNotSet)
     
     func loadConversationList(conversations: LoadableSubject<LazyList<Conversation>>){
-        register(.loadConversationList(conversations: conversations))
+        register(.loadConversationList)
     }
     
     func loadConversationChat(conversation: LoadableSubject<Conversation>){
-        register(.loadConversationChat(conversation: conversation))
+        register(.loadConversationChat)
     }
     
     func createNewConversation(conversation: LoadableSubject<Conversation>, conversationName: String){
-        register(.createNewConversation(conversation: conversation, conversationName: conversationName))
+        register(.createNewConversation(conversationName))
     }
     
     func deleteConversation(conversationID: Int) -> AnyPublisher<Void, Error> {
-        register(.deleteConversation(conversationID: conversationID))
+        register(.deleteConversation(conversationID))
         return deleteConversationResult.publish()
     }
 }
@@ -267,21 +216,8 @@ struct MockedInsightsService: Mock, InsightService {
 
 struct MockedAuthenticationService: Mock, AuthenticationService {
     enum Action: Equatable {
-        static func == (lhs: MockedAuthenticationService.Action, rhs: MockedAuthenticationService.Action) -> Bool {
-            switch (lhs, rhs) {
-            case (.loginUser(let lhsEmail, let lhsPassword), .loginUser(let rhsEmail, let rhsPassword)):
-                return lhsEmail == rhsEmail && lhsPassword == rhsPassword
-            case (.registerUser(let lhsAuth, let lhsEmail, let lhsPassword), .registerUser(let rhsAuth, let rhsEmail, let rhsPassword)):
-                return lhsAuth.wrappedValue.value == rhsAuth.wrappedValue.value && lhsEmail == rhsEmail && lhsPassword == rhsPassword
-            case (.checkUserLoggedStatus, .checkUserLoggedStatus):
-                return true
-            default:
-                return false
-            }
-        }
-        
         case loginUser(email: String, password: String)
-        case registerUser(auth: LoadableSubject<User>, email: String, password: String)
+        case registerUser(email: String, password: String)
         case checkUserLoggedStatus
     }
     
@@ -296,7 +232,7 @@ struct MockedAuthenticationService: Mock, AuthenticationService {
     }
     
     func registerUser(auth: LoadableSubject<User>, email: String, password: String) {
-        register(.registerUser(auth: auth, email: email, password: password))
+        register(.registerUser(email: email, password: password))
     }
     
     func checkUserLoggedStatus() {

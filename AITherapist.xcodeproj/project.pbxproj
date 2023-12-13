@@ -96,6 +96,7 @@
 		A57AD7D82AA6781F008EC1FB /* ConversationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57AD7D72AA6781F008EC1FB /* ConversationService.swift */; };
 		A57AD7DA2AA678CB008EC1FB /* LazyList.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57AD7D92AA678CB008EC1FB /* LazyList.swift */; };
 		A57AD7E02AA67B51008EC1FB /* Loadable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57AD7DF2AA67B51008EC1FB /* Loadable.swift */; };
+		A57D55612B27F1D500C85E3A /* JournalDBRepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57D55602B27F1D500C85E3A /* JournalDBRepositoryTests.swift */; };
 		A58AA4952AD601C9001F7253 /* ChatDBRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A58AA4942AD601C9001F7253 /* ChatDBRepository.swift */; };
 		A58AA4972AD7A9DA001F7253 /* Loading.swift in Sources */ = {isa = PBXBuildFile; fileRef = A58AA4962AD7A9D9001F7253 /* Loading.swift */; };
 		A58AA4992AD7C86B001F7253 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A58AA4982AD7C86B001F7253 /* Constants.swift */; };
@@ -275,6 +276,7 @@
 		A57AD7D72AA6781F008EC1FB /* ConversationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationService.swift; sourceTree = "<group>"; };
 		A57AD7D92AA678CB008EC1FB /* LazyList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LazyList.swift; sourceTree = "<group>"; };
 		A57AD7DF2AA67B51008EC1FB /* Loadable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Loadable.swift; sourceTree = "<group>"; };
+		A57D55602B27F1D500C85E3A /* JournalDBRepositoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalDBRepositoryTests.swift; sourceTree = "<group>"; };
 		A58AA4942AD601C9001F7253 /* ChatDBRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatDBRepository.swift; sourceTree = "<group>"; };
 		A58AA4962AD7A9D9001F7253 /* Loading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Loading.swift; sourceTree = "<group>"; };
 		A58AA4982AD7C86B001F7253 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Constants.swift; path = AITherapist/Utilities/Constants.swift; sourceTree = SOURCE_ROOT; };
@@ -387,6 +389,7 @@
 				A501D9992B15818A00DFE8B2 /* CountriesWebRepositoryTests.swift */,
 				A501D99A2B15818A00DFE8B2 /* WebRepositoryTests.swift */,
 				A501D99B2B15818A00DFE8B2 /* CountriesDBRepositoryTests.swift */,
+				A57D55602B27F1D500C85E3A /* JournalDBRepositoryTests.swift */,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
@@ -1238,6 +1241,7 @@
 				A501D9E72B15818B00DFE8B2 /* CountriesServiceTests.swift in Sources */,
 				A501D9C82B15818B00DFE8B2 /* CountriesWebRepositoryTests.swift in Sources */,
 				A501D9CD2B15818B00DFE8B2 /* DeepLinksHandlerTests.swift in Sources */,
+				A57D55612B27F1D500C85E3A /* JournalDBRepositoryTests.swift in Sources */,
 				A501D9D52B15818B00DFE8B2 /* ImageViewTests.swift in Sources */,
 				A501D9CA2B15818B00DFE8B2 /* CountriesDBRepositoryTests.swift in Sources */,
 				A501D9DF2B15818B00DFE8B2 /* LazyListTests.swift in Sources */,

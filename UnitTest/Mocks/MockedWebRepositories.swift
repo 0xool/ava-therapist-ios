@@ -115,8 +115,6 @@ final class MockedChatWebRepository: TestWebRepository, Mock, ChatWebRepository 
 // MARK: - AuthenicationWebRepository
 
 final class MockedAuthenticateWebRepository: TestWebRepository, Mock, AuthenticateWebRepository {
-    
-    
     enum Action: Equatable {
         case login(String, String)
         case register(String, String)

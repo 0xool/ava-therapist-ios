@@ -6,171 +6,103 @@
 //  Copyright © 2020 Cyrus Refahi. All rights reserved.
 //
 
-import CoreData
+import RealmSwift
 import Combine
-//@testable import AITherapist
-//
-//final class MockedPersistentStore: Mock, DataBase {
-//    func GetAll<T>() -> RealmSwift.Results<T> where T : RealmSwiftObject {
-//        <#code#>
-//    }
-//    
-//    func GetByID<T>(id: Int) -> T? where T : RealmSwiftObject {
-//        <#code#>
-//    }
-//    
-//    func GetLast<T>(ofType: T.Type) -> T? where T : RealmSwiftObject {
-//        <#code#>
-//    }
-//    
-//    func GetByTypeID<T>(ofType: T.Type, id: Int, query: @escaping (RealmSwift.Query<T>) -> RealmSwift.Query<Bool>) -> AnyPublisher<RealmSwift.Results<T>, Error> where T : RealmSwiftObject {
-//        <#code#>
-//    }
-//    
-//    func GetByQuery<T>(ofType: T.Type, query: @escaping (RealmSwift.Query<T>) -> RealmSwift.Query<Bool>) -> AnyPublisher<RealmSwift.Results<T>, Error> where T : RealmSwiftObject {
-//        <#code#>
-//    }
-//    
-//    func GetCount<T>(value: T.Type) -> Int where T : RealmSwiftObject {
-//        <#code#>
-//    }
-//    
-//    func Write<T>(writeData: T) -> AnyPublisher<Void, Error> where T : RealmSwiftObject {
-//        <#code#>
-//    }
-//    
-//    func Update<T>(value: T) -> AnyPublisher<Void, Error> where T : RealmSwiftObject {
-//        <#code#>
-//    }
-//    
-//    func EntityExist<Element>(id: Int, ofType: Element.Type) -> Bool where Element : RealmSwiftObject {
-//        <#code#>
-//    }
-//    
-//    func DeleteLast<T>(ofType: T.Type) where T : RealmSwiftObject {
-//        <#code#>
-//    }
-//    
-//    func DeleteByID<T>(ofType: T.Type, id: Int) -> AnyPublisher<Void, Error> where T : RealmSwiftObject {
-//        <#code#>
-//    }
-//    
-//    struct ContextSnapshot: Equatable {
-//        let inserted: Int
-//        let updated: Int
-//        let deleted: Int
-//    }
-//    
-//    enum Action: Equatable {
-//        case count
-//        case fetchCountries(ContextSnapshot)
-//        case fetchCountryDetails(ContextSnapshot)
-//        case update(ContextSnapshot)
-//    }
-//    
-//    var actions = MockActions<Action>(expected: [])
-//    
-//    var countResult: Int = 0
-//    
-//    deinit {
-//        destroyDatabase()
-//    }
-//    
-//    // MARK: - count
-//    
-//    func count<T>(_ fetchRequest: NSFetchRequest<T>) -> AnyPublisher<Int, Error> {
-//        register(.count)
-//        return Just<Int>.withErrorType(countResult, Error.self).publish()
-//    }
-//    
-//    // MARK: - fetch
-//    
-//    func fetch<T, V>(_ fetchRequest: NSFetchRequest<T>,
-//                     map: @escaping (T) throws -> V?) -> AnyPublisher<LazyList<V>, Error> {
-//        do {
-//            let context = container.viewContext
-//            context.reset()
-//            let result = try context.fetch(fetchRequest)
-//            if T.self is CountryMO.Type {
-//                register(.fetchCountries(context.snapshot))
-//            } else if T.self is CountryDetailsMO.Type {
-//                register(.fetchCountryDetails(context.snapshot))
-//            } else {
-//                fatalError("Add a case for \(String(describing: T.self))")
-//            }
-//            let list = LazyList<V>(count: result.count, useCache: true, { index in
-//                try map(result[index])
-//            })
-//            return Just<LazyList<V>>.withErrorType(list, Error.self).publish()
-//        } catch {
-//            return Fail<LazyList<V>, Error>(error: error).publish()
-//        }
-//    }
-//    
-//    // MARK: - update
-//    
-//    func update<Result>(_ operation: @escaping DBOperation<Result>) -> AnyPublisher<Result, Error> {
-//        do {
-//            let context = container.viewContext
-//            context.reset()
-//            let result = try operation(context)
-//            register(.update(context.snapshot))
-//            return Just(result).setFailureType(to: Error.self).publish()
-//        } catch {
-//            return Fail<Result, Error>(error: error).publish()
-//        }
-//    }
-//    
-//    // MARK: -
-//    
-//    func preloadData(_ preload: (NSManagedObjectContext) throws -> Void) throws {
-//        try preload(container.viewContext)
-//        if container.viewContext.hasChanges {
-//            try container.viewContext.save()
-//        }
-//        container.viewContext.reset()
-//    }
-//    
-//    // MARK: - Database
-//    
-//    private let dbVersion = CoreDataStack.Version(CoreDataStack.Version.actual)
-//    
-//    private var dbURL: URL {
-//        guard let url = dbVersion.dbFileURL(.cachesDirectory, .userDomainMask)
-//            else { fatalError() }
-//        return url
-//    }
-//    
-//    private lazy var container: NSPersistentContainer = {
-//        let container = NSPersistentContainer(name: dbVersion.modelName)
-//        try? FileManager().removeItem(at: dbURL)
-//        let store = NSPersistentStoreDescription(url: dbURL)
-//        container.persistentStoreDescriptions = [store]
-//        let group = DispatchGroup()
-//        group.enter()
-//        container.loadPersistentStores { (desc, error) in
-//            if let error = error {
-//                fatalError("\(error)")
-//            }
-//            group.leave()
-//        }
-//        group.wait()
-//        container.viewContext.mergePolicy = NSOverwriteMergePolicy
-//        container.viewContext.undoManager = nil
-//        return container
-//    }()
-//    
-//    private func destroyDatabase() {
-//        try? container.persistentStoreCoordinator
-//            .destroyPersistentStore(at: dbURL, ofType: NSSQLiteStoreType, options: nil)
-//        try? FileManager().removeItem(at: dbURL)
-//    }
-//}
-//
-//extension NSManagedObjectContext {
-//    var snapshot: MockedPersistentStore.ContextSnapshot {
-//        .init(inserted: insertedObjects.count,
-//              updated: updatedObjects.count,
-//              deleted: deletedObjects.count)
-//    }
-//}
+@testable import AITherapist
+
+final class MockedPersistentStore: Mock, DataBase {
+//    private let realm: Realm
+    enum DataBaseAction: Equatable {
+        case getAll
+        case getByID(Int)
+        case getLast
+        case getByTypeID(Int)
+        case getByQuery
+        case getCount
+        case write
+        case update
+        case entityExist(Int)
+        case deleteLast
+        case deleteByID(Int)
+    }
+    typealias Action = DataBaseAction
+    
+    let actions: MockActions<Action>
+    
+    init(expected: [Action]) {
+        actions = MockActions(expected: expected)
+    }
+    
+    func GetAll<T: Object>() -> Results<T> {
+        register(.getAll)
+        
+        // return a mock result which is a RealmSwift.Results
+        return try! Realm(configuration:  Realm.Configuration(inMemoryIdentifier: "test")).objects(T.self)
+    }
+    
+    func GetByID<T: Object>(id: Int) -> T? {
+        register(.getByID(id))
+        return nil
+    }
+    
+    func GetLast<T: Object>(ofType: T.Type) -> T? {
+        register(.getLast)
+        // Return a mock result
+        return nil
+    }
+    
+    func GetByTypeID<T: Object>(ofType: T.Type, id: Int, query: @escaping (Query<T>) -> Query<Bool>) -> AnyPublisher<Results<T>, Error> {
+        register(.getByTypeID(id))
+        // Return a mock result
+        return Future { promise in
+//            promise(.success(Results<T>()))
+        }.eraseToAnyPublisher()
+    }
+    
+    func GetByQuery<T: Object>(ofType: T.Type, query: @escaping (Query<T>) -> Query<Bool>) -> AnyPublisher<Results<T>, Error> {
+        register(.getByQuery)
+        // Return a mock result
+        return Future { promise in
+//            promise(.success(Results<T>()))
+        }.eraseToAnyPublisher()
+    }
+    
+    func GetCount<T: Object>(value: T.Type) -> Int {
+        register(.getCount)
+        // Return a mock result
+        return 0
+    }
+    
+    func Write<T: Object>(writeData: T) -> AnyPublisher<Void, Error> {
+        register(.write)
+        // Return a mock result
+        return Future { promise in
+            promise(.success(()))
+        }.eraseToAnyPublisher()
+    }
+    
+    func Update<T: Object>(value: T) -> AnyPublisher<Void,  Error> {
+        register(.update)
+        return Future { promise in
+            promise(.success(()))
+        }.eraseToAnyPublisher()
+    }
+    
+    func EntityExist<Element: Object>(id: Int, ofType: Element.Type) -> Bool {
+        register(.entityExist(id))
+        return true
+    }
+    
+    func DeleteLast<T: Object>(ofType: T.Type) {
+        register(.deleteLast)
+    }
+    
+    func DeleteByID<T: Object>(ofType: T.Type, id: Int) -> AnyPublisher<Void,  Error> {
+        register(.deleteByID(id))
+        // Return a mock result
+        return Future { promise in
+            promise(.success(()))
+        }.eraseToAnyPublisher()
+    }
+}
+
