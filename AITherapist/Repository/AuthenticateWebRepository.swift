@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Alamofire
 import Combine
 
 // Refactor this in both backend and frontend to fix this respose setup
@@ -49,7 +50,7 @@ struct MainAuthenticateWebRepository: AuthenticateWebRepository {
     var baseURL: String
     var bgQueue: DispatchQueue = Constants.bgQueue
     
-    let AuthenticateAPI = "user/"
+    static let AuthenticateAPI = "user"
 
     init(baseURL: String, session: URLSession) {
         self.baseURL = baseURL
@@ -59,7 +60,7 @@ struct MainAuthenticateWebRepository: AuthenticateWebRepository {
     
     func login(email: String, password: String) -> AnyPublisher<User, Error> {
         let params = ["user": ["username" : email , "password" : password]]
-        let request: AnyPublisher<AuthenticateResponse, Error> = webRequest(url: getPath(api: .login), method: .post, parameters: params)
+        let request: AnyPublisher<AuthenticateResponse, Error> = webRequest(api: API.login(params: params))
         
         // Refactor this code to remove setting variables inside this call back
         return request.map { (response) -> User in
@@ -71,22 +72,54 @@ struct MainAuthenticateWebRepository: AuthenticateWebRepository {
     }
     
     func register(email: String, password: String) -> AnyPublisher<UserServerResponse, Error> {
-        webRequest(url: getPath(api: .register), method: .post, parameters: ["email" : email , "password" : password])
+        webRequest(api: API.register(email: email, password: password))
     }
 }
 
 extension MainAuthenticateWebRepository {
-    enum API: String {
-        case login = "login"
-        case register = "register/"
-    }
     
-    func getPath(api: API) -> String {
-        switch api {
-        case .login:
-            return "\(baseURL)\(AuthenticateAPI)\(api.rawValue)"
-        case .register:
-            return "\(baseURL)\(AuthenticateAPI)\(api.rawValue)"
+    enum API: APICall {
+        case login(params: Parameters?)
+        case register(email: String, password: String)
+        
+        var url: String {
+            switch self {
+            case .login:
+                return "\(MainAuthenticateWebRepository.AuthenticateAPI)/login"
+            case .register:
+                return "\(MainAuthenticateWebRepository.AuthenticateAPI)/register"
+            }
+        }
+        
+        var method: HTTPMethod {
+            switch self {
+            case .login:
+                return .post
+            case .register:
+                return .post
+            }
+        }
+        
+        var headers: HTTPHeaders? {
+            nil
+        }
+        
+        var encoding: ParameterEncoding {
+            switch self {
+            case .login:
+                return JSONEncoding.default
+            case .register:
+                return JSONEncoding.default
+            }
+        }
+        
+        var parameters: Parameters? {
+            switch self {
+            case .login:
+                return nil
+            case let .register(email, password):
+                return ["email" : email , "password" : password]
+            }
         }
     }
     

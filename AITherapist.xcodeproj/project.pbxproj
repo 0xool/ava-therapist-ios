@@ -88,6 +88,7 @@
 		A56D93912AFB321100A66366 /* NewChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56D93902AFB321100A66366 /* NewChatView.swift */; };
 		A56E17A029B2DB680077B76B /* SpeakManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56E179F29B2DB680077B76B /* SpeakManager.swift */; };
 		A574F5132B03171D00624890 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A574F5122B03171D00624890 /* ProfileView.swift */; };
+		A576DFB92B2AD4D5004C950B /* MockedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A576DFB62B2AD46A004C950B /* MockedData.swift */; };
 		A577D5DE2AB7A2A100D48F94 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A525EEAD29B172BF00A57CE8 /* Assets.xcassets */; };
 		A578EACC2AA418A200D992AD /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = A578EACB2AA418A200D992AD /* Message.swift */; };
 		A57AD7D02AA64AB8008EC1FB /* ConversationWebRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57AD7CF2AA64AB8008EC1FB /* ConversationWebRepository.swift */; };
@@ -139,6 +140,7 @@
 		A5B7D5E829B41997001D7113 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5B7D5E729B41997001D7113 /* Utilities.swift */; };
 		A5BBCED12B1291B9000AC83C /* ImagePersistenceRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BBCED02B1291B9000AC83C /* ImagePersistenceRepository.swift */; };
 		A5BBCED42B129F83000AC83C /* ProfileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BBCED32B129F83000AC83C /* ProfileService.swift */; };
+		A5C148882B29555200D6C836 /* JournalWebRepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C148872B29555200D6C836 /* JournalWebRepositoryTests.swift */; };
 		A5C55FDB2AA55DBD00154ED0 /* CancelBag.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C55FDA2AA55DBD00154ED0 /* CancelBag.swift */; };
 		A5CA948B2AA7D74300E25A46 /* ConversationDBRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5CA948A2AA7D74300E25A46 /* ConversationDBRepository.swift */; };
 		A5CA948D2AA7FA6D00E25A46 /* PushNotificationsHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5CA948C2AA7FA6D00E25A46 /* PushNotificationsHandler.swift */; };
@@ -269,6 +271,7 @@
 		A56D93902AFB321100A66366 /* NewChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewChatView.swift; sourceTree = "<group>"; };
 		A56E179F29B2DB680077B76B /* SpeakManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeakManager.swift; sourceTree = "<group>"; };
 		A574F5122B03171D00624890 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		A576DFB62B2AD46A004C950B /* MockedData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockedData.swift; sourceTree = "<group>"; };
 		A578EACB2AA418A200D992AD /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		A57AD7CF2AA64AB8008EC1FB /* ConversationWebRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationWebRepository.swift; sourceTree = "<group>"; };
 		A57AD7D22AA64C6D008EC1FB /* Error.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
@@ -319,6 +322,7 @@
 		A5B7D5E729B41997001D7113 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Utilities.swift; path = AITherapist/Utilities.swift; sourceTree = SOURCE_ROOT; };
 		A5BBCED02B1291B9000AC83C /* ImagePersistenceRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePersistenceRepository.swift; sourceTree = "<group>"; };
 		A5BBCED32B129F83000AC83C /* ProfileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileService.swift; sourceTree = "<group>"; };
+		A5C148872B29555200D6C836 /* JournalWebRepositoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalWebRepositoryTests.swift; sourceTree = "<group>"; };
 		A5C55FDA2AA55DBD00154ED0 /* CancelBag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelBag.swift; sourceTree = "<group>"; };
 		A5CA948A2AA7D74300E25A46 /* ConversationDBRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationDBRepository.swift; sourceTree = "<group>"; };
 		A5CA948C2AA7FA6D00E25A46 /* PushNotificationsHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationsHandler.swift; sourceTree = "<group>"; };
@@ -390,6 +394,7 @@
 				A501D99A2B15818A00DFE8B2 /* WebRepositoryTests.swift */,
 				A501D99B2B15818A00DFE8B2 /* CountriesDBRepositoryTests.swift */,
 				A57D55602B27F1D500C85E3A /* JournalDBRepositoryTests.swift */,
+				A5C148872B29555200D6C836 /* JournalWebRepositoryTests.swift */,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
@@ -700,6 +705,14 @@
 			path = /Users/cyrusrefahi/Documents/AITherapist/AITherapist/Presentation/UI/ProfileView;
 			sourceTree = "<absolute>";
 		};
+		A576DFB82B2AD4A8004C950B /* MockedData */ = {
+			isa = PBXGroup;
+			children = (
+				A576DFB62B2AD46A004C950B /* MockedData.swift */,
+			);
+			path = MockedData;
+			sourceTree = "<group>";
+		};
 		A578EACA2AA4187E00D992AD /* Message */ = {
 			isa = PBXGroup;
 			children = (
@@ -982,6 +995,7 @@
 		A5B7D5CA29B3ADD5001D7113 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				A576DFB82B2AD4A8004C950B /* MockedData */,
 				A51CF3CC2AF8A6200006F275 /* Journal */,
 				A50F0E532AC123100081AD4C /* GeneralUserSummary */,
 				A5EFC5942AC10FAB00D6097B /* Mood */,
@@ -1271,6 +1285,7 @@
 				A501D9DB2B15818B00DFE8B2 /* CountryDetailsTests.swift in Sources */,
 				A501D9E42B15818B00DFE8B2 /* MockedServices.swift in Sources */,
 				A501D9C92B15818B00DFE8B2 /* WebRepositoryTests.swift in Sources */,
+				A5C148882B29555200D6C836 /* JournalWebRepositoryTests.swift in Sources */,
 				A501D9CB2B15818B00DFE8B2 /* AppDelegateTests.swift in Sources */,
 				A501D9C62B15818B00DFE8B2 /* PushTokenWebRepositoryTests.swift in Sources */,
 				A51B4E342AD0F14500A14AFA /* AITherapistTests.swift in Sources */,
@@ -1316,6 +1331,7 @@
 				A578EACC2AA418A200D992AD /* Message.swift in Sources */,
 				A59C64092ACA58E500B76256 /* ChartView.swift in Sources */,
 				A5CA948B2AA7D74300E25A46 /* ConversationDBRepository.swift in Sources */,
+				A576DFB92B2AD4D5004C950B /* MockedData.swift in Sources */,
 				A58AA4972AD7A9DA001F7253 /* Loading.swift in Sources */,
 				A5B7D5CE29B3AFFD001D7113 /* User.swift in Sources */,
 				A59C63FD2ACA37EE00B76256 /* ContentMessageView.swift in Sources */,

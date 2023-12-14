@@ -21,7 +21,7 @@ final class WebRepositoryTests: XCTestCase {
     
     override func setUp() {
         subscriptions = Set<AnyCancellable>()
-        sut = TestWebRepository()
+        sut = TestWebRepository()        
     }
     
     override func tearDown() {
@@ -133,8 +133,7 @@ final class WebRepositoryTests: XCTestCase {
 
 private extension TestWebRepository {
     func load(_ api: API) -> AnyPublisher<TestData, Error> {
-        print("here bitch\(api.convertToWebApi())")
-        return self.webRequest(webApi: api.convertToWebApi())
+        self.webRequest(api: api)
     }
 }
 
@@ -147,8 +146,6 @@ extension TestWebRepository {
         case noHttpCodeError
         
         var url: String{
-            print(self)
-            print("WTF")
             if self == .urlError {
                 return "😋😋😋"
             }
@@ -169,10 +166,6 @@ extension TestWebRepository {
         
         var parameters: Parameters? {
             nil
-        }
-
-        func convertToWebApi() -> WebAPI {
-            WebAPI(url: url, method: method, headers: headers, encoding: encoding, parameters: parameters)
         }
     }
 }

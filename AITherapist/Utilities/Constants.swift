@@ -17,4 +17,5 @@ struct Constants {
     static let SendConversationUrl: String = BaseUrl + sendConversationUrl
     static let MainUrl = WebProtocol + BaseUrl + port
     static let bgQueue = DispatchQueue(label: "bg_parse_queue")
+    static let testQueue = DispatchQueue(label: "test")
 }

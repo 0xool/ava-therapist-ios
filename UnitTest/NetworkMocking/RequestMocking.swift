@@ -11,7 +11,7 @@ import Alamofire
 extension URLSession {
     static var mockedResponsesOnly: URLSession {
         let configuration = URLSessionConfiguration.default
-        configuration.protocolClasses = [RequestMocking.self]
+        configuration.protocolClasses = [RequestMocking.self, RequestBlocking.self]
         configuration.timeoutIntervalForRequest = 1
         configuration.timeoutIntervalForResource = 1
         return URLSession(configuration: configuration)
@@ -65,26 +65,26 @@ final class RequestMocking: URLProtocol {
 
 // MARK: - RequestBlocking
 
-//private class RequestBlocking: URLProtocol {
-//    enum Error: Swift.Error {
-//        case requestBlocked
-//    }
-//    
-//    override class func canInit(with request: URLRequest) -> Bool {
-//        return true
-//    }
-//
-//    override class func canonicalRequest(for request: URLRequest) -> URLRequest {
-//        return request
-//    }
-//
-//    override func startLoading() {
-//        DispatchQueue(label: "").async {
-//            self.client?.urlProtocol(self, didFailWithError: Error.requestBlocked)
-//        }
-//    }
-//    override func stopLoading() { }
-//}
+private class RequestBlocking: URLProtocol {
+    enum Error: Swift.Error {
+        case requestBlocked
+    }
+    
+    override class func canInit(with request: URLRequest) -> Bool {
+        return true
+    }
+
+    override class func canonicalRequest(for request: URLRequest) -> URLRequest {
+        return request
+    }
+
+    override func startLoading() {
+        DispatchQueue(label: "").async {
+            self.client?.urlProtocol(self, didFailWithError: Error.requestBlocked)
+        }
+    }
+    override func stopLoading() { }
+}
 
 
 extension RequestMocking {
@@ -100,5 +100,49 @@ extension RequestMocking {
     
     static private func mock(for request: URLRequest) -> MockedResponse? {
         return mocks.first { $0.url == request.url }
+    }
+}
+
+extension RequestMocking {
+    
+    class MockInterceptor: RequestInterceptor {
+        private var mocks: [MockedResponse] = []
+        
+        func add(mock: MockedResponse) {
+            mocks.append(mock)
+        }
+        
+        func removeAllMocks() {
+            mocks.removeAll()
+        }
+        
+        private func mock(for request: URLRequest) -> MockedResponse? {
+            return mocks.first { $0.url == request.url }
+        }
+        
+        func adapt(_ urlRequest: URLRequest, for session: Session, completion: @escaping (Result<URLRequest, Error>) -> Void) {
+            if let mock = mock(for: urlRequest),
+               let url = urlRequest.url,
+               let response = mock.customResponse ??
+                HTTPURLResponse(url: url,
+                                statusCode: mock.httpCode,
+                                httpVersion: "HTTP/1.1",
+                                headerFields: mock.headers) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + mock.loadingTime) {
+                    switch mock.result {
+                    case let .success(data):
+                        completion(.success(urlRequest))
+                    case let .failure(error):
+                        completion(.failure(error as! RequestMocking.Error))
+                    }
+                }
+            } else {
+                completion(.failure(Error.requestBlocked))
+            }
+        }
+    }
+    
+    enum Error: Swift.Error {
+        case requestBlocked
     }
 }

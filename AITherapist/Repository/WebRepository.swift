@@ -21,7 +21,11 @@ protocol WebRepository {
 // MARK: General Request
 extension WebRepository {
     func webRequest<D: ServerResponse>(url: String, method: HTTPMethod, parameters: Parameters? = nil, encoding: ParameterEncoding = URLEncoding.default, headers: HTTPHeaders? = nil) -> AnyPublisher<D, Error> {
-        webRequest(webApi: WebAPI.init(url: url, method: method, headers: headers, encoding: encoding, parameters: parameters))
+        webRequest(webApi: WebAPI.init(url: url, method: method, headers: headers, encoding: encoding, parameters: parameters, baseURL: self.baseURL))
+    }
+    
+    func webRequest<D: ServerResponse>(api: APICall) -> AnyPublisher<D, Error> {
+        webRequest(webApi: WebAPI.init(url: api.url, method: api.method, headers: api.headers, encoding: api.encoding, parameters: api.parameters, baseURL: self.baseURL))
     }
     
     func webRequest<D: ServerResponse>(webApi: APICall) -> AnyPublisher<D, Error> {
@@ -141,8 +145,8 @@ struct WebAPI: APICall {
     var encoding: ParameterEncoding = URLEncoding.default
     var parameters: Parameters? = nil
     
-    init(url: String, method: HTTPMethod, headers: HTTPHeaders? = nil, encoding: ParameterEncoding, parameters: Parameters? = nil) {
-        self.url = url
+    init(url: String, method: HTTPMethod, headers: HTTPHeaders? = nil, encoding: ParameterEncoding, parameters: Parameters? = nil, baseURL: String) {
+        self.url = "\(baseURL)/\(url)"
         self.method = method
         self.headers = headers
         self.encoding = encoding

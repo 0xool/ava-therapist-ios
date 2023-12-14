@@ -7,6 +7,7 @@
 
 import Combine
 import Foundation
+import Alamofire
 
 protocol JournalWebRepository: WebRepository {
     func loadJournalList() -> AnyPublisher<DiaryBook, Error>
@@ -22,7 +23,7 @@ struct MainJournalWebRepository: JournalWebRepository {
     var baseURL: String
     
     var bgQueue: DispatchQueue = Constants.bgQueue
-    let JournalAPI = "diary"
+    static let JournalAPI = "diary"
     
     init(baseURL: String, session: URLSession) {
         self.baseURL = baseURL
@@ -32,7 +33,7 @@ struct MainJournalWebRepository: JournalWebRepository {
     
     func loadJournalList() -> AnyPublisher<DiaryBook, Error> {
         
-        let request: AnyPublisher<GetAllJournalResponse, Error> = webRequest(url: getPath(api: .allJournals), method: .get, parameters: nil, headers: nil)
+        let request: AnyPublisher<GetAllJournalResponse, Error> = webRequest(api: API.allJournals)
         
         return request
             .map{
@@ -44,13 +45,11 @@ struct MainJournalWebRepository: JournalWebRepository {
     func addJournal(journal: Journal) -> AnyPublisher<Void, Error> {
         let request: AddJournalRequest = AddJournalRequest(diary: journal)
         
-        let url = getPath(api: .addJournal)
         do {
             let parameters = try JSONEncoder().encode(request)
             let params = try JSONSerialization.jsonObject(with: parameters, options: []) as? [String: Any] ?? [:]
-            let request: AnyPublisher<AddJournalResponse, Error> =
-            webRequest(url: url, method: .post, parameters: params, headers: nil)
-            
+            let request: AnyPublisher<AddJournalResponse, Error> = webRequest(api: API.addJournal(params: params))
+                        
             return request
                 .map{ _ in }
                 .eraseToAnyPublisher()
@@ -60,9 +59,8 @@ struct MainJournalWebRepository: JournalWebRepository {
     }
     
     func deleteJournal(journalID: Int) -> AnyPublisher<Void, Error>{
-        let url = getPath(api: .deleteJournal, journalID: journalID)
         
-        let request: AnyPublisher<DeleteJournalResponse, Error> = webRequest(url: url, method: .delete, parameters: nil, headers: nil)
+        let request: AnyPublisher<DeleteJournalResponse, Error> = webRequest(api: API.deleteJournal(journalID: journalID))
         
         return request
             .map{ _ in
@@ -72,9 +70,7 @@ struct MainJournalWebRepository: JournalWebRepository {
     }
     
     func getJournalByDate(date: Date) -> AnyPublisher<Journal, Error>{
-        let url = getPath(api: .getDiaryByDate, date: date.description)
-        
-        let request: AnyPublisher<GetJournalByDateResponse, Error> = webRequest(url: url, method: .get, parameters: nil)
+        let request: AnyPublisher<GetJournalByDateResponse, Error> = webRequest(api: API.getDiaryByDate(date: date.description))
         
         return request
             .map{
@@ -85,33 +81,66 @@ struct MainJournalWebRepository: JournalWebRepository {
 }
 
 extension MainJournalWebRepository {
-    
-    enum API: String {
-        case allJournals = "getDiaryList"
-        case addJournal = "addDiary"
-        case deleteJournal = "deleteDiary"
-        case getDiaryByDate = "getDiaryByDate"
-    }
-    
-    func getPath(api: API, journalID: Int? = nil, date: String? = nil) -> String {
-        let mainUrl = "\(baseURL)\(JournalAPI)/\(api.rawValue)"
-        switch api {
-        case .addJournal:
-            return mainUrl
-        case .allJournals:
-            return mainUrl
-        case .getDiaryByDate:
-            guard let date = date else {
-                return mainUrl
+    enum API: APICall {
+        case allJournals
+        case addJournal(params: Parameters?)
+        case deleteJournal(journalID: Int)
+        case getDiaryByDate(date: String)
+        
+        var url: String {
+            switch self {
+            case .allJournals:
+                return "\(MainJournalWebRepository.JournalAPI)/getDiaryList"
+            case .addJournal:
+                return "\(MainJournalWebRepository.JournalAPI)/addDiary"
+            case let .deleteJournal(journalID):
+                return "\(MainJournalWebRepository.JournalAPI)/deleteDiary/\(journalID)"
+            case let .getDiaryByDate(date):
+                return "\(MainJournalWebRepository.JournalAPI)/getDiaryByDate/\(date)"
             }
-            
-            return "\(mainUrl)/\(date)"
-        case .deleteJournal:
-            guard let id = journalID else {
-                return mainUrl
+        }
+        
+        var method: HTTPMethod {
+            switch self {
+            case .allJournals:
+                return .get
+            case .addJournal:
+                return .post
+            case .deleteJournal:
+                return .delete
+            case .getDiaryByDate:
+                return .get
             }
-            
-            return "\(mainUrl)/\(id)"
+        }
+        
+        var headers: HTTPHeaders? {
+            nil
+        }
+        
+        var encoding: ParameterEncoding {
+            switch self {
+            case .allJournals:
+                return URLEncoding.default
+            case .addJournal:
+                return JSONEncoding.default
+            case .deleteJournal:
+                return URLEncoding.default
+            case .getDiaryByDate:
+                return URLEncoding.default
+            }
+        }
+        
+        var parameters: Parameters? {
+            switch self {
+            case .allJournals:
+                return nil
+            case let .addJournal(params):
+                return params
+            case .deleteJournal:
+                return nil
+            case .getDiaryByDate:
+                return nil
+            }
         }
     }
 }

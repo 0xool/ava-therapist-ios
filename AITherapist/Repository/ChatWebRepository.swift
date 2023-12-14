@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import Alamofire
 
 protocol ChatWebRepository: WebRepository {
     func loadChatsForConversation(conversationID: Int) -> AnyPublisher<LazyList<Chat>, Error>
@@ -20,7 +21,7 @@ struct MainChatWebRepository: ChatWebRepository {
     var bgQueue: DispatchQueue = Constants.bgQueue
     var baseURL: String
     
-    let chatAPI = "chat"
+    static let ChatAPI = "chat"
 
     init(baseURL: String, session: URLSession) {
         self.baseURL = baseURL
@@ -30,11 +31,10 @@ struct MainChatWebRepository: ChatWebRepository {
     
     func sendChatToServer(data: SaveChatRequset) -> AnyPublisher<Chat, Error> {
         
-        let url = getPath(api: .addChat)
         do {
             let parameters = try JSONEncoder().encode(data)
             let params = try JSONSerialization.jsonObject(with: parameters, options: []) as? [String: Any] ?? [:]
-            let request: AnyPublisher<AddChatServerResponse, Error> = webRequest(url: url, method: .post, parameters: params)
+            let request: AnyPublisher<AddChatServerResponse, Error> = webRequest(api: API.addChat(params: params))
             
             return request
                 .map{
@@ -48,8 +48,7 @@ struct MainChatWebRepository: ChatWebRepository {
     
     func loadChatsForConversation(conversationID: Int) -> AnyPublisher<LazyList<Chat>, Error> {
         
-        let url = getPath(api: .getConversationChats, chatID: conversationID)
-        let request: AnyPublisher<GetConversationChatServerResponse, Error> = webRequest(url: url, method: .get, parameters: nil)
+        let request: AnyPublisher<GetConversationChatServerResponse, Error> = webRequest(api: API.getConversationChats(conversationID: conversationID))
         
         return request
             .map{
@@ -61,22 +60,48 @@ struct MainChatWebRepository: ChatWebRepository {
 
 extension MainChatWebRepository {
     
-    enum API: String {
-        case getConversationChats = "getConversationChat"
-        case addChat = "addUserChat"
-    }
-    
-    func getPath(api: API, chatID: Int? = nil) -> String {
-        let mainUrl = "\(baseURL)\(chatAPI)/\(api.rawValue)"
-        switch api {
-        case .getConversationChats:
-            guard let id = chatID else{
-                return mainUrl
+    enum API: APICall {
+        case getConversationChats(conversationID: Int)
+        case addChat(params: Parameters? = nil)
+        
+        var url: String {
+            switch self {
+            case let .getConversationChats(conversationID):
+                return "\(MainChatWebRepository.ChatAPI)/getConversationChat/\(conversationID)"
+            case .addChat:
+                return "\(MainChatWebRepository.ChatAPI)/addUserChat"
             }
-            
-            return "\(mainUrl)/\(id)"
-        case .addChat:
-            return mainUrl
+        }
+        
+        var method: HTTPMethod {
+            switch self {
+            case .getConversationChats:
+                return .get
+            case .addChat:
+                return .post
+            }
+        }
+        
+        var headers: HTTPHeaders? {
+            nil
+        }
+        
+        var encoding: ParameterEncoding {
+            switch self {
+            case .getConversationChats:
+                return URLEncoding.default
+            case .addChat:
+                return JSONEncoding.default
+            }
+        }
+        
+        var parameters: Parameters? {
+            switch self {
+            case .getConversationChats:
+                return nil
+            case let .addChat(params):
+                return params
+            }
         }
     }
 }

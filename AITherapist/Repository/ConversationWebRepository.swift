@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Alamofire
 import Combine
 
 protocol ConversationWebRepository: WebRepository {
@@ -21,8 +22,8 @@ struct MainConversationWebRepository: ConversationWebRepository {
     var baseURL: String
     var bgQueue: DispatchQueue = Constants.bgQueue
     
-    let ConversationAPI = "conversation"
-
+    static let ConversationAPI = "conversation"
+    
     init(baseURL: String, session: URLSession) {
         self.baseURL = baseURL
         self.session = session
@@ -32,8 +33,8 @@ struct MainConversationWebRepository: ConversationWebRepository {
     
     func loadConversationList() -> AnyPublisher<[Conversation], Error> {
         
-        let request: AnyPublisher<ConversationsResponse, Error> = 
-        webRequest(url: getPath(api: .allConversations), method: .get, parameters: nil, headers: nil)
+        let request: AnyPublisher<ConversationsResponse, Error> =
+        webRequest(api: API.getConversationList)
         
         return request
             .map{
@@ -43,11 +44,10 @@ struct MainConversationWebRepository: ConversationWebRepository {
     }
     
     func addConversation(data: AddConversationRequest) -> AnyPublisher<Conversation, Error> {
-        let url = getPath(api: .addConversation)
         do {
             let parameters = try JSONEncoder().encode(data)
             let params = try JSONSerialization.jsonObject(with: parameters, options: []) as? [String: Any] ?? [:]
-            let request: AnyPublisher<AddConversationResponse, Error> = webRequest(url: url, method: .post, parameters: params, headers: nil)
+            let request: AnyPublisher<AddConversationResponse, Error> = webRequest(api: API.addConversation(params: params))
             
             return request
                 .map{ $0.data }
@@ -58,10 +58,8 @@ struct MainConversationWebRepository: ConversationWebRepository {
     }
     
     func deleteConversation(conversationID: Int) -> AnyPublisher<Void, Error>{
-        let url = getPath(api: .deleteConversation, conversationID: conversationID)
+        let request: AnyPublisher<DeleteConversationResponse, Error> = webRequest(api: API.deleteConversation)
         
-        let request: AnyPublisher<DeleteConversationResponse, Error> = webRequest(url: url, method: .delete, parameters: nil, headers: nil)
-            
         return request
             .map{ _ in
                 
@@ -72,25 +70,57 @@ struct MainConversationWebRepository: ConversationWebRepository {
 
 extension MainConversationWebRepository {
     
-    enum API: String {
-        case allConversations = "getConversationList"
-        case addConversation = "addConversation"
-        case deleteConversation = "deleteConversation"
-    }
-    
-    func getPath(api: API, conversationID: Int? = nil) -> String {
-        let mainUrl = "\(baseURL)\(ConversationAPI)/\(api.rawValue)"
-        switch api {
-        case .addConversation:
-            return mainUrl
-        case .allConversations:
-            return mainUrl
-        case .deleteConversation:
-            guard let id = conversationID else {
-                return mainUrl
+    enum API: APICall{
+        case getConversationList
+        case addConversation(params: Parameters? = nil)
+        case deleteConversation
+        
+        var url: String {
+            switch self {
+            case .getConversationList:
+                return "\(MainConversationWebRepository.ConversationAPI)/getConversationList"
+            case .addConversation:
+                return "\(MainConversationWebRepository.ConversationAPI)/addConversation"
+            case .deleteConversation:
+                return "\(MainConversationWebRepository.ConversationAPI)/deleteConversation"
             }
-            
-            return "\(mainUrl)/\(id)"
+        }
+        
+        var method: HTTPMethod {
+            switch self {
+            case .getConversationList:
+                return .get
+            case .addConversation:
+                return .post
+            case .deleteConversation:
+                return .delete
+            }
+        }
+        
+        var headers: HTTPHeaders? {
+            nil
+        }
+        
+        var encoding: ParameterEncoding {
+            switch self {
+            case .getConversationList:
+                return URLEncoding.default
+            case .addConversation:
+                return JSONEncoding.default
+            case .deleteConversation:
+                return URLEncoding.default
+            }
+        }
+        
+        var parameters: Parameters? {
+            switch self {
+            case .getConversationList:
+                return nil
+            case let .addConversation(params):
+                return params
+            case .deleteConversation:
+                return nil
+            }
         }
     }
 }

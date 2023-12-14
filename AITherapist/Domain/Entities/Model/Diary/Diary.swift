@@ -31,6 +31,17 @@ class Diary: Object, Codable {
     override init() {
         super.init()
     }
+            
+    init (id: Int, diaryMessage: String, diaryName: String, moodID: Int, userID: Int, summary: String, dateCreated: Date) {
+        super.init()
+        self.id = id
+        self.diaryMessage = diaryMessage
+        self.diaryName = diaryName
+        self.moodID = moodID
+        self.userID = userID
+        self.summary = summary
+        self.dateCreated = dateCreated
+    }
     
     required init(from decoder: Decoder) throws {
         super.init()

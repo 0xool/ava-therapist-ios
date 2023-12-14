@@ -115,5 +115,101 @@
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "C206686A-D719-4E18-B713-AF1B993134F4"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "UnitTest/NetworkMocking/RequestMocking.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "131"
+            endingLineNumber = "131"
+            landmarkName = "adapt(_:for:completion:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "C206686A-D719-4E18-B713-AF1B993134F4 - f0712ad29823adb4"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "AITherapistTests.RequestMocking.MockInterceptor.adapt(_: Foundation.URLRequest, for: Alamofire.Session, completion: (Swift.Result&lt;Foundation.URLRequest, AITherapistTests.RequestMocking.Error&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "AITherapistTests"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/cyrusrefahi/Documents/AITherapist/UnitTest/NetworkMocking/RequestMocking.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "131"
+                  endingLineNumber = "131"
+                  offsetFromSymbolStart = "1872">
+               </Location>
+               <Location
+                  uuid = "C206686A-D719-4E18-B713-AF1B993134F4 - 4f72e7a7c9a5fd50"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 @Swift.MainActor () -&gt; () in AITherapistTests.RequestMocking.MockInterceptor.adapt(_: Foundation.URLRequest, for: Alamofire.Session, completion: (Swift.Result&lt;Foundation.URLRequest, AITherapistTests.RequestMocking.Error&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "AITherapistTests"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/cyrusrefahi/Documents/AITherapist/UnitTest/NetworkMocking/RequestMocking.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "131"
+                  endingLineNumber = "131"
+                  offsetFromSymbolStart = "232">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "9CE07F1A-AA4B-4248-B6EE-A7AFA39C65D6"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "UnitTest/NetworkMocking/RequestMocking.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "140"
+            endingLineNumber = "140"
+            landmarkName = "adapt(_:for:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "62B81A02-322E-4CE6-9680-B19834CEFEB5"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "UnitTest/NetworkMocking/RequestMocking.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "136"
+            endingLineNumber = "136"
+            landmarkName = "adapt(_:for:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "1A45D006-81CC-4650-9838-407D1D2B3FB8"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "UnitTest/NetworkMocking/RequestMocking.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "134"
+            endingLineNumber = "134"
+            landmarkName = "adapt(_:for:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

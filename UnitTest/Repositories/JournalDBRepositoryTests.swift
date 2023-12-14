@@ -10,7 +10,7 @@ import XCTest
 @testable import AITherapist
 
 class JournalDBRepositoryTests: XCTestCase {
-//    var mockedStore: MockedPersistentStore!
+    var mockedStore: MockedPersistentStore!
     var sut: MainJournalDBRepository!
     var cancelBag = CancelBag()
 }
