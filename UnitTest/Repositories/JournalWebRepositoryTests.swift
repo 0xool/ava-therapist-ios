@@ -47,4 +47,36 @@ final class JournalWebRepositoryTests: XCTestCase {
         }.store(in: &subscriptions)
 //        wait(for: [exp], timeout: 2)
     }
+    
+    func test_addJournal() throws {
+        let exp = XCTestExpectation(description: "Completion")
+        sut.addJournal(journal: Journal()).sinkToResult { result in
+            result.assertSuccess()
+            exp.fulfill()
+        }.store(in: &subscriptions)
+//    wait(for: [exp], timeout: 2)
+    }
+    
+    func test_deleteJournal() throws {
+        let exp = XCTestExpectation(description: "Completion")
+        sut.deleteJournal(journalID: 1).sinkToResult { result in
+            result.assertSuccess()
+            exp.fulfill()
+        }.store(in: &subscriptions)
+//    wait(for: [exp], timeout: 2)
+
+    }
+
+    func test_getJournalByDate() throws {
+        let data = Journal.mockedJournal
+        try mock(.getDiaryByDate(date: Date.now.description), result: .success(data))
+        let exp = XCTestExpectation(description: "Completion")
+        sut.getJournalByDate(date: Date()).sinkToResult { result in
+            result.assertSuccess(value: data)
+            exp.fulfill()
+        }.store(in: &subscriptions)
+//    wait(for: [exp], timeout: 2)
+    }
+    
 }
+
