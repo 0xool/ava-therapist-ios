@@ -93,7 +93,7 @@ struct AddConversationRequest: Encodable, Equatable{
     var conversation: AddConversationRequestContainer
 }
 
-class Conversation: Object, Decodable {
+class Conversation: Object, Codable {
     
     @Persisted(primaryKey: true) var id: Int
     //    @Persisted var userID: Int
@@ -139,5 +139,12 @@ class Conversation: Object, Decodable {
         id = try container.decode(Int.self , forKey: .id)
         conversationName = try container.decode(String.self , forKey: .conversationName)
         let dateCreated = try container.decode(String.self , forKey: .dateCreated)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(id , forKey: .id)
+        try container.encode(conversationName , forKey: .conversationName)
+        try container.encode(dateCreated , forKey: .dateCreated)
     }
 }

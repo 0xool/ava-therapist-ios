@@ -58,7 +58,7 @@ struct MainConversationWebRepository: ConversationWebRepository {
     }
     
     func deleteConversation(conversationID: Int) -> AnyPublisher<Void, Error>{
-        let request: AnyPublisher<DeleteConversationResponse, Error> = webRequest(api: API.deleteConversation)
+        let request: AnyPublisher<DeleteConversationResponse, Error> = webRequest(api: API.deleteConversation(conversationID: conversationID))
         
         return request
             .map{ _ in
@@ -73,7 +73,7 @@ extension MainConversationWebRepository {
     enum API: APICall{
         case getConversationList
         case addConversation(params: Parameters? = nil)
-        case deleteConversation
+        case deleteConversation(conversationID: Int)
         
         var url: String {
             switch self {
@@ -81,8 +81,8 @@ extension MainConversationWebRepository {
                 return "\(MainConversationWebRepository.ConversationAPI)/getConversationList"
             case .addConversation:
                 return "\(MainConversationWebRepository.ConversationAPI)/addConversation"
-            case .deleteConversation:
-                return "\(MainConversationWebRepository.ConversationAPI)/deleteConversation"
+            case let .deleteConversation(conversationID):
+                return "\(MainConversationWebRepository.ConversationAPI)/deleteConversation/\(conversationID)"
             }
         }
         

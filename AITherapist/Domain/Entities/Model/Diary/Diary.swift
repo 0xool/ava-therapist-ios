@@ -8,7 +8,7 @@
 import Foundation
 import RealmSwift
 
-class Diary: Object, Codable {
+class Diary: Object, Decodable {
     
     @Persisted(primaryKey: true) var id: Int
     @Persisted var diaryMessage: String

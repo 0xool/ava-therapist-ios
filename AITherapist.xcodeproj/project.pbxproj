@@ -73,7 +73,8 @@
 		A556C5652B257524001E4EA9 /* EnvironmentOverrides in Frameworks */ = {isa = PBXBuildFile; productRef = A556C5642B257524001E4EA9 /* EnvironmentOverrides */; };
 		A556C56C2B2651D4001E4EA9 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A53DD8BC2B25694900C98BD0 /* XCTest.framework */; platformFilter = ios; };
 		A556C56D2B2651D4001E4EA9 /* XCTest.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A53DD8BC2B25694900C98BD0 /* XCTest.framework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		A556C5702B265248001E4EA9 /* ViewInspector in Frameworks */ = {isa = PBXBuildFile; productRef = A556C56F2B265248001E4EA9 /* ViewInspector */; };
+		A563E8E02B2BF7670099C97B /* ConversationWebRepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A563E8DF2B2BF7670099C97B /* ConversationWebRepositoryTests.swift */; };
+		A563E8E22B2C05F20099C97B /* InsightWebRepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A563E8E12B2C05F10099C97B /* InsightWebRepositoryTests.swift */; };
 		A566DCA12AA503A200920940 /* WebRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A566DCA02AA503A200920940 /* WebRepository.swift */; };
 		A566DCA32AA503EE00920940 /* APICall.swift in Sources */ = {isa = PBXBuildFile; fileRef = A566DCA22AA503EE00920940 /* APICall.swift */; };
 		A569DEFD2AA4423C006D39AA /* Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = A569DEFC2AA4423C006D39AA /* Chat.swift */; };
@@ -257,6 +258,8 @@
 		A52EF6D62B0EE50E007D17CE /* AnimatableText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatableText.swift; sourceTree = "<group>"; };
 		A53DD8BA2B24FA4900C98BD0 /* MockInterceptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockInterceptor.swift; sourceTree = "<group>"; };
 		A53DD8BC2B25694900C98BD0 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/iPhoneOS.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		A563E8DF2B2BF7670099C97B /* ConversationWebRepositoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationWebRepositoryTests.swift; sourceTree = "<group>"; };
+		A563E8E12B2C05F10099C97B /* InsightWebRepositoryTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsightWebRepositoryTests.swift; sourceTree = "<group>"; };
 		A566DCA02AA503A200920940 /* WebRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebRepository.swift; sourceTree = "<group>"; };
 		A566DCA22AA503EE00920940 /* APICall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APICall.swift; sourceTree = "<group>"; };
 		A569DEFC2AA4423C006D39AA /* Chat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chat.swift; sourceTree = "<group>"; };
@@ -359,7 +362,6 @@
 			files = (
 				F5BED7ECE5A1009911E9192C /* Pods_AITherapist.framework in Frameworks */,
 				A556C5652B257524001E4EA9 /* EnvironmentOverrides in Frameworks */,
-				A556C5702B265248001E4EA9 /* ViewInspector in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -388,8 +390,10 @@
 		A501D9962B15818A00DFE8B2 /* Repositories */ = {
 			isa = PBXGroup;
 			children = (
+				A563E8E12B2C05F10099C97B /* InsightWebRepositoryTests.swift */,
 				A501D9972B15818A00DFE8B2 /* PushTokenWebRepositoryTests.swift */,
 				A501D9982B15818A00DFE8B2 /* ImageWebRepositoryTests.swift */,
+				A563E8DF2B2BF7670099C97B /* ConversationWebRepositoryTests.swift */,
 				A501D9992B15818A00DFE8B2 /* CountriesWebRepositoryTests.swift */,
 				A501D99A2B15818A00DFE8B2 /* WebRepositoryTests.swift */,
 				A501D99B2B15818A00DFE8B2 /* CountriesDBRepositoryTests.swift */,
@@ -1136,7 +1140,6 @@
 			name = AITherapist;
 			packageProductDependencies = (
 				A556C5642B257524001E4EA9 /* EnvironmentOverrides */,
-				A556C56F2B265248001E4EA9 /* ViewInspector */,
 			);
 			productName = AITherapist;
 			productReference = A525EEA629B172BC00A57CE8 /* AITherapist.app */;
@@ -1265,10 +1268,12 @@
 				A501D9E52B15818B00DFE8B2 /* MockedPersistentStore.swift in Sources */,
 				A501D9CC2B15818B00DFE8B2 /* SceneDelegateTests.swift in Sources */,
 				A501D9D22B15818B00DFE8B2 /* MockedResponse.swift in Sources */,
+				A563E8E22B2C05F20099C97B /* InsightWebRepositoryTests.swift in Sources */,
 				A501D9DA2B15818B00DFE8B2 /* RootViewAppearanceTests.swift in Sources */,
 				A501D9E02B15818B00DFE8B2 /* MockedDBRepositories.swift in Sources */,
 				A501D9E32B15818B00DFE8B2 /* MockedWebRepositories.swift in Sources */,
 				A501D9E62B15818B00DFE8B2 /* CoreDataStackTests.swift in Sources */,
+				A563E8E02B2BF7670099C97B /* ConversationWebRepositoryTests.swift in Sources */,
 				A501D9E12B15818B00DFE8B2 /* Mock.swift in Sources */,
 				A501D9DC2B15818B00DFE8B2 /* SearchBarTests.swift in Sources */,
 				A501D9E22B15818B00DFE8B2 /* MockedSystemEventsHandler.swift in Sources */,
@@ -1701,11 +1706,6 @@
 		A556C5642B257524001E4EA9 /* EnvironmentOverrides */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = EnvironmentOverrides;
-		};
-		A556C56F2B265248001E4EA9 /* ViewInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = A556C56E2B265248001E4EA9 /* XCRemoteSwiftPackageReference "ViewInspector" */;
-			productName = ViewInspector;
 		};
 		A5CE62B22B2676D8000D8E2A /* ViewInspector */ = {
 			isa = XCSwiftPackageProductDependency;
