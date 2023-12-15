@@ -69,6 +69,8 @@
 		A5206EC62B0FEC3E00C0296B /* FlexibleStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5206EC52B0FEC3E00C0296B /* FlexibleStack.swift */; };
 		A52EF6D52B0DEAC4007D17CE /* AnimatingBorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52EF6D42B0DEAC4007D17CE /* AnimatingBorder.swift */; };
 		A52EF6D72B0EE50F007D17CE /* AnimatableText.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52EF6D62B0EE50E007D17CE /* AnimatableText.swift */; };
+		A531A67A2B2C319100EDD26D /* AuthenticateWebRepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A531A6792B2C319100EDD26D /* AuthenticateWebRepositoryTests.swift */; };
+		A531A67C2B2C349800EDD26D /* ChatWebRepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A531A67B2B2C349800EDD26D /* ChatWebRepositoryTests.swift */; };
 		A53DD8BB2B24FA4900C98BD0 /* MockInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53DD8BA2B24FA4900C98BD0 /* MockInterceptor.swift */; };
 		A556C5652B257524001E4EA9 /* EnvironmentOverrides in Frameworks */ = {isa = PBXBuildFile; productRef = A556C5642B257524001E4EA9 /* EnvironmentOverrides */; };
 		A556C56C2B2651D4001E4EA9 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A53DD8BC2B25694900C98BD0 /* XCTest.framework */; platformFilter = ios; };
@@ -256,6 +258,8 @@
 		A525EEB029B172BF00A57CE8 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		A52EF6D42B0DEAC4007D17CE /* AnimatingBorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatingBorder.swift; sourceTree = "<group>"; };
 		A52EF6D62B0EE50E007D17CE /* AnimatableText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatableText.swift; sourceTree = "<group>"; };
+		A531A6792B2C319100EDD26D /* AuthenticateWebRepositoryTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticateWebRepositoryTests.swift; sourceTree = "<group>"; };
+		A531A67B2B2C349800EDD26D /* ChatWebRepositoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatWebRepositoryTests.swift; sourceTree = "<group>"; };
 		A53DD8BA2B24FA4900C98BD0 /* MockInterceptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockInterceptor.swift; sourceTree = "<group>"; };
 		A53DD8BC2B25694900C98BD0 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/iPhoneOS.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		A563E8DF2B2BF7670099C97B /* ConversationWebRepositoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationWebRepositoryTests.swift; sourceTree = "<group>"; };
@@ -390,6 +394,7 @@
 		A501D9962B15818A00DFE8B2 /* Repositories */ = {
 			isa = PBXGroup;
 			children = (
+				A531A6792B2C319100EDD26D /* AuthenticateWebRepositoryTests.swift */,
 				A563E8E12B2C05F10099C97B /* InsightWebRepositoryTests.swift */,
 				A501D9972B15818A00DFE8B2 /* PushTokenWebRepositoryTests.swift */,
 				A501D9982B15818A00DFE8B2 /* ImageWebRepositoryTests.swift */,
@@ -399,6 +404,7 @@
 				A501D99B2B15818A00DFE8B2 /* CountriesDBRepositoryTests.swift */,
 				A57D55602B27F1D500C85E3A /* JournalDBRepositoryTests.swift */,
 				A5C148872B29555200D6C836 /* JournalWebRepositoryTests.swift */,
+				A531A67B2B2C349800EDD26D /* ChatWebRepositoryTests.swift */,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
@@ -1268,6 +1274,7 @@
 				A501D9E52B15818B00DFE8B2 /* MockedPersistentStore.swift in Sources */,
 				A501D9CC2B15818B00DFE8B2 /* SceneDelegateTests.swift in Sources */,
 				A501D9D22B15818B00DFE8B2 /* MockedResponse.swift in Sources */,
+				A531A67A2B2C319100EDD26D /* AuthenticateWebRepositoryTests.swift in Sources */,
 				A563E8E22B2C05F20099C97B /* InsightWebRepositoryTests.swift in Sources */,
 				A501D9DA2B15818B00DFE8B2 /* RootViewAppearanceTests.swift in Sources */,
 				A501D9E02B15818B00DFE8B2 /* MockedDBRepositories.swift in Sources */,
@@ -1285,6 +1292,7 @@
 				A501D9D82B15818B00DFE8B2 /* DeepLinkUITests.swift in Sources */,
 				A53DD8BB2B24FA4900C98BD0 /* MockInterceptor.swift in Sources */,
 				A501D9DE2B15818B00DFE8B2 /* HelpersTests.swift in Sources */,
+				A531A67C2B2C349800EDD26D /* ChatWebRepositoryTests.swift in Sources */,
 				A501D9C72B15818B00DFE8B2 /* ImageWebRepositoryTests.swift in Sources */,
 				A501D9D72B15818B00DFE8B2 /* ViewPreviewsTests.swift in Sources */,
 				A501D9DB2B15818B00DFE8B2 /* CountryDetailsTests.swift in Sources */,

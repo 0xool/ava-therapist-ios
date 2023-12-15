@@ -10,7 +10,7 @@ import Combine
 import Alamofire
 
 protocol ChatWebRepository: WebRepository {
-    func loadChatsForConversation(conversationID: Int) -> AnyPublisher<LazyList<Chat>, Error>
+    func loadChatsForConversation(conversationID: Int) -> AnyPublisher<[Chat], Error>
     func sendChatToServer(data: SaveChatRequset) -> AnyPublisher<Chat, Error>
 }
 
@@ -46,13 +46,13 @@ struct MainChatWebRepository: ChatWebRepository {
         }
     }
     
-    func loadChatsForConversation(conversationID: Int) -> AnyPublisher<LazyList<Chat>, Error> {
+    func loadChatsForConversation(conversationID: Int) -> AnyPublisher<[Chat], Error> {
         
         let request: AnyPublisher<GetConversationChatServerResponse, Error> = webRequest(api: API.getConversationChats(conversationID: conversationID))
         
         return request
             .map{
-                return $0.data.lazyList
+                return $0.data
             }
             .eraseToAnyPublisher()
     }

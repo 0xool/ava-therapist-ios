@@ -43,5 +43,25 @@ extension Insight {
     static let mockedInsight: Insight = Insight(conversationSummaries: ConversationSummaries(), dailyMoods: [Mood(mood: .Angry, dateCreated: .now, moodString: "Angry")], generalSummary: "test")
 }
 
+extension Chat{
+    static let mockedChat: Chat = Chat(message: "test", conversationID: 1, chatSequence: 1, isUserMessage: true, isSentToserver: .NoStatus)
+    
+    static let mockedChatList: [Chat] = [ Chat(message: "test", conversationID: 1, chatSequence: 1, isUserMessage: true, isSentToserver: .NoStatus),
+                                                  Chat(message: "test", conversationID: 1, chatSequence: 2, isUserMessage: true, isSentToserver: .NoStatus),
+                                                  Chat(message: "test", conversationID: 1, chatSequence: 3, isUserMessage: false, isSentToserver: .NoStatus),
+                                                  Chat(message: "test", conversationID: 1, chatSequence: 4, isUserMessage: true, isSentToserver: .NoStatus),
+                                                  Chat(message: "test", conversationID: 1, chatSequence: 5, isUserMessage: false, isSentToserver: .NoStatus),
+                                                  Chat(message: "test", conversationID: 1, chatSequence: 6, isUserMessage: true, isSentToserver: .NoStatus),
+                                                  Chat(message: "test", conversationID: 1, chatSequence: 7, isUserMessage: false, isSentToserver: .NoStatus),
+                                                  Chat(message: "test", conversationID: 1, chatSequence: 8, isUserMessage: true, isSentToserver: .NoStatus),
+                                                  Chat(message: "test", conversationID: 1, chatSequence: 9, isUserMessage: false, isSentToserver: .NoStatus),
+                                                  Chat(message: "test", conversationID: 1, chatSequence: 10, isUserMessage: true, isSentToserver: .NoStatus)
+    ]
+}
+
+extension User {
+    static let mockedUser: User = User(id: 1, token: "test")
+}
+
 #endif
 

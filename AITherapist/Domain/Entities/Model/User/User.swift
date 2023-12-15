@@ -8,7 +8,7 @@
 import Foundation
 import RealmSwift
 
-class User: Object, Decodable {
+class User: Object, Codable {
     @Persisted(primaryKey: true) var id: Int
     @Persisted var token: String
     
@@ -36,7 +36,7 @@ class User: Object, Decodable {
 }
 
 struct UserServerResponse: ServerResponse {
-    var data: String
+    var data: User
     var message: String?
     var code: Int?
 }

@@ -44,7 +44,7 @@ struct MainChatService: ChatService {
                     _ = chatDBRepository.store(chat: chat)
                 }
                 
-                return $0
+                return $0.lazyList
             }
             .sinkToLoadable { chats.wrappedValue = $0 }
             .store(in: cancelBag)
@@ -61,6 +61,10 @@ struct MainChatService: ChatService {
     
     func getChatsForConversationFromServer(conversationID: Int) -> AnyPublisher<LazyList<Chat>, Error>{
         chatRepository.loadChatsForConversation(conversationID: conversationID)
+            .map{
+                $0.lazyList
+            }
+            .eraseToAnyPublisher()
     }
 
     private var requestHoldBackTimeInterval: TimeInterval {

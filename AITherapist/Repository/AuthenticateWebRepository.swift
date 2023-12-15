@@ -40,7 +40,7 @@ struct AuthenticateResponse: ServerResponse{
 
 protocol AuthenticateWebRepository: WebRepository {
     func login(email: String, password: String) -> AnyPublisher<User, Error>
-    func register(email: String, password: String) -> AnyPublisher<UserServerResponse, Error>
+    func register(email: String, password: String) -> AnyPublisher<User, Error>
 }
 
 struct MainAuthenticateWebRepository: AuthenticateWebRepository {
@@ -71,8 +71,14 @@ struct MainAuthenticateWebRepository: AuthenticateWebRepository {
         }.eraseToAnyPublisher()
     }
     
-    func register(email: String, password: String) -> AnyPublisher<UserServerResponse, Error> {
-        webRequest(api: API.register(email: email, password: password))
+    func register(email: String, password: String) -> AnyPublisher<User, Error> {
+        let request: AnyPublisher<UserServerResponse, Error> =  webRequest(api: API.register(email: email, password: password))
+        
+        return request
+            .map{
+                $0.data
+            }
+            .eraseToAnyPublisher()
     }
 }
 

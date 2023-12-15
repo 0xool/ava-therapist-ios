@@ -98,10 +98,10 @@ final class MockedChatWebRepository: TestWebRepository, Mock, ChatWebRepository 
     
     var actions = MockActions<Action>(expected: [])
     
-    var loadChatsForConversationResult: Result<LazyList<Chat>, Error> = .failure(MockError.valueNotSet)
+    var loadChatsForConversationResult: Result<[Chat], Error> = .failure(MockError.valueNotSet)
     var sendChatToServerResult: Result<Chat, Error> = .failure(MockError.valueNotSet)
     
-    func loadChatsForConversation(conversationID: Int) -> AnyPublisher<LazyList<Chat>, Error> {
+    func loadChatsForConversation(conversationID: Int) -> AnyPublisher<[Chat], Error> {
         register(.loadChatsForConversation(conversationID))
         return loadChatsForConversationResult.publish()
     }
@@ -123,14 +123,14 @@ final class MockedAuthenticateWebRepository: TestWebRepository, Mock, Authentica
     var actions = MockActions<Action>(expected: [])
     
     var loginResult: Result<User, Error> = .failure(MockError.valueNotSet)
-    var registerResult: Result<UserServerResponse, Error> = .failure(MockError.valueNotSet)
+    var registerResult: Result<User, Error> = .failure(MockError.valueNotSet)
     
     func login(email: String, password: String) -> AnyPublisher<User, Error> {
         register(.login(email, password))
         return loginResult.publish()
     }
     
-    func register(email: String, password: String) -> AnyPublisher<UserServerResponse, Error> {
+    func register(email: String, password: String) -> AnyPublisher<User, Error> {
         register(.register(email, password))
         return registerResult.publish()
     }

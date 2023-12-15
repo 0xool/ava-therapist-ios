@@ -117,7 +117,7 @@ enum ClientError: Error {
     case imageDeserialization
 }
 
-struct ServerResponseModel<T: Decodable>: ServerResponse {
+struct ServerResponseModel<T: Codable>: ServerResponse {
     var data: T
     var message: String?
     var code: Int?
