@@ -10,7 +10,7 @@ import RealmSwift
 typealias ConversationSummaries = List<ConversationSummary>
 typealias DailyMoods = List<Mood>
 
-class Insight: Object, Decodable {
+class Insight: Object, Codable {
     @Persisted var conversationSummaries: ConversationSummaries
     @Persisted var dailyMoods: DailyMoods
     @Persisted var generalSummary: String?
@@ -35,6 +35,22 @@ class Insight: Object, Decodable {
         self.conversationSummaries = conversationSummaries
         self.dailyMoods = dailyMoods
         self.generalSummary = generalSummary
+    }
+    
+    convenience init(conversationSummaries: ConversationSummaries, dailyMoods: [Mood], generalSummary: String) {
+        self.init()
+        self.conversationSummaries = conversationSummaries
+        let dailyMoodsList = List<Mood>()
+        dailyMoods.forEach { dailyMoodsList.append($0) }
+        self.dailyMoods = dailyMoodsList
+        self.generalSummary = generalSummary
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(conversationSummaries, forKey: CodingKeys.conversationSummaries)
+        try container.encode(dailyMoods, forKey: CodingKeys.dailyMoods)
+        try container.encode(generalSummary, forKey: CodingKeys.generalSummary)
     }
         
 }

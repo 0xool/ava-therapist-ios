@@ -9,7 +9,7 @@ import RealmSwift
 import Foundation
 import Charts
 
-class Mood: EmbeddedObject, Decodable {
+class Mood: EmbeddedObject, Codable {
     @Persisted var moodType: MoodType? = .EmotionNotDetected
     @Persisted var dateCreated: Date?
     @Persisted var moodString: String
@@ -36,6 +36,13 @@ class Mood: EmbeddedObject, Decodable {
         self.moodType = mood
         self.dateCreated = dateCreated
         self.moodString = moodString
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(moodType?.rawValue, forKey: .mood)
+        try container.encode(dateCreated?.description, forKey: .dateCreated)
+        try container.encode(moodString, forKey: .moodString)
     }
 }
 

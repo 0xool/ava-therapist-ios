@@ -39,9 +39,9 @@ extension Conversation {
     ]
 }
 
-//extension Insight {
-//    static let mockedInsight: Insight = Insight(conversationSummaries: ConversationSummaries(), dailyMoods: [Mood(mood: .Angry, dateCreated: .now, moodString: "Angry")], generalSummary: "test")
-//}
+extension Insight {
+    static let mockedInsight: Insight = Insight(conversationSummaries: ConversationSummaries(), dailyMoods: [Mood(mood: .Angry, dateCreated: .now, moodString: "Angry")], generalSummary: "test")
+}
 
 #endif
 

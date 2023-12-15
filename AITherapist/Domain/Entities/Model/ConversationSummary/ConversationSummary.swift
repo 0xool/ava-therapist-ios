@@ -8,7 +8,7 @@
 import Foundation
 import RealmSwift
 
-class ConversationSummary: Object, Decodable {
+class ConversationSummary: Object, Codable {
 
     @Persisted(primaryKey: true) var id: Int
     @Persisted var summary: String?
@@ -49,6 +49,17 @@ class ConversationSummary: Object, Decodable {
         let conversationName = try container.decode(String?.self, forKey: CodingKeys.conversationName)
         let dateCreated = try container.decode(String.self, forKey: CodingKeys.dateCreated)
         self.init(id: id, summary: summary, mood: mood, topDescribingWords: topDescribingWords, conversationID: conversationID, dateCreated: dateCreated, conversationName: conversationName)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(id, forKey: CodingKeys.id)
+        try container.encode(summary, forKey: CodingKeys.summary)
+        try container.encode(mood, forKey: CodingKeys.mood)
+        try container.encode(topDescribingWords, forKey: CodingKeys.topDescribingWords)
+        try container.encode(conversationID, forKey: CodingKeys.conversationID)
+        try container.encode(dateCreated, forKey: CodingKeys.dateCreated)
+        try container.encode(conversationName, forKey: CodingKeys.conversationName)
     }
 }
 

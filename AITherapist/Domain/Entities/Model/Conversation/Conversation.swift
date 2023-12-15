@@ -83,9 +83,6 @@ struct AddConversationRequest: Encodable, Equatable{
         lhs.conversation.conversationName == rhs.conversation.conversationName
     }
     
-    
-    
-    
     struct AddConversationRequestContainer: Encodable {
         var conversationName: String
     }
