@@ -29,11 +29,15 @@ protocol DataBase {
 class DataBaseManager: DataBase {
 
     static let Instance = DataBaseManager()
-    private let realm: Realm
+    private var realm: Realm
     private var cancellable: AnyCancellable?
     
     init() {
         realm = try! Realm()
+    }
+    
+    func setRealm(realm: Realm) {
+        self.realm = realm
     }
     
     func getDB() -> Realm {

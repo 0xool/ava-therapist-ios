@@ -12,7 +12,7 @@ import Combine
 protocol JournalDBRepository {
     func store(journal: Journal, fromServer: Bool) -> AnyPublisher<Void, Error>
     func loadJournals() -> AnyPublisher<LazyList<Journal>, Error>
-    func deleteJournal(journalID: Int)
+    func deleteJournal(journalID: Int) -> AnyPublisher<Void, Error>
     func getJournal(byDate: Date) -> AnyPublisher<Journal, Error>
 }
 
@@ -28,7 +28,7 @@ struct MainJournalDBRepository: JournalDBRepository {
         getJournalByDate(date: byDate)
     }
     
-    func store(journal: Journal, fromServer: Bool) -> AnyPublisher<Void, Error> {
+    func store(journal: Journal, fromServer: Bool = false) -> AnyPublisher<Void, Error> {
         writeJournalData(journal: journal, fromServer: fromServer)
     }
     
@@ -36,7 +36,7 @@ struct MainJournalDBRepository: JournalDBRepository {
         readAllJournals()
     }
     
-    func deleteJournal(journalID: Int) {
+    func deleteJournal(journalID: Int) -> AnyPublisher<Void, Error> {
         deleteJournalData(journalID: journalID)
     }
 }
@@ -91,8 +91,8 @@ extension MainJournalDBRepository {
         firstDate.get(.day, .month, .year) == secondDate.get(.day, .month, .year)
     }
     
-    private func deleteJournalData(journalID: Int) {
-        _ = persistentStore.DeleteByID(ofType: Journal.self, id: journalID)
+    private func deleteJournalData(journalID: Int) -> AnyPublisher<Void, Error> {
+        persistentStore.DeleteByID(ofType: Journal.self, id: journalID)
     }
     
     private func readAllJournals() -> AnyPublisher<LazyList<Journal>, Error> {

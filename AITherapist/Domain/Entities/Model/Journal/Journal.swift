@@ -24,7 +24,7 @@ class Journal: Object, Codable {
     
     var dateCreated: Date{
         get{
-            return _dateCreated
+            _dateCreated
         }set{
             dateCreatedString = newValue.description.prefix(10).description
             _dateCreated = newValue
@@ -33,14 +33,13 @@ class Journal: Object, Codable {
     // Return _tags as [JournalTagType]
     var tags: [JournalTagType] {
         get {
-            return Array(_tags)
+            Array(_tags)
         }
         set {
             _tags.removeAll()
-            _tags.append(objectsIn: newValue)            
+            _tags.append(objectsIn: newValue)
         }
     }
-    
     @Persisted var _tags: List<JournalTagType>
     
     enum CodingKeys: String, CodingKey {
@@ -99,6 +98,16 @@ class Journal: Object, Codable {
     }
 }
 
+extension Journal {
+    static func == (lhs: Journal, rhs: Journal) -> Bool {
+        lhs.id == rhs.id
+    }
+    
+    static func != (lhs: Journal, rhs: Journal) -> Bool {
+        lhs.id != rhs.id
+    }
+}
+
 enum JournalTagType: String, PersistableEnum {
     case Personal = "Personal"
     case Happy = "Happy"
@@ -108,43 +117,43 @@ enum JournalTagType: String, PersistableEnum {
     var tag: String {
         switch self {
         case .Personal:
-            return "Personal"
+            "Personal"
         case .Happy:
-            return "Happy"
+            "Happy"
         case .Sad:
-            return "Sad"
+            "Sad"
         case .Family:
-            return "Family"
+            "Family"
         }
     }
     
     static var allTypes: [JournalTagType] {
-        return [.Personal, .Happy, .Sad, .Family]
+        [.Personal, .Happy, .Sad, .Family]
     }
     
     var tagId: Int {
         switch self {
         case .Personal:
-            return 1
+            1
         case .Happy:
-            return 2
+            2
         case .Sad:
-            return 3
+            3
         case .Family:
-            return 4
+            4
         }
     }
     
     var tagColor: String {
         switch self {
         case .Personal:
-            return "#FFC107"
+            "#FFC107"
         case .Happy:
-            return "#4CAF50"
+            "#4CAF50"
         case .Sad:
-            return "#F44336"
+            "#F44336"
         case .Family:
-            return "#2196F3"
+            "#2196F3"
         }
     }
 }

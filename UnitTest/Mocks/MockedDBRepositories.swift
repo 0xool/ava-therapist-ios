@@ -25,6 +25,7 @@ final class MockedJournalDBRepository: Mock, JournalDBRepository {
     var storeJournalResult: Result<Void, Error> = .failure(MockError.valueNotSet)
     var loadJournalsResult: Result<LazyList<Journal>, Error> = .failure(MockError.valueNotSet)
     var getJournalResult: Result<Journal, Error> = .failure(MockError.valueNotSet)
+    var deleteJournalResult: Result<Void, Error> = .failure(MockError.valueNotSet)
     
     // MARK: - API
     
@@ -39,8 +40,9 @@ final class MockedJournalDBRepository: Mock, JournalDBRepository {
         return loadJournalsResult.publish()
     }
     
-    func deleteJournal(journalID: Int){
+    func deleteJournal(journalID: Int) -> AnyPublisher<Void, Error>{
         register(.deleteJournal(journalID))
+        return deleteJournalResult.publish()
     }
     
     func getJournal(byDate: Date) -> AnyPublisher<Journal, Error>{

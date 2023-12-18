@@ -10,96 +10,97 @@ import RealmSwift
 import Combine
 @testable import AITherapist
 
-final class MockedPersistentStore: Mock, DataBase {
-//    private let realm: Realm
+final class MockedPersistentStore: DataBaseManager, Mock {
+    
+    typealias Action = DataBaseAction
+    private let realm: Realm
+    
     enum DataBaseAction: Equatable {
         case getAll
         case getByID(Int)
         case getLast
+        
         case getByTypeID(Int)
         case getByQuery
         case getCount
+        
         case write
         case update
         case entityExist(Int)
+        
         case deleteLast
         case deleteByID(Int)
     }
-    typealias Action = DataBaseAction
     
-    let actions: MockActions<Action>
-    
-    init(expected: [Action]) {
-        actions = MockActions(expected: expected)
+    var actions = MockActions<Action>(expected: [])
+
+    override init() {
+        realm = try! Realm(configuration:  Realm.Configuration(inMemoryIdentifier: "test"))
+        super.init()
     }
-    
-    func GetAll<T: Object>() -> Results<T> {
+
+    override func GetAll<T: Object>() -> Results<T> {
         register(.getAll)
-        
-        // return a mock result which is a RealmSwift.Results
-        return try! Realm(configuration:  Realm.Configuration(inMemoryIdentifier: "test")).objects(T.self)
+        return super.GetAll()
     }
     
-    func GetByID<T: Object>(id: Int) -> T? {
+    override func GetByID<T: Object>(id: Int) -> T? {
         register(.getByID(id))
-        return nil
+        return super.GetByID(id: id)
     }
     
-    func GetLast<T: Object>(ofType: T.Type) -> T? {
+    override func GetLast<T: Object>(ofType: T.Type) -> T? {
         register(.getLast)
-        // Return a mock result
-        return nil
+        return super.GetLast(ofType: ofType)
     }
     
-    func GetByTypeID<T: Object>(ofType: T.Type, id: Int, query: @escaping (Query<T>) -> Query<Bool>) -> AnyPublisher<Results<T>, Error> {
+    override func GetByTypeID<T: Object>(ofType: T.Type, id: Int, query: @escaping (Query<T>) -> Query<Bool>) -> AnyPublisher<Results<T>, Error> {
         register(.getByTypeID(id))
-        // Return a mock result
-        return Future { promise in
-//            promise(.success(Results<T>()))
-        }.eraseToAnyPublisher()
+        return super.GetByTypeID(ofType: ofType, id: id, query: query)
+//        return Future { promise in
+////            promise(.success(Results<T>()))
+//        }.eraseToAnyPublisher()
     }
     
-    func GetByQuery<T: Object>(ofType: T.Type, query: @escaping (Query<T>) -> Query<Bool>) -> AnyPublisher<Results<T>, Error> {
+    override func GetByQuery<T: Object>(ofType: T.Type, query: @escaping (Query<T>) -> Query<Bool>) -> AnyPublisher<Results<T>, Error> {
         register(.getByQuery)
-        // Return a mock result
-        return Future { promise in
-//            promise(.success(Results<T>()))
-        }.eraseToAnyPublisher()
+        return super.GetByQuery(ofType: ofType, query: query)
+//        return Future { promise in
+////            promise(.success(Results<T>()))
+//        }.eraseToAnyPublisher()
     }
     
-    func GetCount<T: Object>(value: T.Type) -> Int {
+    override func GetCount<T: Object>(value: T.Type) -> Int {
         register(.getCount)
-        // Return a mock result
-        return 0
+        return super.GetCount(value: value)
     }
     
-    func Write<T: Object>(writeData: T) -> AnyPublisher<Void, Error> {
+    override func Write<T: Object>(writeData: T) -> AnyPublisher<Void, Error> {
         register(.write)
-        // Return a mock result
-        return Future { promise in
-            promise(.success(()))
-        }.eraseToAnyPublisher()
+        return super.Write(writeData: writeData)
+//        return Future { promise in
+//            promise(.success(()))
+//        }.eraseToAnyPublisher()
     }
     
-    func Update<T: Object>(value: T) -> AnyPublisher<Void,  Error> {
+    override func Update<T: Object>(value: T) -> AnyPublisher<Void,  Error> {
         register(.update)
         return Future { promise in
             promise(.success(()))
         }.eraseToAnyPublisher()
     }
     
-    func EntityExist<Element: Object>(id: Int, ofType: Element.Type) -> Bool {
+    override func EntityExist<Element: Object>(id: Int, ofType: Element.Type) -> Bool {
         register(.entityExist(id))
         return true
     }
     
-    func DeleteLast<T: Object>(ofType: T.Type) {
+    override func DeleteLast<T: Object>(ofType: T.Type) {
         register(.deleteLast)
     }
     
-    func DeleteByID<T: Object>(ofType: T.Type, id: Int) -> AnyPublisher<Void,  Error> {
+    override func DeleteByID<T: Object>(ofType: T.Type, id: Int) -> AnyPublisher<Void,  Error> {
         register(.deleteByID(id))
-        // Return a mock result
         return Future { promise in
             promise(.success(()))
         }.eraseToAnyPublisher()

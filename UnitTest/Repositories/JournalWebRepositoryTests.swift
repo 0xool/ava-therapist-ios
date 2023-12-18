@@ -37,7 +37,7 @@ final class JournalWebRepositoryTests: XCTestCase {
     }
     
     func test_loadJournalList() throws {
-        let data = Journal.mockedData
+        let data = Journal.mockedJournals
         let diaryBook = DiaryBook(journals: data)
         try mock(.allJournals, result: .success(data))
         let exp = XCTestExpectation(description: "Completion")
