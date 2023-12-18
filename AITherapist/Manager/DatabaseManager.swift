@@ -22,12 +22,12 @@ protocol DataBase {
     func Update<T: Object>(value: T) -> AnyPublisher<Void,  Error>
     func EntityExist<Element: Object>(id: Int, ofType: Element.Type) -> Bool
     
-    func DeleteLast<T: Object>(ofType: T.Type)    
+    func DeleteLast<T: Object>(ofType: T.Type) -> AnyPublisher<Void,  Error>
     func DeleteByID<T: Object>(ofType: T.Type, id: Int) -> AnyPublisher<Void,  Error>
 }
 
 class DataBaseManager: DataBase {
-
+    
     static let Instance = DataBaseManager()
     private var realm: Realm
     private var cancellable: AnyCancellable?
@@ -48,24 +48,28 @@ class DataBaseManager: DataBase {
         return realm.objects(T.self)
     }
     
-    func DeleteLast<T: Object>(ofType: T.Type) {
+    func DeleteLast<T: Object>(ofType: T.Type) -> AnyPublisher<Void,  Error> {
         guard let last = realm.objects(T.self).last else{
-            return
+            return Fail<Void, Error>(error: DataBaseError.NotFound).eraseToAnyPublisher()
         }
         
-        do {
-            try self.realm.write {
-                self.realm.delete(last)
-            }
-        } catch {
+        return Future<Void, Error> { promise in
+            
+            do {
+                try self.realm.write {
+                    self.realm.delete(last)
+                }
+            } catch {
 #warning("FIX")
-            print("ERROR WHILbE DELETING OBJECT")
+                print("ERROR WHILbE DELETING OBJECT")
+            }
         }
+        .eraseToAnyPublisher()
     }
     
     func DeleteByID<T: Object>(ofType: T.Type, id: Int) -> AnyPublisher<Void, Error> {
         guard let entity = realm.objects(T.self).last else{
-            return Just<Void>.withErrorType(Error.self)
+            return Fail<Void, Error>(error: DataBaseError.NotFound).eraseToAnyPublisher()
         }
         
         return Future<Void, Error> { promise in
@@ -74,7 +78,7 @@ class DataBaseManager: DataBase {
                     self.realm.delete(entity)
                 }
             } catch {
-    #warning("FIX")
+#warning("FIX")
                 print("ERROR WHILE DELETING OBJECT")
             }
         }
@@ -117,19 +121,19 @@ class DataBaseManager: DataBase {
     }
     
     func GetByID<T: Object>(id: Int) -> T? {
-        return realm.object(ofType: T.self, forPrimaryKey: id)
+        realm.object(ofType: T.self, forPrimaryKey: id)
     }
     
     func GetLast<T: Object>(ofType: T.Type) -> T?{
-        return realm.objects(T.self).last
+        realm.objects(T.self).last
     }
     
     func GetCount<T: Object>(value: T.Type) -> Int {
-        return realm.objects(T.self).lazyList.count
+        realm.objects(T.self).lazyList.count
     }
     
     func EntityExist<Element: Object>(id: Int, ofType: Element.Type) -> Bool{
-        return realm.object(ofType: ofType, forPrimaryKey: id) != nil
+        realm.object(ofType: ofType, forPrimaryKey: id) != nil
     }
     
     func Update<T: Object>(value: T) -> AnyPublisher<Void,  Error> {
@@ -158,7 +162,7 @@ class DataBaseManager: DataBase {
             }
         }
         .eraseToAnyPublisher()
-    }    
+    }
 }
 
 public enum DataBaseError: Error {

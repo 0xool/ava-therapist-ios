@@ -61,7 +61,7 @@ private extension JournalListView {
 
 // MARK: Displaying Content
 private extension JournalListView{
-    func loadedView(_ diaryBook: DiaryBook) -> some View {
+    func loadedView(_ diaryBook: [Journal]) -> some View {
         ZStack{
             if !self.showJournalEditView{
                 journalList(diaryBook: diaryBook)
@@ -71,10 +71,10 @@ private extension JournalListView{
         }
     }
     
-    func journalList(diaryBook: DiaryBook) -> some View {
+    func journalList(diaryBook: [Journal]) -> some View {
         ScrollView{
             VStack{
-                ForEach(Array(diaryBook.journals.enumerated()), id: \.offset){ index, journal in
+                ForEach(Array(diaryBook.enumerated()), id: \.offset){ index, journal in
                     ListContent(namespace: journalNameSpace, journal: journal, index: index,  showDetail: $showJournalEditView){
                             self.selectedIndex = $0
                             self.selectedJournal = $1
@@ -186,9 +186,9 @@ extension JournalListView{
         let isRunningTests: Bool
         private var cancelBag = CancelBag()
         
-        @Published var diaryBook: Loadable<DiaryBook>
+        @Published var diaryBook: Loadable<[Journal]>
         
-        init(container: DIContainer, isRunningTests: Bool = false, cancelBag: CancelBag = CancelBag(), diaryBook: Loadable<DiaryBook> = .notRequested) {
+        init(container: DIContainer, isRunningTests: Bool = false, cancelBag: CancelBag = CancelBag(), diaryBook: Loadable<[Journal]> = .notRequested) {
             self.container = container
             self.isRunningTests = isRunningTests
             self.cancelBag = cancelBag

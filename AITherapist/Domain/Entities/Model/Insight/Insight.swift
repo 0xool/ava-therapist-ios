@@ -11,6 +11,7 @@ typealias ConversationSummaries = List<ConversationSummary>
 typealias DailyMoods = List<Mood>
 
 class Insight: Object, Codable {
+    @Persisted(primaryKey: true) var id: Int = 1
     @Persisted var conversationSummaries: ConversationSummaries
     @Persisted var dailyMoods: DailyMoods
     @Persisted var generalSummary: String?

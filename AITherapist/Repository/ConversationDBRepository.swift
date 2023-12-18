@@ -26,7 +26,7 @@ struct MainConversationDBRepository: ConversationDBRepository {
     }
     
     func hasLoadedConversation() -> AnyPublisher<Bool, Error> {
-        return hasLoadedConversations()
+        hasLoadedConversations()
     }
     
     func store(conversation: Conversation) -> AnyPublisher<Void, Error> {
@@ -54,7 +54,6 @@ extension MainConversationDBRepository {
     private func readAllConversations() -> AnyPublisher<LazyList<Conversation>, Error> {
         let conversations: LazyList<Conversation> = persistentStore.GetAll().sorted(byKeyPath: "id", ascending: false)
             .lazyList
-
         
         return Just(conversations)
             .setFailureType(to: Error.self)
@@ -66,13 +65,13 @@ extension MainConversationDBRepository {
     }
     
     private func writeConversationData(conversation: Conversation) -> AnyPublisher<Void, Error> {
-        if !self.conversationExist(id: conversation.id)  {
+//        if !self.conversationExist(id: conversation.id)  {
             return persistentStore.Write(writeData: conversation)
                     .eraseToAnyPublisher()
-        }else{
-            return persistentStore.Update(value: conversation)
-                .eraseToAnyPublisher()
-        }
+//        }else{
+//            return persistentStore.Update(value: conversation)
+//                .eraseToAnyPublisher()
+//        }
     }
     
     private func updateConversationChatsData(chats: LazyList<Chat>) -> AnyPublisher<Void, Error> {
@@ -83,11 +82,11 @@ extension MainConversationDBRepository {
             return Fail(error: DataBaseError.ObjcectWithIDNotFound).eraseToAnyPublisher()
         }
         
-        guard let conversation = DataBaseManager.Instance.GetByID(id: conversationID) else{
+        guard let conversation: Conversation = persistentStore.GetByID(id: conversationID) else{
             return Fail(error: DataBaseError.ObjcectWithIDNotFound).eraseToAnyPublisher()
         }
                 
-        return DataBaseManager.Instance.Update(value: conversation)
+        return persistentStore.Update(value: conversation)
             .eraseToAnyPublisher()
     }
     

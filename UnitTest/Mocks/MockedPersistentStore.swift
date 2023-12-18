@@ -36,7 +36,6 @@ final class MockedPersistentStore: DataBaseManager, Mock {
 
     override init() {
         realm = try! Realm(configuration:  Realm.Configuration(inMemoryIdentifier: "test"))
-        super.init()
     }
 
     override func GetAll<T: Object>() -> Results<T> {
@@ -57,17 +56,11 @@ final class MockedPersistentStore: DataBaseManager, Mock {
     override func GetByTypeID<T: Object>(ofType: T.Type, id: Int, query: @escaping (Query<T>) -> Query<Bool>) -> AnyPublisher<Results<T>, Error> {
         register(.getByTypeID(id))
         return super.GetByTypeID(ofType: ofType, id: id, query: query)
-//        return Future { promise in
-////            promise(.success(Results<T>()))
-//        }.eraseToAnyPublisher()
     }
     
     override func GetByQuery<T: Object>(ofType: T.Type, query: @escaping (Query<T>) -> Query<Bool>) -> AnyPublisher<Results<T>, Error> {
         register(.getByQuery)
         return super.GetByQuery(ofType: ofType, query: query)
-//        return Future { promise in
-////            promise(.success(Results<T>()))
-//        }.eraseToAnyPublisher()
     }
     
     override func GetCount<T: Object>(value: T.Type) -> Int {
@@ -78,9 +71,6 @@ final class MockedPersistentStore: DataBaseManager, Mock {
     override func Write<T: Object>(writeData: T) -> AnyPublisher<Void, Error> {
         register(.write)
         return super.Write(writeData: writeData)
-//        return Future { promise in
-//            promise(.success(()))
-//        }.eraseToAnyPublisher()
     }
     
     override func Update<T: Object>(value: T) -> AnyPublisher<Void,  Error> {
@@ -95,8 +85,11 @@ final class MockedPersistentStore: DataBaseManager, Mock {
         return true
     }
     
-    override func DeleteLast<T: Object>(ofType: T.Type) {
+    override func DeleteLast<T: Object>(ofType: T.Type) -> AnyPublisher<Void,  Error> {
         register(.deleteLast)
+        return Future { promise in
+            promise(.success(()))
+        }.eraseToAnyPublisher()
     }
     
     override func DeleteByID<T: Object>(ofType: T.Type, id: Int) -> AnyPublisher<Void,  Error> {
@@ -104,6 +97,18 @@ final class MockedPersistentStore: DataBaseManager, Mock {
         return Future { promise in
             promise(.success(()))
         }.eraseToAnyPublisher()
+    }
+    
+    func preLoadData(data: [Object]) {
+        try! realm.write {
+            realm.add(data)
+        }
+    }
+
+    func removeAll() {
+        try! realm.write {
+            realm.deleteAll()
+        }
     }
 }
 

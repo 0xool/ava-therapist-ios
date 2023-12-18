@@ -86,8 +86,9 @@ final class MockedChatDBRepository: Mock, ChatDBRepository {
         return loadChatsByResult.publish()
     }
     
-    func deletePreviousChat(){
+    func deletePreviousChat() -> AnyPublisher<Void,  Error>{
         register(.deletePreviousChat)
+        return deletePreviousChatResult.publish()
     }
 }
 

@@ -8,10 +8,6 @@
 import Foundation
 import RealmSwift
 
-struct DiaryBook: Decodable, Equatable {
-    let journals: [Journal]
-}
-
 class Journal: Object, Codable {
     @Persisted(primaryKey: true) var id: Int
     @Persisted var diaryMessage: String

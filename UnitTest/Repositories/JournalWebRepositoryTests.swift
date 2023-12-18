@@ -38,11 +38,10 @@ final class JournalWebRepositoryTests: XCTestCase {
     
     func test_loadJournalList() throws {
         let data = Journal.mockedJournals
-        let diaryBook = DiaryBook(journals: data)
         try mock(.allJournals, result: .success(data))
         let exp = XCTestExpectation(description: "Completion")
         sut.loadJournalList().sinkToResult { result in
-            result.assertSuccess(value: diaryBook)
+            result.assertSuccess(value: data)
             exp.fulfill()
         }.store(in: &subscriptions)
 //        wait(for: [exp], timeout: 2)

@@ -11,9 +11,9 @@ import Foundation
 import SwiftUI
 
 protocol JournalService {
-    func loadJournalList(journals: LoadableSubject<DiaryBook>)
-    func deleteJournal(journalID: Int, journals: LoadableSubject<DiaryBook>)
-    func saveJournal(journal: Journal, journals: LoadableSubject<DiaryBook>)
+    func loadJournalList(journals: LoadableSubject<[Journal]>)
+    func deleteJournal(journalID: Int, journals: LoadableSubject<[Journal]>)
+    func saveJournal(journal: Journal, journals: LoadableSubject<[Journal]>)
     
     func saveJournal(journal: LoadableSubject<Journal>)
     func getJournal(byDate: Date, journal: LoadableSubject<Journal>)
@@ -60,7 +60,7 @@ struct MainJournalService: JournalService {
             .store(in: cancelBag)
     }
     
-    func saveJournal(journal: Journal, journals: LoadableSubject<DiaryBook>){
+    func saveJournal(journal: Journal, journals: LoadableSubject<[Journal]>){
         let cancelBag = CancelBag()
         journals.wrappedValue.setIsLoading(cancelBag: cancelBag)
         
@@ -74,14 +74,14 @@ struct MainJournalService: JournalService {
                     print(error)
                 }
             } receiveValue: { 
-                var newJournals = journals.wrappedValue.value?.journals
+                var newJournals = journals.wrappedValue.value
                 newJournals?.append(journal)
-                journals.wrappedValue = .loaded(DiaryBook(journals: newJournals!))
+                journals.wrappedValue = .loaded(newJournals!)
             }
             .store(in: cancelBag)
     }
     
-    func loadJournalList(journals: LoadableSubject<DiaryBook>) {
+    func loadJournalList(journals: LoadableSubject<[Journal]>) {
         
         let cancelBag = CancelBag()
         journals.wrappedValue.setIsLoading(cancelBag: cancelBag)
@@ -89,9 +89,12 @@ struct MainJournalService: JournalService {
         journalRepository
             .loadJournalList()
             .map{ [journalDBRepository] in
-                for journal in $0.journals {
-                    _ = journalDBRepository.store(journal: journal, fromServer: true)
+                if let journals = journals.wrappedValue.value{
+                    for journal in journals {
+                        _ = journalDBRepository.store(journal: journal, fromServer: true)
+                    }
                 }
+
                 
                 return $0
             }
@@ -99,19 +102,19 @@ struct MainJournalService: JournalService {
             .store(in: cancelBag)
     }
     
-    func deleteJournal(journalID: Int, journals: LoadableSubject<DiaryBook>){
+    func deleteJournal(journalID: Int, journals: LoadableSubject<[Journal]>){
         let cancelBag = CancelBag()
         journals.wrappedValue.setIsLoading(cancelBag: cancelBag)
         
         journalRepository
             .deleteJournal(journalID: journalID)
             .map{ [journalDBRepository] in
-                journalDBRepository.deleteJournal(journalID: journalID)
+                _ = journalDBRepository.deleteJournal(journalID: journalID)
                 return $0
             }
             .sinkToLoadable { _ in
-                let newJournals = journals.wrappedValue.value?.journals.filter{$0.id != journalID}
-                journals.wrappedValue = .loaded(DiaryBook(journals: newJournals!))
+                let newJournals = journals.wrappedValue.value?.filter{$0.id != journalID}
+                journals.wrappedValue = .loaded(newJournals!)
             }
             .store(in: cancelBag)
     }
@@ -157,15 +160,15 @@ struct StubJournalService: JournalService {
         
     }
     
-    func deleteJournal(journalID: Int, journals: LoadableSubject<DiaryBook>) {
+    func deleteJournal(journalID: Int, journals: LoadableSubject<[Journal]>) {
         
     }
     
-    func saveJournal(journal: Journal, journals: LoadableSubject<DiaryBook>) {
+    func saveJournal(journal: Journal, journals: LoadableSubject<[Journal]>) {
         
     }
     
-    func loadJournalList(journals: LoadableSubject<DiaryBook>) {
+    func loadJournalList(journals: LoadableSubject<[Journal]>) {
     }
     
     func getJournal(byDate: Date, journal: LoadableSubject<Journal>){

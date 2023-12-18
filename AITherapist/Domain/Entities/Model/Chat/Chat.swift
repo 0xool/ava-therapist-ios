@@ -69,6 +69,7 @@ class Chat: Object, Codable, Identifiable {
     
     init(message: String, conversationID: Int, chatSequence: Int?, isUserMessage: Bool, isSentToserver: ChatServerState?){
         super.init()
+        #warning("NEED DECOUPLING!")
         self.id = DataBaseManager.Instance.IncrementaChatID()
         self.message = message
         self.conversationID = conversationID
@@ -77,6 +78,17 @@ class Chat: Object, Codable, Identifiable {
         self.isUserMessage = isUserMessage
         self.isSentToServer = isSentToserver
 //        self.dateCreated = dateCreated
+    }
+    
+    init(id: Int, message: String, conversationID: Int, chatSequence: Int?, isUserMessage: Bool, isSentToserver: ChatServerState?){
+        super.init()
+        self.id = id
+        self.message = message
+        self.conversationID = conversationID
+        
+        self.chatSequence = chatSequence
+        self.isUserMessage = isUserMessage
+        self.isSentToServer = isSentToserver
     }
     
     override init() {

@@ -46,16 +46,16 @@ extension Insight {
 extension Chat{
     static let mockedChat: Chat = Chat(message: "test", conversationID: 1, chatSequence: 1, isUserMessage: true, isSentToserver: .NoStatus)
     
-    static let mockedChatList: [Chat] = [ Chat(message: "test", conversationID: 1, chatSequence: 1, isUserMessage: true, isSentToserver: .NoStatus),
-                                                  Chat(message: "test", conversationID: 1, chatSequence: 2, isUserMessage: true, isSentToserver: .NoStatus),
-                                                  Chat(message: "test", conversationID: 1, chatSequence: 3, isUserMessage: false, isSentToserver: .NoStatus),
-                                                  Chat(message: "test", conversationID: 1, chatSequence: 4, isUserMessage: true, isSentToserver: .NoStatus),
-                                                  Chat(message: "test", conversationID: 1, chatSequence: 5, isUserMessage: false, isSentToserver: .NoStatus),
-                                                  Chat(message: "test", conversationID: 1, chatSequence: 6, isUserMessage: true, isSentToserver: .NoStatus),
-                                                  Chat(message: "test", conversationID: 1, chatSequence: 7, isUserMessage: false, isSentToserver: .NoStatus),
-                                                  Chat(message: "test", conversationID: 1, chatSequence: 8, isUserMessage: true, isSentToserver: .NoStatus),
-                                                  Chat(message: "test", conversationID: 1, chatSequence: 9, isUserMessage: false, isSentToserver: .NoStatus),
-                                                  Chat(message: "test", conversationID: 1, chatSequence: 10, isUserMessage: true, isSentToserver: .NoStatus)
+    static let mockedChatList: [Chat] = [ Chat(id: 1, message: "test", conversationID: 1, chatSequence: 1, isUserMessage: true, isSentToserver: .NoStatus),
+                                                  Chat(id: 2, message: "test", conversationID: 1, chatSequence: 2, isUserMessage: false, isSentToserver: .NoStatus),
+                                                  Chat(id: 3, message: "test", conversationID: 1, chatSequence: 3, isUserMessage: true, isSentToserver: .NoStatus),
+                                                  Chat(id: 4, message: "test", conversationID: 1, chatSequence: 4, isUserMessage: false, isSentToserver: .NoStatus),
+                                                  Chat(id: 5, message: "test", conversationID: 1, chatSequence: 5, isUserMessage: true, isSentToserver: .NoStatus),
+                                                  Chat(id: 6, message: "test", conversationID: 1, chatSequence: 6, isUserMessage: false, isSentToserver: .NoStatus),
+                                                  Chat(id: 7, message: "test", conversationID: 1, chatSequence: 7, isUserMessage: true, isSentToserver: .NoStatus),
+                                                  Chat(id: 8, message: "test", conversationID: 1, chatSequence: 8, isUserMessage: false, isSentToserver: .NoStatus),
+                                                  Chat(id: 9, message: "test", conversationID: 1, chatSequence: 9, isUserMessage: true, isSentToserver: .NoStatus),
+                                                  Chat(id: 10, message: "test", conversationID: 1, chatSequence: 10, isUserMessage: false, isSentToserver: .NoStatus)
     ]
 }
 

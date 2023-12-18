@@ -30,29 +30,29 @@ final class MockedJournalWebRepository: TestWebRepository, Mock, JournalWebRepos
     }
     var actions = MockActions<Action>(expected: [])
     
-    var loadJournalListResult: Result<DiaryBook, Error> = .failure(MockError.valueNotSet)
-    var addJournalResult: Result<Void, Error> = .failure(MockError.valueNotSet)
-    var deleteJournalResult: Result<Void, Error> = .failure(MockError.valueNotSet)
-    var getJournalByDateResult: Result<Journal, Error> = .failure(MockError.valueNotSet)
+    var loadJournalListRespose: Result<[Journal], Error> = .failure(MockError.valueNotSet)
+    var addJournalRespose: Result<Void, Error> = .failure(MockError.valueNotSet)
+    var deleteJournalRespose: Result<Void, Error> = .failure(MockError.valueNotSet)
+    var getJournalByDateRespose: Result<Journal, Error> = .failure(MockError.valueNotSet)
     
-    func loadJournalList() -> AnyPublisher<DiaryBook, Error> {
+    func loadJournalList() -> AnyPublisher<[Journal], Error> {
         register(.loadJournalList)
-        return loadJournalListResult.publish()
+        return loadJournalListRespose.publish()
     }
     
     func addJournal(journal: Journal) -> AnyPublisher<Void, Error> {
         register(.addJournal(journal))
-        return addJournalResult.publish()
+        return addJournalRespose.publish()
     }
     
     func deleteJournal(journalID: Int) -> AnyPublisher<Void, Error> {
         register(.deleteJournal(journalID))
-        return deleteJournalResult.publish()
+        return deleteJournalRespose.publish()
     }
     
     func getJournalByDate(date: Date) -> AnyPublisher<Journal, Error> {
         register(.getJournalByDate(date))
-        return getJournalByDateResult.publish()
+        return getJournalByDateRespose.publish()
     }
 }
 

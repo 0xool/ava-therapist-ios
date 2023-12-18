@@ -57,15 +57,15 @@ struct MockedJournalService: Mock, JournalService {
         self.actions = .init(expected: expected)
     }
     
-    func loadJournalList(journals: LoadableSubject<DiaryBook>){
+    func loadJournalList(journals: LoadableSubject<[Journal]>){
         register(.loadJournalList)
     }
     
-    func deleteJournal(journalID: Int, journals: LoadableSubject<DiaryBook>){
+    func deleteJournal(journalID: Int, journals: LoadableSubject<[Journal]>){
         register(.deleteJournal(journalID))
     }
     
-    func saveJournal(journal: Journal, journals: LoadableSubject<DiaryBook>){
+    func saveJournal(journal: Journal, journals: LoadableSubject<[Journal]>){
 //        register(.saveJournal(journal: journal, journals: journals))
     }
     

@@ -10,7 +10,7 @@ import Foundation
 import Alamofire
 
 protocol JournalWebRepository: WebRepository {
-    func loadJournalList() -> AnyPublisher<DiaryBook, Error>
+    func loadJournalList() -> AnyPublisher<[Journal], Error>
     func addJournal(journal: Journal) -> AnyPublisher<Void, Error>
     func deleteJournal(journalID: Int) -> AnyPublisher<Void, Error>
     
@@ -31,13 +31,13 @@ struct MainJournalWebRepository: JournalWebRepository {
         self.AFSession = setAFSession(session, queue: bgQueue)
     }
     
-    func loadJournalList() -> AnyPublisher<DiaryBook, Error> {
+    func loadJournalList() -> AnyPublisher<[Journal], Error> {
         
         let request: AnyPublisher<GetAllJournalResponse, Error> = webRequest(api: API.allJournals)
         
         return request
             .map{
-                DiaryBook(journals: $0.data)
+                $0.data
             }
             .eraseToAnyPublisher()
     }
