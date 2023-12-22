@@ -109,7 +109,7 @@ extension AppEnvironment {
                                            persistenceRepositories: DIContainer.PersistenceRepositories
     ) -> DIContainer.Services {
 
-        let insightService = MainInsightService(insightRepository: webRepositories.insightRepository, appState: appState, conversationDBRepository: dbRepositories.insightRepository)
+        let insightService = MainInsightService(insightRepository: webRepositories.insightRepository, appState: appState, insightDBRepository: dbRepositories.insightRepository)
         let authenticationService = MainAuthenticationService(appState: appState, authenticateRepository: webRepositories.authenticationRepository, userDBRepository: dbRepositories.userRepository)
         let chatService = MainChatService(chatRepository: webRepositories.chatRepository, appState: appState, chatDBRepository: dbRepositories.chatRepository)
         

@@ -20,9 +20,9 @@ struct MainInsightService: InsightService {
     let insightDBRepository: InsightDBRepository
     let appState: Store<AppState>
     
-    init(insightRepository: InsightWebRepository, appState: Store<AppState>, conversationDBRepository: InsightDBRepository) {
+    init(insightRepository: InsightWebRepository, appState: Store<AppState>, insightDBRepository: InsightDBRepository) {
         self.insightRepository = insightRepository
-        self.insightDBRepository = conversationDBRepository
+        self.insightDBRepository = insightDBRepository
         self.appState = appState
     }
     
