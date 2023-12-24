@@ -63,10 +63,9 @@ extension MainView {
                 .frame(height: 75)
                 .frame(maxWidth: .infinity)
                 .background(Color(.systemGray5))
-                .avaNavigationBarBackButtonHidden(true)
                 .avaNavigationBarTitle(self.viewModel.navigationTitle)
                 .avaNavigationBarBackground(self.viewModel.showNavigationBackground)
-                .avaNavigationLogOutBackButtonHidden(self.mainViewState != .Profile)
+                .avaNavigationBarTopLeftButton(self.mainViewState == .Profile ? .logOut : .nothing)
             }
             .offset(x: 0, y: isAnimatingTabBar ? 0 : 200)
             .onAppear{

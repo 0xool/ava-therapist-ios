@@ -289,7 +289,7 @@ extension ProfileView{
                         
                         AvaNavigationLink {
                             Text(settingType.title)
-                                .avaNavigationBarBackButtonHidden(false)
+                                .avaNavigationBarTopLeftButton(.back)
                                 .avaNavigationBarTitle("")
                         } label: {
                             Text("")

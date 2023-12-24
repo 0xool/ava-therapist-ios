@@ -25,17 +25,23 @@ struct AuthenticationView: View {
     
     @ViewBuilder private var content: some View {
         
-        switch viewModel.container.appState[\.userData.user] {
-        case .notRequested:
-            SplashScreen()
-        case let .isLoading(last, _):
-            loadingView(last)
-        case let .loaded(user):
-            loadedView(user, showLoading: false)
-        case let .failed(error):
-            failedView(error)
-        case .partialLoaded(_):
-            SplashScreen()
+        ZStack{
+            loginView()
+            
+            switch self.viewModel.user {
+            case .notRequested:
+                EmptyView()
+            case let .isLoading(last, _):
+                loadingView(last)
+            case let .loaded(user):
+                loadedView(user, showLoading: false)
+            case let .failed(error):
+                loginViewOverlay()
+                failedView(error)
+            case .partialLoaded(_):
+                //            SplashScreen()
+                loginView()
+            }
         }
     }
     
@@ -75,6 +81,19 @@ struct AnimatedSplashView: UIViewRepresentable {
 }
 
 extension  AuthenticationView {
+    func loginView() -> some View {
+        LoginPanelView(email: $email, password: $password) {
+            
+        } onFacebookLoginClicked: {
+            
+        } onLoginClicked: {
+            self.login()
+        }
+        .alert(viewModel.alertMessage.rawValue, isPresented: $showingAlert) {
+            Button("OK", role: .cancel) { }
+        }
+    }
+    
     func SplashScreen() -> some View {
         VStack{
             Color(red: 220/255, green: 255/255, blue: 253/255)
@@ -118,7 +137,7 @@ extension  AuthenticationView {
                         .padding(.vertical)
                         
                         Button {
-                            self.loginWithCheking()
+                            self.login()
                         } label: {
                             Text("Login")
                                 .fontWeight(.bold)
@@ -144,11 +163,9 @@ extension  AuthenticationView {
                                 .frame(height: 1)
                         }
                         .padding(.vertical)
-                        
-                        
+                                                
                         HStack(spacing: 10) {
-                            
-                            
+                                                        
                             Button {
                                 
                             } label: {
@@ -190,9 +207,7 @@ extension  AuthenticationView {
                                 .background(.red)
                                 .clipShape(Capsule())
                             }
-                            
                         }
-                        
                     }
                     .padding()
                     .background(Color(red: 0/255, green: 59/255, blue: 54/255))
@@ -212,7 +227,7 @@ extension  AuthenticationView {
         return emailPred.evaluate(with: email)
     }
     
-    private func loginWithCheking(){
+    private func login(){
         if (email == ""){
             viewModel.alertMessage = .EmailFieldEmpty
             showingAlert = true
@@ -237,11 +252,12 @@ private extension AuthenticationView {
     //    }
     
     func loadingView(_ previouslyLoaded: User?) -> some View {
-        if let user = previouslyLoaded {
-            return AnyView(loadedView(user, showLoading: true))
-        } else {
-            return AnyView(ActivityIndicatorView().padding())
-        }
+        AuthenticationBackgroundView()
+//        if let user = previouslyLoaded {
+//            return AnyView(loadedView(user, showLoading: true))
+//        } else {
+//            return AnyView(ActivityIndicatorView().padding())
+//        }
     }
     
     func loadedView(_ user: User, showLoading: Bool) -> some View {
@@ -250,30 +266,23 @@ private extension AuthenticationView {
                 ActivityIndicatorView().padding()
             }
             Text(user.token)
-        }.padding(.bottom, bottomInset)
-        
-        
+        }.padding(.bottom, 0)
+    }
+    
+    private func loginViewOverlay() -> some View {
+        Rectangle()
+            .fill(Color.black.opacity(0.3))
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .ignoresSafeArea()
     }
     
     func failedView(_ error: Error) -> some View {
         ErrorView(error: error, retryAction: {
             print("Error!!")
-            //            self.viewModel.reloadCountries()
-            
+            self.viewModel.retry()
         })
     }
-    
-    var bottomInset: CGFloat {
-        if #available(iOS 14, *) {
-            return 0
-        } else {
-            //            return self.viewModel.countriesSearch.keyboardHeight
-            return 0
-        }
-    }
 }
-
-
 
 #if DEBUG
 struct AuthenticationView_Previews: PreviewProvider {

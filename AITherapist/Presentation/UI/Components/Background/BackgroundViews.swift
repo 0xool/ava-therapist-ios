@@ -8,6 +8,25 @@
 import Foundation
 import SwiftUI
 
+struct AuthenticationBackgroundView: View {
+    var body: some View {
+        background
+    }
+    
+    @ViewBuilder var background: some View {
+        ZStack{
+            Rectangle()
+                .foregroundColor(.clear)
+                .background(ColorPallet.MediumTurquoiseBlue)
+            
+            Image("BackgroundImage")
+                .opacity(0.9)
+                .ignoresSafeArea()
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+}
+
 struct TwoCircleBackgroundView: View {
     @State private var circleAnimationOffsetX: CGFloat = 0
     @State private var circleAnimationOffsetY: CGFloat = 0

@@ -21,18 +21,26 @@ extension AuthenticationView {
 extension AuthenticationView {
     class ViewModel: ObservableObject {
         
-        // State
-//        @Published var routingState: Routing
-//        @Published var countriesSearch = CountriesSearch()
         @Published var canRequestPushPermission: Bool = false
         var alertMessage: AlertMessage = .None
         
         // Misc
         let container: DIContainer
         private var cancelBag = CancelBag()
+        var user: Loadable<User>{
+            get{
+                self.container.appState[\.userData.user]
+            }set{
+                self.container.appState[\.userData.user] = newValue
+            }
+        }
         
         init(container: DIContainer) {
             self.container = container
+        }
+        
+        func retry(){
+            user = .notRequested
         }
         
 //        var localeReader: LocaleReader {
@@ -54,7 +62,6 @@ extension AuthenticationView {
         }
         
         func login(email: String, password: String){
-            // upon success run print statement
             container.services.authenticationService.loginUser(email: email, password: password)
         }
     }

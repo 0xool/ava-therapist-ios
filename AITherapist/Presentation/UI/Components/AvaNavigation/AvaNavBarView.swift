@@ -11,8 +11,7 @@ import SwiftUI
 struct AvaNavBarView<Content: View>: View {
     
     @Environment(\.dismiss) var dismiss
-    @State private var backButtonIsHidden: Bool = true
-    @State private var logOutButtonIsHidden: Bool = true
+    @State private var backButtonType: TopLeftButtonType = .nothing
     @State private var title: String = ""
     
     @State private var showBackground: Bool = false
@@ -38,8 +37,7 @@ struct AvaNavBarView<Content: View>: View {
         }
         .backgroundStyle(.red)
         .toolbarBackground(.hidden, for: .navigationBar)
-        .onPreferenceChange(AvaNavigationBarBackButtonHiddenRefrenceKeys.self, perform: { self.backButtonIsHidden = $0 })
-        .onPreferenceChange(AvaNavigationBarLogOutButtonHiddenRefrenceKeys.self, perform: { self.logOutButtonIsHidden = $0 })
+        .onPreferenceChange(AvaNavigationBarTopLeftButtonRefrenceKeys.self, perform: { self.backButtonType = $0 })
         .onPreferenceChange(AvaNavigationBarTitleRefrenceKeys.self) { self.title = $0 }
         .onPreferenceChange(AvaNavigationBarShowBackgroundRefrenceKeys.self, perform: { self.showBackground = $0 })
     }
@@ -60,41 +58,41 @@ struct AvaNavBarView<Content: View>: View {
     }
     
     func NavBar() -> some View {
-        HStack(alignment: .center){
-            ZStack{
-                Button {
-//                    dismiss()
-//                    LogOut
-                } label: {
-                    Image(systemName: "rectangle.portrait.and.arrow.right")
-                        .font(.title3)
-                        .foregroundStyle(.gray)
-                        .padding([.leading], 8)
-                        .rotation3DEffect( .degrees(180),axis: (x: 0.0, y: 1.0, z: 0.0) )
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .frame(width: 75)
-                .padding([.leading], 8)
-                .hiddenModifier(isHide: self.logOutButtonIsHidden)
+        ZStack(alignment: .center){
+                switch self.backButtonType {
+                case .back:
+                    Button {
+                        dismiss()
+                    } label: {
+                        Image(systemName: "chevron.backward")
+                            .font(.subheadline)
+                            .foregroundStyle(.green)
+                            .padding([.leading], 8)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+
+                case .logOut:
+                    Button {
+                        dismiss()
+                    } label: {
+                        Image(systemName: "rectangle.portrait.and.arrow.right")
+                            .font(.title3)
+                            .foregroundStyle(.gray)
+                            .padding([.leading], 8)
+                            .rotation3DEffect( .degrees(180),axis: (x: 0.0, y: 1.0, z: 0.0) )
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding([.leading], 8)
                 
-                Button {
-                    dismiss()
-                } label: {
-                    Image(systemName: "chevron.backward")
-                        .font(.subheadline)
-                        .foregroundStyle(.green)
-                        .padding([.leading], 8)
+                case .nothing:
+                    EmptyView()
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .frame(width: 75)
-                .hiddenModifier(isHide: self.backButtonIsHidden)
-            }
             
             middleSection
                 .frame(maxWidth: .infinity, alignment: .center)
             
             HelpLineView
-                .frame(alignment: .trailing)
+                .frame(maxWidth: .infinity, alignment: .trailing)
         }
         .frame(maxHeight: .infinity, alignment: .top)
         .frame(width: UIScreen.main.bounds.width, height: 40)
@@ -115,12 +113,17 @@ struct AvaNavBarView<Content: View>: View {
     }
 }
 
+public enum TopLeftButtonType {
+    case back
+    case logOut
+    case nothing
+}
+
 
 #Preview{
     AvaNavBarView{
         Color.clear.ignoresSafeArea()
-            .avaNavigationBarBackButtonHidden(true)
             .avaNavigationBarTitle("Conversations")
-            .avaNavigationLogOutBackButtonHidden(false)
+            .avaNavigationBarTopLeftButton(.back)
     }
 }

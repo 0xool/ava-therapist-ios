@@ -146,7 +146,7 @@ struct WebAPI: APICall {
     var parameters: Parameters? = nil
     
     init(url: String, method: HTTPMethod, headers: HTTPHeaders? = nil, encoding: ParameterEncoding, parameters: Parameters? = nil, baseURL: String) {
-        self.url = "\(baseURL)/\(url)"
+        self.url = "\(baseURL)\(url)"
         self.method = method
         self.headers = headers
         self.encoding = encoding

@@ -19,8 +19,8 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession,
                options connectionOptions: UIScene.ConnectionOptions) {
         let environment = AppEnvironment.bootstrap()
-//        let contentView = MainContentView(viewModel: MainContentView.ViewModel(container: environment.container))
-        let contentView = MainView(viewModel: MainView.ViewModel(container: environment.container))
+        let contentView = MainAppView(viewModel: .init(container: environment.container))
+//        let contentView = MainView(viewModel: MainView.ViewModel(container: environment.container))
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)
             window.rootViewController = UIHostingController(rootView: contentView)

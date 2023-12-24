@@ -67,7 +67,7 @@ private extension ConversationListView {
                                 ConversationCell(conversation: conversation)
                                 AvaNavigationLink {
                                     TherapyChatView(viewModel: .init(conversation: conversation, container: self.viewModel.container))
-                                        .avaNavigationBarBackButtonHidden(false)
+                                        .avaNavigationBarTopLeftButton(.back)
                                         .avaNavigationBarTitle("")
                                 } label: {
                                     EmptyView()

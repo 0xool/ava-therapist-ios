@@ -31,6 +31,12 @@ extension ColorPallet {
     static let BackgroundColorLight: Color = Color(red: 242/255, green: 239/255, blue: 234/255)
     static let HelpLineColor: Color = Color(red: 0.45, green: 0.05, blue: 0.03)
     static let BackgroundColorDark: Color = Color(red: 16/255, green: 45/255, blue: 64/255)
+    
+    static let DarkGreen: Color = Color(red: 0.15, green: 0.38, blue: 0.38)
+    static let TextYellow: Color = Color(red: 0.93, green: 0.74, blue: 0.16)
+    static let LoginThirdPartyButtonColor: Color = Color(red: 0.71, green: 0.99, blue: 0.99)
+    
+    static let MediumTurquoiseBlue: Color = Color(red: 0.37, green: 0.85, blue: 0.85)
 }
 
 

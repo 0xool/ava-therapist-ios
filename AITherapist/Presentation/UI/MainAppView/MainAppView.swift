@@ -11,7 +11,6 @@ import EnvironmentOverrides
 
 // MARK: - View
 struct MainAppView: View {
-    
     @ObservedObject private(set) var viewModel: ViewModel
     
     var body: some View {
@@ -21,12 +20,12 @@ struct MainAppView: View {
             }else if (PersistentManager.UserHasFinishedOnboarding()){
                 Text("OnboardingView")
             }else{
-                if viewModel.container.appState[\.userData.user].value == nil
+                if self.viewModel.user.value == nil
                 { LoginView } else { MainAppView }
             }
         }
         .background(Color(red: 220/255, green: 255/255, blue: 253/255))
-        .animation(.easeIn, value: viewModel.container.appState[\.userData.user])
+        .animation(.easeIn, value: self.viewModel.user)
     }
     
     @ViewBuilder var LoginView: some View {
@@ -35,21 +34,36 @@ struct MainAppView: View {
             .modifier(RootViewAppearance(viewModel: .init(container: viewModel.container)))
     }
     
+    @ViewBuilder var splashView: some View {
+        AuthenticationBackgroundView()
+    }
+    
     @ViewBuilder var MainAppView: some View {
-        switch(viewModel.container.appState[\.userData.insight]) {
-        case .notRequested: // if we haven't started requesting the data yet
-            Text("Not requested")
-                .onAppear(){
-                    self.viewModel.container.services.insightService.loadInsight()
-                }
-        case .isLoading(_, _): // if we're waiting for the data to come back
-            Text("Loading")
-        case .loaded(_): // if we've got the data back
-            MainView(viewModel: .init(container: viewModel.container))
-        case let .failed(error): // if the request failed
-            Text(error.localizedDescription)
-        case .partialLoaded(_):
-            Text("Not requested")
+        ZStack{
+            splashView
+            switch(self.viewModel.insight) {
+            case .notRequested: // if we haven't started requesting the data yet
+                Text("Not requested")
+                    .onAppear(){
+                        self.viewModel.container.services.insightService.loadInsight()
+                    }
+            case .isLoading(_, _): // if we're waiting for the data to come back
+                Text("Loading")
+            case .loaded(_): // if we've got the data back
+                MainView(viewModel: .init(container: viewModel.container))
+            case let .failed(error): // if the request failed
+                failedView(error: error)
+            case .partialLoaded(_):
+                Text("Not requested")
+            }
+        }
+    }
+}
+
+extension MainAppView {
+    func failedView(error: Error) -> some View {
+        ErrorView(error: error) {
+            self.viewModel.getUserInsight( )
         }
     }
 }
@@ -63,15 +77,37 @@ extension MainAppView {
         let isRunningTests: Bool
         var anyCancellable: AnyCancellable? = nil
         
+        var user: Loadable<User>{
+            get{
+                self.container.appState[\.userData.user]
+            }set{
+                self.container.appState[\.userData.user] = newValue
+            }
+        }
+        
+        var insight: Loadable<Insight>{
+            get{
+                self.container.appState[\.userData.insight]
+            }set{
+                self.container.appState[\.userData.insight] = newValue
+            }
+        }
+        
         init(container: DIContainer, isRunningTests: Bool = ProcessInfo.processInfo.isRunningTests){
             self.container = container
             self.isRunningTests = isRunningTests
             self.container.services.authenticationService.checkUserLoggedStatus()
-            self.container.services.insightService.checkInsight()
+            
+            getUserInsight()
             
             anyCancellable = container.appState.value.userData.objectWillChange.sink { (_) in
                 self.objectWillChange.send()
             }
+        }
+        
+        func getUserInsight() {
+            insight = .notRequested
+            self.container.services.insightService.checkInsight()
         }
         
         var onChangeHandler: (EnvironmentValues.Diff) -> Void {

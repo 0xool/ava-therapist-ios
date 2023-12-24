@@ -121,8 +121,8 @@ extension MainAuthenticateWebRepository {
         
         var parameters: Parameters? {
             switch self {
-            case .login:
-                return nil
+            case let .login(params):
+                return params
             case let .register(email, password):
                 return ["email" : email , "password" : password]
             }

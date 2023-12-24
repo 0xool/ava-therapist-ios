@@ -20,8 +20,33 @@ struct ErrorView: View {
                 .font(.callout)
                 .multilineTextAlignment(.center)
                 .padding(.bottom, 40).padding()
-            Button(action: retryAction, label: { Text("Retry").bold() })
+            retryBtnView
         }
+        .padding(32)
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(ColorPallet.LoginThirdPartyButtonColor)
+                .shadow(radius: 8)
+        )
+    }
+    
+    @ViewBuilder var retryBtnView: some View{
+        Button(action: {
+            retryAction()
+        }, label: {
+            Text("Retry")
+                .font(
+                    Font.custom("SF Pro Text", size: 16)
+                        .weight(.semibold)
+                )
+                .multilineTextAlignment(.center)
+                .foregroundColor(ColorPallet.TextYellow)
+        })
+        .padding(.horizontal, 50)
+        .padding(.vertical, 5)
+        .frame(height: 54, alignment: .center)
+        .background(ColorPallet.DarkGreen)
+        .cornerRadius(50)
     }
 }
 
