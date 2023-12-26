@@ -40,10 +40,9 @@ struct AvaNavigationBarTitleRefrenceKeys: PreferenceKey{
     }
 }
 
-
 extension View {
     func avaNavigationBarTopLeftButton(_ topLeftButtonType: TopLeftButtonType) -> some View{
-        preference(key: AvaNavigationBarTopLeftButtonRefrenceKeys.self.self, value: topLeftButtonType)
+        preference(key: AvaNavigationBarTopLeftButtonRefrenceKeys.self, value: topLeftButtonType)
     }
     
     func avaNavigationBarTitle(_ title: String) -> some View{

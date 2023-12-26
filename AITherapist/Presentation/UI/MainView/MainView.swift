@@ -12,18 +12,21 @@ struct MainView: View {
     @ObservedObject private(set) var viewModel: ViewModel
     
     var body: some View {
-        AvaNavigationView{
-            VStack(spacing: 0){
-                MainTabContentView()
-                    .padding([.leading, .trailing], 16)
-                    .environmentObject(viewModel)
-                
-                TabView()
-                    .environmentObject(viewModel)
+        ZStack{
+            AvaNavigationView{
+                VStack(spacing: 0){
+                    MainTabContentView()
+                        .padding([.leading, .trailing], 16)
+                        .environmentObject(viewModel)
+                    TabView()
+                        .environmentObject(viewModel)
+                }
+                .fullScreenCover(isPresented: $viewModel.showNewChat, content: {
+                    NewChatView(viewModel: .init(coninater: self.viewModel.container), show: $viewModel.showNewChat)
+                })
+            } background: {
+                background
             }
-            .fullScreenCover(isPresented: $viewModel.showNewChat, content: {
-                NewChatView(viewModel: .init(coninater: self.viewModel.container), show: $viewModel.showNewChat)
-            })
         }
     }
 }
@@ -45,7 +48,13 @@ extension MainView {
         @Namespace var tabTopViewNameSpace
         
         var body: some View {
-            VStack{
+            ZStack{
+                Rectangle()
+                    .fill(ColorPallet.Celeste)
+                    .frame(height: 75)
+                    .frame(maxWidth: .infinity)
+                    .shadow(color: ColorPallet.DarkGreen, radius: 4, x: 0, y: -1)
+                    .mask(Rectangle().padding(.top, -10))
                 HStack{
                     self.homeTabIcon
                         .navigationTitle("")
@@ -62,12 +71,12 @@ extension MainView {
                 }
                 .frame(height: 75)
                 .frame(maxWidth: .infinity)
-                .background(Color(.systemGray5))
                 .avaNavigationBarTitle(self.viewModel.navigationTitle)
                 .avaNavigationBarBackground(self.viewModel.showNavigationBackground)
                 .avaNavigationBarTopLeftButton(self.mainViewState == .Profile ? .logOut : .nothing)
             }
             .offset(x: 0, y: isAnimatingTabBar ? 0 : 200)
+            .padding([.trailing, .leading], 16)
             .onAppear{
                 if !isAnimatingTabBar {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
@@ -80,7 +89,7 @@ extension MainView {
         }
         
         @ViewBuilder var homeTabIcon: some View {
-            TabIcon(imageName: "house", title: "Home", isSelected: self.mainViewState == .Home, tabTopViewNameSpace: tabTopViewNameSpace) {
+            TabIcon(imageName: "house", filledImageName: "house.fill", title: "Home", isSelected: self.mainViewState == .Home, tabTopViewNameSpace: tabTopViewNameSpace) {
                 if self.mainViewState == .Home { return }
                 self.viewModel.mainViewState.send(.Home)
                 self.mainViewState = .Home
@@ -90,7 +99,7 @@ extension MainView {
         }
         
         @ViewBuilder var chatHistoryTabIcon: some View {
-            TabIcon(imageName: "bubble.left.and.bubble.right", title: "Conversations", isSelected: self.mainViewState == .ChatHistory, tabTopViewNameSpace: tabTopViewNameSpace) {
+            TabIcon(imageName: "bubble.left.and.bubble.right", filledImageName: "bubble.left.and.bubble.right.fill", title: "Conversations", isSelected: self.mainViewState == .ChatHistory, tabTopViewNameSpace: tabTopViewNameSpace) {
                 if self.mainViewState == .ChatHistory { return }
                 self.viewModel.mainViewState.send(.ChatHistory)
                 self.mainViewState = .ChatHistory
@@ -100,7 +109,7 @@ extension MainView {
         }
         
         @ViewBuilder var journalTabIcon: some View {
-            TabIcon(imageName: "magazine.fill", title: "Journal", isSelected: self.mainViewState == .Journal, tabTopViewNameSpace: tabTopViewNameSpace) {
+            TabIcon(imageName: "magazine", filledImageName: "magazine.fill", title: "Journal", isSelected: self.mainViewState == .Journal, tabTopViewNameSpace: tabTopViewNameSpace) {
                 if self.mainViewState == .Journal { return }
                 self.viewModel.mainViewState.send(.Journal)
                 self.mainViewState = .Journal
@@ -110,7 +119,7 @@ extension MainView {
         }
         
         @ViewBuilder var profileTabIcon: some View {
-            TabIcon(imageName: "person.crop.circle", title: "Profile", isSelected: self.mainViewState == .Profile, tabTopViewNameSpace: tabTopViewNameSpace) {
+            TabIcon(imageName: "person", filledImageName: "person.fill", title: "Profile", isSelected: self.mainViewState == .Profile, tabTopViewNameSpace: tabTopViewNameSpace) {
                 if self.mainViewState == .Profile { return }
                 self.viewModel.mainViewState.send(.Profile)
                 self.mainViewState = .Profile
@@ -121,6 +130,7 @@ extension MainView {
         
         struct TabIcon: View {
             var imageName: String = ""
+            var filledImageName: String = ""
             var title: String = ""
             var isSelected: Bool = false
             
@@ -132,10 +142,10 @@ extension MainView {
                     onTabClick()
                 } label: {
                     VStack(spacing: 5){
-                        Rectangle().fill(ColorPallet.SecondaryColorGreen).frame(height: 5).offset(x: 0, y: -8)
+                        Rectangle().fill(ColorPallet.DarkGreen).frame(height: 5).offset(x: 0, y: -8)
                             .matchedGeometryEffect(id: "TabIconEffect", in: tabTopViewNameSpace, isSource: isSelected)
                             .animation(.bouncy, value: isSelected)
-                        Image(systemName: self.imageName)
+                        Image(systemName: isSelected ? self.filledImageName : self.imageName)
                             .aspectRatio(contentMode: .fill)
                             .frame(width: 32, height: 32)
                         Text(self.title)
@@ -147,7 +157,7 @@ extension MainView {
                         
                             .font(.caption)
                     }
-                    .foregroundStyle(isSelected ? ColorPallet.SecondaryColorGreen : .gray)
+                    .foregroundStyle(isSelected ? ColorPallet.DarkGreen : .gray)
                     .frame(maxWidth: .infinity)
                 }
             }
@@ -161,24 +171,24 @@ extension MainView {
             ZStack{
                 Circle()
                     .frame(width: 80, height: 80)
-                    .foregroundColor(Color(.systemGray5))
-                    .shadow(color: .black, radius: 0.5, x: 0, y: 1)
+                    .foregroundColor(ColorPallet.Celeste)
+                    .shadow(color: ColorPallet.DarkGreen, radius: 0.5, x: 0, y: 1)
                 Circle()
                     .frame(width: 75, height: 75)
-                    .foregroundColor(ColorPallet.SecondaryColorGreen)
+                    .foregroundColor(ColorPallet.MediumTurquoiseBlue)
                 Image(systemName: "plus.message")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 50, height: 50)
-                    .foregroundStyle(.white)
-                Text("New Conversation")
+                    .foregroundStyle(ColorPallet.DarkGreen)
+                Text("New Chat")
                     .font(
                         Font.custom("SF Pro Text", size: 7)
                             .weight(.bold)
                             .bold()
                     )
                     .multilineTextAlignment(.center)
-                    .foregroundColor(Color(red: 0.55, green: 0.55, blue: 0.55))
+                    .foregroundColor(ColorPallet.DarkGreen)
                     .offset(y: 54.5)
             }
             .offset(y: -36)
@@ -191,7 +201,7 @@ extension MainView {
     struct MainTabContentView: View {
         @EnvironmentObject var viewModel: ViewModel
         @State var viewState: MainViewState = .Home
-        @State fileprivate var insightView: LoadableTabViw<InsightView> = .notLoaded
+        @State fileprivate var insightView: LoadableTabView<InsightView> = .notLoaded
         
         var body: some View {
             mainContentView
@@ -223,9 +233,50 @@ extension MainView {
                 }
                 .opacity(self.viewState == .Profile ? 1 : 0)
             }
-//            .avaNavigationLogOutBackButtonHidden(s true)
+            //            .avaNavigationLogOutBackButtonHidden(s true)
             .environmentObject(viewModel)
         }
+    }
+}
+
+extension MainView {
+    enum MainViewBackground {
+        case blueGradientBackground
+        case cicleBackground
+        case defaultBackground
+    }
+    
+    @ViewBuilder private var  cicleBackgroundView: some View {
+        TwoCircleBackgroundView(backgroundColor: .white, animate: true)
+            .opacity(0.3)
+            .ignoresSafeArea()
+    }
+    
+    @ViewBuilder private var blueGradientBackgroundView: some View {
+        
+        
+        ZStack{
+            Rectangle()
+                .fill(ColorPallet.HomePageGradientBackground)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            Image("EarBG")
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+        }
+        .ignoresSafeArea()
+        //                .matchedGeometryEffect(id: "MainBackground", in: insightNamespace)
+        
+    }
+    
+    @ViewBuilder private var background: some View {
+        switch self.viewModel.mainViewBackground {
+        case .blueGradientBackground:
+            blueGradientBackgroundView
+        case .cicleBackground:
+            cicleBackgroundView
+        case .defaultBackground:
+            EmptyView()
+        }
+        
     }
 }
 
@@ -236,6 +287,7 @@ extension MainView {
         
         @Published var navigationTitle: String = ""
         @Published var showNavigationBackground: Bool = false
+        @Published var mainViewBackground: MainViewBackground = .blueGradientBackground
         
         let container: DIContainer
         
@@ -245,8 +297,8 @@ extension MainView {
     }
 }
 
-private extension MainView {
-    enum LoadableTabViw<T> {
+extension MainView {
+    enum LoadableTabView<T> {
         case notLoaded
         case loaded(T)
         
@@ -260,7 +312,7 @@ private extension MainView {
     
     struct LodableTabView<Content>: View where Content: View{
         @EnvironmentObject var viewModel: ViewModel
-        @State var lodableView: LoadableTabViw<Content> = .notLoaded
+        @State var lodableView: LoadableTabView<Content> = .notLoaded
         
         var content: Content
         var viewState: MainViewState

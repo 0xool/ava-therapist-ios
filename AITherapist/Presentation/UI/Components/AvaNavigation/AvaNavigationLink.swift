@@ -22,6 +22,8 @@ struct AvaNavigationLink<Label, Destination> : View where Label : View, Destinat
         NavigationLink {
             AvaNavBarView{
                 destination
+            } background: {
+                EmptyView()
             }
             .navigationBarBackButtonHidden(true)
         } label: {
@@ -38,6 +40,8 @@ struct AvaNavigationLink<Label, Destination> : View where Label : View, Destinat
         } label: {
             Text("Click me")
         }
+    } background: {
+        Color.blue
     }
 
 }

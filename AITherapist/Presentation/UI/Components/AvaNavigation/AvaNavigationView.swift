@@ -7,17 +7,21 @@
 
 import SwiftUI
 
-struct AvaNavigationView<Content: View>: View {
+struct AvaNavigationView<Content: View, Background: View>: View {
     let content: Content
+    let background: Background
     
-    init(content: () -> Content) {
+    init(content: () -> Content, background: () -> Background) {
         self.content = content()
+        self.background = background()
     }
     
     var body: some View {
         NavigationStack{
             AvaNavBarView{
                 self.content
+            } background: {
+                self.background
             }
         }
     }
@@ -25,8 +29,10 @@ struct AvaNavigationView<Content: View>: View {
 
 struct AvaNavigationView_Previews: PreviewProvider {
     static var previews: some View {
-        AvaNavigationView{
+        AvaNavigationView {
             Color.blue
+        } background: {
+            EmptyView()
         }
     }
 }

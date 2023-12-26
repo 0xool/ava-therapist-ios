@@ -25,7 +25,7 @@ struct ErrorView: View {
         .padding(32)
         .background(
             RoundedRectangle(cornerRadius: 16)
-                .fill(ColorPallet.LoginThirdPartyButtonColor)
+                .fill(ColorPallet.Celeste)
                 .shadow(radius: 8)
         )
     }

@@ -12,6 +12,9 @@ import EnvironmentOverrides
 // MARK: - View
 struct MainAppView: View {
     @ObservedObject private(set) var viewModel: ViewModel
+    @Namespace var mainViewNameSpace
+    
+    @State private var showBG: Bool = true
     
     var body: some View {
         Group {
@@ -21,10 +24,9 @@ struct MainAppView: View {
                 Text("OnboardingView")
             }else{
                 if self.viewModel.user.value == nil
-                { LoginView } else { MainAppView }
+                { LoginView } else { mainAppView }
             }
         }
-        .background(Color(red: 220/255, green: 255/255, blue: 253/255))
         .animation(.easeIn, value: self.viewModel.user)
     }
     
@@ -36,11 +38,11 @@ struct MainAppView: View {
     
     @ViewBuilder var splashView: some View {
         AuthenticationBackgroundView()
+            .matchedGeometryEffect(id: "MainBackground", in: mainViewNameSpace, isSource: showBG)
     }
     
-    @ViewBuilder var MainAppView: some View {
+    @ViewBuilder var mainAppView: some View {
         ZStack{
-            splashView
             switch(self.viewModel.insight) {
             case .notRequested: // if we haven't started requesting the data yet
                 Text("Not requested")
@@ -48,15 +50,23 @@ struct MainAppView: View {
                         self.viewModel.container.services.insightService.loadInsight()
                     }
             case .isLoading(_, _): // if we're waiting for the data to come back
-                Text("Loading")
+                loadingView()
             case .loaded(_): // if we've got the data back
                 MainView(viewModel: .init(container: viewModel.container))
+                    .onAppear{
+                        withAnimation{
+                            showBG = false
+                        }
+                    }
             case let .failed(error): // if the request failed
                 failedView(error: error)
             case .partialLoaded(_):
                 Text("Not requested")
             }
-        }
+        }.background(
+            splashView
+                .hiddenModifier(isHide: !showBG)
+        )
     }
 }
 
@@ -64,6 +74,15 @@ extension MainAppView {
     func failedView(error: Error) -> some View {
         ErrorView(error: error) {
             self.viewModel.getUserInsight( )
+        }
+    }
+    
+    func loadingView() -> some View {
+        // show logged in successfully
+        VStack{
+            CircleLoading()
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+            Text("Logged in succesfully")
         }
     }
 }
@@ -99,7 +118,6 @@ extension MainAppView {
             self.container.services.authenticationService.checkUserLoggedStatus()
             
             getUserInsight()
-            
             anyCancellable = container.appState.value.userData.objectWillChange.sink { (_) in
                 self.objectWillChange.send()
             }

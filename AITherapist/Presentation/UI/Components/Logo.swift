@@ -11,7 +11,7 @@ struct LogoIcon: View {
     var body: some View {
         Logo()
             .frame(width: 42.97, height: 24.25)
-            .foregroundStyle(.green)
+            .foregroundStyle(ColorPallet.SolidDarkGreen)
     }
 }
 

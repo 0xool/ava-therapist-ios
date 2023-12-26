@@ -71,6 +71,7 @@
 		A52EF6D72B0EE50F007D17CE /* AnimatableText.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52EF6D62B0EE50E007D17CE /* AnimatableText.swift */; };
 		A531A67A2B2C319100EDD26D /* AuthenticateWebRepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A531A6792B2C319100EDD26D /* AuthenticateWebRepositoryTests.swift */; };
 		A531A67C2B2C349800EDD26D /* ChatWebRepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A531A67B2B2C349800EDD26D /* ChatWebRepositoryTests.swift */; };
+		A53210D12B3B41D800CE156F /* RegisterPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53210D02B3B41D800CE156F /* RegisterPanelView.swift */; };
 		A53DD8BB2B24FA4900C98BD0 /* MockInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53DD8BA2B24FA4900C98BD0 /* MockInterceptor.swift */; };
 		A54FFEEE2B2FDFA600ECFCF2 /* JournalServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54FFEED2B2FDFA600ECFCF2 /* JournalServiceTests.swift */; };
 		A54FFEF02B2FF20600ECFCF2 /* InsightDBRepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54FFEEF2B2FF20600ECFCF2 /* InsightDBRepositoryTests.swift */; };
@@ -270,6 +271,7 @@
 		A52EF6D62B0EE50E007D17CE /* AnimatableText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatableText.swift; sourceTree = "<group>"; };
 		A531A6792B2C319100EDD26D /* AuthenticateWebRepositoryTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticateWebRepositoryTests.swift; sourceTree = "<group>"; };
 		A531A67B2B2C349800EDD26D /* ChatWebRepositoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatWebRepositoryTests.swift; sourceTree = "<group>"; };
+		A53210D02B3B41D800CE156F /* RegisterPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterPanelView.swift; sourceTree = "<group>"; };
 		A53DD8BA2B24FA4900C98BD0 /* MockInterceptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockInterceptor.swift; sourceTree = "<group>"; };
 		A53DD8BC2B25694900C98BD0 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/iPhoneOS.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		A54FFEED2B2FDFA600ECFCF2 /* JournalServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalServiceTests.swift; sourceTree = "<group>"; };
@@ -824,6 +826,7 @@
 				A59C63D12ACA37EE00B76256 /* AuthenticationView.swift.swift */,
 				A59C63D22ACA37EE00B76256 /* AuthenticationViewModel.swift */,
 				A50360752B36319700E542C4 /* LoginPanelView.swift */,
+				A53210D02B3B41D800CE156F /* RegisterPanelView.swift */,
 			);
 			path = AuthenticationView;
 			sourceTree = "<group>";
@@ -1377,6 +1380,7 @@
 				A50A1A6F2AA44D0D00A6AD6D /* AppEnvironment.swift in Sources */,
 				A52EF6D52B0DEAC4007D17CE /* AnimatingBorder.swift in Sources */,
 				A56E17A029B2DB680077B76B /* SpeakManager.swift in Sources */,
+				A53210D12B3B41D800CE156F /* RegisterPanelView.swift in Sources */,
 				A51CF3CB2AF8A48E0006F275 /* JournalView.swift in Sources */,
 				A51CF3CE2AF8A64E0006F275 /* Journal.swift in Sources */,
 				A59C63F82ACA37EE00B76256 /* CustomTabBar.swift in Sources */,

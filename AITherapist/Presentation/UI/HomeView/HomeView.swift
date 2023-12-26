@@ -15,11 +15,11 @@ struct InsightView: View {
     @State private var isAnimatingQuote = false
     @State private var isAnimatingMood = false
     
-    @Namespace private var chartNamespace
+    @Namespace private var insightNamespace
     private let animationTime = 1.25
     
     var body: some View {
-        MoodAnalyticsView(namespace: chartNamespace, isSource: showingModalSheet, showBackButton: true, withOptions: true, shown: $showingModalSheet)
+        MoodAnalyticsView(namespace: insightNamespace, isSource: showingModalSheet, showBackButton: true, withOptions: true, shown: $showingModalSheet)
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
                 .opacity(showingModalSheet ? 1 : 0)
             
@@ -30,7 +30,7 @@ struct InsightView: View {
                     QuoteView
                     VStack{
                         Divider()
-                        MoodAnalyticsView(namespace: chartNamespace, isSource: !showingModalSheet, showBackButton: false, withOptions: false, shown: $showingModalSheet)
+                        MoodAnalyticsView(namespace: insightNamespace, isSource: !showingModalSheet, showBackButton: false, withOptions: false, shown: $showingModalSheet)
                             .opacity(isAnimatingMood ? 1 : 0)
                             .offset(x: isAnimatingMood ? 0 : -50, y: 0)
                             .onTapGesture{
@@ -61,6 +61,18 @@ struct InsightView: View {
                     }
                 }
             }
+    }
+    
+    @ViewBuilder var background: some View {
+        ZStack{
+            Rectangle()
+                .fill(ColorPallet.HomePageGradientBackground)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            Image("EarBG")
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+        }
+        .matchedGeometryEffect(id: "MainBackground", in: insightNamespace)
+        .ignoresSafeArea()
     }
     
     @ViewBuilder var QuoteView: some View {

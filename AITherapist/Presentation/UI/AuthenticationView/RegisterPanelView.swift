@@ -1,42 +1,60 @@
 //
-//  LoginPanelView.swift
+//  RegisterPanelView.swift
 //  AITherapist
 //
-//  Created by cyrus refahi on 12/22/23.
+//  Created by cyrus refahi on 12/26/23.
 //
 
 import SwiftUI
 
-struct LoginPanelView: View {
+struct RegisterPanelView: View {
     @Binding var email: String
     @Binding var password: String
-    @Binding var showCreateAcount: Bool
+    @Binding var rePassword: String
+    
+    @Binding var showLogin: Bool
     
     @State private var isEmailFocused: Bool = false
     @State private var isPasswordFocused: Bool = false
     
     let onGoogleLoginClicked: () -> ()
     let onFacebookLoginClicked: () -> ()
-    let onLoginClicked: () -> ()
+    let onRegisterClicked: () -> ()
 
     var body: some View {
         VStack{
             Spacer()
             
-            Text("Welcome Back")
+            VStack(spacing: 28){
+                // Bold/Headline
+                Text("Create an account")
+//                  .font(
+//                    Font.custom("SF Pro Text", size: 24)
+//                      .weight(.heavy)
+//                  )
+                  .fontWeight(.bold)
+//                  .multilineTextAlignment(.center)
+                  .foregroundColor(ColorPallet.DarkGreen)
+                
+                Text(" Boost your experience with more chats, personalized tracking, and insights!")
+                  .font(Font.custom("SF Pro Text", size: 17))
+                  .multilineTextAlignment(.center)
+                  .foregroundColor(ColorPallet.DarkGreen)
+            }
             
             Spacer()
             
-            LoginInputView
+            registerInputView
             
             Spacer()
                 .frame(maxHeight: 50)
             
-            loginBtnView
+            registerBtnView
             
             Spacer()
+            //                .frame(maxHeight: 50)
             
-            thirdPartyLoginBtnView
+            thirdPartyRegisterBtnView
             
             Spacer()
             
@@ -52,11 +70,11 @@ struct LoginPanelView: View {
         AuthenticationBackgroundView()
     }
     
-    @ViewBuilder var loginBtnView: some View{
+    @ViewBuilder var registerBtnView: some View{
         Button(action: {
-            onLoginClicked()
+            onRegisterClicked()
         }, label: {
-            Text("Login")
+            Text("Next")
                 .font(
                     Font.custom("SF Pro Text", size: 16)
                         .weight(.semibold)
@@ -71,7 +89,7 @@ struct LoginPanelView: View {
         .cornerRadius(50)
     }
     
-    @ViewBuilder var LoginInputView: some View{
+    @ViewBuilder var registerInputView: some View{
         VStack(alignment: .center, spacing: 15) {
             TextField("Email Adress", text: $email)
                 .padding(.horizontal, 15)
@@ -98,9 +116,21 @@ struct LoginPanelView: View {
 
         }
         .padding(0)
+                
+        VStack(alignment: .center, spacing: 15) {
+            SecureField("Repeat Password", text: $rePassword)
+                .textContentType(.password)
+                .padding(.horizontal, 15)
+                .padding(.vertical, 10)
+                .frame(width: 276, alignment: .leading)
+                .cornerRadius(10)
+                .overlay(RoundedRectangle(cornerRadius: 10).frame(width: nil, height: 1, alignment: .bottom).foregroundColor(ColorPallet.DarkGreen).shadow(color: ColorPallet.DarkGreen, radius: 1, x: 0, y: 1), alignment: .bottom)
+
+        }
+        .padding(0)
     }
     
-    @ViewBuilder var thirdPartyLoginBtnView: some View {
+    @ViewBuilder var thirdPartyRegisterBtnView: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack(alignment: .center, spacing: 0) {
                 Image("GoogleIcon")
@@ -142,27 +172,19 @@ struct LoginPanelView: View {
     
     @ViewBuilder var newToAvaView: some View {
         Button(action: {
-            showCreateAcount.toggle()
+            showLogin.toggle()
         }, label: {
-            VStack(alignment: .center, spacing: 5) {
-                Text("New to Ava?")
-                    .font(Font.custom("SF Pro Text", size: 13))
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(ColorPallet.DarkGreen)
-                
-                Text("Sign up for free")
-                    .font(Font.custom("SF Pro Display", size: 15))
-                    .underline()
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(ColorPallet.DarkGreen)
-            }
+            Text("Already have an acount?")
+                .font(Font.custom("SF Pro Display", size: 15))
+                .underline()
+                .multilineTextAlignment(.center)
+                .foregroundColor(ColorPallet.DarkGreen)
             .frame(maxWidth: .infinity, alignment: .center)
             .padding(0)
         })
     }
-    
 }
 
 #Preview {
-    LoginPanelView(email: Binding.constant(""), password: Binding.constant(""), showCreateAcount: Binding.constant(true), onGoogleLoginClicked: {}, onFacebookLoginClicked: {}, onLoginClicked: {})
+    RegisterPanelView(email: Binding.constant(""), password: Binding.constant(""), rePassword: Binding.constant(""), showLogin: Binding.constant(false), onGoogleLoginClicked: {}, onFacebookLoginClicked: {}, onRegisterClicked: {})
 }

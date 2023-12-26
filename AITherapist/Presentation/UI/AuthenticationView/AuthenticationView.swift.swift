@@ -14,9 +14,11 @@ struct AuthenticationView: View {
     @ObservedObject private(set) var viewModel: ViewModel
     @State var email: String = ""
     @State var password: String = ""
+    @State var rePassword: String = ""
     
     @State var show: Bool = false
     @State private var showingAlert = false
+    @State private var showLoginView = true
     
     var body: some View {
         self.content
@@ -24,9 +26,8 @@ struct AuthenticationView: View {
     }
     
     @ViewBuilder private var content: some View {
-        
         ZStack{
-            loginView()
+            authView
             
             switch self.viewModel.user {
             case .notRequested:
@@ -39,8 +40,7 @@ struct AuthenticationView: View {
                 loginViewOverlay()
                 failedView(error)
             case .partialLoaded(_):
-                //            SplashScreen()
-                loginView()
+                authView
             }
         }
     }
@@ -81,13 +81,34 @@ struct AnimatedSplashView: UIViewRepresentable {
 }
 
 extension  AuthenticationView {
+    @ViewBuilder private var authView: some View {
+        if self.showLoginView {
+            loginView()
+        }else{
+            registerView()
+        }
+    }
+    
     func loginView() -> some View {
-        LoginPanelView(email: $email, password: $password) {
+        LoginPanelView(email: $email, password: $password, showCreateAcount: $showLoginView) {
             
         } onFacebookLoginClicked: {
             
         } onLoginClicked: {
             self.login()
+        }
+        .alert(viewModel.alertMessage.rawValue, isPresented: $showingAlert) {
+            Button("OK", role: .cancel) { }
+        }
+    }
+    
+    func registerView() -> some View {
+        RegisterPanelView(email: $email, password: $password, rePassword: $rePassword, showLogin: $showLoginView) {
+            
+        } onFacebookLoginClicked: {
+            
+        } onRegisterClicked: {
+            
         }
         .alert(viewModel.alertMessage.rawValue, isPresented: $showingAlert) {
             Button("OK", role: .cancel) { }
@@ -252,12 +273,11 @@ private extension AuthenticationView {
     //    }
     
     func loadingView(_ previouslyLoaded: User?) -> some View {
-        AuthenticationBackgroundView()
-//        if let user = previouslyLoaded {
-//            return AnyView(loadedView(user, showLoading: true))
-//        } else {
-//            return AnyView(ActivityIndicatorView().padding())
-//        }
+        ZStack{
+            AuthenticationBackgroundView()
+            CircleLoading()
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+        }
     }
     
     func loadedView(_ user: User, showLoading: Bool) -> some View {

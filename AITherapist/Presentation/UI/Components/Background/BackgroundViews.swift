@@ -18,7 +18,6 @@ struct AuthenticationBackgroundView: View {
             Rectangle()
                 .foregroundColor(.clear)
                 .background(ColorPallet.MediumTurquoiseBlue)
-            
             Image("BackgroundImage")
                 .opacity(0.9)
                 .ignoresSafeArea()

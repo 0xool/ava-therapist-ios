@@ -8,38 +8,35 @@
 import Foundation
 import SwiftUI
 
-struct AvaNavBarView<Content: View>: View {
+struct AvaNavBarView<Content: View, Background: View>: View {
     
     @Environment(\.dismiss) var dismiss
     @State private var backButtonType: TopLeftButtonType = .nothing
     @State private var title: String = ""
     
-    @State private var showBackground: Bool = false
     let content: Content
+    let background: Background
     
-    init (@ViewBuilder content: () -> Content){
+    init (@ViewBuilder content: () -> Content, @ViewBuilder background: () -> Background){
         self.content = content()
+        self.background = background()
     }
     
     var body: some View {
         ZStack{
-            TwoCircleBackgroundView(backgroundColor: .white, animate: false)
-                .opacity(0.3)
-                .hiddenModifier(isHide: !self.showBackground)
-
+            self.background
             VStack{
                 NavBar()
                     .backgroundStyle(.clear)
-                content
+                self.content
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .backgroundStyle(.clear)
             }
         }
-        .backgroundStyle(.red)
         .toolbarBackground(.hidden, for: .navigationBar)
+        .backgroundStyle(.clear)
         .onPreferenceChange(AvaNavigationBarTopLeftButtonRefrenceKeys.self, perform: { self.backButtonType = $0 })
         .onPreferenceChange(AvaNavigationBarTitleRefrenceKeys.self) { self.title = $0 }
-        .onPreferenceChange(AvaNavigationBarShowBackgroundRefrenceKeys.self, perform: { self.showBackground = $0 })
     }
     
     @ViewBuilder var HelpLineView: some View {
@@ -119,11 +116,12 @@ public enum TopLeftButtonType {
     case nothing
 }
 
-
 #Preview{
     AvaNavBarView{
         Color.clear.ignoresSafeArea()
             .avaNavigationBarTitle("Conversations")
             .avaNavigationBarTopLeftButton(.back)
+    } background: {
+        TwoCircleBackgroundView()
     }
 }

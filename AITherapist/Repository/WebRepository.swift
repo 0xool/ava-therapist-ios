@@ -29,12 +29,12 @@ extension WebRepository {
     }
     
     func webRequest<D: ServerResponse>(webApi: APICall) -> AnyPublisher<D, Error> {
-        
-#warning ("REMOVE TESTS")
-        generateTestCookie()
-        
+        AF.session.configuration.httpCookieStorage?.cookies?.forEach({
+            AFSession.session.configuration.httpCookieStorage?.setCookie($0)
+        })
+
         return Future<D, Error> { promise in
-            AFSession.request(webApi.url, method: webApi.method, parameters: webApi.parameters, encoding: webApi.encoding, headers: webApi.headers)
+            AFSession.request(webApi.url, method: webApi.method, parameters: webApi.parameters, encoding: webApi.encoding, headers: webApi.headers, requestModifier: {$0.timeoutInterval = 5})
                 .validate()
                 .responseDecodable(of: D.self) { response in
                     switch response.result {
@@ -48,8 +48,6 @@ extension WebRepository {
         .receive(on: DispatchQueue.main)
         .eraseToAnyPublisher()
     }
-    
-    
 }
 
 func setAFSession(_ session: URLSession, queue: DispatchQueue) -> Session {
@@ -70,8 +68,6 @@ func setAFSession(_ session: URLSession, queue: DispatchQueue) -> Session {
             eventMonitors: []
         )
 }
-
-
 
 // MARK: COOKIE
 extension WebRepository {
@@ -105,10 +101,6 @@ extension WebRepository {
     }
 }
 
-extension WebRepository {
-    
-}
-
 // MARK: Model
 enum ClientError: Error {
     case invalidURL
@@ -136,7 +128,6 @@ protocol ServerResponse: Decodable {
     var message: String? { get set }
     var code: Int? { get set }
 }
-
 
 struct WebAPI: APICall {
     var url: String
