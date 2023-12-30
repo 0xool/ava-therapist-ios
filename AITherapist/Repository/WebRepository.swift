@@ -32,9 +32,9 @@ extension WebRepository {
         AF.session.configuration.httpCookieStorage?.cookies?.forEach({
             AFSession.session.configuration.httpCookieStorage?.setCookie($0)
         })
-
+        
         return Future<D, Error> { promise in
-            AFSession.request(webApi.url, method: webApi.method, parameters: webApi.parameters, encoding: webApi.encoding, headers: webApi.headers, requestModifier: {$0.timeoutInterval = 5})
+            AFSession.request(webApi.url, method: webApi.method, parameters: webApi.parameters, encoding: webApi.encoding, headers: webApi.headers)
                 .validate()
                 .responseDecodable(of: D.self) { response in
                     switch response.result {

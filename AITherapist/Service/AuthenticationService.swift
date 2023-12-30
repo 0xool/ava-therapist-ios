@@ -11,7 +11,7 @@ import Combine
 
 protocol AuthenticationService {
     func loginUser(email: String, password: String)
-    func registerUser(auth: LoadableSubject<User>, email: String, password: String)
+    func registerUser(email: String, password: String, mobileNumber: String)
     func checkUserLoggedStatus()
 }
 
@@ -72,7 +72,7 @@ class MainAuthenticationService: AuthenticationService {
     }
     
     func login(email: String, password: String) -> AnyPublisher<Void, Error>{
-        return authenticateRepository
+        authenticateRepository
             .login(email: email, password: password)
             .ensureTimeSpan(requestHoldBackTimeInterval)
             .map { [userDBRepository] in
@@ -81,10 +81,41 @@ class MainAuthenticationService: AuthenticationService {
             .eraseToAnyPublisher()
     }
                    
-    func registerUser(auth: LoadableSubject<User>, email: String, password: String) {
-        
+    func register(email: String, password: String, mobileNumber: String) -> AnyPublisher<Void, Error>{
+        authenticateRepository
+            .register(email: email, password: password, mobileNumber: mobileNumber)
+            .ensureTimeSpan(requestHoldBackTimeInterval)
+            .map { [userDBRepository] in
+                _ = userDBRepository.store(user: $0)
+            }
+            .eraseToAnyPublisher()
     }
     
+    func registerUser(email: String, password: String, mobileNumber: String){
+        let cancelBag = CancelBag()
+        self.appState[\.userData.user].setIsLoading(cancelBag: cancelBag)
+        
+        Just<Void>
+            .withErrorType(Error.self)
+            .flatMap{ [userDBRepository] _ -> AnyPublisher<Bool, Error> in
+                userDBRepository.hasLoadedUser()
+            }
+            .flatMap{ hasLoaded in
+                if hasLoaded {
+                    return Just<Void>.withErrorType(Error.self)
+                } else {
+                    return self.register(email: email, password: password, mobileNumber: mobileNumber)
+                }
+            }
+            .flatMap({ [userDBRepository] in
+                userDBRepository.loadUser()
+            })
+            .sinkToLoadable {
+                self.appState[\.userData.user] = $0
+            }
+            .store(in: cancelBag)
+    }
+        
     private var requestHoldBackTimeInterval: TimeInterval {
         return ProcessInfo.processInfo.isRunningTests ? 0 : 0.5
     }
@@ -97,6 +128,6 @@ struct StubAuthenticateService: AuthenticationService {
     func loginUser(email: String, password: String) {
     }
     
-    func registerUser(auth: LoadableSubject<User>, email: String, password: String) {
+    func registerUser(email: String, password: String, mobileNumber: String) {
     }
  }

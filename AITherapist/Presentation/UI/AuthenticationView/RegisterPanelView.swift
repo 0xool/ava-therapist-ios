@@ -11,9 +11,11 @@ struct RegisterPanelView: View {
     @Binding var email: String
     @Binding var password: String
     @Binding var rePassword: String
+    @Binding var mobileNumber: String
     
     @Binding var showLogin: Bool
     
+    @State private var enableRegisterBtn: Bool = false
     @State private var isEmailFocused: Bool = false
     @State private var isPasswordFocused: Bool = false
     
@@ -26,14 +28,8 @@ struct RegisterPanelView: View {
             Spacer()
             
             VStack(spacing: 28){
-                // Bold/Headline
                 Text("Create an account")
-//                  .font(
-//                    Font.custom("SF Pro Text", size: 24)
-//                      .weight(.heavy)
-//                  )
                   .fontWeight(.bold)
-//                  .multilineTextAlignment(.center)
                   .foregroundColor(ColorPallet.DarkGreen)
                 
                 Text(" Boost your experience with more chats, personalized tracking, and insights!")
@@ -45,6 +41,11 @@ struct RegisterPanelView: View {
             Spacer()
             
             registerInputView
+                .onReceive(email.publisher, perform: { _ in enableRegisterBtnOnFill() })
+                .onReceive(password.publisher, perform: { _ in enableRegisterBtnOnFill() })
+                .onReceive(rePassword.publisher, perform: { _ in enableRegisterBtnOnFill() })
+                .onReceive(mobileNumber.publisher, perform: { _ in enableRegisterBtnOnFill() })
+            
             
             Spacer()
                 .frame(maxHeight: 50)
@@ -52,7 +53,6 @@ struct RegisterPanelView: View {
             registerBtnView
             
             Spacer()
-            //                .frame(maxHeight: 50)
             
             thirdPartyRegisterBtnView
             
@@ -72,7 +72,9 @@ struct RegisterPanelView: View {
     
     @ViewBuilder var registerBtnView: some View{
         Button(action: {
-            onRegisterClicked()
+            if self.enableRegisterBtn{
+                onRegisterClicked()
+            }
         }, label: {
             Text("Next")
                 .font(
@@ -80,12 +82,12 @@ struct RegisterPanelView: View {
                         .weight(.semibold)
                 )
                 .multilineTextAlignment(.center)
-                .foregroundColor(ColorPallet.TextYellow)
+                .foregroundColor(self.enableRegisterBtn ? ColorPallet.TextYellow : .gray)
         })
         .padding(.horizontal, 50)
         .padding(.vertical, 5)
         .frame(height: 54, alignment: .center)
-        .background(ColorPallet.DarkGreen)
+        .background(ColorPallet.DarkGreen.opacity(self.enableRegisterBtn ? 1 : 0.3 ))
         .cornerRadius(50)
     }
     
@@ -128,6 +130,18 @@ struct RegisterPanelView: View {
 
         }
         .padding(0)
+        
+        VStack(alignment: .center, spacing: 15) {
+            TextField("Phone Number", text: $mobileNumber)
+                .textContentType(.password)
+                .padding(.horizontal, 15)
+                .padding(.vertical, 10)
+                .frame(width: 276, alignment: .leading)
+                .cornerRadius(10)
+                .overlay(RoundedRectangle(cornerRadius: 10).frame(width: nil, height: 1, alignment: .bottom).foregroundColor(ColorPallet.DarkGreen).shadow(color: ColorPallet.DarkGreen, radius: 1, x: 0, y: 1), alignment: .bottom)
+
+        }
+        .padding(0)
     }
     
     @ViewBuilder var thirdPartyRegisterBtnView: some View {
@@ -148,7 +162,6 @@ struct RegisterPanelView: View {
             .frame(width: 296, alignment: .leading)
             .background(ColorPallet.Celeste)
             .cornerRadius(5)
-            
             HStack(alignment: .center, spacing: 0) {
                 Image("FacebookIcon")
                     .frame(width: 33, height: 34)
@@ -183,8 +196,16 @@ struct RegisterPanelView: View {
             .padding(0)
         })
     }
+    
+    private func enableRegisterBtnOnFill() {
+        if email.count > 0 && password.count > 0 && rePassword.count > 0 && mobileNumber.count > 0 {
+            self.enableRegisterBtn = true
+        }else{
+            self.enableRegisterBtn = false
+        }
+    }
 }
 
 #Preview {
-    RegisterPanelView(email: Binding.constant(""), password: Binding.constant(""), rePassword: Binding.constant(""), showLogin: Binding.constant(false), onGoogleLoginClicked: {}, onFacebookLoginClicked: {}, onRegisterClicked: {})
+    RegisterPanelView(email: Binding.constant(""), password: Binding.constant(""), rePassword: Binding.constant(""), mobileNumber: Binding.constant(""), showLogin: Binding.constant(false), onGoogleLoginClicked: {}, onFacebookLoginClicked: {}, onRegisterClicked: {})
 }

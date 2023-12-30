@@ -19,7 +19,7 @@ struct MainInsightWebRepository: InsightWebRepository {
     var bgQueue: DispatchQueue = Constants.bgQueue
     
     var baseURL: String
-    static let InsightAPI = "insight"
+    static let InsightAPI = "user"
     
     init(session: URLSession, baseURL: String) {
         self.session = session
@@ -32,7 +32,10 @@ struct MainInsightWebRepository: InsightWebRepository {
         let request: AnyPublisher<LoadInsightServerResponse, Error> = webRequest(api: API.getInsight)
         
         return request
-            .map{ $0.data }
+            .map{
+                print($0.data)
+                return $0.data
+            }
             .eraseToAnyPublisher()
     }
 }
@@ -43,7 +46,7 @@ extension MainInsightWebRepository {
         case getInsight
         
         var url: String{
-            "\(InsightAPI)/getUserInsight"
+            "\(MainInsightWebRepository.InsightAPI)/getUserInsight"
         }
         
         var method: HTTPMethod {

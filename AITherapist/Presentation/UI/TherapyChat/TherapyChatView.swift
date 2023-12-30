@@ -141,8 +141,7 @@ private extension TherapyChatView {
     func failedView(_ error: Error) -> some View {
         self.showSheet.toggle()
         return ErrorView(error: error, retryAction: {
-#warning("Handle Conversation ERROR")
-            print("Handle Conversation ERROR")
+            self.viewModel.loadConversationChat()
         })
     }
     
@@ -250,6 +249,7 @@ extension TherapyChatView {
         @Published var conversation: Loadable<Conversation>
         @Published var isUserTurnToSpeak: Bool = true
         var speechRecognizer = SpeechManager()
+        let conversationID: Int
         //        var didChange = PassthroughSubject<Void, Never>()
         
         let isRunningTests: Bool
@@ -272,7 +272,7 @@ extension TherapyChatView {
         }
         
         func loadConversationChat() {
-            self.container.services.conversationService.loadConversationChat(conversation: loadableSubject(\.conversation))
+            self.container.services.conversationService.loadConversationChat(conversation: loadableSubject(\.conversation), conversationID: self.conversationID)
         }
         
         func resendMessage(chat: Chat) {
@@ -295,7 +295,7 @@ extension TherapyChatView {
             _conversation = .init(initialValue: .partialLoaded(conversation))
             self.container = container
             self.isRunningTests = isRunningTests
-            
+            self.conversationID = conversation.id
             loadConversationChat()
         }
     }

@@ -22,6 +22,8 @@ struct ChartView: View {
                  Mood(mood: .Happy, dateCreated: .now + 10, moodString: "Happy"),
                  Mood(mood: .Guilty, dateCreated: .now - 10, moodString: "Happy") ]
     
+    
+    
     var body: some View {
         VStack{
             withAnimation {
@@ -36,9 +38,14 @@ struct ChartView: View {
             }
             .hiddenModifier(isHide: !withChartOption)
             
-            MoodQuantityChart(chartNamespace: chartNamespace, moodChartDatas: convertMoodToMoodQuantityChartData(moods: moods), chartType: chartType, isSource: isSource)
+            if moods.count == 0 {
+                
+            }else{
+                MoodQuantityChart(chartNamespace: chartNamespace, moodChartDatas: convertMoodToMoodQuantityChartData(moods: moods), chartType: chartType, isSource: isSource)
+                //            WeeklyMoodChart(moodChartDatas: moods, chartType: .bar)
+            }
+                        
             Spacer(minLength: 0)
-//            WeeklyMoodChart(moodChartDatas: moods, chartType: .bar)
         }
         .padding(4)
     }

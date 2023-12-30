@@ -40,7 +40,7 @@ extension Conversation {
 }
 
 extension Insight {
-    static let mockedInsight: Insight = Insight(conversationSummaries: ConversationSummaries(), dailyMoods: [Mood(mood: .Angry, dateCreated: .now, moodString: "Angry")], generalSummary: "test")
+    static let mockedInsight: Insight = Insight(conversationSummaries: ConversationSummaries(), dailyMoods: [Mood(mood: .Angry, dateCreated: .now, moodString: "Angry")], generalSummary: "test", quote: "test")
 }
 
 extension Chat{
@@ -60,7 +60,7 @@ extension Chat{
 }
 
 extension User {
-    static let mockedUser: User = User(id: 1, token: "test")
+    static let mockedUser: User = User(id: 1, userName: "cyrus", therapistID: nil, mobile: "310", name: "John", lastName: "Doe", email: "johndoe32@gmail.com", generalSummary: nil, token: "123")
 }
 
 #endif

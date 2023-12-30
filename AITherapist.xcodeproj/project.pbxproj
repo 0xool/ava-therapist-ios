@@ -140,7 +140,6 @@
 		A59C64022ACA37EE00B76256 /* BreathingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A59C63E72ACA37EE00B76256 /* BreathingView.swift */; };
 		A59C64032ACA37EE00B76256 /* ConversationListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A59C63E92ACA37EE00B76256 /* ConversationListView.swift */; };
 		A59C64042ACA37EE00B76256 /* MainAppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A59C63EB2ACA37EE00B76256 /* MainAppView.swift */; };
-		A59C64052ACA37EE00B76256 /* TherapyChatModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A59C63EE2ACA37EE00B76256 /* TherapyChatModel.swift */; };
 		A59C64072ACA3DA300B76256 /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = A59C64062ACA3DA300B76256 /* Fonts.swift */; };
 		A59C64092ACA58E500B76256 /* ChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A59C64082ACA58E500B76256 /* ChartView.swift */; };
 		A5A708CC29C5342B001BCF2F /* SpeechManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A708CB29C5342B001BCF2F /* SpeechManager.swift */; };
@@ -337,7 +336,6 @@
 		A59C63E72ACA37EE00B76256 /* BreathingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BreathingView.swift; sourceTree = "<group>"; };
 		A59C63E92ACA37EE00B76256 /* ConversationListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationListView.swift; sourceTree = "<group>"; };
 		A59C63EB2ACA37EE00B76256 /* MainAppView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainAppView.swift; sourceTree = "<group>"; };
-		A59C63EE2ACA37EE00B76256 /* TherapyChatModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TherapyChatModel.swift; sourceTree = "<group>"; };
 		A59C64062ACA3DA300B76256 /* Fonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
 		A59C64082ACA58E500B76256 /* ChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartView.swift; sourceTree = "<group>"; };
 		A5A708CB29C5342B001BCF2F /* SpeechManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpeechManager.swift; sourceTree = "<group>"; };
@@ -931,26 +929,9 @@
 		A59C63EC2ACA37EE00B76256 /* TherapyChat */ = {
 			isa = PBXGroup;
 			children = (
-				A59C63ED2ACA37EE00B76256 /* ViewModel */,
-				A59C63EF2ACA37EE00B76256 /* View */,
-			);
-			path = TherapyChat;
-			sourceTree = "<group>";
-		};
-		A59C63ED2ACA37EE00B76256 /* ViewModel */ = {
-			isa = PBXGroup;
-			children = (
-				A59C63EE2ACA37EE00B76256 /* TherapyChatModel.swift */,
-			);
-			path = ViewModel;
-			sourceTree = "<group>";
-		};
-		A59C63EF2ACA37EE00B76256 /* View */ = {
-			isa = PBXGroup;
-			children = (
 				A59C63E32ACA37EE00B76256 /* TherapyChatView.swift */,
 			);
-			path = View;
+			path = TherapyChat;
 			sourceTree = "<group>";
 		};
 		A59EB1512ACA28A900F31A12 /* UI */ = {
@@ -1415,7 +1396,6 @@
 				A58AA49B2AD8D8A3001F7253 /* ChatWebRepository.swift in Sources */,
 				A56D938E2AFB288D00A66366 /* JournalDBRepository.swift in Sources */,
 				A5AE6FDA2AA3E9AE00168037 /* ConversationSummary.swift in Sources */,
-				A59C64052ACA37EE00B76256 /* TherapyChatModel.swift in Sources */,
 				A51F46D42B09349300E6C2D2 /* ViewExtensions.swift in Sources */,
 				A51CF3D02AF8AEC00006F275 /* JournalWebRepository.swift in Sources */,
 				A50A1A662AA44A2D00A6AD6D /* ServiceContainer.swift in Sources */,

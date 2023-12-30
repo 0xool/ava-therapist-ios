@@ -27,8 +27,8 @@ struct AnimatableText: View {
         FlexibleStack(spacing: 0, alignment: .leading){
             ForEach(letters.indices, id: \.self) { index in
                 Text(letters[index])
-                    .foregroundStyle(.white)
-                    .font(.title3)
+                    .foregroundStyle(ColorPallet.DarkBlue)
+                    .bold()
                     .modifier(PresentingTextModifer(isAnimating: isAnimating, fraction: fraction, order: index))
                     .modifier(PresentingTextOpacityModifer(isAnimating: isAnimating, fraction: fraction, order: index))
             }

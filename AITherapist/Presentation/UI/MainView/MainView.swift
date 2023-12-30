@@ -10,6 +10,8 @@ import Combine
 
 struct MainView: View {
     @ObservedObject private(set) var viewModel: ViewModel
+    private let screenWidth = UIViewController().view.bounds.width
+    private let screenHeight = UIViewController().view.bounds.height
     
     var body: some View {
         ZStack{
@@ -254,14 +256,21 @@ extension MainView {
     
     @ViewBuilder private var blueGradientBackgroundView: some View {
         
-        
         ZStack{
             Rectangle()
                 .fill(ColorPallet.HomePageGradientBackground)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
+            
+            Circle()
+                .fill(Color(red: 0.16, green: 0.74, blue: 0.93).opacity(0.7))
+                .frame(width: screenWidth, height: screenWidth)
+                .blur(radius: 30)
+                .offset(y: -screenWidth + 100)
+            
             Image("EarBG")
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+
         .ignoresSafeArea()
         //                .matchedGeometryEffect(id: "MainBackground", in: insightNamespace)
         

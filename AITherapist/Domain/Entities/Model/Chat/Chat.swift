@@ -12,10 +12,15 @@ struct GetConversationChatServerResponse: ServerResponse {
     var code: Int?
     var message: String?
     var data: [Chat]
+    
+    enum CodingKeys: CodingKey {
+        case code
+        case message
+        case data
+    }
 }
 
-struct AddChatServerResponse: ServerResponse {
-    
+struct AddChatServerResponse: ServerResponse {    
     var message: String?
     var code: Int?
     var data: AddChatServerResponseData
@@ -31,7 +36,6 @@ struct SaveChatRequset: Encodable, Equatable{
     static func == (lhs: SaveChatRequset, rhs: SaveChatRequset) -> Bool {
         lhs.chat.message == rhs.chat.message && lhs.chat.conversationID == rhs.chat.conversationID
     }
-    
     
     var chat: SaveChatRequsetBody
 }

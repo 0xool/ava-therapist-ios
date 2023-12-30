@@ -28,6 +28,7 @@ struct MainInsightService: InsightService {
     
     func checkInsight() {
         let cancelBag = CancelBag()
+        self.appState[\.userData.insight].setIsLoading(cancelBag: cancelBag)
         
         Just<Void>
             .withErrorType(Error.self)

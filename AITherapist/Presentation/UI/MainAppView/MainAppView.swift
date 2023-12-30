@@ -47,7 +47,7 @@ struct MainAppView: View {
             case .notRequested: // if we haven't started requesting the data yet
                 Text("Not requested")
                     .onAppear(){
-                        self.viewModel.container.services.insightService.loadInsight()
+                        self.viewModel.getUserInsight()
                     }
             case .isLoading(_, _): // if we're waiting for the data to come back
                 loadingView()
@@ -73,7 +73,7 @@ struct MainAppView: View {
 extension MainAppView {
     func failedView(error: Error) -> some View {
         ErrorView(error: error) {
-            self.viewModel.getUserInsight( )
+            self.viewModel.getUserInsight()
         }
     }
     
@@ -117,15 +117,13 @@ extension MainAppView {
             self.isRunningTests = isRunningTests
             self.container.services.authenticationService.checkUserLoggedStatus()
             
-            getUserInsight()
             anyCancellable = container.appState.value.userData.objectWillChange.sink { (_) in
                 self.objectWillChange.send()
             }
         }
         
         func getUserInsight() {
-            insight = .notRequested
-            self.container.services.insightService.checkInsight()
+            self.container.services.insightService.loadInsight()
         }
         
         var onChangeHandler: (EnvironmentValues.Diff) -> Void {
@@ -137,9 +135,7 @@ extension MainAppView {
         }
     }
 }
-
 // MARK: - Preview
-
 #if DEBUG
 struct MainContentView_Previews: PreviewProvider {
     static var previews: some View {

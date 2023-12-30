@@ -12,25 +12,35 @@ struct InsightView: View {
     @ObservedObject private(set) var viewModel: ViewModel
     
     @State private var showingModalSheet = false
-    @State private var isAnimatingQuote = false
     @State private var isAnimatingMood = false
     
     @Namespace private var insightNamespace
-    private let animationTime = 1.25
+    private let moods: [Mood]
+    
+    init(viewModel: ViewModel, showingModalSheet: Bool = false, isAnimatingMood: Bool = false, moods: [Mood] = []) {
+        self.viewModel = viewModel
+        self.showingModalSheet = showingModalSheet
+        self.isAnimatingMood = isAnimatingMood
+        self.moods = viewModel.insight.value?.getDailyMoodsArray() ?? moods
+    }
     
     var body: some View {
-        MoodAnalyticsView(namespace: insightNamespace, isSource: showingModalSheet, showBackButton: true, withOptions: true, shown: $showingModalSheet)
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-                .opacity(showingModalSheet ? 1 : 0)
-            
-            ScrollView{
-                VStack{
-                    WelcomeToHomeTitleView()
-                        .opacity(isAnimatingMood ? 1 : 0)
-                    QuoteView
+        MoodAnalyticsView(namespace: insightNamespace, isSource: showingModalSheet, showBackButton: true, withOptions: true, shown: $showingModalSheet, moods: self.moods)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+            .opacity(showingModalSheet ? 1 : 0)
+        
+        ScrollView{
+            VStack{
+                WelcomeToHomeTitleView(name: self.viewModel.name)
+                    .opacity(isAnimatingMood ? 1 : 0)
+                QuoteView(quote: self.viewModel.quote)
+                
+                if (self.viewModel.userInsightHasValues()) {
+                    createNewConversationButton
+                }else{
                     VStack{
                         Divider()
-                        MoodAnalyticsView(namespace: insightNamespace, isSource: !showingModalSheet, showBackButton: false, withOptions: false, shown: $showingModalSheet)
+                        MoodAnalyticsView(namespace: insightNamespace, isSource: !showingModalSheet, showBackButton: false, withOptions: false, shown: $showingModalSheet, moods: self.moods)
                             .opacity(isAnimatingMood ? 1 : 0)
                             .offset(x: isAnimatingMood ? 0 : -50, y: 0)
                             .onTapGesture{
@@ -38,29 +48,44 @@ struct InsightView: View {
                                     showingModalSheet.toggle()
                                 }
                             }
-                        
                         Divider()
-                        GeneralSummaryView()
+                        GeneralSummaryView(generalSummaryText: self.viewModel.generalSummary)
+                        
+                        
                         Divider()
                     }
                     .opacity(isAnimatingMood ? 1 : 0)
                     .offset(x: isAnimatingMood ? 0 : -50, y: 0)
                 }
             }
-            .opacity(showingModalSheet ? 0 : 1)
-            .frame(width: UIViewController().view.bounds.width)
-            .frame(maxHeight: .infinity)
-            .onAppear {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    withAnimation(.spring(duration: animationTime)) {
-                        self.isAnimatingQuote = true
-                    }
-                    
-                    withAnimation(.spring.delay(1)) {
-                        self.isAnimatingMood = true
-                    }
+        }
+        .opacity(showingModalSheet ? 0 : 1)
+        .frame(width: UIViewController().view.bounds.width)
+        .frame(maxHeight: .infinity)
+        .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                withAnimation(.spring.delay(1)) {
+                    self.isAnimatingMood = true
                 }
             }
+        }
+    }
+    
+    @ViewBuilder var createNewConversationButton: some View{
+        Button {
+            
+        } label: {
+            Text("Create a new Conversation")
+            .padding(.horizontal, 30)
+            .padding(.vertical, 5)
+            .frame(height: 54, alignment: .center)
+            .background(ColorPallet.SolidDarkGreen)
+            .foregroundStyle(ColorPallet.Celeste)
+            .cornerRadius(50)
+            .opacity(isAnimatingMood ? 1 : 0)
+            .offset(x: isAnimatingMood ? 0 : -50, y: 0)
+            .padding(.top, 50)
+        }
     }
     
     @ViewBuilder var background: some View {
@@ -74,46 +99,61 @@ struct InsightView: View {
         .matchedGeometryEffect(id: "MainBackground", in: insightNamespace)
         .ignoresSafeArea()
     }
-    
-    @ViewBuilder var QuoteView: some View {
-        ZStack{
-            if isAnimatingQuote {
-                AnimatableText(text: "Happiness is not something ready     made. It comes from your own actions")
-                    .frame(maxHeight: .infinity, alignment: .center)
-            }
-        }
-        .padding(10)
-        .background{
-            ZStack {
-                GeometryReader { geo in
-                    RoundedRectangle(cornerRadius: 10)
-                        .fill(.gray)
-                    Image(systemName: "quote.opening")
-                        .resizable()
-                        .frame(width: 33, height: 25, alignment: .center)
-                        .scaledToFit()
-                        .position(.init(x: 0, y: 0))
-                        .offset(x: 15, y: -2)
-                    Image(systemName: "quote.closing")
-                        .resizable()
-                        .frame(width: 33, height: 25, alignment: .center)
-                        .scaledToFit()
-                        .position(.init(x: geo.size.width, y: geo.size.height))
-                        .offset(x: -15, y: 2)
-                }
-            }
-            .opacity(isAnimatingQuote ? 1 : 0)
-            .offset(x: isAnimatingQuote ? 0 : 20, y: isAnimatingQuote ? 0 : 20)
-        }
-        .overlay{
-            GeometryReader{ geo in
+}
+
+extension InsightView {
+    struct QuoteView: View {
+        let quote: String
+        @State private var isAnimatingQuote = false
+        private let animationTime = 1.25
+        
+        var body: some View {
+            ZStack{
                 if isAnimatingQuote {
-                    AnimatingBorder(width: geo.size.width, height: geo.size.height, cornerRadius: 5, lineWidth: 1, fadeAnimationTime: self.animationTime)
-                        .offset(x: -6, y: -6)
+                    AnimatableText(text: quote)
+                        .frame(maxHeight: .infinity, alignment: .center)
+                }
+            }
+            .padding(10)
+            .background{
+                ZStack {
+                    GeometryReader { geo in
+                        Image(systemName: "quote.opening")
+                            .resizable()
+                            .frame(width: 20, height: 16.67364, alignment: .center)
+                            .scaledToFit()
+                            .position(.init(x: 0, y: 0))
+                            .offset(x: 5, y: 5)
+                            .foregroundStyle(ColorPallet.DarkBlue)
+                        Image(systemName: "quote.closing")
+                            .resizable()
+                            .frame(width: 20, height: 16.67364, alignment: .center)                            .scaledToFit()
+                            .position(.init(x: geo.size.width, y: geo.size.height))
+                            .offset(x: -5, y: -5)
+                            .foregroundStyle(ColorPallet.DarkBlue)
+                    }
+                }
+                .opacity(isAnimatingQuote ? 1 : 0)
+                .offset(x: isAnimatingQuote ? 0 : 20, y: isAnimatingQuote ? 0 : 20)
+            }
+            .overlay{
+                GeometryReader{ geo in
+                    if isAnimatingQuote {
+                        AnimatingBorder(width: geo.size.width + 24, height: geo.size.height + 24, cornerRadius: 5, lineWidth: 5, fadeAnimationTime: self.animationTime)
+                            .offset(x: -11, y: -11)
+                    }
+                }
+            }
+            .padding(16)
+            .padding([.leading, .trailing], 32)
+            .onAppear {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    withAnimation(.spring(duration: animationTime)) {
+                        self.isAnimatingQuote = true
+                    }
                 }
             }
         }
-        .padding(16)
     }
 }
 
@@ -124,6 +164,7 @@ struct MoodAnalyticsView: View {
     
     let withOptions: Bool
     @Binding var shown: Bool
+    let moods: [Mood]
     
     var body: some View {
         VStack{
@@ -141,30 +182,36 @@ struct MoodAnalyticsView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .hiddenModifier(isHide: !showBackButton)
             
-            ChartView(isSource: isSource, chartNamespace: self.namespace, withChartOption: withOptions)
+            ChartView(isSource: isSource, chartNamespace: self.namespace, withChartOption: withOptions, moods: self.moods)
         }
     }
 }
 
 struct GeneralSummaryView: View {
+    let generalSummaryText: String
+    
     var body: some View {
         VStack{
             Text("General Summary")
                 .font(.title3)
-            Text("You have been seeing therapist Ava and have shared your emotions and concerns with her. You discussed feeling blessed and the importance of positivity and gratitude. You also talked about having a good day and the positive emotions you experienced. Ava encouraged you to focus on enjoyable activities to manage stress. You read a book suggested by Ava and found it helpful in improving your mood. It made you realize the power you have to change your thoughts and emotions. One quote that resonated with you was Happiness is not something ready made. It comes from your own actions.")
+                .foregroundStyle(ColorPallet.DarkBlue)
+                .bold()
+            Text(generalSummaryText)
                 .font(.caption)
                 .padding([.top], 8)
+                .foregroundStyle(ColorPallet.DarkBlue)
         }
         .padding()
     }
 }
 
 struct WelcomeToHomeTitleView: View {
-    var name: String = "Cyrus"
+    var name: String = "John"
     
     var body: some View {
-        Text("Welcome to your safe place, \(name)!")
+        Text("Welcome \(name)")
             .font(.title2)
+            .foregroundStyle(ColorPallet.DarkBlue)
             .lineLimit(1)
             .padding()
     }
@@ -184,6 +231,24 @@ extension InsightView {
             }
         }
         
+        var name: String {
+            get{
+                self.container.appState[\.userData.user].value?.name ?? ""
+            }
+        }
+        
+        var quote: String{
+            get{
+                self.insight.value?.quote ?? "Happiness is not something ready made. It comes from your own actions"
+            }
+        }
+        
+        var generalSummary: String{
+            get{
+                self.insight.value?.generalSummary ?? "No General Summary"
+            }
+        }
+        
         init(container: DIContainer, isRunningTests: Bool = false, anyCancellable: AnyCancellable? = nil) {
             self.container = container
             self.isRunningTests = isRunningTests
@@ -192,6 +257,10 @@ extension InsightView {
                 self.objectWillChange.send()
             }
             .store(in: cancelBag)
+        }
+        
+        func userInsightHasValues() -> Bool {
+            self.insight.value?.generalSummary == nil || self.insight.value?.dailyMoods.count == 0
         }
     }
 }

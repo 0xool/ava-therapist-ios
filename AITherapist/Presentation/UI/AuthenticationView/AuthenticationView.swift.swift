@@ -15,6 +15,7 @@ struct AuthenticationView: View {
     @State var email: String = ""
     @State var password: String = ""
     @State var rePassword: String = ""
+    @State var mobileNumber: String = ""
     
     @State var show: Bool = false
     @State private var showingAlert = false
@@ -103,12 +104,12 @@ extension  AuthenticationView {
     }
     
     func registerView() -> some View {
-        RegisterPanelView(email: $email, password: $password, rePassword: $rePassword, showLogin: $showLoginView) {
+        RegisterPanelView(email: $email, password: $password, rePassword: $rePassword, mobileNumber: $mobileNumber, showLogin: $showLoginView) {
             
         } onFacebookLoginClicked: {
             
         } onRegisterClicked: {
-            
+            self.register()
         }
         .alert(viewModel.alertMessage.rawValue, isPresented: $showingAlert) {
             Button("OK", role: .cancel) { }
@@ -260,6 +261,27 @@ extension  AuthenticationView {
             showingAlert = true
         }else {
             self.viewModel.login(email: email, password: password)
+        }
+    }
+    
+    private func register(){
+        if (email == ""){
+            viewModel.alertMessage = .EmailFieldEmpty
+            showingAlert = true
+        }else if (password == "") {
+            viewModel.alertMessage = .PasswordFieldEmpty
+            showingAlert = true
+        }else if (!emailIsValid()){
+            viewModel.alertMessage = .WrongEmailFormat
+            showingAlert = true
+        }else if (password != rePassword){
+            viewModel.alertMessage = .PasswordRepetitionDoesNotMatch
+            showingAlert = true
+        }else if (mobileNumber == ""){
+            viewModel.alertMessage = .MobileFieldEmpty
+            showingAlert = true
+        }else {
+            self.viewModel.register(email: email, password: password, mobileNumber: mobileNumber)
         }
     }
 }

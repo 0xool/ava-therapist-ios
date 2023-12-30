@@ -37,7 +37,7 @@ struct MainInsightDBRepository: InsightDBRepository {
 
 extension MainInsightDBRepository {
     private func writeInsightData(insight: Insight) -> AnyPublisher<Void, Error> {
-        persistentStore.DeleteLast(ofType: Insight.self)
+        _ = persistentStore.DeleteLast(ofType: Insight.self)
         return persistentStore.Write(writeData: insight)
     }
     

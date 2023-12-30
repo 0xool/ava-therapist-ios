@@ -24,6 +24,13 @@ struct LoginPanelView: View {
             Spacer()
             
             Text("Welcome Back")
+//                  .font(
+//                    Font.custom("SF Pro Text", size: 24)
+//                      .weight(.heavy)
+//                  )
+              .fontWeight(.bold)
+//                  .multilineTextAlignment(.center)
+              .foregroundColor(ColorPallet.DarkGreen)
             
             Spacer()
             

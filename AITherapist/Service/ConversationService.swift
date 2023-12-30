@@ -11,7 +11,7 @@ import RealmSwift
 
 protocol ConversationService {
     func loadConversationList(conversations: LoadableSubject<LazyList<Conversation>>)
-    func loadConversationChat(conversation: LoadableSubject<Conversation>)
+    func loadConversationChat(conversation: LoadableSubject<Conversation>, conversationID: Int)
     func createNewConversation(conversation: LoadableSubject<Conversation>, conversationName: String)
     func deleteConversation(conversationID: Int) -> AnyPublisher<Void, Error>
 }
@@ -47,14 +47,6 @@ struct MainConversationService: ConversationService {
             .ensureTimeSpan(requestHoldBackTimeInterval)
             .sinkToLoadable { conversations.wrappedValue = $0 }
             .store(in: cancelBag)
-        
-//        self.refreshConversationList()
-//            .sinkToResult { _ in
-//                self.conversationDBRepository.loadConversations()
-//                    .sinkToLoadable { conversations.wrappedValue = $0 }
-//                    .store(in: cancelBag)
-//            }
-//            .store(in: cancelBag)
     }
     
     func deleteConversation(conversationID: Int) -> AnyPublisher<Void, Error> {
@@ -62,23 +54,17 @@ struct MainConversationService: ConversationService {
             .eraseToAnyPublisher()
     }
     
-    func loadConversationChat(conversation: LoadableSubject<Conversation>){
+    func loadConversationChat(conversation: LoadableSubject<Conversation>, conversationID: Int){
         let cancelBag = CancelBag()
         conversation.wrappedValue.setIsLoading(cancelBag: cancelBag)
-        guard let id = conversation.wrappedValue.value?.id else {
-            return Just<Void>
-                .withErrorType(Error.self)
-                .sinkToLoadable{ _ in conversation.wrappedValue = .failed(Error.self as! Error)}
-                .store(in: cancelBag)
-        }
         
         Just<Void>
             .withErrorType(Error.self)
             .flatMap{
-                self.loadConversationChatFromWeb(conversationID: id)
+                self.loadConversationChatFromWeb(conversationID: conversationID)
             }
             .map { [chatService] in
-                chatService.loadChatFromDBBy(conversationID: id)
+                chatService.loadChatFromDBBy(conversationID: conversationID)
             }
             .flatMap{ publisher in
                 convertLazyListChatToConversation(publisher: publisher, conversation: conversation)
@@ -171,6 +157,12 @@ extension MainConversationService{
     }
 }
 
+extension MainConversationService {
+    enum ConversationError: Error {
+        case invalidID
+    }
+}
+
 struct StubConversationService: ConversationService {
     func createNewConversation(conversation: LoadableSubject<Conversation>, conversationName: String) {
         
@@ -197,6 +189,6 @@ struct StubConversationService: ConversationService {
         conversations.wrappedValue = .loaded(convos)
     }
     
-    func loadConversationChat(conversation: LoadableSubject<Conversation>) {
+    func loadConversationChat(conversation: LoadableSubject<Conversation>, conversationID: Int) {
     }
 }

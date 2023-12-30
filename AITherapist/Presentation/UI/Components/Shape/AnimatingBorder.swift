@@ -29,7 +29,6 @@ struct AnimatingBorder: View {
     private var Circumference: CGFloat {
         let straightSegments = 2 * (width - 2 * cornerRadius) + 2 * (height - 2 * cornerRadius)
         let quarterCircles = 4 * (Double.pi * cornerRadius / 2.0)
-        
         let circumference = straightSegments + quarterCircles
         
         return circumference
@@ -40,10 +39,10 @@ struct AnimatingBorder: View {
             
         }
         .frame(width: self.width, height: self.height, alignment: .center)
-        .background(.black)
+        .background(ColorPallet.TertiaryYellow)
         .mask{
             RoundedRectangle(cornerRadius: cornerRadius)
-                .stroke(style: .init(lineWidth: lineWidth, lineCap: .round, lineJoin: .round,  dash: [dashLineSize, dashSize, dashLineSize, dashSize], dashPhase: dashPhase))
+                .stroke(style:  .init(lineWidth: lineWidth, lineCap: .round, lineJoin: .round,  dash: [dashLineSize, dashSize, dashLineSize, dashSize], dashPhase: dashPhase))
         }
         .opacity(fadeInAnimation ? 1 : 0)
         .onAppear{
