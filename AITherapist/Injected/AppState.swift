@@ -10,9 +10,10 @@ import SwiftUI
 import Combine
 
 struct AppState: Equatable {
-    var userData = UserData()
+    var userData = UserData.shared
     var routing = ViewRouting()
     var system = System()
+    
     var permissions = Permissions()
     var conversationData = ConversationData()
 }
@@ -23,14 +24,15 @@ extension AppState {
             lhs.user == rhs.user
         }
         
+        static let shared = UserData()
+        
         @Published var user: Loadable<User> = .notRequested
         @Published var insight: Loadable<Insight> = .notRequested
-        /*
-         The list of countries (Loadable<[Country]>) used to be stored here.
-         It was removed for performing countries' search by name inside a database,
-         which made the resulting variable used locally by just one screen (CountriesList)
-         Otherwise, the list of countries could have remained here, available for the entire app.
-         */
+        
+        func logout() {
+            self.user = .notRequested
+            _ = MainUserDBRepository().deleteUser()
+        }
     }
 }
 

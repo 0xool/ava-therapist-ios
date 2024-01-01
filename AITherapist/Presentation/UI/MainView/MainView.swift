@@ -23,6 +23,7 @@ struct MainView: View {
                     TabView()
                         .environmentObject(viewModel)
                 }
+                .ignoresSafeArea()
                 .fullScreenCover(isPresented: $viewModel.showNewChat, content: {
                     NewChatView(viewModel: .init(coninater: self.viewModel.container), show: $viewModel.showNewChat)
                 })
@@ -47,16 +48,20 @@ extension MainView {
         @EnvironmentObject var viewModel: ViewModel
         @State private var mainViewState: MainViewState = .Home
         @State private var isAnimatingTabBar: Bool = false
+        
+        private let tabBarSize: CGFloat = 105
         @Namespace var tabTopViewNameSpace
         
         var body: some View {
             ZStack{
                 Rectangle()
                     .fill(ColorPallet.Celeste)
-                    .frame(height: 75)
+                    .frame(height: tabBarSize)
                     .frame(maxWidth: .infinity)
                     .shadow(color: ColorPallet.DarkGreen, radius: 4, x: 0, y: -1)
                     .mask(Rectangle().padding(.top, -10))
+                    .ignoresSafeArea()
+        
                 HStack{
                     self.homeTabIcon
                         .navigationTitle("")
@@ -71,8 +76,9 @@ extension MainView {
                         .navigationTitle("Journal")
                     self.profileTabIcon
                 }
-                .frame(height: 75)
+                .frame(height: tabBarSize)
                 .frame(maxWidth: .infinity)
+                .offset(y: -16)
                 .avaNavigationBarTitle(self.viewModel.navigationTitle)
                 .avaNavigationBarBackground(self.viewModel.showNavigationBackground)
                 .avaNavigationBarTopLeftButton(self.mainViewState == .Profile ? .logOut : .nothing)
@@ -185,13 +191,13 @@ extension MainView {
                     .foregroundStyle(ColorPallet.DarkGreen)
                 Text("New Chat")
                     .font(
-                        Font.custom("SF Pro Text", size: 7)
-                            .weight(.bold)
-                            .bold()
+                        Font.custom("SF Pro Text", size: 10)
+                            .weight(.medium)
                     )
                     .multilineTextAlignment(.center)
+                    .font(.caption)
                     .foregroundColor(ColorPallet.DarkGreen)
-                    .offset(y: 54.5)
+                    .offset(y: 60.2)
             }
             .offset(y: -36)
             .zIndex(20)
@@ -216,7 +222,7 @@ extension MainView {
             
             ZStack{
                 LodableTabView(viewState: .Home, initialDelay: 0){
-                    InsightView(viewModel: .init(container: self.viewModel.container))
+                    InsightView(viewModel: .init(container: self.viewModel.container), showNewConversationChatView: $viewModel.showNewChat)
                 }
                 .opacity(self.viewState == .Home ? 1 : 0)
                 
@@ -290,23 +296,6 @@ extension MainView {
 }
 
 extension MainView {
-    class ViewModel: ObservableObject {
-        var mainViewState: CurrentValueSubject<MainViewState, Never> = .init(.Home)
-        @Published var showNewChat: Bool = false
-        
-        @Published var navigationTitle: String = ""
-        @Published var showNavigationBackground: Bool = false
-        @Published var mainViewBackground: MainViewBackground = .blueGradientBackground
-        
-        let container: DIContainer
-        
-        init(container: DIContainer) {
-            self.container = container
-        }
-    }
-}
-
-extension MainView {
     enum LoadableTabView<T> {
         case notLoaded
         case loaded(T)
@@ -351,6 +340,25 @@ extension MainView {
     }
 }
 
+extension MainView {
+    class ViewModel: ObservableObject {
+        var mainViewState: CurrentValueSubject<MainViewState, Never> = .init(.Home)
+        @Published var showNewChat: Bool = false
+        
+        @Published var navigationTitle: String = ""
+        @Published var showNavigationBackground: Bool = false
+        @Published var mainViewBackground: MainViewBackground = .blueGradientBackground
+        
+        let container: DIContainer
+        
+        init(container: DIContainer) {
+            self.container = container
+        }
+    }
+}
+
 #Preview{
     MainView(viewModel: MainView.ViewModel(container: .preview ))
 }
+
+

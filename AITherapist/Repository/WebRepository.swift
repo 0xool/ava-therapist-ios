@@ -29,7 +29,7 @@ extension WebRepository {
     }
     
     func webRequest<D: ServerResponse>(webApi: APICall) -> AnyPublisher<D, Error> {
-        AF.session.configuration.httpCookieStorage?.cookies?.forEach({
+        self.session.configuration.httpCookieStorage?.cookies?.forEach({
             AFSession.session.configuration.httpCookieStorage?.setCookie($0)
         })
         
@@ -41,6 +41,11 @@ extension WebRepository {
                     case .success(let data):
                         promise(.success(data))
                     case .failure(let error):
+                    // if code is 401 then we should logout the user
+                        if let code = response.response?.statusCode, code == 401 {
+                            AppState.UserData.shared.logout()
+                        }
+                        
                         promise(.failure(error))
                     }
                 }
@@ -72,16 +77,7 @@ func setAFSession(_ session: URLSession, queue: DispatchQueue) -> Session {
 // MARK: COOKIE
 extension WebRepository {
     func SetCookie(cookie: String) {
-        let cookieProps = [
-            HTTPCookiePropertyKey.domain: Constants.BaseUrl,
-            HTTPCookiePropertyKey.path: "/",
-            HTTPCookiePropertyKey.name: "jwt",
-            HTTPCookiePropertyKey.value: cookie
-        ]
-        
-        if let cookie = HTTPCookie(properties: cookieProps) {
-            AF.session.configuration.httpCookieStorage?.setCookie(cookie)
-        }
+        PersistentManager.SaveUserToken(token: cookie)
     }
 }
 

@@ -50,7 +50,6 @@ struct MainAuthenticateWebRepository: AuthenticateWebRepository {
         // Refactor this code to remove setting variables inside this call back
         return request.map { (response) -> User in
             let token = response.data.token
-            let id = response.data.id
             self.SetCookie(cookie: token)
             return response.data.user
         }
@@ -64,7 +63,6 @@ struct MainAuthenticateWebRepository: AuthenticateWebRepository {
         // Refactor this code to remove setting variables inside this call back
         return request.map { (response) -> User in
             let token = response.data.token
-            let id = response.data.id
             self.SetCookie(cookie: token)
             return response.data.user
         }

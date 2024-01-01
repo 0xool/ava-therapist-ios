@@ -39,11 +39,15 @@ extension ColorPallet {
     static let MediumTurquoiseBlue: Color = Color(red: 0.37, green: 0.85, blue: 0.85)
     static let Celeste: Color = Color(red: 0.71, green: 0.99, blue: 0.99)
     static let DarkBlue: Color = Color(red: 0.01, green: 0.16, blue: 0.21)
+    
+    static let IconBlue: Color = Color(red: 20/255, green: 110/255, blue: 139/255)
     static let TertiaryYellow: Color = Color(red: 0.93, green: 0.74, blue: 0.16)
     static let HomePageGradientBackground = LinearGradient(colors: [MediumTurquoiseBlue, Celeste], startPoint: .top, endPoint: .bottom)
-
+    
+    static let Verdigris: Color = Color(red: 0.29, green: 0.69, blue: 0.69)
+    static let DarkBlack: Color = Color(red: 0.02, green: 0.11, blue: 0.11)
+    static let SkyBlue: Color = Color(red: 0.16, green: 0.74, blue: 0.93)
 }
-
 
 
 

@@ -74,7 +74,7 @@ struct AvaNavBarView<Content: View, Background: View>: View {
                     } label: {
                         Image(systemName: "rectangle.portrait.and.arrow.right")
                             .font(.title3)
-                            .foregroundStyle(.gray)
+                            .foregroundStyle(ColorPallet.SolidDarkGreen)
                             .padding([.leading], 8)
                             .rotation3DEffect( .degrees(180),axis: (x: 0.0, y: 1.0, z: 0.0) )
                     }

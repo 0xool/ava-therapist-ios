@@ -39,7 +39,7 @@ class MainAuthenticationService: AuthenticationService {
                 if let _ = subscriptionCompletion.error {
                 }
             } receiveValue: { user in
-                self.authenticateRepository.SetCookie(cookie: user.token)
+                PersistentManager.SaveUserToken(token: user.token)
                 self.appState[\.userData.user] = .loaded(user)
             }
             .store(in: cancelBag)

@@ -30,10 +30,11 @@ struct ProfileView: View {
                     profileHeaderView(profileImage: $viewModel.profileImage, showImagePicker: $showImagePicker)
                         .frame(height: profileHeaderHeight(geo))
                         .frame(maxWidth: .infinity)
+                        .offset(y: -35)
                     ProfileSettingView()
                         .frame(maxWidth: .infinity, maxHeight: .infinity + 35)
                         .ignoresSafeArea()
-                        .background(.white)
+                        .background(ColorPallet.Verdigris)
                         .clipShape(
                             .rect(
                                 topLeadingRadius: 20,
@@ -44,11 +45,10 @@ struct ProfileView: View {
                         )
                         .offset(x: 0, y: -35)
                         .padding([.bottom], -200)
-                    
                 }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .ignoresSafeArea()
-            .background(.gray)
+            .background(.clear)
             .sheet(isPresented: $showImagePicker) {
                 ImagePicker(image: $viewModel.profileImage)
                     .environmentObject(self.viewModel)
@@ -117,24 +117,22 @@ extension ProfileView{
         @Binding var profileImage: Image?
         @Binding var showImagePicker: Bool
         
+        private let name: String = "John"
+        
         var body: some View {
-            VStack(spacing: 25){
-                
+            VStack(spacing: 20){
                 ProfileImageView(profileImage: $profileImage, showImagePicker: $showImagePicker)
                 
-                Text("Cyrus")
+                Text(name)
                 .font(
                 Font.custom("SF Pro Text", size: 17)
                 .weight(.semibold)
                 )
                 .multilineTextAlignment(.center)
-                .foregroundColor(.black)
+                .foregroundColor(ColorPallet.DarkBlack)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-            .background{
-                DynamicTwoCircleBackgroundView(backgroundColor: .gray)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-            }
+            .background{ Color.clear }
         }
 
         struct ProfileImageView: View {
@@ -151,24 +149,26 @@ extension ProfileView{
                             .clipShape(
                                 Circle()
                             )
+                            .foregroundStyle(ColorPallet.IconBlue)
                             .overlay{
                                 Circle()
                                     .strokeBorder(lineWidth: 2)
-                                    .fill(.white)
+                                    .fill(ColorPallet.SkyBlue)
                             }
                     
                     ZStack{
                         Circle()
-                            .fill(.gray)
+                            .fill(ColorPallet.Celeste)
                             .frame(height: 25)
                             .background{
                                 Circle()
-                                    .fill(.white)
+                                    .fill(ColorPallet.SkyBlue)
                                     .padding(-1)
                             }
                         Image(systemName: "camera")
                             .resizable()
                             .scaledToFit()
+                            .foregroundStyle(ColorPallet.IconBlue)
                             .frame(height: 15)
                 }
                     .offset(x: 35, y: 35)
@@ -225,9 +225,6 @@ extension ProfileView{
                     SettingCellView(.editProfile)
                     SettingCellView(.settings)
                     SettingCellView(.prefrences)
-                    
-                    Divider()
-                    
                     SettingCellView(.invite)
                     SettingCellView(.help)
                 }
@@ -242,7 +239,7 @@ extension ProfileView{
                 .padding(.top, 32)
                 .padding(.bottom, 103)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(.white)
+                .background(ColorPallet.Verdigris)
             }
         }
         
@@ -256,33 +253,39 @@ extension ProfileView{
             var body: some View {
                     ZStack {
                         HStack(alignment: .center) {
-                            HStack{
                                 HStack(alignment: .center, spacing: 10) {
                                     Image(systemName: settingType.image)
                                         .resizable()
                                         .scaledToFit()
                                         .frame(width: 25, height: 25)
+                                        .foregroundStyle(ColorPallet.IconBlue)
                                 }
                                 .padding(5)
                                 .frame(width: 50, height: 50, alignment: .center)
-                                .background(Color(red: 0.75, green: 0.75, blue: 0.75))
+                                .background(ColorPallet.Celeste)
                                 .cornerRadius(10)
+
+                            VStack{
+                                HStack{
+                                    Text(settingType.title)
+                                        .font(
+                                            Font.custom("SF Pro Text", size: 17)
+                                                .weight(.semibold)
+                                        )
+                                        .multilineTextAlignment(.center)
+                                        .foregroundColor(ColorPallet.DarkBlack)
+                                    Spacer()
+                                    Image(systemName: "chevron.right")
+                                        .frame(width: 28, height: 28)
+                                        .foregroundColor(ColorPallet.DarkBlack)
+                                }
                                 
-                                // Bold/Body
-                                Text(settingType.title)
-                                    .font(
-                                        Font.custom("SF Pro Text", size: 17)
-                                            .weight(.semibold)
-                                    )
-                                    .multilineTextAlignment(.center)
-                                    .foregroundColor(.black)
+                                Rectangle()
+                                    .frame(height: 1)
+                                    .frame(maxWidth: .infinity)
+                                    .foregroundColor(ColorPallet.Celeste)
+                                    
                             }
-                            
-                            Spacer()
-                            Image(systemName: "chevron.right")
-                                .frame(width: 28, height: 28)
-                            
-                                .foregroundStyle(.black)
                         }
                         .padding(0)
                         .frame(width: 350, alignment: .center)

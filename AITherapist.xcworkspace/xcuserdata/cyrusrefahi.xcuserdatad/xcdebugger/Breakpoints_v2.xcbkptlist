@@ -262,112 +262,33 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "B110BFEB-E7BE-4A8B-8F72-8C29554B95DE"
+            uuid = "C8DD1BB9-3B81-4D6D-AABD-0782086EE792"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "AITherapist/Domain/Entities/Model/Chat/Chat.swift"
+            filePath = "AITherapist/Manager/UserManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "104"
-            endingLineNumber = "104"
-            landmarkName = "init(from:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "B110BFEB-E7BE-4A8B-8F72-8C29554B95DE - 4bf65c55496d901c"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "AITherapist.Chat.__allocating_init() -&gt; AITherapist.Chat"
-                  moduleName = "AITherapist"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/cyrusrefahi/Documents/AITherapist/AITherapist/Domain/Entities/Model/Chat/Chat.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "0"
-                  endingLineNumber = "0"
-                  offsetFromSymbolStart = "12">
-               </Location>
-               <Location
-                  uuid = "B110BFEB-E7BE-4A8B-8F72-8C29554B95DE - eb56fddc2ae66e14"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "AITherapist.Chat.init() -&gt; AITherapist.Chat"
-                  moduleName = "AITherapist"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/cyrusrefahi/Documents/AITherapist/AITherapist/Domain/Entities/Model/Chat/Chat.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "64"
-                  endingLineNumber = "64"
-                  offsetFromSymbolStart = "96">
-               </Location>
-               <Location
-                  uuid = "B110BFEB-E7BE-4A8B-8F72-8C29554B95DE - aa7f93e3ef5b5dad"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "AITherapist.Chat.init(from: Swift.Decoder) throws -&gt; AITherapist.Chat"
-                  moduleName = "AITherapist"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/cyrusrefahi/Documents/AITherapist/AITherapist/Domain/Entities/Model/Chat/Chat.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "105"
-                  endingLineNumber = "105"
-                  offsetFromSymbolStart = "936">
-               </Location>
-            </Locations>
+            startingLineNumber = "16"
+            endingLineNumber = "16"
+            landmarkName = "unknown"
+            landmarkType = "0">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "72053132-6693-476A-BA2B-5275AAEBF984"
+            uuid = "405A7098-D2D1-40D2-9C03-3B4AF7E6049B"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "AITherapist/Domain/Entities/Model/Chat/Chat.swift"
+            filePath = "AITherapist/Repository/AuthenticateWebRepository.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "103"
-            endingLineNumber = "103"
-            landmarkName = "init(from:)"
+            startingLineNumber = "53"
+            endingLineNumber = "53"
+            landmarkName = "login(email:password:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "72053132-6693-476A-BA2B-5275AAEBF984 - 214f3d1112d0d5b1"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "AITherapist.Chat.init(id: Swift.Int, message: Swift.String, conversationID: Swift.Int, chatSequence: Swift.Optional&lt;Swift.Int&gt;, isUserMessage: Swift.Bool, isSentToserver: Swift.Optional&lt;AITherapist.ChatServerState&gt;) -&gt; AITherapist.Chat"
-                  moduleName = "AITherapist"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/cyrusrefahi/Documents/AITherapist/AITherapist/Domain/Entities/Model/Chat/Chat.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "104"
-                  endingLineNumber = "104"
-                  offsetFromSymbolStart = "1240">
-               </Location>
-               <Location
-                  uuid = "72053132-6693-476A-BA2B-5275AAEBF984 - aa7f93e3ef5b5e4c"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "AITherapist.Chat.init(from: Swift.Decoder) throws -&gt; AITherapist.Chat"
-                  moduleName = "AITherapist"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/cyrusrefahi/Documents/AITherapist/AITherapist/Domain/Entities/Model/Chat/Chat.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "104"
-                  endingLineNumber = "104"
-                  offsetFromSymbolStart = "792">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

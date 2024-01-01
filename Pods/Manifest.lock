@@ -3,6 +3,7 @@ PODS:
   - AlamofireImage (4.2.0):
     - Alamofire (~> 5.4)
   - FDSoundActivatedRecorder (3.1.0)
+  - KeychainSwift (20.0.0)
   - lottie-ios (4.2.0)
   - Realm (10.42.1):
     - Realm/Headers (= 10.42.1)
@@ -14,6 +15,7 @@ DEPENDENCIES:
   - Alamofire (~> 5.8)
   - AlamofireImage (~> 4.2)
   - FDSoundActivatedRecorder (~> 3.1)
+  - KeychainSwift (~> 20.0)
   - lottie-ios (~> 4.2)
   - RealmSwift (~> 10.42)
 
@@ -22,6 +24,7 @@ SPEC REPOS:
     - Alamofire
     - AlamofireImage
     - FDSoundActivatedRecorder
+    - KeychainSwift
     - lottie-ios
     - Realm
     - RealmSwift
@@ -30,10 +33,11 @@ SPEC CHECKSUMS:
   Alamofire: 0e92e751b3e9e66d7982db43919d01f313b8eb91
   AlamofireImage: 34a2d90b0e5fe6a5605f85ae4b7b01e784c60192
   FDSoundActivatedRecorder: f08e5114767d843a7d781488cb3ed209a3ffe546
+  KeychainSwift: 0ce6a4d13f7228054d1a71bb1b500448fb2ab837
   lottie-ios: 809ecf2d460ed650a6aed7aa88b2ec45fab4779c
   Realm: f433b80a05f68575e88364d6fcc6234965ccc5af
   RealmSwift: 757e1416e2314f7e1543abdb2aa65b311d7b6545
 
-PODFILE CHECKSUM: 6317f7bc1f2d0ccc7a695c62f53f101e8aeb5672
+PODFILE CHECKSUM: 9fd20d64d0cebf5d8a44dfee4d28b661efc53496
 
 COCOAPODS: 1.12.1

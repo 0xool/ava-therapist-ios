@@ -8,35 +8,6 @@
 import Foundation
 import RealmSwift
 
-//class User: Object, Codable {
-//    @Persisted(primaryKey: true) var id: Int
-//    @Persisted var token: String
-//    @Persisted var name: String
-//    @Persisted var Username: String
-//    @Persisted var Name: String
-//    @Persisted var Lastname: String
-//    @Persisted var Mobile: String
-//    @Persisted var
-//    
-//    override init() {
-//        super.init()
-//    }
-//    
-//    init(id: Int, token: String, name: String) {
-//        super.init()
-//        self.id = id
-//        self.token = token
-//        self.name = name
-//    }
-//    
-//    required init(from decoder: Decoder) throws {
-//        let container = try decoder.container(keyedBy: CodingKeys.self)
-//        self._id = try container.decode(Persisted<Int>.self, forKey: .id)
-//        self._token = try container.decode(Persisted<String>.self, forKey: .token)
-//        self._name = try container.decode(Persisted<String>.self, forKey: .name)
-//    }
-//}
-
 struct UserServerResponse: ServerResponse {
     var data: User
     var message: String?

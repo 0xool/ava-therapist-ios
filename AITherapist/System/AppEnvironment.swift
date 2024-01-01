@@ -60,7 +60,16 @@ extension AppEnvironment {
 //        configuration.waitsForConnectivity = true
         configuration.httpMaximumConnectionsPerHost = 5
         configuration.requestCachePolicy = .returnCacheDataElseLoad
+        let cookieProps = [
+            HTTPCookiePropertyKey.domain: Constants.BaseUrl,
+            HTTPCookiePropertyKey.path: "/",
+            HTTPCookiePropertyKey.name: "jwt",
+            HTTPCookiePropertyKey.value: PersistentManager.GetUserToken()
+        ]
         
+        if let cookie = HTTPCookie(properties: cookieProps) {
+            configuration.httpCookieStorage?.setCookie(cookie)
+        }
         configuration.urlCache = .shared
         return URLSession(configuration: configuration)
     }

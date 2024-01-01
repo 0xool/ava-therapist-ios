@@ -12,6 +12,7 @@ target 'AITherapist' do
   pod 'AlamofireImage', '~> 4.2'
   pod 'RealmSwift', '~> 10.42'
   pod 'FDSoundActivatedRecorder', '~> 3.1' 
+  pod 'KeychainSwift', '~> 20.0'
  # Pods for AITherapist
 
 end

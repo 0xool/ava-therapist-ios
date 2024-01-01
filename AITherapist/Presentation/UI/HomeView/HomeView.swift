@@ -13,15 +13,17 @@ struct InsightView: View {
     
     @State private var showingModalSheet = false
     @State private var isAnimatingMood = false
+    @Binding private var showNewConversationChatView: Bool
     
     @Namespace private var insightNamespace
     private let moods: [Mood]
     
-    init(viewModel: ViewModel, showingModalSheet: Bool = false, isAnimatingMood: Bool = false, moods: [Mood] = []) {
+    init(viewModel: ViewModel, showingModalSheet: Bool = false, isAnimatingMood: Bool = false, moods: [Mood] = [], showNewConversationChatView: Binding<Bool>) {
         self.viewModel = viewModel
         self.showingModalSheet = showingModalSheet
         self.isAnimatingMood = isAnimatingMood
         self.moods = viewModel.insight.value?.getDailyMoodsArray() ?? moods
+        self._showNewConversationChatView = showNewConversationChatView
     }
     
     var body: some View {
@@ -49,8 +51,8 @@ struct InsightView: View {
                                 }
                             }
                         Divider()
-                        GeneralSummaryView(generalSummaryText: self.viewModel.generalSummary)
                         
+                        GeneralSummaryView(generalSummaryText: self.viewModel.generalSummary)
                         
                         Divider()
                     }
@@ -73,7 +75,7 @@ struct InsightView: View {
     
     @ViewBuilder var createNewConversationButton: some View{
         Button {
-            
+            self.showNewConversationChatView = true
         } label: {
             Text("Create a new Conversation")
             .padding(.horizontal, 30)
@@ -267,6 +269,6 @@ extension InsightView {
 
 struct InsightView_Previews: PreviewProvider {
     static var previews: some View {
-        InsightView(viewModel: .init(container: .preview))
+        InsightView(viewModel: .init(container: .preview), showNewConversationChatView: Binding.constant(false))
     }
 }

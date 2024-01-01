@@ -155,6 +155,7 @@
 		A5BBCED42B129F83000AC83C /* ProfileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BBCED32B129F83000AC83C /* ProfileService.swift */; };
 		A5C148882B29555200D6C836 /* JournalWebRepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C148872B29555200D6C836 /* JournalWebRepositoryTests.swift */; };
 		A5C55FDB2AA55DBD00154ED0 /* CancelBag.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C55FDA2AA55DBD00154ED0 /* CancelBag.swift */; };
+		A5C7675F2B4343A800DDD3C5 /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C7675E2B4343A800DDD3C5 /* UserManager.swift */; };
 		A5CA948B2AA7D74300E25A46 /* ConversationDBRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5CA948A2AA7D74300E25A46 /* ConversationDBRepository.swift */; };
 		A5CA948D2AA7FA6D00E25A46 /* PushNotificationsHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5CA948C2AA7FA6D00E25A46 /* PushNotificationsHandler.swift */; };
 		A5CA948F2AA7FE8000E25A46 /* DeepLinksHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5CA948E2AA7FE8000E25A46 /* DeepLinksHandler.swift */; };
@@ -351,6 +352,7 @@
 		A5BBCED32B129F83000AC83C /* ProfileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileService.swift; sourceTree = "<group>"; };
 		A5C148872B29555200D6C836 /* JournalWebRepositoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalWebRepositoryTests.swift; sourceTree = "<group>"; };
 		A5C55FDA2AA55DBD00154ED0 /* CancelBag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelBag.swift; sourceTree = "<group>"; };
+		A5C7675E2B4343A800DDD3C5 /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
 		A5CA948A2AA7D74300E25A46 /* ConversationDBRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationDBRepository.swift; sourceTree = "<group>"; };
 		A5CA948C2AA7FA6D00E25A46 /* PushNotificationsHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationsHandler.swift; sourceTree = "<group>"; };
 		A5CA948E2AA7FE8000E25A46 /* DeepLinksHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinksHandler.swift; sourceTree = "<group>"; };
@@ -1048,6 +1050,7 @@
 				A5B7D5DE29B3D4B3001D7113 /* NetworkManager.swift */,
 				A596AD1129B4385100C19DA6 /* MicManager.swift */,
 				A505865429BD003B001F1970 /* PersistentManager.swift */,
+				A5C7675E2B4343A800DDD3C5 /* UserManager.swift */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -1345,6 +1348,7 @@
 				A5AE6FDD2AA3ECF100168037 /* Conversation.swift in Sources */,
 				A5BBCED42B129F83000AC83C /* ProfileService.swift in Sources */,
 				A59C63FA2ACA37EE00B76256 /* ErrorView.swift in Sources */,
+				A5C7675F2B4343A800DDD3C5 /* UserManager.swift in Sources */,
 				A5B7D5E829B41997001D7113 /* Utilities.swift in Sources */,
 				A59C63FC2ACA37EE00B76256 /* MainView.swift in Sources */,
 				A59C63F02ACA37EE00B76256 /* LoginViewModel.swift in Sources */,

@@ -14,6 +14,8 @@ protocol UserDBRepository {
     func hasLoadedUser() -> AnyPublisher<Bool, Error>
     func store(user: User) -> AnyPublisher<Void, Error>
     func loadUser() -> AnyPublisher<User, Error>
+    
+    func deleteUser() -> AnyPublisher<Void, Error>
 }
 
 struct MainUserDBRepository: UserDBRepository {
@@ -34,9 +36,17 @@ struct MainUserDBRepository: UserDBRepository {
     func loadUser() -> AnyPublisher<User, Error> {
         self.loadUsertFromDB()
     }
+    
+    func deleteUser() -> AnyPublisher<Void, Error> {
+        self.deleteUserFromDB()
+    }
 }
 
 extension MainUserDBRepository {
+    private func deleteUserFromDB() -> AnyPublisher<Void, Error> {
+        persistentStore.DeleteLast(ofType: User.self)
+    }
+    
     private func loadUsertFromDB() -> AnyPublisher<User, Error>{
         guard let user = persistentStore.GetLast(ofType: User.self) else{
             return Fail(error: DataBaseError.NotFound)
@@ -49,7 +59,7 @@ extension MainUserDBRepository {
     }
     
     private func storeUserToDB(user: User) -> AnyPublisher<Void, Error>{
-        persistentStore.DeleteLast(ofType: User.self)
+        _ = persistentStore.DeleteLast(ofType: User.self)
         return persistentStore.Write(writeData: user)
     }
     
