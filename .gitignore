@@ -89,3 +89,4 @@ fastlane/test_output
 
 iOSInjectionProject/
 TutorialDocs/SwiftUI-WeatherApp
+.DS_Store
