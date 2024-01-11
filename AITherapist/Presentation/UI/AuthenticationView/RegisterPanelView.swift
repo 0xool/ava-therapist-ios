@@ -12,6 +12,7 @@ struct RegisterPanelView: View {
     @Binding var password: String
     @Binding var rePassword: String
     @Binding var mobileNumber: String
+    @Binding var nickname: String
     
     @Binding var showLogin: Bool
     
@@ -41,6 +42,7 @@ struct RegisterPanelView: View {
             Spacer()
             
             registerInputView
+                .onReceive(nickname.publisher, perform: { _ in enableRegisterBtnOnFill() })
                 .onReceive(email.publisher, perform: { _ in enableRegisterBtnOnFill() })
                 .onReceive(password.publisher, perform: { _ in enableRegisterBtnOnFill() })
                 .onReceive(rePassword.publisher, perform: { _ in enableRegisterBtnOnFill() })
@@ -92,6 +94,21 @@ struct RegisterPanelView: View {
     }
     
     @ViewBuilder var registerInputView: some View{
+        VStack(alignment: .center, spacing: 15) {
+            TextField("Nickname", text: $nickname)
+                .padding(.horizontal, 15)
+                .padding(.vertical, 10)
+                .frame(width: 276, alignment: .leading)
+                .cornerRadius(10)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 10)
+                        .frame(width: nil, height: 1, alignment: .bottom)
+                        .foregroundColor(ColorPallet.DarkGreen)
+                        .shadow(color: ColorPallet.DarkGreen, radius: 1, x: 0, y: 1), alignment: .bottom
+                )
+        }
+        .padding(0)
+        
         VStack(alignment: .center, spacing: 15) {
             TextField("Email Adress", text: $email)
                 .padding(.horizontal, 15)
@@ -198,7 +215,7 @@ struct RegisterPanelView: View {
     }
     
     private func enableRegisterBtnOnFill() {
-        if email.count > 0 && password.count > 0 && rePassword.count > 0 && mobileNumber.count > 0 {
+        if nickname.count > 0 && email.count > 0 && password.count > 0 && rePassword.count > 0 && mobileNumber.count > 0 {
             self.enableRegisterBtn = true
         }else{
             self.enableRegisterBtn = false
@@ -207,5 +224,5 @@ struct RegisterPanelView: View {
 }
 
 #Preview {
-    RegisterPanelView(email: Binding.constant(""), password: Binding.constant(""), rePassword: Binding.constant(""), mobileNumber: Binding.constant(""), showLogin: Binding.constant(false), onGoogleLoginClicked: {}, onFacebookLoginClicked: {}, onRegisterClicked: {})
+    RegisterPanelView(email: Binding.constant(""), password: Binding.constant(""), rePassword: Binding.constant(""), mobileNumber: Binding.constant(""), nickname: Binding.constant(""), showLogin: Binding.constant(false), onGoogleLoginClicked: {}, onFacebookLoginClicked: {}, onRegisterClicked: {})
 }

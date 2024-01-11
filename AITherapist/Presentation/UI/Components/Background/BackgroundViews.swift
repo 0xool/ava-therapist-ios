@@ -32,7 +32,7 @@ struct TwoCircleBackgroundView: View {
     let backgroundColor: Color
     let animate: Bool
     
-    init( backgroundColor: Color = ColorPallet.BackgroundColorLight, animate: Bool = true) {
+    init( backgroundColor: Color = ColorPallet.CelesteLight, animate: Bool = true) {
         self.backgroundColor = backgroundColor
         self.animate = animate
     }
@@ -52,12 +52,12 @@ struct TwoCircleBackgroundView: View {
             backgroundColor
             Circle()
                 .frame(width: backgroundCircleRadius, height: backgroundCircleRadius)
-                .foregroundStyle(.green)
+                .foregroundStyle(ColorPallet.IconBlue)
                 .offset(topCircleBackgroundOfsett)
                 .offset(x: circleAnimationOffsetX, y: circleAnimationOffsetY)
             Circle()
                 .frame(width: backgroundCircleRadius * 0.66 , height: backgroundCircleRadius * 0.66)
-                .foregroundStyle(.green)
+                .foregroundStyle(ColorPallet.IconBlue)
                 .offset(bottomCircleBackgroundOfsett)
                 .offset(x: circleAnimationOffsetX, y: circleAnimationOffsetY)
                 .onAppear{

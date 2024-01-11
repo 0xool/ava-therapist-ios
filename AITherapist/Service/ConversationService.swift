@@ -14,10 +14,10 @@ protocol ConversationService {
     func loadConversationChat(conversation: LoadableSubject<Conversation>, conversationID: Int)
     func createNewConversation(conversation: LoadableSubject<Conversation>, conversationName: String)
     func deleteConversation(conversationID: Int) -> AnyPublisher<Void, Error>
+    func loadConversationChat(conversation: LoadableSubject<[Chat]>, conversationID: Int)
 }
 
 struct MainConversationService: ConversationService {
-    
     let conversationRepository: ConversationWebRepository
     let conversationDBRepository: ConversationDBRepository
     let chatService: ChatService
@@ -50,7 +50,14 @@ struct MainConversationService: ConversationService {
     }
     
     func deleteConversation(conversationID: Int) -> AnyPublisher<Void, Error> {
-        return conversationRepository.deleteConversation(conversationID: conversationID)
+        Just<Void>
+            .withErrorType(Error.self)
+            .flatMap({ [conversationRepository] in
+                conversationRepository.deleteConversation(conversationID: conversationID)
+            })
+            .flatMap({ [conversationDBRepository] in
+                conversationDBRepository.deleteConversation(conversationID: conversationID)
+            })
             .eraseToAnyPublisher()
     }
     
@@ -68,6 +75,25 @@ struct MainConversationService: ConversationService {
             }
             .flatMap{ publisher in
                 convertLazyListChatToConversation(publisher: publisher, conversation: conversation)
+            }
+            .sinkToLoadable { conversation.wrappedValue = $0 }
+            .store(in: cancelBag)
+    }
+    
+    func loadConversationChat(conversation: LoadableSubject<[Chat]>, conversationID: Int){
+        let cancelBag = CancelBag()
+        conversation.wrappedValue.setIsLoading(cancelBag: cancelBag)
+        
+        Just<Void>
+            .withErrorType(Error.self)
+            .flatMap{
+                self.loadConversationChatFromWeb(conversationID: conversationID)
+            }
+            .flatMap { [chatService] in
+                chatService.loadChatFromDBBy(conversationID: conversationID)
+            }
+            .map{
+                Array($0)
             }
             .sinkToLoadable { conversation.wrappedValue = $0 }
             .store(in: cancelBag)
@@ -138,7 +164,8 @@ struct MainConversationService: ConversationService {
             .loadConversationList()
             .ensureTimeSpan(requestHoldBackTimeInterval)
             .map { [conversationDBRepository] in
-                appState[\.conversationData.conversations] = .loaded($0.lazyList)
+                _ = conversationDBRepository.deleteAllConversation()
+                
                 for conversation in $0 {
                     _ = conversationDBRepository.store(conversation: conversation)
                 }
@@ -165,6 +192,10 @@ extension MainConversationService {
 
 struct StubConversationService: ConversationService {
     func createNewConversation(conversation: LoadableSubject<Conversation>, conversationName: String) {
+        
+    }
+    
+    func loadConversationChat(conversation: LoadableSubject<[Chat]>, conversationID: Int){
         
     }
     

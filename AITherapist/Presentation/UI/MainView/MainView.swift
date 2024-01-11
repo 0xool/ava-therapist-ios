@@ -20,7 +20,7 @@ struct MainView: View {
                     MainTabContentView()
                         .padding([.leading, .trailing], 16)
                         .environmentObject(viewModel)
-                    TabView()
+                    TabView(userName: self.viewModel.getUsername())
                         .environmentObject(viewModel)
                 }
                 .ignoresSafeArea()
@@ -50,6 +50,7 @@ extension MainView {
         @State private var isAnimatingTabBar: Bool = false
         
         private let tabBarSize: CGFloat = 105
+        let userName: String
         @Namespace var tabTopViewNameSpace
         
         var body: some View {
@@ -127,7 +128,7 @@ extension MainView {
         }
         
         @ViewBuilder var profileTabIcon: some View {
-            TabIcon(imageName: "person", filledImageName: "person.fill", title: "Profile", isSelected: self.mainViewState == .Profile, tabTopViewNameSpace: tabTopViewNameSpace) {
+            TabIcon(imageName: "person", filledImageName: "person.fill", title: "\(userName)", isSelected: self.mainViewState == .Profile, tabTopViewNameSpace: tabTopViewNameSpace) {
                 if self.mainViewState == .Profile { return }
                 self.viewModel.mainViewState.send(.Profile)
                 self.mainViewState = .Profile
@@ -353,6 +354,10 @@ extension MainView {
         
         init(container: DIContainer) {
             self.container = container
+        }
+        
+        func getUsername() -> String {
+            self.container.appState[\.userData.user].value?.userName.capitalizingFirstLetter() ?? "Profile"
         }
     }
 }

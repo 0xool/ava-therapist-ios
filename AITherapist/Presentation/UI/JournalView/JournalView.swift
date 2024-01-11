@@ -42,28 +42,41 @@ struct JournalView: View {
     }
     
     @ViewBuilder var sendButton: some View{
-        Button {
-            self.viewModel.saveJournalEntry()
-        } label: {
-            ZStack{
-                RoundedRectangle(cornerRadius: 50)
-                    .inset(by: 0.5)
-                    .stroke(Color(red: 0.66, green: 0.66, blue: 0.66), lineWidth: 1)
-                    .background(RoundedRectangle(cornerRadius: 50).foregroundStyle(ColorPallet.SecondaryColorGreen))
-                
-                Text("Save Journal Entry")
-                    .font(
-                        Font.custom("SF Pro Text", size: 16)
-                            .weight(.bold)
-                    )
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(.black)
+        
+        VStack(spacing: 10) {
+            Button {
+                self.viewModel.saveJournalEntry()
+            } label: {
+                ZStack{
+                    RoundedRectangle(cornerRadius: 50)
+                        .inset(by: 0.5)
+                        .stroke(Color(red: 0.66, green: 0.66, blue: 0.66), lineWidth: 1)
+                        .background(RoundedRectangle(cornerRadius: 50).foregroundStyle(ColorPallet.DiarySaveButtonBlue))
+                    
+                    Text("Save")
+                        .bold()
+                        .multilineTextAlignment(.center)
+                        .foregroundColor(ColorPallet.DiaryIconBlue)
+                }
             }
+            .padding(.horizontal, 30)
+            .padding(.vertical, 5)
+            .frame(height: 50, alignment: .center)
+            .frame(maxWidth: .infinity)
+            
+            Button {
+                self.viewModel.saveJournalEntry()
+            } label: {
+                Text("All Journals")
+                    .bold()
+                    .underline()
+                    .multilineTextAlignment(.center)
+                    .foregroundColor(ColorPallet.DiaryDateBlue)
+            }
+            .padding(.horizontal, 30)
+            .frame(maxWidth: .infinity)
         }
-        .padding(.horizontal, 30)
-        .padding(.vertical, 5)
-        .frame(height: 50, alignment: .center)
-        .frame(maxWidth: .infinity)
+        .padding(.bottom, 32)
     }
 }
 
@@ -99,12 +112,9 @@ extension JournalView{
                 
                 VStack{
                     Text("Choose a tag for today’s journal!")
-                        .font(
-                            Font.custom("SF Pro Text", size: 15)
-                                .weight(.semibold)
-                        )
-                        .foregroundColor(.black)
-                        .frame(width: 225, height: 21, alignment: .topLeading)
+                        .bold()
+                        .foregroundColor(ColorPallet.DiaryDateBlue)
+                        .frame(height: 21, alignment: .center)
                     LazyVStack{
                         ScrollView(.horizontal) {
                             LazyHStack{
@@ -157,7 +167,7 @@ extension JournalView{
                 .overlay(
                     RoundedRectangle(cornerRadius: 5)
                         .inset(by: -0.5)
-                        .stroke(Color(red: 0.5, green: 0.5, blue: 0.5), lineWidth: 1)
+                        .stroke(ColorPallet.DiaryTagBorder, lineWidth: 1)
                 )
                 .opacity(tagOpacity)
                 .offset(x: tagOffset, y: 0)
@@ -184,15 +194,20 @@ extension JournalView{
                         .font(Font.custom("SF Pro Text", size: 20))
                         .foregroundColor(Color(red: 0.5, green: 0.5, blue: 0.5))
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                        .scrollContentBackground(.hidden)
+                        .background(.clear)
+
                     VStack{
                         Image(systemName: "paperclip")
                             .frame(width: 25, height: 25)
+                            .foregroundStyle(ColorPallet.DiaryIconBlue)
                         Image(systemName: "mic")
                             .frame(width: 25, height: 25)
+                            .foregroundStyle(ColorPallet.DiaryIconBlue)
                     }
                     .offset(x: geo.size.width - 20, y: geo.size.height - 60)
                 }
-                
+                .background(.clear)
                 .padding([.leading, .trailing], 24)
                 .padding([.top, .bottom], 8)
             }
@@ -200,7 +215,7 @@ extension JournalView{
             .cornerRadius(10)
             .background(
                 RoundedRectangle(cornerRadius: 10)
-                    .fill(.white)
+                    .fill(ColorPallet.CelesteLight)
                     .background{
                         RoundedRectangle(cornerRadius: 10)
                             .stroke(Color.black, lineWidth: 1)
@@ -285,28 +300,20 @@ extension JournalView {
                         Text("\(getDayString(from: day))")
                             .font(Font.custom("SF Pro Text", size: 13))
                             .multilineTextAlignment(.center)
-                            .foregroundColor(.black)
+                            .foregroundColor(isSelected ? ColorPallet.TertiaryYellow : .black)
                         Text("\(day.get(.day))")
                             .font(Font.custom("SF Pro Text", size: 16))
                             .multilineTextAlignment(.center)
-                            .foregroundColor(.black)
+                            .foregroundColor(isSelected ? ColorPallet.TertiaryYellow : .black)
                             .frame(maxWidth: .infinity, minHeight: 18, maxHeight: 18, alignment: .top)
                     }
                     
                 }
                 .frame(width: 40, height: 51)
-                .background(backgroundView)
+                .background(isSelected ? ColorPallet.DiaryDateBlue : ColorPallet.DiaryDateBlue.opacity(0.3))
                 .cornerRadius(10)
                 .scaleEffect(isSelected ? 1.15 : 1)
                 
-            }
-            
-            @ViewBuilder var backgroundView: some View{
-                if isSelected{
-                    ColorPallet.greenAiMessage.opacity(0.4)
-                }else {
-                    Color(red: 0.75, green: 0.75, blue: 0.75).opacity(0.4)
-                }
             }
             
             private func getDayString(from date: Date) -> String {
@@ -325,10 +332,11 @@ extension JournalView {
     class ViewModel: ObservableObject {
         @Published var selectedDate: Date = .now
         @Published var journalLodable: Loadable<Journal>
-        @Published var journalEntryText: String = "Today was..."
+        @Published var journalEntryText: String = MAIN_JOURNAL_TEXT
         @Published var tags = JournalTagType.allTypes
         
         var journal: Journal = Journal()
+        static let MAIN_JOURNAL_TEXT = "How is your day? What are you grateful for today?"
         
         let container: DIContainer
         private var cancelBag = CancelBag()

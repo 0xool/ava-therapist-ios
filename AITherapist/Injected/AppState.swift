@@ -32,6 +32,7 @@ extension AppState {
         func logout() {
             self.user = .notRequested
             _ = MainUserDBRepository().deleteUser()
+            DataBaseManager.Instance.ClearAllData()
         }
     }
 }

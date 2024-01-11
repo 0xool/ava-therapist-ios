@@ -53,6 +53,7 @@ struct InsightView: View {
                         Divider()
                         
                         GeneralSummaryView(generalSummaryText: self.viewModel.generalSummary)
+                            .padding(.bottom, 16)
                         
                         Divider()
                     }

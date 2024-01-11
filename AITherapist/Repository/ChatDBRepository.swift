@@ -13,7 +13,9 @@ protocol ChatDBRepository {
     func store(chat: Chat) -> AnyPublisher<Void, Error>
     func loadChats() -> AnyPublisher<LazyList<Chat>, Error>
     func loadChatsBy(conversationID: Int) -> AnyPublisher<LazyList<Chat>, Error>
+    
     func deletePreviousChat() -> AnyPublisher<Void, Error>
+    func deleteAllPreviousChatsFor(conversationID: Int) -> AnyPublisher<Void, Error>
 //    func loadConversationChat(id: Int) -> AnyPublisher<[Chat], Error>
 }
 
@@ -40,6 +42,10 @@ struct MainChatDBRepository: ChatDBRepository {
     func deletePreviousChat() -> AnyPublisher<Void, Error> {
         self.deleteLastChat()
     }
+    
+    func deleteAllPreviousChatsFor(conversationID: Int) -> AnyPublisher<Void, Error>{
+        self.deleteChatFor(conversationID: conversationID)
+    }
 }
 
 extension MainChatDBRepository {    
@@ -51,6 +57,10 @@ extension MainChatDBRepository {
     
     private func deleteLastChat() -> AnyPublisher<Void, Error> {
         persistentStore.DeleteLast(ofType: Chat.self)
+    }
+    
+    private func deleteChatFor(conversationID: Int) -> AnyPublisher<Void, Error> {
+        persistentStore.DeleteByQuery(ofType: Chat.self) { $0.conversationID == conversationID }
     }
     
     private func readAllChats() -> AnyPublisher<LazyList<Chat>, Error> {

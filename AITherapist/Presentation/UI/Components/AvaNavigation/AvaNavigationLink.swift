@@ -43,5 +43,4 @@ struct AvaNavigationLink<Label, Destination> : View where Label : View, Destinat
     } background: {
         Color.blue
     }
-
 }

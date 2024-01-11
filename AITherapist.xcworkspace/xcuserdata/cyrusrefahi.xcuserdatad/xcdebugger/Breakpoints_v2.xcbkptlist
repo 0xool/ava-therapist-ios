@@ -214,22 +214,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "5DBF05BA-71F5-48BD-BBFE-E8387815B202"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "AITherapist/Presentation/UI/AuthenticationView/AuthenticationViewModel.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "43"
-            endingLineNumber = "43"
-            landmarkName = "retry()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "49EF7673-325D-4FFB-ACAF-DFEE364B6CD5"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -237,8 +221,8 @@
             filePath = "AITherapist/Presentation/UI/AuthenticationView/AuthenticationView.swift.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "324"
-            endingLineNumber = "324"
+            startingLineNumber = "328"
+            endingLineNumber = "328"
             landmarkName = "failedView(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -278,16 +262,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "405A7098-D2D1-40D2-9C03-3B4AF7E6049B"
+            uuid = "5F614031-CE1A-42A8-8565-4E436C86C7C6"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "AITherapist/Repository/AuthenticateWebRepository.swift"
+            filePath = "AITherapist/Domain/Entities/Model/Chat/Chat.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "53"
-            endingLineNumber = "53"
-            landmarkName = "login(email:password:)"
+            startingLineNumber = "78"
+            endingLineNumber = "78"
+            landmarkName = "init(message:conversationID:chatSequence:isUserMessage:isSentToserver:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

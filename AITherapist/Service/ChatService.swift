@@ -16,8 +16,9 @@ protocol ChatService {
     func getChatsForConversationFromServer(conversationID: Int) -> AnyPublisher<LazyList<Chat>, Error>
     
     func saveChatInDB(chat: Chat)
-    func sendChatToServer(message: String, conversation: Conversation) -> AnyPublisher<Chat, Error>
+    func sendChatToServer(message: String, conversationID: Int) -> AnyPublisher<(Chat, Chat), Error>
     func deletePreviousUserMessage()
+    func deleteAllChatFor(conversationID: Int)
 }
 
 struct MainChatService: ChatService {
@@ -30,6 +31,10 @@ struct MainChatService: ChatService {
         self.chatRepository = chatRepository
         self.chatDBRepository = chatDBRepository
         self.appState = appState
+    }
+    
+    func deleteAllChatFor(conversationID: Int){
+        _ = self.chatDBRepository.deleteAllPreviousChatsFor(conversationID: conversationID)
     }
     
     func loadConversationChat(chats: LoadableSubject<LazyList<Chat>>, conversationID: Int) {
@@ -71,41 +76,34 @@ struct MainChatService: ChatService {
         return ProcessInfo.processInfo.isRunningTests ? 0 : 0.5
     }
     
-    func sendChatToServer(message: String, conversation: Conversation) -> AnyPublisher<Chat, Error>{
-    
-        let userChat = Chat(message: message, conversationID: conversation.id, chatSequence: nil, isUserMessage: true, isSentToserver: .NoStatus)
+    func sendChatToServer(message: String, conversationID: Int) -> AnyPublisher<(Chat, Chat), Error>{
 
-        return chatRepository.sendChatToServer(data: .init(chat: .init(message: message, conversationID: conversation.id)))
+        return chatRepository.sendChatToServer(data: .init(chat: .init(message: message, conversationID: conversationID)))
             .map{
-                userChat.isSentToServer = .NoStatus
-                _ = chatDBRepository.store(chat: userChat)
                 saveChatInDB(chat: $0)
-                
-                return $0
-            }
-            .catch { error in
-                userChat.isSentToServer = .ErrorWhileSending
-                _ = chatDBRepository.store(chat: userChat)
-                
-                return Fail<Chat, Error>(error: error)
+                saveChatInDB(chat: $1)                
+                return ($0, $1)
             }
             .eraseToAnyPublisher()
     }
     
     func deletePreviousUserMessage() {
-        self.chatDBRepository.deletePreviousChat()
+        _ = self.chatDBRepository.deletePreviousChat()
     }
 }
 
 struct StubChatService: ChatService {
-    func sendChatToServer(message: String, conversation: Conversation) -> AnyPublisher<Chat, Error> {
-        Just(Chat())
+    func sendChatToServer(message: String, conversationID: Int) -> AnyPublisher<(Chat, Chat), Error> {
+        Just((Chat(), Chat()))
         .setFailureType(to: Error.self)
         .eraseToAnyPublisher()
     }
     
     func deletePreviousUserMessage() {
 //        self.chatDBRepository.deletePreviousChat(
+    }
+    
+    func deleteAllChatFor(conversationID: Int)  {
     }
     
     func saveChatInDB(chat: Chat) {

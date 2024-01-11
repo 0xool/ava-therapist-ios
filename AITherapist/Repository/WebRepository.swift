@@ -22,10 +22,12 @@ protocol WebRepository {
 extension WebRepository {
     func webRequest<D: ServerResponse>(url: String, method: HTTPMethod, parameters: Parameters? = nil, encoding: ParameterEncoding = URLEncoding.default, headers: HTTPHeaders? = nil) -> AnyPublisher<D, Error> {
         webRequest(webApi: WebAPI.init(url: url, method: method, headers: headers, encoding: encoding, parameters: parameters, baseURL: self.baseURL))
+            .eraseToAnyPublisher()
     }
     
     func webRequest<D: ServerResponse>(api: APICall) -> AnyPublisher<D, Error> {
         webRequest(webApi: WebAPI.init(url: api.url, method: api.method, headers: api.headers, encoding: api.encoding, parameters: api.parameters, baseURL: self.baseURL))
+            .eraseToAnyPublisher()
     }
     
     func webRequest<D: ServerResponse>(webApi: APICall) -> AnyPublisher<D, Error> {

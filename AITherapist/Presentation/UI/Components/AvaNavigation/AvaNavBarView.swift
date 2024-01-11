@@ -28,6 +28,7 @@ struct AvaNavBarView<Content: View, Background: View>: View {
             VStack{
                 NavBar()
                     .backgroundStyle(.clear)
+                    .padding(.top, 4)
                 self.content
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .backgroundStyle(.clear)
@@ -63,7 +64,7 @@ struct AvaNavBarView<Content: View, Background: View>: View {
                     } label: {
                         Image(systemName: "chevron.backward")
                             .font(.subheadline)
-                            .foregroundStyle(.green)
+                            .foregroundStyle(ColorPallet.IconBlue)
                             .padding([.leading], 8)
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -71,6 +72,8 @@ struct AvaNavBarView<Content: View, Background: View>: View {
                 case .logOut:
                     Button {
                         dismiss()
+                        AppState.UserData.shared.logout()
+
                     } label: {
                         Image(systemName: "rectangle.portrait.and.arrow.right")
                             .font(.title3)

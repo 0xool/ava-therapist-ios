@@ -23,7 +23,11 @@ protocol DataBase {
     func EntityExist<Element: Object>(id: Int, ofType: Element.Type) -> Bool
     
     func DeleteLast<T: Object>(ofType: T.Type) -> AnyPublisher<Void,  Error>
+    func DeleteAll<T: Object>(ofType: T.Type) -> AnyPublisher<Void,  Error>
     func DeleteByID<T: Object>(ofType: T.Type, id: Int) -> AnyPublisher<Void,  Error>
+    
+    func DeleteByQuery<T: Object>(ofType: T.Type, query: @escaping (Query<T>) -> Query<Bool>) -> AnyPublisher<Void,  Error>
+    func ClearAllData()
 }
 
 class DataBaseManager: DataBase {
@@ -54,22 +58,60 @@ class DataBaseManager: DataBase {
         }
         
         return Future<Void, Error> { promise in
-            
             do {
                 try self.realm.write {
                     self.realm.delete(last)
                 }
+                
+                promise(.success(()))
             } catch {
-#warning("FIX")
-                print("ERROR WHILbE DELETING OBJECT")
+                promise(.failure(DataBaseError.ErrorWhileDeleting))
+            }
+        }
+        .eraseToAnyPublisher()
+    }
+    
+    func DeleteAll<T: Object>(ofType: T.Type) -> AnyPublisher<Void,  Error>{
+        return Future<Void, Error> { promise in
+            do {
+                try self.realm.write {
+                    self.realm.delete(self.realm.objects(T.self))
+                }
+                
+                promise(.success(()))
+            } catch {
+                promise(.failure(DataBaseError.ErrorWhileDeleting))
+            }
+        }
+        .eraseToAnyPublisher()
+    }
+    
+    func ClearAllData() {
+        self.realm.deleteAll()
+    }
+    
+    func DeleteByQuery<T: Object>(ofType: T.Type, query: @escaping (Query<T>) -> Query<Bool>) -> AnyPublisher<Void,  Error> {
+        let value: Results<T> = self.realm.objects(T.self).where(query)
+        
+        return Future<Void, Error> { promise in
+            
+            do {
+                try self.realm.write {
+                    self.realm.delete(value)
+                }
+                
+                promise(.success(()))
+            } catch {
+                promise(.failure(DataBaseError.ErrorWhileDeleting))
             }
         }
         .eraseToAnyPublisher()
     }
     
     func DeleteByID<T: Object>(ofType: T.Type, id: Int) -> AnyPublisher<Void, Error> {
-        guard let entity = realm.objects(T.self).last else{
-            return Fail<Void, Error>(error: DataBaseError.NotFound).eraseToAnyPublisher()
+        guard let entity = realm.object(ofType: T.self, forPrimaryKey: id) else{
+            return Fail<Void, Error>(error: DataBaseError.NotFound)
+                .eraseToAnyPublisher()
         }
         
         return Future<Void, Error> { promise in
@@ -77,9 +119,10 @@ class DataBaseManager: DataBase {
                 try self.realm.write {
                     self.realm.delete(entity)
                 }
+                
+                promise(.success(()))
             } catch {
-#warning("FIX")
-                print("ERROR WHILE DELETING OBJECT")
+                promise(.failure(DataBaseError.ErrorWhileDeleting))
             }
         }
         .eraseToAnyPublisher()
@@ -170,4 +213,5 @@ public enum DataBaseError: Error {
     case UserIsNil
     case ObjcectWithIDNotFound
     case NotFound
+    case ErrorWhileDeleting
 }

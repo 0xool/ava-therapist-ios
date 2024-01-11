@@ -44,17 +44,25 @@ struct TherapyChatView: View {
     }
     
     var body: some View {
-        switch self.viewModel.conversation {
-        case .notRequested:
-            notRequestedView
-        case .isLoading(last: _, cancelBag: _):
-            loadingView()
-        case let .loaded(conversation):
-            mainChatView(conversation: conversation)
-        case let .failed(error):
-            failedView(error)
-        case .partialLoaded(_):
-            notRequestedView
+        ZStack{
+            mainChatView(chats: self.viewModel.chats.value ?? [])
+                .onAppear{
+                    self.viewModel.loadConversationChat()
+                }
+            
+            switch self.viewModel.chats {
+            case .notRequested:
+                notRequestedView
+            case .isLoading(last: _, cancelBag: _):
+                loadingView()
+            case .loaded:
+                EmptyView()
+            case let .failed(error):
+                failedView(error)
+            case .partialLoaded(_):
+                notRequestedView
+            }
+            
         }
     }
     
@@ -63,7 +71,7 @@ struct TherapyChatView: View {
         viewModel.speechRecognizer.transcript = ""
         userMessage = ""
     }
-
+    
     private func speechBtnView(isHidden: Bool = false) -> some View {
         Button {
             withAnimation {
@@ -131,6 +139,14 @@ struct TherapyChatView: View {
     }
 }
 
+extension TherapyChatView {
+    struct ChatView: View {
+        var body: some View {
+            /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Hello, world!@*/Text("Hello, world!")/*@END_MENU_TOKEN@*/
+        }
+    }
+}
+
 private extension TherapyChatView {
     private var notRequestedView: some View {
         Text("").onAppear{
@@ -149,15 +165,16 @@ private extension TherapyChatView {
         CircleLoading()
     }
     
-    private func mainChatView(conversation: Conversation) -> some View {
-        ZStack {
-            GeometryReader { geo in
+    private func mainChatView(chats: [Chat]) -> some View {
+        GeometryReader { geo in
+            VStack(spacing: 0){
                 ScrollViewReader{ proxy in
                     VStack {
                         backButton
                         ScrollView {
-                            ForEach(conversation.chats.lazyList, id: \.id) { chat in
+                            ForEach(chats, id: \.id) { chat in
                                 MessageView(chat: chat, onResendMessageClicked: self.viewModel.resendMessage)
+                                    .padding([.leading, .trailing], 8)
                                     .listRowSeparator(.hidden)
                             }
                         }
@@ -166,40 +183,47 @@ private extension TherapyChatView {
                                 .frame(height: 20)
                         }
                         .scrollContentBackground(.hidden)
-                        .padding([.leading, .trailing], 8)
                     }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .onAppear{
-                        proxy.scrollTo(conversation.chats.last , anchor: .bottom)
-                    }
-                    
-                    if viewModel.isUserTurnToSpeak {
-                        VStack{
-                            HStack(alignment: .center) {
-                                
-                                if self.isRecording {
-                                    speechInputView()
-                                }else{
-                                    textInputView()
-                                }
-                                
-                                ZStack{
-                                    !isRecording ? sendBtnView(isHidden: userMessage.isEmpty) : nil
-                                    speechBtnView(isHidden: !userMessage.isEmpty)
-                                }
-                            }.frame(maxHeight: 75, alignment: .center)                       
-                                .padding(8)
+                        if let id = chats.last?.id  {
+                            proxy.scrollTo(id)
                         }
-                        .frame(maxHeight: 70, alignment: .center)
+                    }
+                    .onChange(of: chats){ newValue in
+                        if let id = newValue.last?.id  {
+                            proxy.scrollTo(id)
+                        }
+                    }
+                }
+                            
+                VStack{
+                    if viewModel.isUserTurnToSpeak {
+                        HStack(alignment: .center) {
+                            if self.isRecording {
+                                speechInputView()
+                            }else{
+                                textInputView()
+                            }
+                            
+                            ZStack{
+                                !isRecording ? sendBtnView(isHidden: userMessage.isEmpty) : nil
+                                speechBtnView(isHidden: !userMessage.isEmpty)
+                            }
+                        }
+                        .padding([.leading, .trailing], 8)
+                        .frame(maxHeight: .infinity, alignment: .center)
                     }else{
                         CircleLoading()
                     }
                 }
-                .background{
-                    TwoCircleBackgroundView()
-                }
+                .background(ColorPallet.DarkGreen.opacity(0.6))
+                .frame(maxHeight: 75, alignment: .center)
+            }
+            .background{
+                TwoCircleBackgroundView()
             }
         }
-        
         .onTapGesture {
             self.hideKeyboard()
         }
@@ -225,14 +249,13 @@ private extension TherapyChatView {
             .textFieldStyle(ChatWithAiTextField())
             .modifier(PlaceholderStyle(showPlaceHolder: userMessage.isEmpty,
                                        placeholder: setPlaceHolder ? "" : "What's on your mind today?", isLargeChatbox: (userMessage.count > MessageViewLineLimitMax)))
-            .padding(8)
             .background(.white)
-            .frame(height: (userMessage.count > 40) ? 62 : 35)
+            .frame(height: (userMessage.count > 35) ? 62 : 35)
             .animation(.easeIn, value: userMessage)
             .padding([.top], 4)
             .cornerRadius(15)
     }
-
+    
     struct ChatWithAiTextField: TextFieldStyle {
         func _body(configuration: TextField<Self._Label>) -> some View {
             configuration
@@ -246,8 +269,9 @@ extension TherapyChatView {
         let container: DIContainer
         private var cancelBag = CancelBag()
         
-        @Published var conversation: Loadable<Conversation>
+        @Published var chats: Loadable<[Chat]>
         @Published var isUserTurnToSpeak: Bool = true
+        
         var speechRecognizer = SpeechManager()
         let conversationID: Int
         //        var didChange = PassthroughSubject<Void, Never>()
@@ -256,24 +280,35 @@ extension TherapyChatView {
         private let initialAiMessage = "Hi this is Ava your personal therapist. How do you feel today?"
         
         func sendMessage(_ chatMessage: String){
-            //            didChange.send(())
             isUserTurnToSpeak = false
             
-            self.container.services.chatService.sendChatToServer(message: chatMessage, conversation: self.conversation.value!)
+            self.container.services.chatService.sendChatToServer(message: chatMessage, conversationID: conversationID)
                 .sink { [weak self] error in
                     self!.isUserTurnToSpeak = true
 #warning("Handel error message")
                     // Set Last chat as Error proned ( Server had error)
                     print("Error while sending message \(error)")
-                } receiveValue: { chat in
-                    self.loadConversationChat()
+                } receiveValue: {
+                    var newChats = self.chats.value ?? []
+                    newChats.append($0)
+                    newChats.append($1)
+                    self.chats = .loaded(newChats)
                 }
                 .store(in: self.cancelBag)
         }
         
-        func loadConversationChat() {
-            self.container.services.conversationService.loadConversationChat(conversation: loadableSubject(\.conversation), conversationID: self.conversationID)
+        func addChatToConversation() {
+            
         }
+        
+        func loadConversationChat() {
+            self.container.services.conversationService.loadConversationChat(conversation: loadableSubject(\.chats), conversationID: self.conversationID)
+        }
+        
+        private func addElement<T>(_ element: T, to array: [T]) -> [T] {
+            return array + [element]
+        }
+        
         
         func resendMessage(chat: Chat) {
             self.container.services.chatService.deletePreviousUserMessage()
@@ -292,11 +327,10 @@ extension TherapyChatView {
         }
         
         init(conversation: Conversation, container: DIContainer, isRunningTests: Bool = ProcessInfo.processInfo.isRunningTests) {
-            _conversation = .init(initialValue: .partialLoaded(conversation))
+            _chats = .init(initialValue: .partialLoaded(Array(conversation.chats)))
             self.container = container
             self.isRunningTests = isRunningTests
             self.conversationID = conversation.id
-            loadConversationChat()
         }
     }
 }

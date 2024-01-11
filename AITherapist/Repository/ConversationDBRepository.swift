@@ -15,6 +15,7 @@ protocol ConversationDBRepository {
     
     func addChatToConversation(chats: LazyList<Chat>) -> AnyPublisher<Void, Error>
     func deleteConversation(conversationID: Int) -> AnyPublisher<Void, Error>
+    func deleteAllConversation() -> AnyPublisher<Void, Error>
 }
 
 struct MainConversationDBRepository: ConversationDBRepository {
@@ -43,19 +44,25 @@ struct MainConversationDBRepository: ConversationDBRepository {
     
     func deleteConversation(conversationID: Int) -> AnyPublisher<Void, Error>{
         deleteConversationFromDBWith(id: conversationID)
+            .eraseToAnyPublisher()
+    }
+    
+    func deleteAllConversation() -> AnyPublisher<Void, Error> {
+        persistentStore.DeleteAll(ofType: Conversation.self)
     }
 }
 
 extension MainConversationDBRepository {
     private func deleteConversationFromDBWith(id: Int) -> AnyPublisher<Void, Error>{
         persistentStore.DeleteByID(ofType: Conversation.self, id: id)
+            .eraseToAnyPublisher()
     }
     
     private func readAllConversations() -> AnyPublisher<LazyList<Conversation>, Error> {
-        let conversations: LazyList<Conversation> = persistentStore.GetAll().sorted(byKeyPath: "id", ascending: false)
+        let conversations: LazyList<Conversation> = persistentStore.GetAll().sorted(byKeyPath: "id", ascending: true)
             .lazyList
         
-        return Just(conversations)
+        return Just(conversations.sorted(by: { $0.dateCreated > $1.dateCreated }).lazyList)
             .setFailureType(to: Error.self)
             .eraseToAnyPublisher()
     }

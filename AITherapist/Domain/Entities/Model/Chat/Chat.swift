@@ -26,9 +26,8 @@ struct AddChatServerResponse: ServerResponse {
     var data: AddChatServerResponseData
     
     struct AddChatServerResponseData: Decodable {
-        var message: String?
-        var conversationID: Int?
-        var transcription: String?
+        var botChat: Chat
+        var userChat: Chat
     }
 }
 
@@ -51,6 +50,8 @@ enum ChatServerState: String, PersistableEnum {
     case NoStatus
 }
 
+
+
 class Chat: Object, Codable, Identifiable {
     
     @Persisted(primaryKey: true) var id: Int
@@ -66,7 +67,7 @@ class Chat: Object, Codable, Identifiable {
         case id = "chatID"
         case message = "message"
         case conversationID = "conversationID"
-        case chatSequence = "chatsequence"
+        case chatSequence = "chatSequence"
         case isUserMessage = "isUserMessage"
 //        case dateCreated = "DateCreated"
     }

@@ -128,6 +128,8 @@ extension Publisher {
     }
 }
 
+
+
 private extension Error {
     var underlyingError: Error? {
         let nsError = self as NSError
@@ -156,6 +158,19 @@ extension Publisher where Failure == Never {
         sink { [weak object] value in
             object?[keyPath: keyPath] = value
         }
+    }
+}
+
+extension Object {
+    func convertServerDateStringToDate(serverDate: String) -> Date{
+        let dateFormatter = ISO8601DateFormatter()
+        dateFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds, .withTimeZone]
+        
+        if let date = dateFormatter.date(from: serverDate) {
+            return date
+        }
+        
+        return .now
     }
 }
 
@@ -216,6 +231,12 @@ extension Color {
             blue: Double((hex >> 00) & 0xff) / 255,
             opacity: alpha
         )
+    }
+}
+
+extension String {
+    func capitalizingFirstLetter() -> String {
+        return prefix(1).capitalized + dropFirst()
     }
 }
 

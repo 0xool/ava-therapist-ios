@@ -11,7 +11,7 @@ import Combine
 
 protocol AuthenticationService {
     func loginUser(email: String, password: String)
-    func registerUser(email: String, password: String, mobileNumber: String)
+    func registerUser(nickname: String, email: String, password: String, mobileNumber: String)
     func checkUserLoggedStatus()
 }
 
@@ -80,18 +80,8 @@ class MainAuthenticationService: AuthenticationService {
             }
             .eraseToAnyPublisher()
     }
-                   
-    func register(email: String, password: String, mobileNumber: String) -> AnyPublisher<Void, Error>{
-        authenticateRepository
-            .register(email: email, password: password, mobileNumber: mobileNumber)
-            .ensureTimeSpan(requestHoldBackTimeInterval)
-            .map { [userDBRepository] in
-                _ = userDBRepository.store(user: $0)
-            }
-            .eraseToAnyPublisher()
-    }
     
-    func registerUser(email: String, password: String, mobileNumber: String){
+    func registerUser(nickname: String, email: String, password: String, mobileNumber: String){
         let cancelBag = CancelBag()
         self.appState[\.userData.user].setIsLoading(cancelBag: cancelBag)
         
@@ -104,7 +94,7 @@ class MainAuthenticationService: AuthenticationService {
                 if hasLoaded {
                     return Just<Void>.withErrorType(Error.self)
                 } else {
-                    return self.register(email: email, password: password, mobileNumber: mobileNumber)
+                    return self.register(nickname: nickname, email: email, password: password, mobileNumber: mobileNumber)
                 }
             }
             .flatMap({ [userDBRepository] in
@@ -121,6 +111,18 @@ class MainAuthenticationService: AuthenticationService {
     }
 }
 
+extension MainAuthenticationService {
+    private func register(nickname: String, email: String, password: String, mobileNumber: String) -> AnyPublisher<Void, Error>{
+        authenticateRepository
+            .register(nickname: nickname, email: email, password: password, mobileNumber: mobileNumber)
+            .ensureTimeSpan(requestHoldBackTimeInterval)
+            .map { [userDBRepository] in
+                _ = userDBRepository.store(user: $0)
+            }
+            .eraseToAnyPublisher()
+    }
+}
+
 struct StubAuthenticateService: AuthenticationService {
     func checkUserLoggedStatus() {
     }
@@ -128,6 +130,7 @@ struct StubAuthenticateService: AuthenticationService {
     func loginUser(email: String, password: String) {
     }
     
-    func registerUser(email: String, password: String, mobileNumber: String) {
+    func registerUser(nickname: String, email: String, password: String, mobileNumber: String){
+        
     }
  }

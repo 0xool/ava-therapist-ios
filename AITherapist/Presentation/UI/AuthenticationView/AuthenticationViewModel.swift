@@ -65,8 +65,8 @@ extension AuthenticationView {
             container.services.authenticationService.loginUser(email: email, password: password)
         }
         
-        func register(email: String, password: String, mobileNumber: String) {
-            container.services.authenticationService.registerUser(email: email, password: password, mobileNumber: mobileNumber)
+        func register(nickname: String, email: String, password: String, mobileNumber: String) {
+            container.services.authenticationService.registerUser(nickname: nickname, email: email, password: password, mobileNumber: mobileNumber)
         }
     }
 }
@@ -99,6 +99,7 @@ extension AuthenticationView {
         case WrongEmailFormat = "Email is not in correct format"
         case MobileFieldEmpty = "mobile field is empty"
         case EmailFieldEmpty = "Email field is empty"
+        case NicknameFieldEmpty = "Nickname field is empty"
         case PasswordFieldEmpty = "Password field is empty"
         case PasswordRepetitionDoesNotMatch = "Password and repeated password does not match"
     }

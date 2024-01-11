@@ -9,9 +9,9 @@ import Foundation
 import RealmSwift
 
 class Conversations: Decodable{
-    static func == (lhs: Conversations, rhs: Conversations) -> Bool {
-        lhs.conversations == rhs.conversations
-    }
+//    static func == (lhs: Conversations, rhs: Conversations) -> Bool {
+//        lhs.conversations == rhs.conversations
+//    }
     
     var conversations: [Conversation]
     
@@ -23,30 +23,6 @@ class Conversations: Decodable{
         self.conversations = conversations
     }
 }
-
-//class Conversation: Object, Decodable  {
-//
-//    @Persisted(primaryKey: true) var id: Int
-//    var conversations: [Message] = []
-//
-//    enum CodingKeys: String, CodingKey {
-//        case conversations
-//    }
-//
-//}
-
-//struct Conversation: Codable {
-//    let conversationID: Int
-//    let conversationName: String
-//    let dateCreated: Date // Assuming you want to decode the date as a Date object
-//
-//    enum CodingKeys: String, CodingKey {
-//        case conversationID = "conversationID"
-//        case conversationName = "conversationName"
-//        case dateCreated = "dateCreated"
-//    }
-//}
-
 
 struct ConversationsResponse: ServerResponse {
     var code: Int?
@@ -93,41 +69,34 @@ struct AddConversationRequest: Encodable, Equatable{
 class Conversation: Object, Codable {
     
     @Persisted(primaryKey: true) var id: Int
-    //    @Persisted var userID: Int
-    //    @Persisted var therapistID: Int
-    //    @Persisted var conversationSummaryID: Int
     @Persisted var conversationName: String
     @Persisted var dateCreated: Date
+    
     @Persisted var chats: List<Chat>
-    //    @Persisted var messages: List<Message>
-    //    enum CodingKeys: String, CodingKey {
-    //        case id = "conversationID"
-    //        case userID = "UserID"
-    //        case therapistID = "TherapistID"
-    //        case conversationSummaryID = "ConversationSummaryID"
-    //        case conversationName = "conversationName"
-    //        case dateCreated = "dateCreated"
-    //    }
+    @Persisted var summary: String?
+//    @Persisted var topWords: List<String>
     
     enum CodingKeys: String, CodingKey {
         case id = "conversationID"
         case conversationName = "conversationName"
         case dateCreated = "dateCreated"
+        case summary = "conversaionSummary"
     }
     
     override init() {
         super.init()
     }
     
-    init(id: Int, conversationName: String, date: Date){
+    init(id: Int, conversationName: String, date: Date, summary: String? = nil){
         super.init()
         self.id = id
         self.conversationName = conversationName
         
         self.dateCreated = date
         self.chats = List<Chat>()
-        #warning("Remove test")
-        // Tests Remove
+//        self.topWords = List<String>()
+        
+        self.summary = summary
     }
     
     required init(from decoder: Decoder) throws {
@@ -135,13 +104,18 @@ class Conversation: Object, Codable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         id = try container.decode(Int.self , forKey: .id)
         conversationName = try container.decode(String.self , forKey: .conversationName)
-        let dateCreated = try container.decode(String.self , forKey: .dateCreated)
+        
+        dateCreated = convertServerDateStringToDate(serverDate: try container.decode(String.self , forKey: .dateCreated))
+        
+        summary = try container.decodeIfPresent(String.self , forKey: .summary)
     }
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(id , forKey: .id)
         try container.encode(conversationName , forKey: .conversationName)
+        
         try container.encode(dateCreated , forKey: .dateCreated)
+        try container.encode(summary , forKey: .summary)
     }
 }

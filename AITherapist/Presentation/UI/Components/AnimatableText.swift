@@ -10,21 +10,55 @@ import SwiftUI
 struct AnimatableText: View {
     @State var isAnimating: Bool
     
+    private var words: [String]{
+        text.components(separatedBy: " ")
+    }
+    private var fraction: CGFloat{
+        1 / CGFloat(words.count)
+    }
+    
+    private var textSize: CGFloat {
+        CGFloat(words.count)
+    }
+    
+    let text: String
+    let animationTime: CGFloat
+    init(text: String, animationTime: CGFloat = 4) {
+        self.isAnimating = false
+        self.text = text
+        self.animationTime = animationTime
+    }
+    
+    var body: some View {
+        FlexibleStack(spacing: 4){
+            ForEach(words.indices, id: \.self) { index in
+                AnimatableWord(word: words[index], delay: (CGFloat(index) / textSize) * animationTime)
+            }
+        }
+    }
+}
+
+struct AnimatableWord: View {
+    @State var isAnimating: Bool
+    
     private var letters: [String]{
-        text.map{ String($0) }
+        word.map{ String($0) }
     }
     private var fraction: CGFloat{
         1 / CGFloat(letters.count)
     }
-    let text: String
-     
-    init(text: String) {
+    private let initalDelay: CGFloat = 1
+    
+    let delay: CGFloat
+    let word: String
+    init(word: String, delay: CGFloat) {
         self.isAnimating = false
-        self.text = text
+        self.word = word
+        self.delay = delay
     }
     
     var body: some View {
-        FlexibleStack(spacing: 0, alignment: .leading){
+        HStack(spacing: 0){
             ForEach(letters.indices, id: \.self) { index in
                 Text(letters[index])
                     .foregroundStyle(ColorPallet.DarkBlue)
@@ -34,7 +68,7 @@ struct AnimatableText: View {
             }
         }
         .onAppear{
-            withAnimation(.easeInOut(duration: Double(self.letters.count) * 0.025).delay(0.8)) {
+            withAnimation(.easeInOut(duration: 0.5).delay(initalDelay + delay)) {
                 isAnimating = true
             }
         }

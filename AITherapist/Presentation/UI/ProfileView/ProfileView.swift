@@ -27,7 +27,7 @@ struct ProfileView: View {
     var body: some View {
         GeometryReader{ geo in
             VStack(spacing: 0){
-                    profileHeaderView(profileImage: $viewModel.profileImage, showImagePicker: $showImagePicker)
+                profileHeaderView(profileImage: $viewModel.profileImage, showImagePicker: $showImagePicker, name: self.viewModel.user?.name ?? "")
                         .frame(height: profileHeaderHeight(geo))
                         .frame(maxWidth: .infinity)
                         .offset(y: -35)
@@ -117,7 +117,7 @@ extension ProfileView{
         @Binding var profileImage: Image?
         @Binding var showImagePicker: Bool
         
-        private let name: String = "John"
+        let name: String
         
         var body: some View {
             VStack(spacing: 20){
@@ -310,6 +310,11 @@ extension ProfileView{
 extension ProfileView {
     class ViewModel: ObservableObject {
         @Published var profileImage: Image? = Image(systemName: "person.circle")
+        var user: User?{
+            get{
+                return self.container.appState[\.userData.user].value
+            }
+        }
         
         let container: DIContainer
         let isRunningTests: Bool

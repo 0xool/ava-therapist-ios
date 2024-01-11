@@ -59,7 +59,6 @@ extension AppEnvironment {
         
 //        configuration.waitsForConnectivity = true
         configuration.httpMaximumConnectionsPerHost = 5
-        configuration.requestCachePolicy = .returnCacheDataElseLoad
         let cookieProps = [
             HTTPCookiePropertyKey.domain: Constants.BaseUrl,
             HTTPCookiePropertyKey.path: "/",

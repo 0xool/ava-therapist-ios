@@ -10,6 +10,7 @@ import Combine
 
 struct ConversationListView: View {
     @ObservedObject private(set) var viewModel: ViewModel
+    @State private var searchText: String = ""
     
     var body: some View {
         mainContent
@@ -23,7 +24,7 @@ struct ConversationListView: View {
         case .isLoading(last: _, cancelBag: _):
             loadingView()
         case let .loaded(conversations):
-            loadedView(conversations)
+            loadedView(conversations/*.sorted(by: { $0.dateCreated > $1.dateCreated }).lazyList*/)
         case let .failed(error):
             failedView(error)
         case .partialLoaded(_):
@@ -52,17 +53,32 @@ private extension ConversationListView {
 // MARK: Displaying Content
 private extension ConversationListView {
     func loadedView(_ conversationList: LazyList<Conversation>) -> some View {
+        let filteredConversationList = conversationList.filter({
+            if searchText.count == 0 { return true }
+            guard let summary = $0.summary else{
+                return false
+            }
+            
+            return summary.contains(self.searchText)
+            
+        })
+        
         return NavigationStack {
-            VStack(spacing: -40){
+            VStack(spacing: 0){
+                SearchableCustom(searchtxt: $searchText)
+                    .padding(.bottom, 8)
+                
                 ConversationCellHeader()
-                    .frame(height: 60)
+                    .frame(height: 25)
                     .zIndex(5)
                 ZStack{
                     List{
-                        ForEach (conversationList, id: \.id){ conversation in
+                        ForEach (filteredConversationList, id: \.id){ conversation in
                             ZStack{
                                 ConversationCell(conversation: conversation)
-                                    .frame(maxWidth: .infinity)
+                                    .background(.clear)
+                                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                    
                                 AvaNavigationLink {
                                     TherapyChatView(viewModel: .init(conversation: conversation, container: self.viewModel.container))
                                         .avaNavigationBarTopLeftButton(.back)
@@ -70,23 +86,65 @@ private extension ConversationListView {
                                 } label: {
                                     EmptyView()
                                 }
+                                .listRowBackground(Color.red)
                                 .opacity(0)
                             }
                             .padding([.top, .bottom], 0)
                             .listRowSeparator(.hidden)
                             .listRowBackground(Color.clear)
+                            .listRowSpacing(5)
+                            .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
                             .frame(maxHeight: .infinity)
                         }
                         .onDelete(perform: self.viewModel.deleteConversation)
                     }
+                    .padding(0)
                     .background(.clear)
                     .scrollContentBackground(.hidden)
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-                    .listStyle(.grouped)
+                    .listStyle(.plain)
+                    
+
                 }
             }
         }
     }
+}
+
+extension ConversationListView{
+struct SearchableCustom: View {
+    
+    @Binding var searchtxt: String
+    @FocusState private var isSearchFocused: Bool // Track focus state
+    
+    var body: some View {
+        HStack {
+            HStack {
+                Image(systemName: "magnifyingglass")
+                TextField("Search keywords", text: $searchtxt)
+                    .focused($isSearchFocused) // Track focus state
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 8)
+            }
+            .padding(.horizontal)
+            .background(Color(.secondarySystemBackground))
+            .cornerRadius(10)
+            .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.gray, lineWidth: 1))
+            
+            if isSearchFocused {
+                Button("Cancel") {
+                    searchtxt = ""
+                    withAnimation(.spring()) {
+                        isSearchFocused = false
+                    }
+                }
+                .transition(.move(edge: .trailing)) // Add animation for cancel button
+            }
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.horizontal)
+    }
+}
 }
 
 extension ConversationListView{
@@ -102,32 +160,33 @@ extension ConversationListView{
                         Font.custom("Inter", size: 12)
                             .weight(.medium)
                     )
-                    .foregroundColor(.black)
-                    .frame(width: 77)
+                    .foregroundColor(ColorPallet.DarkBlue)
+                    .frame(width: 60)
                 
-                Divider()
-                Spacer()
+                ConversationCustomDivider()
                 
-                Text("Summary")
-                    .font(
-                        Font.custom("Inter", size: 12)
-                            .weight(.medium)
-                    )
-                    .foregroundColor(.black)
-                    .padding([.trailing], 30)
+                HStack{
+                    Spacer()
+                    Text("Summary")
+                        .font(
+                            Font.custom("Inter", size: 12)
+                                .weight(.medium)
+                        )
+                        .foregroundColor(ColorPallet.DarkBlue)
+                    Spacer()
+                }
                 
-                Spacer()
-                Divider()
+                ConversationCustomDivider()
                 
                 Text("Mood")
                     .font(
                         Font.custom("Inter", size: 12)
                             .weight(.medium)
                     )
-                    .foregroundColor(.black)
-                    .frame(width: 40)
+                    .foregroundColor(ColorPallet.DarkBlue)
+                    .frame(width: 70)
             }
-            .frame(height: 25)
+            .frame(height: 15)
             .frame(maxWidth: .infinity)
             .padding([.leading, .trailing], 16)
         }
@@ -141,18 +200,6 @@ extension ConversationListView{
             cellView
         }
         
-        @ViewBuilder private var cellContent: some View{
-            VStack{
-                Text(conversation.conversationName)
-                    .font(.title2)
-                    .padding([.leading], 8)
-                    .lineLimit(1)
-                Text(getDateString())
-                    .font(.subheadline)
-                    .padding([.trailing], 8)
-            }
-        }
-        
         @ViewBuilder private var cellView: some View {
             VStack(alignment: .center, spacing: 0) {
                 HStack(alignment: .center, spacing: 10) {
@@ -161,13 +208,18 @@ extension ConversationListView{
                         .kerning(0.066)
                         .multilineTextAlignment(.center)
                         .foregroundColor(ColorPallet.DarkBlue)
+                        .frame(width: 60)
                     
                     ConversationCustomDivider()
                     
-                    Text("We talked about.... dolor sit amet consectetur. Tempus dui vitae vivamus diam habitasse metus aliquet rhoncus. Potenti nulla pulvinar neque tellus lectus sit.vivamus diam habitasse metus aliquet rhonc Llorem ipsum dolor s")
-                        .font(Font.custom("SF Pro Text", size: 11))
-                        .kerning(0.066)
-                        .foregroundColor(ColorPallet.DarkBlue)
+                    HStack{
+                        Spacer()
+                        Text(self.conversation.summary ?? "No Summary")
+                            .font(Font.custom("SF Pro Text", size: 11))
+                            .kerning(0.066)
+                            .foregroundColor((self.conversation.summary != nil) ? ColorPallet.DarkBlue : ColorPallet.TertiaryYellow)
+                        Spacer()
+                    }
                     
                     ConversationCustomDivider()
                     
@@ -188,6 +240,7 @@ extension ConversationListView{
                 .padding(16)
                 
                 Spacer()
+                
                 Rectangle()
                     .fill(ColorPallet.MediumTurquoiseBlue)
                     .frame(width: UIViewController().view.bounds.width, height: 1)
@@ -200,7 +253,7 @@ extension ConversationListView{
         private func getDateString() -> String {
             let components = conversation.dateCreated.get(.month, .day, .year)
             if let day = components.day, let month = components.month, let year = components.year {
-                return "\(day)-\(month)-\(year)"
+                return "\(day)/\(month)/\(year)"
             }
             
             return ""
@@ -229,9 +282,15 @@ extension ConversationListView {
         
         var conversations: Loadable<LazyList<Conversation>>{
             get{
-                return self.container.appState[\.conversationData.conversations]
+                self.container.appState[\.conversationData.conversations]
             }set{
                 self.container.appState[\.conversationData.conversations] = newValue
+            }
+        }
+        
+        var conversationsList: LazyList<Conversation> {
+            get{
+                conversations.value?.sorted(by: { $0.dateCreated > $1.dateCreated }).lazyList ?? [].lazyList
             }
         }
         
@@ -244,13 +303,17 @@ extension ConversationListView {
             }
             .store(in: self.cancelBag)
             
-            loadConversationList()
+            loadConversationListIfNotRequested()
         }
         
-        private func loadConversationList() {
+        private func loadConversationListIfNotRequested() {
             if (conversations == .notRequested) {
-                self.container.services.conversationService.loadConversationList(conversations: self.loadableSubject(\.container.appState[\.conversationData.conversations]))
+                self.container.services.conversationService.loadConversationList(conversations: self.loadableSubject(\.conversations))
             }
+        }
+        
+        func loadConversationList() {
+            self.container.services.conversationService.loadConversationList(conversations: self.loadableSubject(\.conversations))
         }
         
         func loadConversationListOnRetry(){
@@ -262,17 +325,19 @@ extension ConversationListView {
                 return
             }
             
-            guard let conversation = self.conversations.value?[index] else {
+            guard let conversationID = self.conversations.value?[index].id else {
                 return
             }
-            
-            self.container.services.conversationService.deleteConversation(conversationID: conversation.id)
+
+            self.conversations = .loaded(self.conversations.value?.filter({ $0.id != conversationID
+            }) .lazyList ?? [].lazyList)
+            self.container.services.conversationService.deleteConversation(conversationID: conversationID)
                 .sink(receiveCompletion: { completion in
                     switch completion {
                     case .finished:
-                        self.conversations = .loaded((self.conversations.value?.filter{ $0 != conversation}.lazyList)!)
-                    default:
                         break
+                    case .failure:
+                        self.loadConversationList()
                     }
                 }, receiveValue: {
                     

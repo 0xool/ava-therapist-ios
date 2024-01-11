@@ -16,6 +16,7 @@ struct AuthenticationView: View {
     @State var password: String = ""
     @State var rePassword: String = ""
     @State var mobileNumber: String = ""
+    @State var nickname: String = ""
     
     @State var show: Bool = false
     @State private var showingAlert = false
@@ -104,7 +105,7 @@ extension  AuthenticationView {
     }
     
     func registerView() -> some View {
-        RegisterPanelView(email: $email, password: $password, rePassword: $rePassword, mobileNumber: $mobileNumber, showLogin: $showLoginView) {
+        RegisterPanelView(email: $email, password: $password, rePassword: $rePassword, mobileNumber: $mobileNumber, nickname: $nickname, showLogin: $showLoginView) {
             
         } onFacebookLoginClicked: {
             
@@ -265,7 +266,10 @@ extension  AuthenticationView {
     }
     
     private func register(){
-        if (email == ""){
+        if (nickname == ""){
+            viewModel.alertMessage = .NicknameFieldEmpty
+            showingAlert = true
+        }else if (email == ""){
             viewModel.alertMessage = .EmailFieldEmpty
             showingAlert = true
         }else if (password == "") {
@@ -281,7 +285,7 @@ extension  AuthenticationView {
             viewModel.alertMessage = .MobileFieldEmpty
             showingAlert = true
         }else {
-            self.viewModel.register(email: email, password: password, mobileNumber: mobileNumber)
+            self.viewModel.register(nickname: nickname, email: email, password: password, mobileNumber: mobileNumber)
         }
     }
 }

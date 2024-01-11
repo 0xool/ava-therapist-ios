@@ -37,9 +37,7 @@ struct MainConversationWebRepository: ConversationWebRepository {
         webRequest(api: API.getConversationList)
         
         return request
-            .map{
-                return $0.data
-            }
+            .map{ $0.data }
             .eraseToAnyPublisher()
     }
     
@@ -61,9 +59,7 @@ struct MainConversationWebRepository: ConversationWebRepository {
         let request: AnyPublisher<DeleteConversationResponse, Error> = webRequest(api: API.deleteConversation(conversationID: conversationID))
         
         return request
-            .map{ _ in
-                
-            }
+            .map{ _ in }
             .eraseToAnyPublisher()
     }
 }
@@ -108,7 +104,7 @@ extension MainConversationWebRepository {
             case .addConversation:
                 return JSONEncoding.default
             case .deleteConversation:
-                return URLEncoding.default
+                return JSONEncoding.default
             }
         }
         

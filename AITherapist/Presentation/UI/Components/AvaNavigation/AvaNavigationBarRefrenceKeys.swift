@@ -40,9 +40,21 @@ struct AvaNavigationBarTitleRefrenceKeys: PreferenceKey{
     }
 }
 
+struct AvaNavigationLogoutClickedRefrenceKeys: PreferenceKey{
+    static var defaultValue: () -> () = {}
+    
+    static func reduce(value: inout () -> (), nextValue: () -> () -> ()) {
+        value = nextValue()
+    }
+}
+
 extension View {
     func avaNavigationBarTopLeftButton(_ topLeftButtonType: TopLeftButtonType) -> some View{
         preference(key: AvaNavigationBarTopLeftButtonRefrenceKeys.self, value: topLeftButtonType)
+    }
+    
+    func avaNavigationSetLogoutClicked(_ onLogout: @escaping () -> ()) -> some View{
+        preference(key: AvaNavigationLogoutClickedRefrenceKeys.self, value: onLogout)
     }
     
     func avaNavigationBarTitle(_ title: String) -> some View{

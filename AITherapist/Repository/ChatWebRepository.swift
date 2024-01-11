@@ -11,7 +11,7 @@ import Alamofire
 
 protocol ChatWebRepository: WebRepository {
     func loadChatsForConversation(conversationID: Int) -> AnyPublisher<[Chat], Error>
-    func sendChatToServer(data: SaveChatRequset) -> AnyPublisher<Chat, Error>
+    func sendChatToServer(data: SaveChatRequset) -> AnyPublisher<(Chat, Chat), Error>
 }
 
 struct MainChatWebRepository: ChatWebRepository {
@@ -29,7 +29,7 @@ struct MainChatWebRepository: ChatWebRepository {
         self.AFSession = setAFSession(session, queue: bgQueue)
     }
     
-    func sendChatToServer(data: SaveChatRequset) -> AnyPublisher<Chat, Error> {
+    func sendChatToServer(data: SaveChatRequset) -> AnyPublisher<(Chat, Chat), Error> {
         
         do {
             let parameters = try JSONEncoder().encode(data)
@@ -37,9 +37,7 @@ struct MainChatWebRepository: ChatWebRepository {
             let request: AnyPublisher<AddChatServerResponse, Error> = webRequest(api: API.addChat(params: params))
             
             return request
-                .map{
-                    Chat(message: $0.data.message!, conversationID: $0.data.conversationID!, chatSequence: nil, isUserMessage: false, isSentToserver: .NoStatus)
-                }
+                .map{ ($0.data.userChat, $0.data.botChat) }
                 .eraseToAnyPublisher()
         } catch {
             return Fail(error: error).eraseToAnyPublisher()

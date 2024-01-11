@@ -25,7 +25,7 @@ struct AuthenticateResponse: ServerResponse{
 
 protocol AuthenticateWebRepository: WebRepository {
     func login(email: String, password: String) -> AnyPublisher<User, Error>
-    func register(email: String, password: String, mobileNumber: String) -> AnyPublisher<User, Error>
+    func register(nickname: String, email: String, password: String, mobileNumber: String) -> AnyPublisher<User, Error>
 }
 
 struct MainAuthenticateWebRepository: AuthenticateWebRepository {
@@ -56,8 +56,8 @@ struct MainAuthenticateWebRepository: AuthenticateWebRepository {
         .eraseToAnyPublisher()
     }
     
-    func register(email: String, password: String, mobileNumber: String) -> AnyPublisher<User, Error> {
-        let params = ["user": ["email" : email , "password" : password, "mobile": mobileNumber]]
+    func register(nickname: String, email: String, password: String, mobileNumber: String) -> AnyPublisher<User, Error> {
+        let params = ["user": ["email" : email , "password" : password, "mobile": mobileNumber, "nickname": nickname]]
         let request: AnyPublisher<AuthenticateResponse, Error> = webRequest(api: API.register(params: params))
         
         // Refactor this code to remove setting variables inside this call back
