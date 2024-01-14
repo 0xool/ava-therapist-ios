@@ -87,7 +87,13 @@ class DataBaseManager: DataBase {
     }
     
     func ClearAllData() {
-        self.realm.deleteAll()
+        do {
+            try self.realm.write {
+                self.realm.deleteAll()
+            }
+        }catch {
+            
+        }
     }
     
     func DeleteByQuery<T: Object>(ofType: T.Type, query: @escaping (Query<T>) -> Query<Bool>) -> AnyPublisher<Void,  Error> {

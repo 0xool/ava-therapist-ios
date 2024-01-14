@@ -26,10 +26,10 @@ struct DIContainer: EnvironmentKey {
     }
 }
 
-//#if DEBUG
+#if DEBUG
 extension DIContainer {
     static var preview: Self {
         .init(appState: AppState.preview, services: .stub)
     }
 }
-//#endif
+#endif

@@ -347,8 +347,10 @@ extension ConversationListView {
     }
 }
 
+#if DEBUG
 struct ConversationListView_Previews: PreviewProvider {
     static var previews: some View {
         ConversationListView(viewModel: ConversationListView.ViewModel(coninater: .preview))
     }
 }
+#endif

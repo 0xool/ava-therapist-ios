@@ -18,19 +18,16 @@ struct LoginPanelView: View {
     let onGoogleLoginClicked: () -> ()
     let onFacebookLoginClicked: () -> ()
     let onLoginClicked: () -> ()
-
+    
+    private let thirdPartyIconSize: CGFloat = 40
+    
     var body: some View {
         VStack{
             Spacer()
             
             Text("Welcome Back")
-//                  .font(
-//                    Font.custom("SF Pro Text", size: 24)
-//                      .weight(.heavy)
-//                  )
-              .fontWeight(.bold)
-//                  .multilineTextAlignment(.center)
-              .foregroundColor(ColorPallet.DarkGreen)
+                .fontWeight(.bold)
+                .foregroundColor(ColorPallet.DarkGreen)
             
             Spacer()
             
@@ -102,47 +99,44 @@ struct LoginPanelView: View {
                 .frame(width: 276, alignment: .leading)
                 .cornerRadius(10)
                 .overlay(RoundedRectangle(cornerRadius: 10).frame(width: nil, height: 1, alignment: .bottom).foregroundColor(ColorPallet.DarkGreen).shadow(color: ColorPallet.DarkGreen, radius: 1, x: 0, y: 1), alignment: .bottom)
-
+            
         }
         .padding(0)
     }
     
     @ViewBuilder var thirdPartyLoginBtnView: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            HStack(alignment: .center, spacing: 0) {
-                Image("GoogleIcon")
-                    .frame(width: 33, height: 34)
-                // Regular/Footnote
-                Text("Continue with Google")
-                    .font(Font.custom("SF Pro Text", size: 13))
-                    .foregroundColor(ColorPallet.DarkGreen)
-                    .padding(.horizontal, 0)
-                    .padding(.leading, 8)
-                .frame(maxWidth: .infinity, alignment: .leading)
-            }
-            .padding(.horizontal, 5)
-            .padding(.vertical, 2)
-            .frame(width: 296, alignment: .leading)
-            .background(ColorPallet.Celeste)
-            .cornerRadius(5)
+        HStack(spacing: 50) {
             
-            HStack(alignment: .center, spacing: 0) {
-                Image("FacebookIcon")
-                    .frame(width: 33, height: 34)
-                
-                // Regular/Footnote
-                Text("Continue with Facebook")
-                    .font(Font.custom("SF Pro Text", size: 13))
-                    .foregroundColor(ColorPallet.DarkGreen)
-                    .padding(.horizontal, 0)
-                    .padding(.leading, 8)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            }
-            .padding(.horizontal, 5)
-            .padding(.vertical, 2)
-            .frame(width: 296, alignment: .leading)
-            .background(ColorPallet.Celeste)
-            .cornerRadius(5)
+            Image("GoogleIcon")
+                .frame(width: thirdPartyIconSize, height: thirdPartyIconSize)
+                .padding(.horizontal, 5)
+                .padding(.vertical, 2)
+                .background(
+                    Circle()
+                        .fill(ColorPallet.Celeste)
+                        .padding(1)
+                )
+            
+            Image("FacebookIcon")
+                .frame(width: thirdPartyIconSize, height: thirdPartyIconSize)
+                .padding(.horizontal, 5)
+                .padding(.vertical, 2)
+                .background(
+                    Circle()
+                        .fill(ColorPallet.Celeste)
+                        .padding(1)
+                )
+            
+            Image(systemName: "apple.logo")
+                .font(.title)
+                .frame(width: thirdPartyIconSize, height: thirdPartyIconSize)
+                .padding(.horizontal, 5)
+                .padding(.vertical, 2)
+                .background(
+                    Circle()
+                        .fill(ColorPallet.Celeste)
+                        .padding(1)
+                )
         }
         .padding(0)
     }

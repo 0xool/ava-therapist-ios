@@ -359,6 +359,8 @@ extension ProfileView {
     }
 }
 
+#if DEBUG
 #Preview {
     ProfileView(viewModel: .init(container: .preview))
 }
+#endif

@@ -163,7 +163,7 @@ extension MainView {
                                     .weight(.medium)
                             )
                             .multilineTextAlignment(.center)
-                        
+                            .lineLimit(1)
                             .font(.caption)
                     }
                     .foregroundStyle(isSelected ? ColorPallet.DarkGreen : .gray)
@@ -362,8 +362,8 @@ extension MainView {
     }
 }
 
+#if DEBUG
 #Preview{
     MainView(viewModel: MainView.ViewModel(container: .preview ))
 }
-
-
+#endif

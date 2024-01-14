@@ -204,6 +204,8 @@ extension JournalListView{
     }
 }
 
+#if DEBUG
 #Preview {
     JournalListView(viewModel: .init(container: .init(appState: .preview, services: .stub)))
 }
+#endif

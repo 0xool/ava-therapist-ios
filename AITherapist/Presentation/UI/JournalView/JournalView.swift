@@ -388,6 +388,7 @@ extension JournalView {
     }
 }
 
+#if DEBUG
 struct JournalView_Preview: PreviewProvider {
     @Namespace static var namespace
     
@@ -395,4 +396,4 @@ struct JournalView_Preview: PreviewProvider {
         JournalView(viewModel: .init(container: .preview))
     }
 }
-
+#endif

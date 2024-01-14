@@ -55,7 +55,7 @@ struct MainInsightService: InsightService {
             }
             .flatMap { hasLoaded -> AnyPublisher<Void, Error> in
                 if hasLoaded {
-                    return Just<Void>.withErrorType(Error.self)
+                    return self.loadInsightFromServer()
                 } else {
                     return self.loadInsightFromServer()
                 }

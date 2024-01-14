@@ -268,8 +268,10 @@ extension InsightView {
     }
 }
 
+#if DEBUG
 struct InsightView_Previews: PreviewProvider {
     static var previews: some View {
         InsightView(viewModel: .init(container: .preview), showNewConversationChatView: Binding.constant(false))
     }
 }
+#endif
