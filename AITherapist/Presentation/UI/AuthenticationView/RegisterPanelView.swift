@@ -77,6 +77,7 @@ struct RegisterPanelView: View {
     @ViewBuilder var registerBtnView: some View{
         Button(action: {
             if self.enableRegisterBtn{
+                self.hideKeyboard()
                 onRegisterClicked()
             }
         }, label: {

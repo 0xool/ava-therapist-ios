@@ -132,3 +132,27 @@ struct DynamicTwoCircleBackgroundView: View {
         }
     }
 }
+
+
+struct MenuBackground: View {
+    var body: some View {
+        ZStack{
+            Rectangle()
+                .fill(ColorPallet.Celeste)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .backgroundStyle(ColorPallet.Celeste)
+                .ignoresSafeArea()
+            
+            RoundedRectangle(cornerRadius: 30)
+                .fill(ColorPallet.Verdigris)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .offset(y: UIViewController().view.bounds.height / 3)
+            
+            Image("EarBG")
+                .resizable()
+                .scaledToFit()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .ignoresSafeArea()
+        }
+    }
+}

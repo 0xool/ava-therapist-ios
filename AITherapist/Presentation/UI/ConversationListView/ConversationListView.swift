@@ -12,6 +12,17 @@ struct ConversationListView: View {
     @ObservedObject private(set) var viewModel: ViewModel
     @State private var searchText: String = ""
     
+    var filteredConversationList: [Conversation] { self.viewModel.conversations.value?.filter({
+        
+        guard let summary = $0.summary else{
+            return false
+        }
+        
+        return summary.contains(self.searchText)
+        
+    }).sorted { $0.dateCreated > $1.dateCreated } ?? []
+    }
+    
     var body: some View {
         mainContent
             .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -24,7 +35,7 @@ struct ConversationListView: View {
         case .isLoading(last: _, cancelBag: _):
             loadingView()
         case let .loaded(conversations):
-            loadedView(conversations/*.sorted(by: { $0.dateCreated > $1.dateCreated }).lazyList*/)
+            loadedView(conversations)
         case let .failed(error):
             failedView(error)
         case .partialLoaded(_):
@@ -61,7 +72,7 @@ private extension ConversationListView {
             
             return summary.contains(self.searchText)
             
-        })
+        }).sorted { $0.dateCreated > $1.dateCreated }
         
         return NavigationStack {
             VStack(spacing: 0){
@@ -78,13 +89,15 @@ private extension ConversationListView {
                                 ConversationCell(conversation: conversation)
                                     .background(.clear)
                                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                    
+                                
                                 AvaNavigationLink {
                                     TherapyChatView(viewModel: .init(conversation: conversation, container: self.viewModel.container))
                                         .avaNavigationBarTopLeftButton(.back)
                                         .avaNavigationBarTitle("")
                                 } label: {
                                     EmptyView()
+                                } background: {
+                                    TwoCircleBackgroundView()
                                 }
                                 .listRowBackground(Color.red)
                                 .opacity(0)
@@ -103,8 +116,6 @@ private extension ConversationListView {
                     .scrollContentBackground(.hidden)
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
                     .listStyle(.plain)
-                    
-
                 }
             }
         }
@@ -112,39 +123,38 @@ private extension ConversationListView {
 }
 
 extension ConversationListView{
-struct SearchableCustom: View {
-    
-    @Binding var searchtxt: String
-    @FocusState private var isSearchFocused: Bool // Track focus state
-    
-    var body: some View {
-        HStack {
+    struct SearchableCustom: View {
+        @Binding var searchtxt: String
+        @FocusState private var isSearchFocused: Bool // Track focus state
+        
+        var body: some View {
             HStack {
-                Image(systemName: "magnifyingglass")
-                TextField("Search keywords", text: $searchtxt)
-                    .focused($isSearchFocused) // Track focus state
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 8)
-            }
-            .padding(.horizontal)
-            .background(Color(.secondarySystemBackground))
-            .cornerRadius(10)
-            .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.gray, lineWidth: 1))
-            
-            if isSearchFocused {
-                Button("Cancel") {
-                    searchtxt = ""
-                    withAnimation(.spring()) {
-                        isSearchFocused = false
-                    }
+                HStack {
+                    Image(systemName: "magnifyingglass")
+                    TextField("Search keywords", text: $searchtxt)
+                        .focused($isSearchFocused) // Track focus state
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 8)
                 }
-                .transition(.move(edge: .trailing)) // Add animation for cancel button
+                .padding(.horizontal)
+                .background(Color(.secondarySystemBackground))
+                .cornerRadius(10)
+                .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.gray, lineWidth: 1))
+                
+                if isSearchFocused {
+                    Button("Cancel") {
+                        searchtxt = ""
+                        withAnimation(.spring()) {
+                            isSearchFocused = false
+                        }
+                    }
+                    .transition(.move(edge: .trailing)) // Add animation for cancel button
+                }
             }
+            .frame(maxWidth: .infinity)
+            .padding(.horizontal)
         }
-        .frame(maxWidth: .infinity)
-        .padding(.horizontal)
     }
-}
 }
 
 extension ConversationListView{
@@ -308,7 +318,9 @@ extension ConversationListView {
         
         private func loadConversationListIfNotRequested() {
             if (conversations == .notRequested) {
-                self.container.services.conversationService.loadConversationList(conversations: self.loadableSubject(\.conversations))
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    self.container.services.conversationService.loadConversationList(conversations: self.loadableSubject(\.conversations))
+                }
             }
         }
         
@@ -328,7 +340,7 @@ extension ConversationListView {
             guard let conversationID = self.conversations.value?[index].id else {
                 return
             }
-
+            
             self.conversations = .loaded(self.conversations.value?.filter({ $0.id != conversationID
             }) .lazyList ?? [].lazyList)
             self.container.services.conversationService.deleteConversation(conversationID: conversationID)
@@ -337,7 +349,8 @@ extension ConversationListView {
                     case .finished:
                         break
                     case .failure:
-                        self.loadConversationList()
+                        //                        self.loadConversationList()
+                        break
                     }
                 }, receiveValue: {
                     

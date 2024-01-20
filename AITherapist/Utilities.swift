@@ -41,6 +41,7 @@ extension ColorPallet {
     static let CelesteLight: Color = Color(red: 0.76, green: 0.99, blue: 0.99)
     
     static let DarkBlue: Color = Color(red: 0.01, green: 0.16, blue: 0.21)
+    static let DeepAquaBlue: Color = Color(red: 0.08, green: 0.43, blue: 0.55)
     
     static let IconBlue: Color = Color(red: 20/255, green: 110/255, blue: 139/255)
     static let TertiaryYellow: Color = Color(red: 0.93, green: 0.74, blue: 0.16)
@@ -49,11 +50,14 @@ extension ColorPallet {
     static let Verdigris: Color = Color(red: 0.29, green: 0.69, blue: 0.69)
     static let DarkBlack: Color = Color(red: 0.02, green: 0.11, blue: 0.11)
     static let SkyBlue: Color = Color(red: 0.16, green: 0.74, blue: 0.93)
+    
     static let DiaryDateBlue: Color = Color(red: 0.04, green: 0.29, blue: 0.37)
     static let DiaryIconBlue: Color = Color(red: 31/255, green: 148/255, blue: 187/255)
     static let DiaryTagBorder: Color = Color(red: 0.22, green: 0.53, blue: 0.53)
-    static let DiarySaveButtonBlue: Color = Color(red: 0.08, green: 0.43, blue: 0.55)
-
+    
+    static let DiarySaveButtonBlue: Color = DeepAquaBlue
+    
+    
 }
 
 

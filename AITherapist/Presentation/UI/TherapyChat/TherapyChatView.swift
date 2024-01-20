@@ -25,17 +25,6 @@ struct TherapyChatView: View {
     @Binding var showSheet: Bool
     
     private let MessageViewLineLimitMax = 6
-    private var keyboardHeightPublisher: AnyPublisher<CGFloat, Never> {
-        Publishers.Merge(
-            NotificationCenter.default
-                .publisher(for: UIResponder.keyboardWillShowNotification)
-                .compactMap { $0.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue }
-                .map { $0.cgRectValue.height },
-            NotificationCenter.default
-                .publisher(for: UIResponder.keyboardWillHideNotification)
-                .map { _ in CGFloat(0) }
-        ).eraseToAnyPublisher()
-    }
     
     init(viewModel: ViewModel, withBackButton: Bool = false, showSheet: Binding<Bool> = .constant(false)) {
         self.viewModel = viewModel
@@ -64,6 +53,7 @@ struct TherapyChatView: View {
             }
             
         }
+        .padding([.leading, .trailing], 16)
     }
     
     private func sendMessage() {
@@ -139,14 +129,6 @@ struct TherapyChatView: View {
     }
 }
 
-extension TherapyChatView {
-    struct ChatView: View {
-        var body: some View {
-            /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Hello, world!@*/Text("Hello, world!")/*@END_MENU_TOKEN@*/
-        }
-    }
-}
-
 private extension TherapyChatView {
     private var notRequestedView: some View {
         Text("").onAppear{
@@ -219,9 +201,6 @@ private extension TherapyChatView {
                 }
                 .background(ColorPallet.DarkGreen.opacity(0.6))
                 .frame(maxHeight: 75, alignment: .center)
-            }
-            .background{
-                TwoCircleBackgroundView()
             }
         }
         .onTapGesture {

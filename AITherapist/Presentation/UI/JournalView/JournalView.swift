@@ -192,7 +192,7 @@ extension JournalView{
                 GeometryReader{ geo in
                     TextEditor(text: $journalEntryText)
                         .font(Font.custom("SF Pro Text", size: 20))
-                        .foregroundColor(Color(red: 0.5, green: 0.5, blue: 0.5))
+                        .foregroundColor(ColorPallet.DarkGreen)
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
                         .scrollContentBackground(.hidden)
                         .background(.clear)

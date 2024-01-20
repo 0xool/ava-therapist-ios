@@ -275,6 +275,9 @@ extension MainView {
                 .offset(y: -screenWidth + 100)
             
             Image("EarBG")
+                .resizable()
+                .scaledToFit()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
 

@@ -5,48 +5,88 @@
 //  Created by Cyrus Refahi on 9/7/23.
 //
 
-
 import SwiftUI
 
 struct ErrorView: View {
     let error: Error
     let retryAction: () -> Void
     
-    var body: some View {
-        VStack {
-            Text("An Error Occured")
-                .font(.title)
-            Text(error.localizedDescription)
-                .font(.callout)
-                .multilineTextAlignment(.center)
-                .padding(.bottom, 40).padding()
-            retryBtnView
-        }
-        .padding(32)
-        .background(
-            RoundedRectangle(cornerRadius: 16)
-                .fill(ColorPallet.Celeste)
-                .shadow(radius: 8)
-        )
+    private var formHeight: CGFloat {
+        CGFloat(UIViewController().view.bounds.height * 0.7)
     }
     
-    @ViewBuilder var retryBtnView: some View{
-        Button(action: {
-            retryAction()
-        }, label: {
-            Text("Retry")
-                .font(
-                    Font.custom("SF Pro Text", size: 16)
-                        .weight(.semibold)
-                )
-                .multilineTextAlignment(.center)
-                .foregroundColor(ColorPallet.TextYellow)
-        })
-        .padding(.horizontal, 50)
-        .padding(.vertical, 5)
-        .frame(height: 54, alignment: .center)
-        .background(ColorPallet.DarkGreen)
-        .cornerRadius(50)
+    var body: some View {
+        mainView
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(MenuBackground())
+    }
+    
+    @ViewBuilder var mainView: some View {
+        ZStack {
+            VStack(spacing: 24){
+                Text("Oops!\n")
+                    .bold()
+                    .font(.title)
+                    .multilineTextAlignment(.center)
+                    .foregroundColor(ColorPallet.DarkBlue)
+                    .frame(alignment: .top)
+                    .padding(.top, 16)
+                VStack{
+                    Text("Looks like something went wrong!")
+                        .fixedSize(horizontal: false, vertical: true)
+                        .font(Font.custom("SF Pro Text", size: 17))
+                        .multilineTextAlignment(.center)
+                        .lineLimit(3)
+                        .foregroundColor(ColorPallet.DarkBlue)
+                        .frame(alignment: .top)
+                    Text("\(error.localizedDescription)")
+                        .fixedSize(horizontal: false, vertical: true)
+                        .font(.footnote)
+                        .multilineTextAlignment(.center)
+                        .lineLimit(3)
+                        .foregroundColor(ColorPallet.DarkBlue)
+                        .frame(alignment: .top)
+                }
+                                
+                errorIcon
+                
+                Spacer()
+                
+                Button(action: {
+                    retryAction()
+                }, label: {
+                    Text("Retry")
+                        .foregroundStyle(ColorPallet.Celeste)
+                        .bold()
+                })
+                .padding(.horizontal, 30)
+                .padding(.vertical, 0)
+                .frame(maxWidth: .infinity, minHeight: 40, maxHeight: 40, alignment: .center)
+                .background(ColorPallet.DeepAquaBlue)
+                .cornerRadius(50)
+                
+            Spacer()
+                
+            }
+            .padding()
+            .frame(maxHeight: .infinity)
+            
+            
+        }
+        .frame(height: formHeight)
+        .frame(maxWidth: .infinity)
+        .background(.white)
+        .cornerRadius(25)
+        .shadow(color: .black.opacity(0.25), radius: 3.5, x: 4, y: 6)
+        .padding()
+    }
+    
+    @ViewBuilder var errorIcon: some View{
+        ZStack{
+            Image("ErrorEar")
+            Image("Mobile")
+            Image("ErrorCross")
+        }
     }
 }
 

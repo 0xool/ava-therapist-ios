@@ -58,6 +58,7 @@ struct LoginPanelView: View {
     
     @ViewBuilder var loginBtnView: some View{
         Button(action: {
+            self.hideKeyboard()
             onLoginClicked()
         }, label: {
             Text("Login")

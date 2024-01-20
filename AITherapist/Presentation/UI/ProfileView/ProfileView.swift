@@ -216,6 +216,40 @@ extension ProfileView{
                 return "ellipsis.message"
             }
         }
+        
+        @ViewBuilder var view: some View {
+            switch self {
+            case .editProfile:
+                Text(self.title)
+            case .settings:
+                Text(self.title)
+            case .prefrences:
+                Text(self.title)
+            case .invite:
+                InviteFriendView()
+            case .help:
+                HelpView()
+            }
+        }
+        
+        @ViewBuilder private var helpBackground: some View {
+            MenuBackground()
+        }
+        
+        @ViewBuilder var background: some View {
+            switch self {
+            case .editProfile:
+                helpBackground
+            case .settings:
+                helpBackground
+            case .prefrences:
+                helpBackground
+            case .invite:
+                helpBackground
+            case .help:
+                helpBackground
+            }
+        }
     }
     
     struct ProfileSettingView: View {
@@ -291,12 +325,14 @@ extension ProfileView{
                         .frame(width: 350, alignment: .center)
                         
                         AvaNavigationLink {
-                            Text(settingType.title)
+                            settingType.view
                                 .avaNavigationBarTopLeftButton(.back)
                                 .avaNavigationBarTitle("")
                         } label: {
                             Text("")
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        } background: {
+                            settingType.background
                         }
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                     }

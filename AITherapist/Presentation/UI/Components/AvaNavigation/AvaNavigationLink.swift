@@ -7,15 +7,17 @@
 
 import SwiftUI
 
-struct AvaNavigationLink<Label, Destination> : View where Label : View, Destination : View {
+struct AvaNavigationLink<Label, Destination, Background> : View where Background: View, Label : View, Destination : View {
     
     let label: Label
     let destination: Destination
+    let background: Background
     
-    public init(@ViewBuilder destination: () -> Destination, @ViewBuilder label: () -> Label)
+    public init(@ViewBuilder destination: () -> Destination, @ViewBuilder label: () -> Label, @ViewBuilder background: () -> Background)
     {
         self.destination = destination()
         self.label = label()
+        self.background = background()
     }
     
     var body: some View {
@@ -23,9 +25,10 @@ struct AvaNavigationLink<Label, Destination> : View where Label : View, Destinat
             AvaNavBarView{
                 destination
             } background: {
-                EmptyView()
+                self.background
             }
             .navigationBarBackButtonHidden(true)
+            .toolbarBackground(.hidden, for: .navigationBar)
         } label: {
             label
         }
@@ -39,6 +42,8 @@ struct AvaNavigationLink<Label, Destination> : View where Label : View, Destinat
             Text("des")
         } label: {
             Text("Click me")
+        }background: {
+            EmptyView()
         }
     } background: {
         Color.blue

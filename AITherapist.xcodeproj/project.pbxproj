@@ -74,6 +74,7 @@
 		A531A67C2B2C349800EDD26D /* ChatWebRepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A531A67B2B2C349800EDD26D /* ChatWebRepositoryTests.swift */; };
 		A53210D12B3B41D800CE156F /* RegisterPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53210D02B3B41D800CE156F /* RegisterPanelView.swift */; };
 		A53DD8BB2B24FA4900C98BD0 /* MockInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53DD8BA2B24FA4900C98BD0 /* MockInterceptor.swift */; };
+		A542634E2B5C3BD7006F3A91 /* InviteFriendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A542634D2B5C3BD7006F3A91 /* InviteFriendView.swift */; };
 		A54FFEEE2B2FDFA600ECFCF2 /* JournalServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54FFEED2B2FDFA600ECFCF2 /* JournalServiceTests.swift */; };
 		A54FFEF02B2FF20600ECFCF2 /* InsightDBRepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54FFEEF2B2FF20600ECFCF2 /* InsightDBRepositoryTests.swift */; };
 		A54FFEF22B2FFCB000ECFCF2 /* ChatDBRepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54FFEF12B2FFCB000ECFCF2 /* ChatDBRepositoryTests.swift */; };
@@ -155,6 +156,7 @@
 		A5BBCED12B1291B9000AC83C /* ImagePersistenceRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BBCED02B1291B9000AC83C /* ImagePersistenceRepository.swift */; };
 		A5BBCED42B129F83000AC83C /* ProfileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BBCED32B129F83000AC83C /* ProfileService.swift */; };
 		A5C148882B29555200D6C836 /* JournalWebRepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C148872B29555200D6C836 /* JournalWebRepositoryTests.swift */; };
+		A5C2D3452B564E1300F97116 /* HelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C2D3442B564E1300F97116 /* HelpView.swift */; };
 		A5C55FDB2AA55DBD00154ED0 /* CancelBag.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C55FDA2AA55DBD00154ED0 /* CancelBag.swift */; };
 		A5C7675F2B4343A800DDD3C5 /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C7675E2B4343A800DDD3C5 /* UserManager.swift */; };
 		A5CA948B2AA7D74300E25A46 /* ConversationDBRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5CA948A2AA7D74300E25A46 /* ConversationDBRepository.swift */; };
@@ -277,6 +279,7 @@
 		A53210D02B3B41D800CE156F /* RegisterPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterPanelView.swift; sourceTree = "<group>"; };
 		A53DD8BA2B24FA4900C98BD0 /* MockInterceptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockInterceptor.swift; sourceTree = "<group>"; };
 		A53DD8BC2B25694900C98BD0 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/iPhoneOS.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		A542634D2B5C3BD7006F3A91 /* InviteFriendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteFriendView.swift; sourceTree = "<group>"; };
 		A54FFEED2B2FDFA600ECFCF2 /* JournalServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalServiceTests.swift; sourceTree = "<group>"; };
 		A54FFEEF2B2FF20600ECFCF2 /* InsightDBRepositoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightDBRepositoryTests.swift; sourceTree = "<group>"; };
 		A54FFEF12B2FFCB000ECFCF2 /* ChatDBRepositoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatDBRepositoryTests.swift; sourceTree = "<group>"; };
@@ -354,6 +357,7 @@
 		A5BBCED02B1291B9000AC83C /* ImagePersistenceRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePersistenceRepository.swift; sourceTree = "<group>"; };
 		A5BBCED32B129F83000AC83C /* ProfileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileService.swift; sourceTree = "<group>"; };
 		A5C148872B29555200D6C836 /* JournalWebRepositoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalWebRepositoryTests.swift; sourceTree = "<group>"; };
+		A5C2D3442B564E1300F97116 /* HelpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpView.swift; sourceTree = "<group>"; };
 		A5C55FDA2AA55DBD00154ED0 /* CancelBag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelBag.swift; sourceTree = "<group>"; };
 		A5C7675E2B4343A800DDD3C5 /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
 		A5CA948A2AA7D74300E25A46 /* ConversationDBRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationDBRepository.swift; sourceTree = "<group>"; };
@@ -659,6 +663,14 @@
 			path = Shape;
 			sourceTree = "<group>";
 		};
+		A542634C2B5C3BBF006F3A91 /* InviteFriendView */ = {
+			isa = PBXGroup;
+			children = (
+				A542634D2B5C3BD7006F3A91 /* InviteFriendView.swift */,
+			);
+			path = InviteFriendView;
+			sourceTree = "<group>";
+		};
 		A55BCAD92AA439B300C8335E /* Diary */ = {
 			isa = PBXGroup;
 			children = (
@@ -942,6 +954,8 @@
 		A59EB1512ACA28A900F31A12 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				A542634C2B5C3BBF006F3A91 /* InviteFriendView */,
+				A5C2D3432B564DDF00F97116 /* EditView */,
 				A574F5112B0316D500624890 /* ProfileView */,
 				A56D938F2AFB31EE00A66366 /* NewChatView */,
 				A51CF3C92AF8A3FE0006F275 /* JournalView */,
@@ -1073,6 +1087,14 @@
 			name = Resources;
 			path = /Users/cyrusrefahi/Documents/AITherapist/AITherapist/Resources;
 			sourceTree = "<absolute>";
+		};
+		A5C2D3432B564DDF00F97116 /* EditView */ = {
+			isa = PBXGroup;
+			children = (
+				A5C2D3442B564E1300F97116 /* HelpView.swift */,
+			);
+			path = EditView;
+			sourceTree = "<group>";
 		};
 		A5CA949A2AA81AA100E25A46 /* UnitTest */ = {
 			isa = PBXGroup;
@@ -1376,6 +1398,7 @@
 				A51CF3CE2AF8A64E0006F275 /* Journal.swift in Sources */,
 				A59C63F82ACA37EE00B76256 /* CustomTabBar.swift in Sources */,
 				A578EACC2AA418A200D992AD /* Message.swift in Sources */,
+				A542634E2B5C3BD7006F3A91 /* InviteFriendView.swift in Sources */,
 				A59C64092ACA58E500B76256 /* ChartView.swift in Sources */,
 				A5CA948B2AA7D74300E25A46 /* ConversationDBRepository.swift in Sources */,
 				A576DFB92B2AD4D5004C950B /* MockedData.swift in Sources */,
@@ -1441,6 +1464,7 @@
 				A566DCA12AA503A200920940 /* WebRepository.swift in Sources */,
 				A50A1A6D2AA44CE000A6AD6D /* SceneDelegate.swift in Sources */,
 				A5CA94A42AA9646500E25A46 /* UserDBRepository.swift in Sources */,
+				A5C2D3452B564E1300F97116 /* HelpView.swift in Sources */,
 				A59C63F12ACA37EE00B76256 /* LoginView.swift in Sources */,
 				A59C64012ACA37EE00B76256 /* MessageView.swift in Sources */,
 				A596AD1229B4385100C19DA6 /* MicManager.swift in Sources */,
@@ -1650,7 +1674,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1.0;
+				MARKETING_VERSION = 0.1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = CyrusRefahi.AITherapist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1689,7 +1713,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1.0;
+				MARKETING_VERSION = 0.1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = CyrusRefahi.AITherapist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
