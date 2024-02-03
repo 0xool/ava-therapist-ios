@@ -15,7 +15,6 @@ struct UserServerResponse: ServerResponse {
 }
 
 class User: Object, Codable {
-    
     @Persisted(primaryKey: true) var id: Int
     @Persisted var userName: String
     @Persisted var therapistID: Int?
@@ -27,7 +26,7 @@ class User: Object, Codable {
     @Persisted var email: String
     @Persisted var generalSummary: String?
     @Persisted var token: String
-    
+        
     enum CodingKeys: String, CodingKey {
         case id = "userID"
         case userName = "username"
@@ -47,12 +46,15 @@ class User: Object, Codable {
     convenience init(id: Int, userName: String, therapistID: Int?, mobile: String, name: String?, lastName: String?, email: String, generalSummary: String?, token: String) {
         self.init()
         self.id = id
+        
         self.userName = userName
         self.therapistID = therapistID
         self.mobile = mobile
+        
         self.name = name
         self.lastName = lastName
         self.email = email
+        
         self.generalSummary = generalSummary
         self.token = token
     }
@@ -75,5 +77,20 @@ class User: Object, Codable {
             UserDefaults.standard.set(token, forKey: "token")
         }
     }
+}
+
+struct EditUserInfoRequest: Encodable{
+    var user: EditUserData
     
+    struct EditUserData: Encodable {
+        var username: String
+        var name: String
+        var lastName: String
+    }
+}
+
+struct EditUserInfoResponse: ServerResponse {
+    var message: String?
+    var code: Int?
+    var data: String
 }

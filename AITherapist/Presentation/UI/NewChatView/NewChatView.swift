@@ -13,6 +13,8 @@ struct NewChatView: View {
     
     var body: some View {
         content
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(TwoCircleBackgroundView())
     }
     
     @ViewBuilder private var content: some View {
@@ -38,6 +40,7 @@ struct NewChatView: View {
 private extension NewChatView {
     private func loadedView(_ conversation: Conversation) -> some View{
         TherapyChatView(viewModel: .init(conversation: conversation, container: self.viewModel.container), withBackButton: true, showSheet: $show)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
     
     private var notRequestedView: some View {
@@ -63,6 +66,7 @@ extension NewChatView{
     class ViewModel: ObservableObject {
         let container: DIContainer
         let isRunningTests: Bool
+        
         @Published var conversation: Loadable<Conversation>
         private var cancelBag = CancelBag()
         

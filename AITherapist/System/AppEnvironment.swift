@@ -32,6 +32,7 @@ extension AppEnvironment {
                 deepLinksHandler.open(deepLink: .showCountryFlag(alpha3Code: "AFG"))
             }
         */
+        
         let session = configuredURLSession()
         let webRepositories = configuredWebRepositories(session: session)
         let dbRepositories = configuredDBRepositories(appState: appState)
@@ -75,25 +76,19 @@ extension AppEnvironment {
 
     private static func configuredWebRepositories(session: URLSession) -> DIContainer.WebRepositories {
         let baseURL: String = Constants.MainUrl
-//        let countriesWebRepository = RealCountriesWebRepository(
-//            session: session,
-//            baseURL: "https://restcountries.com/v2")
-//        let imageWebRepository = RealImageWebRepository(
-//            session: session,
-//            baseURL: "https://ezgif.com")
-        
         let authenticationWebRepository = MainAuthenticateWebRepository(baseURL: baseURL, session: session)
         let pushTokenWebRepository = RealPushTokenWebRepository(
             session: session,
             baseURL: "https://fake.backend.com")
-        let conversationWebRepository = MainConversationWebRepository(baseURL: baseURL, session: session)
         
+        let conversationWebRepository = MainConversationWebRepository(baseURL: baseURL, session: session)
         let insightWebRepository = MainInsightWebRepository(session: session, baseURL: baseURL)
         let chatWebRepoistory = MainChatWebRepository(baseURL: baseURL, session: session)
         
         let journalWebRepository = MainJournalWebRepository(baseURL: baseURL, session: session)
+        let userWebRepository = MainUserWebRepository(baseURL: baseURL, session: session)
         
-        return .init(conversationRepository: conversationWebRepository, pushTokenWebRepository: pushTokenWebRepository, authenticationRepository: authenticationWebRepository, insightRepository: insightWebRepository, chatRepository: chatWebRepoistory, journalRepository: journalWebRepository)
+        return .init(conversationRepository: conversationWebRepository, pushTokenWebRepository: pushTokenWebRepository, authenticationRepository: authenticationWebRepository, insightRepository: insightWebRepository, chatRepository: chatWebRepoistory, journalRepository: journalWebRepository, userRepository: userWebRepository)
     }
     
     private static func configuredDBRepositories(appState: Store<AppState>) -> DIContainer.DBRepositories {
@@ -103,8 +98,9 @@ extension AppEnvironment {
         
         let chatDBRepository = MainChatDBRepository()
         let journalDBRepository = MainJournalDBRepository()
+        let settingDBRepository = MainSettingDBRepository()
         
-        return .init(conversationRepository: conversationDBRepository, userRepository: userDBRepository, insightRepository: insightDBRepository, chatRepository: chatDBRepository, journalRepository: journalDBRepository)
+        return .init(conversationRepository: conversationDBRepository, userRepository: userDBRepository, insightRepository: insightDBRepository, chatRepository: chatDBRepository, journalRepository: journalDBRepository, settingRepository: settingDBRepository)
     }
     
     private static func configurePersistenceRepositories(app: Store<AppState>) -> DIContainer.PersistenceRepositories {
@@ -118,12 +114,12 @@ extension AppEnvironment {
     ) -> DIContainer.Services {
 
         let insightService = MainInsightService(insightRepository: webRepositories.insightRepository, appState: appState, insightDBRepository: dbRepositories.insightRepository)
-        let authenticationService = MainAuthenticationService(appState: appState, authenticateRepository: webRepositories.authenticationRepository, userDBRepository: dbRepositories.userRepository)
+        let authenticationService = MainAuthenticationService(appState: appState, authenticateRepository: webRepositories.authenticationRepository, userDBRepository: dbRepositories.userRepository, settingDBRepository: dbRepositories.settingRepository)
         let chatService = MainChatService(chatRepository: webRepositories.chatRepository, appState: appState, chatDBRepository: dbRepositories.chatRepository)
         
         let conversationService = MainConversationService(conversationRepository: webRepositories.conversationRepository, appState: appState, conversationDBRepository: dbRepositories.conversationRepository, chatService: chatService)
         let journalService = MainJournalService(journalRepository: webRepositories.journalRepository, journalDBRepository: dbRepositories.journalRepository, appState: appState)
-        let profileService = MainProfileService(imagePersistenceRepository: persistenceRepositories.imagePersistenceRepository, appState: appState)
+        let profileService = MainProfileService(imagePersistenceRepository: persistenceRepositories.imagePersistenceRepository, userWebRepository: webRepositories.userRepository, userDBRepository: dbRepositories.userRepository, appState: appState)
 
         let userPermissionsService = MainUserPermissionsService(
             appState: appState, openAppSettings: {
@@ -138,7 +134,6 @@ extension AppEnvironment {
 
 extension DIContainer {
     struct WebRepositories {
-//        let imageRepository: ImageWebRepository
         let conversationRepository: ConversationWebRepository
         let pushTokenWebRepository: PushTokenWebRepository
         let authenticationRepository: AuthenticateWebRepository
@@ -146,6 +141,8 @@ extension DIContainer {
         let insightRepository: InsightWebRepository
         let chatRepository: ChatWebRepository
         let journalRepository: JournalWebRepository
+        
+        let userRepository: UserWebRepository
     }
 
     struct DBRepositories {
@@ -154,6 +151,7 @@ extension DIContainer {
         let insightRepository: InsightDBRepository
         let chatRepository: ChatDBRepository
         let journalRepository: JournalDBRepository
+        let settingRepository: SettingDBRepository
     }
     
     struct PersistenceRepositories {

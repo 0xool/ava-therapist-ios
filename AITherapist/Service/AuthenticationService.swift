@@ -19,12 +19,15 @@ class MainAuthenticationService: AuthenticationService {
     
     let authenticateRepository: AuthenticateWebRepository
     let userDBRepository: UserDBRepository
+    let settingDBRepository: SettingDBRepository
     let appState: Store<AppState>
     
-    init(appState: Store<AppState>, authenticateRepository: AuthenticateWebRepository, userDBRepository: UserDBRepository){
+    init(appState: Store<AppState>, authenticateRepository: AuthenticateWebRepository, userDBRepository: UserDBRepository, settingDBRepository: SettingDBRepository){
         self.appState = appState
         self.authenticateRepository = authenticateRepository
         self.userDBRepository = userDBRepository
+        
+        self.settingDBRepository = settingDBRepository
     }
     
     func checkUserLoggedStatus() {
@@ -75,8 +78,9 @@ class MainAuthenticationService: AuthenticationService {
         authenticateRepository
             .login(email: email, password: password)
             .ensureTimeSpan(requestHoldBackTimeInterval)
-            .map { [userDBRepository] in
-                _ = userDBRepository.store(user: $0)                
+            .map { [userDBRepository, settingDBRepository] in
+                _ = userDBRepository.store(user: $0.data.user)
+                _ = settingDBRepository.store(setting: $0.data.userSetting)
             }
             .eraseToAnyPublisher()
     }
@@ -116,8 +120,9 @@ extension MainAuthenticationService {
         authenticateRepository
             .register(nickname: nickname, email: email, password: password, mobileNumber: mobileNumber)
             .ensureTimeSpan(requestHoldBackTimeInterval)
-            .map { [userDBRepository] in
-                _ = userDBRepository.store(user: $0)
+            .map { [userDBRepository, settingDBRepository] in
+                _ = settingDBRepository.store(setting: $0.data.userSetting)
+                _ = userDBRepository.store(user: $0.data.user)
             }
             .eraseToAnyPublisher()
     }
@@ -131,6 +136,5 @@ struct StubAuthenticateService: AuthenticationService {
     }
     
     func registerUser(nickname: String, email: String, password: String, mobileNumber: String){
-        
     }
  }

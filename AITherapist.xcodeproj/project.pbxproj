@@ -72,9 +72,12 @@
 		A52EF6D72B0EE50F007D17CE /* AnimatableText.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52EF6D62B0EE50E007D17CE /* AnimatableText.swift */; };
 		A531A67A2B2C319100EDD26D /* AuthenticateWebRepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A531A6792B2C319100EDD26D /* AuthenticateWebRepositoryTests.swift */; };
 		A531A67C2B2C349800EDD26D /* ChatWebRepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A531A67B2B2C349800EDD26D /* ChatWebRepositoryTests.swift */; };
+		A531AE2A2B5F6587009D16ED /* UserWebRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A531AE292B5F6587009D16ED /* UserWebRepository.swift */; };
 		A53210D12B3B41D800CE156F /* RegisterPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53210D02B3B41D800CE156F /* RegisterPanelView.swift */; };
 		A53DD8BB2B24FA4900C98BD0 /* MockInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53DD8BA2B24FA4900C98BD0 /* MockInterceptor.swift */; };
 		A542634E2B5C3BD7006F3A91 /* InviteFriendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A542634D2B5C3BD7006F3A91 /* InviteFriendView.swift */; };
+		A54263502B5C67EB006F3A91 /* JournalSavedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A542634F2B5C67EB006F3A91 /* JournalSavedView.swift */; };
+		A54A9BBB2B5E0C4800ADEE2C /* EditUserSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54A9BBA2B5E0C4800ADEE2C /* EditUserSettingsView.swift */; };
 		A54FFEEE2B2FDFA600ECFCF2 /* JournalServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54FFEED2B2FDFA600ECFCF2 /* JournalServiceTests.swift */; };
 		A54FFEF02B2FF20600ECFCF2 /* InsightDBRepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54FFEEF2B2FF20600ECFCF2 /* InsightDBRepositoryTests.swift */; };
 		A54FFEF22B2FFCB000ECFCF2 /* ChatDBRepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54FFEF12B2FFCB000ECFCF2 /* ChatDBRepositoryTests.swift */; };
@@ -169,10 +172,16 @@
 		A5CA94A42AA9646500E25A46 /* UserDBRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5CA94A32AA9646500E25A46 /* UserDBRepository.swift */; };
 		A5CA94BA2AAAB6F400E25A46 /* splashScreen.json in Resources */ = {isa = PBXBuildFile; fileRef = A5CA94B52AAAA4E300E25A46 /* splashScreen.json */; };
 		A5CE62B32B2676D8000D8E2A /* ViewInspector in Frameworks */ = {isa = PBXBuildFile; productRef = A5CE62B22B2676D8000D8E2A /* ViewInspector */; };
+		A5EBAED22B69F4B100D45C08 /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5EBAED12B69F4B100D45C08 /* SettingView.swift */; };
 		A5EF5C942B05B2D00048CAD0 /* JournalService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5EF5C932B05B2D00048CAD0 /* JournalService.swift */; };
 		A5EFC5912AC1072300D6097B /* Insight.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5EFC5902AC1072300D6097B /* Insight.swift */; };
 		A5EFC5932AC10F0C00D6097B /* Quote.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5EFC5922AC10F0C00D6097B /* Quote.swift */; };
 		A5EFC5962AC10FC600D6097B /* Mood.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5EFC5952AC10FC600D6097B /* Mood.swift */; };
+		A5F1D5D12B6DF3A90035D5CD /* Setting.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5F1D5D02B6DF3A90035D5CD /* Setting.swift */; };
+		A5F1D5D32B6E00340035D5CD /* SettingDBRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5F1D5D22B6E00340035D5CD /* SettingDBRepository.swift */; };
+		A5F1D5D52B6EBB090035D5CD /* SettingWebRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5F1D5D42B6EBB090035D5CD /* SettingWebRepository.swift */; };
+		A5F1D5D82B6EC7C40035D5CD /* Persona.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5F1D5D72B6EC7C40035D5CD /* Persona.swift */; };
+		A5F1D5DA2B6EF9640035D5CD /* SettingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5F1D5D92B6EF9640035D5CD /* SettingService.swift */; };
 		F5BED7ECE5A1009911E9192C /* Pods_AITherapist.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 470052D87753E53A6EB3A9BF /* Pods_AITherapist.framework */; };
 /* End PBXBuildFile section */
 
@@ -276,10 +285,13 @@
 		A52EF6D62B0EE50E007D17CE /* AnimatableText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatableText.swift; sourceTree = "<group>"; };
 		A531A6792B2C319100EDD26D /* AuthenticateWebRepositoryTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticateWebRepositoryTests.swift; sourceTree = "<group>"; };
 		A531A67B2B2C349800EDD26D /* ChatWebRepositoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatWebRepositoryTests.swift; sourceTree = "<group>"; };
+		A531AE292B5F6587009D16ED /* UserWebRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserWebRepository.swift; sourceTree = "<group>"; };
 		A53210D02B3B41D800CE156F /* RegisterPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterPanelView.swift; sourceTree = "<group>"; };
 		A53DD8BA2B24FA4900C98BD0 /* MockInterceptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockInterceptor.swift; sourceTree = "<group>"; };
 		A53DD8BC2B25694900C98BD0 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/iPhoneOS.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		A542634D2B5C3BD7006F3A91 /* InviteFriendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteFriendView.swift; sourceTree = "<group>"; };
+		A542634F2B5C67EB006F3A91 /* JournalSavedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalSavedView.swift; sourceTree = "<group>"; };
+		A54A9BBA2B5E0C4800ADEE2C /* EditUserSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditUserSettingsView.swift; sourceTree = "<group>"; };
 		A54FFEED2B2FDFA600ECFCF2 /* JournalServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalServiceTests.swift; sourceTree = "<group>"; };
 		A54FFEEF2B2FF20600ECFCF2 /* InsightDBRepositoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightDBRepositoryTests.swift; sourceTree = "<group>"; };
 		A54FFEF12B2FFCB000ECFCF2 /* ChatDBRepositoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatDBRepositoryTests.swift; sourceTree = "<group>"; };
@@ -372,10 +384,16 @@
 		A5CA94A12AA959BD00E25A46 /* AuthenticationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationService.swift; sourceTree = "<group>"; };
 		A5CA94A32AA9646500E25A46 /* UserDBRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDBRepository.swift; sourceTree = "<group>"; };
 		A5CA94B52AAAA4E300E25A46 /* splashScreen.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = splashScreen.json; path = AITherapist/Resources/Assets/AfterEffects/splashScreen.json; sourceTree = SOURCE_ROOT; };
+		A5EBAED12B69F4B100D45C08 /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
 		A5EF5C932B05B2D00048CAD0 /* JournalService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalService.swift; sourceTree = "<group>"; };
 		A5EFC5902AC1072300D6097B /* Insight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Insight.swift; sourceTree = "<group>"; };
 		A5EFC5922AC10F0C00D6097B /* Quote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Quote.swift; sourceTree = "<group>"; };
 		A5EFC5952AC10FC600D6097B /* Mood.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mood.swift; sourceTree = "<group>"; };
+		A5F1D5D02B6DF3A90035D5CD /* Setting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Setting.swift; sourceTree = "<group>"; };
+		A5F1D5D22B6E00340035D5CD /* SettingDBRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingDBRepository.swift; sourceTree = "<group>"; };
+		A5F1D5D42B6EBB090035D5CD /* SettingWebRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingWebRepository.swift; sourceTree = "<group>"; };
+		A5F1D5D72B6EC7C40035D5CD /* Persona.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persona.swift; sourceTree = "<group>"; };
+		A5F1D5D92B6EF9640035D5CD /* SettingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingService.swift; sourceTree = "<group>"; };
 		E42015C30DF5C284A403DE1D /* Pods-AITherapist.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AITherapist.debug.xcconfig"; path = "Target Support Files/Pods-AITherapist/Pods-AITherapist.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -595,6 +613,7 @@
 				A51CF3CA2AF8A48E0006F275 /* JournalView.swift */,
 				A56C8C2A2B00316200D586E6 /* DaySelectorView.swift */,
 				A56C8C2E2B00C2F200D586E6 /* JournalListView.swift */,
+				A542634F2B5C67EB006F3A91 /* JournalSavedView.swift */,
 			);
 			path = JournalView;
 			sourceTree = "<group>";
@@ -671,6 +690,14 @@
 			path = InviteFriendView;
 			sourceTree = "<group>";
 		};
+		A54A9BB92B5E0C2B00ADEE2C /* EditUserSettingsView */ = {
+			isa = PBXGroup;
+			children = (
+				A54A9BBA2B5E0C4800ADEE2C /* EditUserSettingsView.swift */,
+			);
+			path = EditUserSettingsView;
+			sourceTree = "<group>";
+		};
 		A55BCAD92AA439B300C8335E /* Diary */ = {
 			isa = PBXGroup;
 			children = (
@@ -695,6 +722,9 @@
 				A51CF3CF2AF8AEC00006F275 /* JournalWebRepository.swift */,
 				A56D938D2AFB288D00A66366 /* JournalDBRepository.swift */,
 				A5BBCED02B1291B9000AC83C /* ImagePersistenceRepository.swift */,
+				A531AE292B5F6587009D16ED /* UserWebRepository.swift */,
+				A5F1D5D22B6E00340035D5CD /* SettingDBRepository.swift */,
+				A5F1D5D42B6EBB090035D5CD /* SettingWebRepository.swift */,
 			);
 			path = Repository;
 			sourceTree = "<group>";
@@ -795,6 +825,7 @@
 				A58AA49D2AD8E9B1001F7253 /* ChatService.swift */,
 				A5EF5C932B05B2D00048CAD0 /* JournalService.swift */,
 				A5BBCED32B129F83000AC83C /* ProfileService.swift */,
+				A5F1D5D92B6EF9640035D5CD /* SettingService.swift */,
 			);
 			name = Service;
 			path = /Users/cyrusrefahi/Documents/AITherapist/AITherapist/Service;
@@ -954,8 +985,10 @@
 		A59EB1512ACA28A900F31A12 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				A5EBAED02B69F48A00D45C08 /* SettingView */,
+				A54A9BB92B5E0C2B00ADEE2C /* EditUserSettingsView */,
 				A542634C2B5C3BBF006F3A91 /* InviteFriendView */,
-				A5C2D3432B564DDF00F97116 /* EditView */,
+				A5C2D3432B564DDF00F97116 /* HelpView */,
 				A574F5112B0316D500624890 /* ProfileView */,
 				A56D938F2AFB31EE00A66366 /* NewChatView */,
 				A51CF3C92AF8A3FE0006F275 /* JournalView */,
@@ -1040,6 +1073,8 @@
 		A5B7D5CA29B3ADD5001D7113 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				A5F1D5D62B6EC7B90035D5CD /* Persona */,
+				A5F1D5CF2B6DF39F0035D5CD /* Setting */,
 				A576DFB82B2AD4A8004C950B /* MockedData */,
 				A51CF3CC2AF8A6200006F275 /* Journal */,
 				A50F0E532AC123100081AD4C /* GeneralUserSummary */,
@@ -1088,12 +1123,12 @@
 			path = /Users/cyrusrefahi/Documents/AITherapist/AITherapist/Resources;
 			sourceTree = "<absolute>";
 		};
-		A5C2D3432B564DDF00F97116 /* EditView */ = {
+		A5C2D3432B564DDF00F97116 /* HelpView */ = {
 			isa = PBXGroup;
 			children = (
 				A5C2D3442B564E1300F97116 /* HelpView.swift */,
 			);
-			path = EditView;
+			path = HelpView;
 			sourceTree = "<group>";
 		};
 		A5CA949A2AA81AA100E25A46 /* UnitTest */ = {
@@ -1132,6 +1167,14 @@
 			path = /Users/cyrusrefahi/Documents/AITherapist/AITherapist/Resources/Assets/AfterEffects;
 			sourceTree = "<absolute>";
 		};
+		A5EBAED02B69F48A00D45C08 /* SettingView */ = {
+			isa = PBXGroup;
+			children = (
+				A5EBAED12B69F4B100D45C08 /* SettingView.swift */,
+			);
+			path = SettingView;
+			sourceTree = "<group>";
+		};
 		A5EFC58F2AC1071400D6097B /* Insight */ = {
 			isa = PBXGroup;
 			children = (
@@ -1146,6 +1189,22 @@
 				A5EFC5952AC10FC600D6097B /* Mood.swift */,
 			);
 			path = Mood;
+			sourceTree = "<group>";
+		};
+		A5F1D5CF2B6DF39F0035D5CD /* Setting */ = {
+			isa = PBXGroup;
+			children = (
+				A5F1D5D02B6DF3A90035D5CD /* Setting.swift */,
+			);
+			path = Setting;
+			sourceTree = "<group>";
+		};
+		A5F1D5D62B6EC7B90035D5CD /* Persona */ = {
+			isa = PBXGroup;
+			children = (
+				A5F1D5D72B6EC7C40035D5CD /* Persona.swift */,
+			);
+			path = Persona;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1366,6 +1425,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A50B167D2AC26D7400571D27 /* InsightWebRepository.swift in Sources */,
+				A5F1D5D52B6EBB090035D5CD /* SettingWebRepository.swift in Sources */,
 				A566DCA32AA503EE00920940 /* APICall.swift in Sources */,
 				A5CA948F2AA7FE8000E25A46 /* DeepLinksHandler.swift in Sources */,
 				A5B7D5DF29B3D4B3001D7113 /* NetworkManager.swift in Sources */,
@@ -1392,6 +1452,7 @@
 				A59C63F22ACA37EE00B76256 /* UsernameInputView.swift in Sources */,
 				A50A1A6F2AA44D0D00A6AD6D /* AppEnvironment.swift in Sources */,
 				A52EF6D52B0DEAC4007D17CE /* AnimatingBorder.swift in Sources */,
+				A531AE2A2B5F6587009D16ED /* UserWebRepository.swift in Sources */,
 				A56E17A029B2DB680077B76B /* SpeakManager.swift in Sources */,
 				A53210D12B3B41D800CE156F /* RegisterPanelView.swift in Sources */,
 				A51CF3CB2AF8A48E0006F275 /* JournalView.swift in Sources */,
@@ -1407,13 +1468,17 @@
 				A59C63FD2ACA37EE00B76256 /* ContentMessageView.swift in Sources */,
 				A50360762B36319700E542C4 /* LoginPanelView.swift in Sources */,
 				A57AD7E02AA67B51008EC1FB /* Loadable.swift in Sources */,
+				A5F1D5D32B6E00340035D5CD /* SettingDBRepository.swift in Sources */,
 				A59C63F52ACA37EE00B76256 /* AuthenticationViewModel.swift in Sources */,
 				A569DF022AA44822006D39AA /* SystemEventsHandler.swift in Sources */,
 				A505865329BCFF2A001F1970 /* AuthenticateMessage.swift in Sources */,
+				A5F1D5DA2B6EF9640035D5CD /* SettingService.swift in Sources */,
 				A5CA94932AA8039D00E25A46 /* UserPermissionsService.swift in Sources */,
 				A5EF5C942B05B2D00048CAD0 /* JournalService.swift in Sources */,
 				A569DEFD2AA4423C006D39AA /* Chat.swift in Sources */,
 				A51CF3C82AF85DCF0006F275 /* Modififers.swift in Sources */,
+				A5F1D5D12B6DF3A90035D5CD /* Setting.swift in Sources */,
+				A5F1D5D82B6EC7C40035D5CD /* Persona.swift in Sources */,
 				A5A708CC29C5342B001BCF2F /* SpeechManager.swift in Sources */,
 				A59C64032ACA37EE00B76256 /* ConversationListView.swift in Sources */,
 				A59C63F72ACA37EE00B76256 /* Logo.swift in Sources */,
@@ -1427,6 +1492,7 @@
 				A56C8C2B2B00316200D586E6 /* DaySelectorView.swift in Sources */,
 				A59C63F32ACA37EE00B76256 /* PasswordInputView.swift in Sources */,
 				A58AA49B2AD8D8A3001F7253 /* ChatWebRepository.swift in Sources */,
+				A54263502B5C67EB006F3A91 /* JournalSavedView.swift in Sources */,
 				A56D938E2AFB288D00A66366 /* JournalDBRepository.swift in Sources */,
 				A5AE6FDA2AA3E9AE00168037 /* ConversationSummary.swift in Sources */,
 				A51F46D42B09349300E6C2D2 /* ViewExtensions.swift in Sources */,
@@ -1437,6 +1503,7 @@
 				A5CA94A22AA959BD00E25A46 /* AuthenticationService.swift in Sources */,
 				A50A1A6B2AA44C9400A6AD6D /* Helper.swift in Sources */,
 				A5206EC62B0FEC3E00C0296B /* FlexibleStack.swift in Sources */,
+				A54A9BBB2B5E0C4800ADEE2C /* EditUserSettingsView.swift in Sources */,
 				A59C63F42ACA37EE00B76256 /* AuthenticationView.swift.swift in Sources */,
 				A51CF3C42AF8577A0006F275 /* AvaNavigationBarRefrenceKeys.swift in Sources */,
 				A50B167B2AC26D3300571D27 /* InsightDBRepository.swift in Sources */,
@@ -1445,6 +1512,7 @@
 				A58AA4952AD601C9001F7253 /* ChatDBRepository.swift in Sources */,
 				A569DF042AA4488C006D39AA /* DependencyInjector.swift in Sources */,
 				A57AD7D82AA6781F008EC1FB /* ConversationService.swift in Sources */,
+				A5EBAED22B69F4B100D45C08 /* SettingView.swift in Sources */,
 				A58AA4992AD7C86B001F7253 /* Constants.swift in Sources */,
 				A5B7D5D029B3B03C001D7113 /* Enums.swift in Sources */,
 				A51CF3C02AF8394D0006F275 /* AvaNavigationView.swift in Sources */,
@@ -1674,7 +1742,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1.1;
+				MARKETING_VERSION = 0.1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = CyrusRefahi.AITherapist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1713,7 +1781,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1.1;
+				MARKETING_VERSION = 0.1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = CyrusRefahi.AITherapist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

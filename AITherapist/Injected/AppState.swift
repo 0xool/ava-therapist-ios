@@ -16,6 +16,7 @@ struct AppState: Equatable {
     
     var permissions = Permissions()
     var conversationData = ConversationData()
+    var application = Application.instance
 }
 
 extension AppState {
@@ -28,9 +29,11 @@ extension AppState {
         
         @Published var user: Loadable<User> = .notRequested
         @Published var insight: Loadable<Insight> = .notRequested
+        @Published var setting: Loadable<Setting> = .notRequested
         
         func logout() {
             self.user = .notRequested
+            self.setting = .notRequested
             _ = MainUserDBRepository().deleteUser()
             DataBaseManager.Instance.ClearAllData()
         }
@@ -43,6 +46,18 @@ extension AppState{
         
         init(conversations: Loadable<LazyList<Conversation>> = .notRequested) {
             self.conversations = conversations
+        }
+    }
+}
+
+extension AppState{
+    class Application: ObservableObject{
+        @Published var showNewChat = false
+        
+        static let instance = Application()
+        
+        init(showNewChat: Bool = false) {
+            self.showNewChat = showNewChat
         }
     }
 }

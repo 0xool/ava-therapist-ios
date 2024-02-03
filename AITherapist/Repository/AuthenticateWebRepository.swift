@@ -19,13 +19,15 @@ struct AuthenticateResponse: ServerResponse{
         var auth: Bool
         let token: String
         let id: Int
+        
         let user: User
+        let userSetting: Setting
     }
 }
 
 protocol AuthenticateWebRepository: WebRepository {
-    func login(email: String, password: String) -> AnyPublisher<User, Error>
-    func register(nickname: String, email: String, password: String, mobileNumber: String) -> AnyPublisher<User, Error>
+    func login(email: String, password: String) -> AnyPublisher<AuthenticateResponse, Error>
+    func register(nickname: String, email: String, password: String, mobileNumber: String) -> AnyPublisher<AuthenticateResponse, Error>
 }
 
 struct MainAuthenticateWebRepository: AuthenticateWebRepository {
@@ -43,30 +45,22 @@ struct MainAuthenticateWebRepository: AuthenticateWebRepository {
         self.AFSession = setAFSession(session, queue: bgQueue)
     }
     
-    func login(email: String, password: String) -> AnyPublisher<User, Error> {
+    func login(email: String, password: String) -> AnyPublisher<AuthenticateResponse, Error> {
         let params = ["user": ["email" : email , "password" : password]]
         let request: AnyPublisher<AuthenticateResponse, Error> = webRequest(api: API.login(params: params))
         
         // Refactor this code to remove setting variables inside this call back
-        return request.map { (response) -> User in
-            let token = response.data.token
-            self.SetCookie(cookie: token)
-            return response.data.user
-        }
-        .eraseToAnyPublisher()
+        return request
+                .eraseToAnyPublisher()
     }
     
-    func register(nickname: String, email: String, password: String, mobileNumber: String) -> AnyPublisher<User, Error> {
+    func register(nickname: String, email: String, password: String, mobileNumber: String) -> AnyPublisher<AuthenticateResponse, Error> {
         let params = ["user": ["email" : email , "password" : password, "mobile": mobileNumber, "nickname": nickname]]
         let request: AnyPublisher<AuthenticateResponse, Error> = webRequest(api: API.register(params: params))
         
         // Refactor this code to remove setting variables inside this call back
-        return request.map { (response) -> User in
-            let token = response.data.token
-            self.SetCookie(cookie: token)
-            return response.data.user
-        }
-        .eraseToAnyPublisher()
+        return request
+                .eraseToAnyPublisher()
     }
 }
 

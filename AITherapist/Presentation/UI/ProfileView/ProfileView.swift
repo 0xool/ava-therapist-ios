@@ -4,7 +4,6 @@
 //
 //  Created by Cyrus Refahi on 11/13/23.
 //
-
 import SwiftUI
 
 struct ProfileView: View {
@@ -17,7 +16,7 @@ struct ProfileView: View {
         return geo.size.height * CGFloat(1 - HEADER_HEIGHT_RATIO)
     }
     
-    @ObservedObject private(set) var viewModel: ViewModel
+    @ObservedObject var viewModel: ViewModel
     @State var showImagePicker: Bool = false
 
     init(viewModel: ViewModel) {
@@ -31,7 +30,7 @@ struct ProfileView: View {
                         .frame(height: profileHeaderHeight(geo))
                         .frame(maxWidth: .infinity)
                         .offset(y: -35)
-                    ProfileSettingView()
+                ProfileSettingView(container: self.viewModel.container)
                         .frame(maxWidth: .infinity, maxHeight: .infinity + 35)
                         .ignoresSafeArea()
                         .background(ColorPallet.Verdigris)
@@ -63,7 +62,6 @@ struct ProfileView: View {
 
 extension ProfileView{
     struct ImagePicker: UIViewControllerRepresentable {
-        
         @Environment(\.presentationMode)
         var presentationMode
         
@@ -180,83 +178,14 @@ extension ProfileView{
         }
     }
     
-    enum Setting {
-        case editProfile
-        case settings
-        case prefrences
-        case invite
-        case help
-        
-        var title: String {
-            switch self {
-            case .editProfile:
-                return "Edit Profile"
-            case .settings:
-                return "Settings"
-            case .prefrences:
-                return "Preferences"
-            case .invite:
-                return "Invite a friend"
-            case .help:
-                return "Help"
-            }
-        }
-        
-        var image: String {
-            switch self {
-            case .editProfile:
-                return "person.circle"
-            case .settings:
-                return "gearshape"
-            case .prefrences:
-                return "rectangle.and.pencil.and.ellipsis"
-            case .invite:
-                return "person.badge.plus"
-            case .help:
-                return "ellipsis.message"
-            }
-        }
-        
-        @ViewBuilder var view: some View {
-            switch self {
-            case .editProfile:
-                Text(self.title)
-            case .settings:
-                Text(self.title)
-            case .prefrences:
-                Text(self.title)
-            case .invite:
-                InviteFriendView()
-            case .help:
-                HelpView()
-            }
-        }
-        
-        @ViewBuilder private var helpBackground: some View {
-            MenuBackground()
-        }
-        
-        @ViewBuilder var background: some View {
-            switch self {
-            case .editProfile:
-                helpBackground
-            case .settings:
-                helpBackground
-            case .prefrences:
-                helpBackground
-            case .invite:
-                helpBackground
-            case .help:
-                helpBackground
-            }
-        }
-    }
-    
     struct ProfileSettingView: View {
+        
+        let container: DIContainer
+        
         var body: some View {
             ScrollView{
                 VStack(alignment: .leading, spacing: 0) {
-                    SettingCellView(.editProfile)
+                    SettingCellView(.editProfile(container: container))
                     SettingCellView(.settings)
                     SettingCellView(.prefrences)
                     SettingCellView(.invite)
@@ -344,6 +273,80 @@ extension ProfileView{
 }
 
 extension ProfileView {
+    enum Setting {
+        case editProfile(container: DIContainer)
+        case settings
+        case prefrences
+        case invite
+        case help
+        
+        var title: String {
+            switch self {
+            case .editProfile:
+                return "Edit Profile"
+            case .settings:
+                return "Settings"
+            case .prefrences:
+                return "Preferences"
+            case .invite:
+                return "Invite a friend"
+            case .help:
+                return "Help"
+            }
+        }
+        
+        var image: String {
+            switch self {
+            case .editProfile:
+                return "person.circle"
+            case .settings:
+                return "gearshape"
+            case .prefrences:
+                return "rectangle.and.pencil.and.ellipsis"
+            case .invite:
+                return "person.badge.plus"
+            case .help:
+                return "ellipsis.message"
+            }
+        }
+        
+        @ViewBuilder var view: some View {
+            switch self {
+            case let .editProfile(container):
+                EditUserSettingsView(viewModel: .init(container: container))
+            case .settings:
+                SettingView()
+            case .prefrences:
+                Text(self.title)
+            case .invite:
+                InviteFriendView()
+            case .help:
+                HelpView()
+            }
+        }
+        
+        @ViewBuilder private var helpBackground: some View {
+            MenuBackground()
+        }
+        
+        @ViewBuilder var background: some View {
+            switch self {
+            case .editProfile:
+                helpBackground
+            case .settings:
+                helpBackground
+            case .prefrences:
+                helpBackground
+            case .invite:
+                helpBackground
+            case .help:
+                helpBackground
+            }
+        }
+    }
+}
+
+extension ProfileView {
     class ViewModel: ObservableObject {
         @Published var profileImage: Image? = Image(systemName: "person.circle")
         var user: User?{
@@ -365,7 +368,6 @@ extension ProfileView {
                 self.objectWillChange.send()
             }
             .store(in: cancelBag)
-            
         }
         
         func saveProfileImage(uiImage: UIImage){

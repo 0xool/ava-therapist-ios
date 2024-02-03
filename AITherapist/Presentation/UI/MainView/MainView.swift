@@ -347,16 +347,27 @@ extension MainView {
 extension MainView {
     class ViewModel: ObservableObject {
         var mainViewState: CurrentValueSubject<MainViewState, Never> = .init(.Home)
-        @Published var showNewChat: Bool = false
+        var showNewChat: Bool{
+            get{
+                self.container.appState[\.application.showNewChat]
+            }set{
+                self.container.appState[\.application.showNewChat] = newValue
+            }
+        }
         
         @Published var navigationTitle: String = ""
         @Published var showNavigationBackground: Bool = false
         @Published var mainViewBackground: MainViewBackground = .blueGradientBackground
         
         let container: DIContainer
+        private var anyCancellable: AnyCancellable? = nil
         
         init(container: DIContainer) {
             self.container = container
+            
+            anyCancellable = container.appState.value.application.objectWillChange.sink { (_) in
+                self.objectWillChange.send()
+            }
         }
         
         func getUsername() -> String {

@@ -37,6 +37,13 @@ struct JournalView: View {
                 self.hideKeyboard()
             }
         }
+        .sheet(isPresented: self.$viewModel.showSuccesfullSave, content: {
+            JournalSavedView(show: self.$viewModel.showSuccesfullSave, onChatClicked: {
+                
+            }, onAllJournalsClicked: {
+                
+            })
+        })
         .frame(maxWidth: .infinity)
         .padding([.bottom], 35)
     }
@@ -333,7 +340,10 @@ extension JournalView {
         @Published var selectedDate: Date = .now
         @Published var journalLodable: Loadable<Journal>
         @Published var journalEntryText: String = MAIN_JOURNAL_TEXT
+        
         @Published var tags = JournalTagType.allTypes
+        @Published var showSuccesfullSave: Bool = false
+        private var initialLoad = true
         
         var journal: Journal = Journal()
         static let MAIN_JOURNAL_TEXT = "How is your day? What are you grateful for today?"
@@ -355,6 +365,7 @@ extension JournalView {
             $journalLodable
                 .debounce(for: .seconds(0.1), scheduler: DispatchQueue.main)
                 .sink{ [self] data in
+                    
                     if let newJournal = data.value {
                         self.journal = Journal(id: newJournal.id, diaryMessage: newJournal.diaryMessage, diaryName: newJournal.diaryName, moodID: newJournal.moodID, summary: newJournal.summary, dateCreated: newJournal.dateCreated, tags: newJournal.tags)
                     }else{
@@ -363,8 +374,14 @@ extension JournalView {
                     
                     self.tags = JournalTagType.allTypes.filter{ !self.journal.tags.contains($0) }.sorted()
                     self.journalEntryText = self.journal.diaryMessage
+                    if !initialLoad {
+                        self.showSuccesfullSave = true
+                    }
+                    
+                    initialLoad = false
                 }
                 .store(in: cancelBag)
+            
             
         }
         

@@ -22,6 +22,7 @@ struct InsightView: View {
         self.viewModel = viewModel
         self.showingModalSheet = showingModalSheet
         self.isAnimatingMood = isAnimatingMood
+        
         self.moods = viewModel.insight.value?.getDailyMoodsArray() ?? moods
         self._showNewConversationChatView = showNewConversationChatView
     }

@@ -5,16 +5,15 @@
 //  Created by Cyrus Refahi on 9/6/23.
 //
 
-
-
 import Foundation
 import Combine
 
 protocol UserDBRepository {
     func hasLoadedUser() -> AnyPublisher<Bool, Error>
     func store(user: User) -> AnyPublisher<Void, Error>
-    func loadUser() -> AnyPublisher<User, Error>
+    func updateUser(user: User) -> AnyPublisher<Void, Error>
     
+    func loadUser() -> AnyPublisher<User, Error>
     func deleteUser() -> AnyPublisher<Void, Error>
 }
 
@@ -33,6 +32,10 @@ struct MainUserDBRepository: UserDBRepository {
         self.storeUserToDB(user: user)
     }
     
+    func updateUser(user: User) -> AnyPublisher<Void, Error>{
+        self.updateUserInDB(user: user)
+    }
+    
     func loadUser() -> AnyPublisher<User, Error> {
         self.loadUsertFromDB()
     }
@@ -45,6 +48,10 @@ struct MainUserDBRepository: UserDBRepository {
 extension MainUserDBRepository {
     private func deleteUserFromDB() -> AnyPublisher<Void, Error> {
         persistentStore.DeleteLast(ofType: User.self)
+    }
+    
+    private func updateUserInDB(user: User) -> AnyPublisher<Void, Error>{
+        persistentStore.Update(value: user)
     }
     
     private func loadUsertFromDB() -> AnyPublisher<User, Error>{
