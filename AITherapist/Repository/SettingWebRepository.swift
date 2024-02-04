@@ -90,7 +90,7 @@ extension MainSettingWebRepository {
             case .getAllPersona:
                 return URLEncoding.default
             case .updateSetting:
-                return URLEncoding.default
+                return JSONEncoding.default
             }
         }
         

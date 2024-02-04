@@ -16,10 +16,10 @@ protocol AuthenticationService {
 }
 
 class MainAuthenticationService: AuthenticationService {
-    
     let authenticateRepository: AuthenticateWebRepository
     let userDBRepository: UserDBRepository
     let settingDBRepository: SettingDBRepository
+    
     let appState: Store<AppState>
     
     init(appState: Store<AppState>, authenticateRepository: AuthenticateWebRepository, userDBRepository: UserDBRepository, settingDBRepository: SettingDBRepository){
@@ -35,8 +35,9 @@ class MainAuthenticationService: AuthenticationService {
         
         Just<Void>
             .withErrorType(Error.self)
-            .flatMap({ [userDBRepository] in
-                userDBRepository.loadUser()
+            .flatMap({ [self, userDBRepository] in
+                loadSetting(cancelBag: cancelBag)
+                return userDBRepository.loadUser()
             })
             .sink{ subscriptionCompletion in
                 if let _ = subscriptionCompletion.error {
@@ -49,7 +50,6 @@ class MainAuthenticationService: AuthenticationService {
     }
     
     func loginUser(email: String, password: String) {
-        
         let cancelBag = CancelBag()
         self.appState[\.userData.user].setIsLoading(cancelBag: cancelBag)
         
@@ -65,8 +65,9 @@ class MainAuthenticationService: AuthenticationService {
                     return self.login(email: email, password: password)
                 }
             }
-            .flatMap({ [userDBRepository] in
-                userDBRepository.loadUser()
+            .flatMap({ [self, userDBRepository] in
+                loadSetting(cancelBag: cancelBag)
+                return userDBRepository.loadUser()
             })
             .sinkToLoadable {
                 self.appState[\.userData.user] = $0
@@ -85,6 +86,20 @@ class MainAuthenticationService: AuthenticationService {
             .eraseToAnyPublisher()
     }
     
+    func loadSetting(cancelBag: CancelBag) {
+        self.appState[\.userData.setting].setIsLoading(cancelBag: cancelBag)
+        
+        Just<Void>
+            .withErrorType(Error.self)
+            .flatMap({ [settingDBRepository] in
+                settingDBRepository.loadSetting()
+            })
+            .sinkToLoadable {
+                self.appState[\.userData.setting] = $0
+            }
+            .store(in: cancelBag)
+    }
+    
     func registerUser(nickname: String, email: String, password: String, mobileNumber: String){
         let cancelBag = CancelBag()
         self.appState[\.userData.user].setIsLoading(cancelBag: cancelBag)
@@ -101,8 +116,9 @@ class MainAuthenticationService: AuthenticationService {
                     return self.register(nickname: nickname, email: email, password: password, mobileNumber: mobileNumber)
                 }
             }
-            .flatMap({ [userDBRepository] in
-                userDBRepository.loadUser()
+            .flatMap({ [self, userDBRepository] in
+                loadSetting(cancelBag: cancelBag)
+                return userDBRepository.loadUser()
             })
             .sinkToLoadable {
                 self.appState[\.userData.user] = $0

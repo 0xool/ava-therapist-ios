@@ -29,7 +29,7 @@ extension AppState {
         
         @Published var user: Loadable<User> = .notRequested
         @Published var insight: Loadable<Insight> = .notRequested
-        @Published var setting: Loadable<Setting> = .notRequested
+        var setting: Loadable<Setting> = .notRequested
         
         func logout() {
             self.user = .notRequested

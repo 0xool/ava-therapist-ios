@@ -141,12 +141,12 @@ extension MainView {
             var imageName: String = ""
             var filledImageName: String = ""
             var title: String = ""
-            var isSelected: Bool = false
             
+            var isSelected: Bool = false
             let tabTopViewNameSpace: Namespace.ID
             var onTabClick: () -> ()
-            var body: some View {
-                
+            
+            var body: some View {                
                 Button {
                     onTabClick()
                 } label: {

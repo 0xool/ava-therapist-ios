@@ -186,7 +186,7 @@ extension ProfileView{
             ScrollView{
                 VStack(alignment: .leading, spacing: 0) {
                     SettingCellView(.editProfile(container: container))
-                    SettingCellView(.settings)
+                    SettingCellView(.settings(container: container))
                     SettingCellView(.prefrences)
                     SettingCellView(.invite)
                     SettingCellView(.help)
@@ -275,7 +275,7 @@ extension ProfileView{
 extension ProfileView {
     enum Setting {
         case editProfile(container: DIContainer)
-        case settings
+        case settings(container: DIContainer)
         case prefrences
         case invite
         case help
@@ -314,8 +314,8 @@ extension ProfileView {
             switch self {
             case let .editProfile(container):
                 EditUserSettingsView(viewModel: .init(container: container))
-            case .settings:
-                SettingView()
+            case let .settings(container):
+                SettingView(viewModel: .init(container: container))
             case .prefrences:
                 Text(self.title)
             case .invite:

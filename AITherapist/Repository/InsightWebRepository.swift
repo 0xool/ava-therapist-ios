@@ -33,8 +33,7 @@ struct MainInsightWebRepository: InsightWebRepository {
         
         return request
             .map{
-                print($0.data)
-                return $0.data
+                $0.data
             }
             .eraseToAnyPublisher()
     }

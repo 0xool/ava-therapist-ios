@@ -41,10 +41,9 @@ struct MainSettingService: SettingService {
         let settingVal =  setting.wrappedValue.value!
         
         self.settingRepository.editSettingInfo(setting: settingVal)
-            .flatMap{ [settingDBRepository] in
-                settingDBRepository.store(setting: settingVal)
-            }
             .sinkToLoadable { _ in
+                _ = settingDBRepository.store(setting: settingVal)
+                self.appState[\.userData.setting] = .loaded(settingVal)
                 setting.wrappedValue.cancelLoading()
             }
             .store(in: cancelBag)

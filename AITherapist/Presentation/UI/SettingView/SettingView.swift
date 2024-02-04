@@ -8,15 +8,13 @@
 import SwiftUI
 
 struct SettingView: View {
-
-    @ObservedObject private(set) var viewModel: ViewModel
     
+    @ObservedObject private(set) var viewModel: ViewModel
     private var formSize: (width: CGFloat, height: CGFloat) {
         get{
             return (viewSize.width, viewSize.height * 0.7)
         }
     }
-    
     private var viewSize: (width: CGFloat, height: CGFloat) {
         get{
             return (CGFloat(UIViewController().view.bounds.width), CGFloat(UIViewController().view.bounds.height))
@@ -24,14 +22,26 @@ struct SettingView: View {
     }
     
     var body: some View {
+        settingView
+            .onTapGesture {
+                self.hideKeyboard()
+            }
+    }
+}
+
+extension SettingView {
+    @ViewBuilder var mainView: some View {
         VStack{
             HStack{
                 Text("AI Personality")
                 
                 Spacer()
-               
+                                
                 Picker(selection: $viewModel.personality, label: Text("AI Personality")) {
-                    
+                    ForEach(viewModel.personas.value!, id:\.id) {
+                        Text($0.personaName)
+                            .tag($0.id)
+                    }
                 }
             }
             .padding()
@@ -48,7 +58,7 @@ struct SettingView: View {
             .padding()
             
             Button(action: {
-                
+                self.viewModel.updateSetting()
             }, label: {
                 Text("Submit")
                     .font(.callout)
@@ -65,8 +75,44 @@ struct SettingView: View {
         .cornerRadius(25)
         .shadow(color: .black.opacity(0.25), radius: 3.5, x: 4, y: 6)
         .padding()
-        .onTapGesture {
-            self.hideKeyboard()
+    }
+}
+
+extension SettingView {
+    func failedView(error: Error) -> some View {
+        ErrorView(error: error) {
+            self.viewModel.loadPersonas()
+        }
+    }
+    
+    func loadingView() -> some View {
+        // show logged in successfully
+        VStack{
+            CircleLoading()
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+            Text("Logged in succesfully")
+        }
+    }
+}
+
+extension SettingView {
+    @ViewBuilder var settingView: some View {
+        ZStack{
+            switch(self.viewModel.personas) {
+            case .notRequested: // if we haven't started requesting the data yet
+                Text("")
+            case .isLoading(_, _): // if we're waiting for the data to come back
+                loadingView()
+            case .loaded(_): // if we've got the data back
+                mainView
+                    .onBecomingVisible {
+                        self.viewModel.setSetting()
+                    }
+            case let .failed(error): // if the request failed
+                failedView(error: error)
+            case .partialLoaded(_):
+                Text("Not requested")
+            }
         }
     }
 }
@@ -76,15 +122,15 @@ extension SettingView{
         @Published var setting: Loadable<Setting>
         @Published var personas: Loadable<[Persona]>
         @Published var personality: Int = 1
+        
         @Published var showNotification: Bool = false
-                
         let container: DIContainer
         private var cancelBag = CancelBag()
         
         init(container: DIContainer, personas: Loadable<[Persona]> = .notRequested) {
             self.container = container
-            self.setting = setting
             self.personas = personas
+            self.setting = .notRequested
             
             $setting
                 .debounce(for: .seconds(0), scheduler: DispatchQueue.main)
@@ -94,26 +140,31 @@ extension SettingView{
                 }
                 .store(in: cancelBag)
             
-
+            self.loadPersonas()
+        }
+        
+        func loadPersonas(){
+            self.container.services.settingService.getAllPersona(personas: loadableSubject(\.personas))
+        }
+        
+        func setSetting() {
             if let setting = self.container.appState[\.userData.setting].value {
                 self.setting = .loaded(setting)
+                
             }else{
                 // load setting
             }
-            
-
-            
-            
         }
         
-        private func loadInitialPersona(){
-            self.container.services.
+        func updateSetting(){
+            self.setting = .loaded(.init(id: self.setting.value!.id, personaID: self.personality, isNotificationEnabled: self.showNotification))
+                        
+            self.container.services.settingService.updateSetting(setting: loadableSubject(\.setting))
         }
-        
     }
 }
 
 
 #Preview {
-    SettingView(viewModel: .init(container: .preview, setting: .loaded(.init(id: 1, personaID: 1, isNotificationEnabled: false))))
+    SettingView(viewModel: .init(container: .preview))
 }
