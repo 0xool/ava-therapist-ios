@@ -30,6 +30,7 @@ struct AvaNavBarView<Content: View, Background: View>: View {
                     .backgroundStyle(.clear)
                     .padding(.top, 4)
                 self.content
+                    .padding([.leading, .trailing], 16)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .backgroundStyle(.clear)
             }
@@ -50,7 +51,6 @@ struct AvaNavBarView<Content: View, Background: View>: View {
         .background{
             RoundedRectangle(cornerSize: CGSize(width: 50, height: 50))
                 .foregroundStyle(ColorPallet.HelpLineColor)
-
         }
         .padding(8)
     }

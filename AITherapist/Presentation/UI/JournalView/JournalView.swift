@@ -203,7 +203,7 @@ extension JournalView{
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
                         .scrollContentBackground(.hidden)
                         .background(.clear)
-
+                    
                     VStack{
                         Image(systemName: "paperclip")
                             .frame(width: 25, height: 25)
@@ -228,8 +228,6 @@ extension JournalView{
                             .stroke(Color.black, lineWidth: 1)
                     }
                     .padding([.leading, .trailing], 16)
-                
-                
             )
         }
     }
@@ -296,7 +294,6 @@ extension JournalView {
             return daysOfMonth
         }
         
-        
         struct DaySelectorCell: View {
             let day: Date
             let isSelected: Bool
@@ -320,7 +317,6 @@ extension JournalView {
                 .background(isSelected ? ColorPallet.DiaryDateBlue : ColorPallet.DiaryDateBlue.opacity(0.3))
                 .cornerRadius(10)
                 .scaleEffect(isSelected ? 1.15 : 1)
-                
             }
             
             private func getDayString(from date: Date) -> String {
@@ -333,8 +329,6 @@ extension JournalView {
     }
 }
 
-typealias BindingSubject<Value> = Binding<Value>
-
 extension JournalView {
     class ViewModel: ObservableObject {
         @Published var selectedDate: Date = .now
@@ -343,7 +337,6 @@ extension JournalView {
         
         @Published var tags = JournalTagType.allTypes
         @Published var showSuccesfullSave: Bool = false
-        private var initialLoad = true
         
         var journal: Journal = Journal()
         static let MAIN_JOURNAL_TEXT = "How is your day? What are you grateful for today?"
@@ -374,15 +367,9 @@ extension JournalView {
                     
                     self.tags = JournalTagType.allTypes.filter{ !self.journal.tags.contains($0) }.sorted()
                     self.journalEntryText = self.journal.diaryMessage
-                    if !initialLoad {
-                        self.showSuccesfullSave = true
-                    }
-                    
-                    initialLoad = false
+                                        
                 }
                 .store(in: cancelBag)
-            
-            
         }
         
         private func getJournal(date: Date){
@@ -396,7 +383,10 @@ extension JournalView {
             
             self.journal.diaryMessage = journalEntryText
             self.journalLodable = .loaded(journal)
-            self.container.services.journalService.saveJournal(journal: loadableSubject(\.journalLodable))
+            self.container.services.journalService.saveJournal(journal: loadableSubject(\.journalLodable)) {
+                self.showSuccesfullSave = true
+            }
+            self.showSuccesfullSave = true
         }
         
         func onSaveEnterInputCorrect(_ journalEntry: String) -> Bool {

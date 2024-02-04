@@ -23,10 +23,11 @@ struct MainView: View {
                     TabView(userName: self.viewModel.getUsername())
                         .environmentObject(viewModel)
                 }
-                .ignoresSafeArea()
                 .fullScreenCover(isPresented: $viewModel.showNewChat, content: {
                     NewChatView(viewModel: .init(coninater: self.viewModel.container), show: $viewModel.showNewChat)
+                        
                 })
+                .ignoresSafeArea()
             } background: {
                 background
             }

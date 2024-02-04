@@ -53,7 +53,6 @@ struct TherapyChatView: View {
             }
             
         }
-        .padding([.leading, .trailing], 16)
     }
     
     private func sendMessage() {
@@ -195,11 +194,11 @@ private extension TherapyChatView {
                         }
                         .padding([.leading, .trailing], 8)
                         .frame(maxHeight: .infinity, alignment: .center)
+                        .background(ColorPallet.DarkGreen.opacity(0.6))
                     }else{
                         CircleLoading()
                     }
                 }
-                .background(ColorPallet.DarkGreen.opacity(0.6))
                 .frame(maxHeight: 75, alignment: .center)
             }
         }

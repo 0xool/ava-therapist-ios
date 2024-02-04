@@ -164,7 +164,8 @@ extension SettingView{
     }
 }
 
-
+#if DEBUG
 #Preview {
     SettingView(viewModel: .init(container: .preview))
 }
+#endif

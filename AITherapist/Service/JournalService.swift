@@ -15,7 +15,7 @@ protocol JournalService {
     func deleteJournal(journalID: Int, journals: LoadableSubject<[Journal]>)
     func saveJournal(journal: Journal, journals: LoadableSubject<[Journal]>)
     
-    func saveJournal(journal: LoadableSubject<Journal>)
+    func saveJournal(journal: LoadableSubject<Journal>, _ completion: @escaping () -> ())
     func getJournal(byDate: Date, journal: LoadableSubject<Journal>)
 }
 
@@ -30,7 +30,7 @@ struct MainJournalService: JournalService {
         self.appState = appState
     }
     
-    func saveJournal(journal: LoadableSubject<Journal>){
+    func saveJournal(journal: LoadableSubject<Journal>, _ completion: @escaping () -> ()){
         let cancelBag = CancelBag()
         journal.wrappedValue.setIsLoading(cancelBag: cancelBag)
 
@@ -55,7 +55,7 @@ struct MainJournalService: JournalService {
                     print(error)
                 }
             } receiveValue: {
-                
+                completion()
             }
             .store(in: cancelBag)
     }
@@ -156,7 +156,7 @@ struct MainJournalService: JournalService {
 }
 
 struct StubJournalService: JournalService {
-    func saveJournal(journal: LoadableSubject<Journal>){
+    func saveJournal(journal: LoadableSubject<Journal>, _ completion: @escaping () -> ()){
         
     }
     
