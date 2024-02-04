@@ -87,8 +87,9 @@ extension AppEnvironment {
         
         let journalWebRepository = MainJournalWebRepository(baseURL: baseURL, session: session)
         let userWebRepository = MainUserWebRepository(baseURL: baseURL, session: session)
+        let settingWebRepository = MainSettingWebRepository(baseURL: baseURL, session: session)
         
-        return .init(conversationRepository: conversationWebRepository, pushTokenWebRepository: pushTokenWebRepository, authenticationRepository: authenticationWebRepository, insightRepository: insightWebRepository, chatRepository: chatWebRepoistory, journalRepository: journalWebRepository, userRepository: userWebRepository)
+        return .init(conversationRepository: conversationWebRepository, pushTokenWebRepository: pushTokenWebRepository, authenticationRepository: authenticationWebRepository, insightRepository: insightWebRepository, chatRepository: chatWebRepoistory, journalRepository: journalWebRepository, userRepository: userWebRepository, settingRepository: settingWebRepository)
     }
     
     private static func configuredDBRepositories(appState: Store<AppState>) -> DIContainer.DBRepositories {
@@ -120,6 +121,8 @@ extension AppEnvironment {
         let conversationService = MainConversationService(conversationRepository: webRepositories.conversationRepository, appState: appState, conversationDBRepository: dbRepositories.conversationRepository, chatService: chatService)
         let journalService = MainJournalService(journalRepository: webRepositories.journalRepository, journalDBRepository: dbRepositories.journalRepository, appState: appState)
         let profileService = MainProfileService(imagePersistenceRepository: persistenceRepositories.imagePersistenceRepository, userWebRepository: webRepositories.userRepository, userDBRepository: dbRepositories.userRepository, appState: appState)
+        
+        let settingService = MainSettingService(settingRepository: webRepositories.settingRepository, settingDBRepository: dbRepositories.settingRepository, appState: appState)
 
         let userPermissionsService = MainUserPermissionsService(
             appState: appState, openAppSettings: {
@@ -128,7 +131,7 @@ extension AppEnvironment {
                 }
             })
         
-        return .init(conversationService: conversationService, userPermissionsService: userPermissionsService, authenticationService: authenticationService, insightService: insightService, chatService: chatService, journalService: journalService, profileService: profileService)
+        return .init(services: .init(conversationService: conversationService, userPermissionsService: userPermissionsService, authenticationService: authenticationService, insightService: insightService, chatService: chatService, journalService: journalService, profileService: profileService, settingService: settingService))
     }
 }
 
@@ -143,6 +146,7 @@ extension DIContainer {
         let journalRepository: JournalWebRepository
         
         let userRepository: UserWebRepository
+        let settingRepository: SettingWebRepository
     }
 
     struct DBRepositories {

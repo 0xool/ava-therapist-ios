@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct SettingView: View {
-    @State var personality: Int = 2
-    @State var showNotification: Bool = false
+
+    @ObservedObject private(set) var viewModel: ViewModel
     
     private var formSize: (width: CGFloat, height: CGFloat) {
         get{
@@ -30,11 +30,8 @@ struct SettingView: View {
                 
                 Spacer()
                
-                Picker(selection: $personality, label: Text("AI Personality")) {
-                    Text("1")
-                        .tag(1)
-                    Text("2")
-                        .tag(2)
+                Picker(selection: $viewModel.personality, label: Text("AI Personality")) {
+                    
                 }
             }
             .padding()
@@ -46,7 +43,7 @@ struct SettingView: View {
                 
                 Spacer()
                 
-                Toggle("", isOn: $showNotification)
+                Toggle("", isOn: $viewModel.showNotification)
             }
             .padding()
             
@@ -74,6 +71,49 @@ struct SettingView: View {
     }
 }
 
+extension SettingView{
+    class ViewModel: ObservableObject {
+        @Published var setting: Loadable<Setting>
+        @Published var personas: Loadable<[Persona]>
+        @Published var personality: Int = 1
+        @Published var showNotification: Bool = false
+                
+        let container: DIContainer
+        private var cancelBag = CancelBag()
+        
+        init(container: DIContainer, personas: Loadable<[Persona]> = .notRequested) {
+            self.container = container
+            self.setting = setting
+            self.personas = personas
+            
+            $setting
+                .debounce(for: .seconds(0), scheduler: DispatchQueue.main)
+                .sink { [weak self] setting in
+                    self?.personality = setting.value?.personaID ?? 1
+                    self?.showNotification = (setting.value?.isNotificationEnabled ?? false)
+                }
+                .store(in: cancelBag)
+            
+
+            if let setting = self.container.appState[\.userData.setting].value {
+                self.setting = .loaded(setting)
+            }else{
+                // load setting
+            }
+            
+
+            
+            
+        }
+        
+        private func loadInitialPersona(){
+            self.container.services.
+        }
+        
+    }
+}
+
+
 #Preview {
-    SettingView()
+    SettingView(viewModel: .init(container: .preview, setting: .loaded(.init(id: 1, personaID: 1, isNotificationEnabled: false))))
 }

@@ -18,22 +18,38 @@ extension DIContainer {
         let journalService: JournalService
         
         let profileService: ProfileService
+        let settingService: SettingService
         
-        init(conversationService: ConversationService, userPermissionsService: UserPermissionsService, authenticationService: AuthenticationService, insightService: InsightService, chatService: ChatService, journalService: JournalService, profileService: ProfileService) {
-            self.conversationService = conversationService
-            self.userPermissionsService = userPermissionsService
-            self.authenticationService = authenticationService
+        init(services: ServiceRepository) {
+            self.conversationService = services.conversationService
+            self.userPermissionsService = services.userPermissionsService
+            self.authenticationService = services.authenticationService
             
-            self.insightService = insightService
-            self.chatService = chatService
-            self.journalService = journalService
+            self.insightService = services.insightService
+            self.chatService = services.chatService
+            self.journalService = services.journalService
             
-            self.profileService = profileService
+            self.profileService = services.profileService
+            self.settingService = services.settingService
         }
         
         static var stub: Self {
-            .init(conversationService: StubConversationService(),
-                  userPermissionsService: StubUserPermissionsService(), authenticationService: StubAuthenticateService(), insightService: StubInsightService(), chatService: StubChatService(), journalService: StubJournalService(), profileService:  StubProfileService())
+            .init(services: .init(
+                conversationService: StubConversationService(),
+                  userPermissionsService: StubUserPermissionsService(), authenticationService: StubAuthenticateService(), insightService: StubInsightService(), chatService: StubChatService(), journalService: StubJournalService(), profileService:  StubProfileService(), settingService: StubSettingService()))
         }
+    }
+    
+    struct ServiceRepository {
+        let conversationService: ConversationService
+        let userPermissionsService: UserPermissionsService
+        let authenticationService: AuthenticationService
+        
+        let insightService: InsightService
+        let chatService: ChatService
+        let journalService: JournalService
+        
+        let profileService: ProfileService
+        let settingService: SettingService
     }
 }
