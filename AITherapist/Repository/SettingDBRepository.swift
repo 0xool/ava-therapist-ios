@@ -14,6 +14,7 @@ protocol SettingDBRepository {
     
     func loadSetting() -> AnyPublisher<Setting, Error>
     func deleteSetting() -> AnyPublisher<Void, Error>
+    func hasSetting() -> AnyPublisher<Bool, Error>
 }
 
 struct MainSettingDBRepository: SettingDBRepository {
@@ -37,6 +38,10 @@ struct MainSettingDBRepository: SettingDBRepository {
     
     func deleteSetting() -> AnyPublisher<Void, Error> {
         self.deleteSettingFromDB()
+    }
+    
+    func hasSetting() -> AnyPublisher<Bool, Error> {
+        self.getSettingCountFromDB()
     }
 }
 
@@ -63,5 +68,13 @@ extension MainSettingDBRepository {
     private func storeSettingToDB(setting: Setting) -> AnyPublisher<Void, Error>{
         _ = persistentStore.DeleteLast(ofType: Setting.self)
         return persistentStore.Write(writeData: setting)
+    }
+    
+    private func getSettingCountFromDB() -> AnyPublisher<Bool, Error> {
+        let settingCount = persistentStore.GetCount(value: Setting.self)
+        
+        return Just(settingCount > 0)
+            .setFailureType(to: Error.self)
+            .eraseToAnyPublisher()
     }
 }

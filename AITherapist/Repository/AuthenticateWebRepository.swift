@@ -25,9 +25,21 @@ struct AuthenticateResponse: ServerResponse{
     }
 }
 
+struct GetUserInfoResponse: ServerResponse{
+    var message: String?
+    var code: Int?
+    var data: GetUserInfoResponseData
+
+    struct GetUserInfoResponseData: Decodable {
+        let user: User
+        let userSetting: Setting
+    }
+}
+
 protocol AuthenticateWebRepository: WebRepository {
     func login(email: String, password: String) -> AnyPublisher<AuthenticateResponse, Error>
     func register(nickname: String, email: String, password: String, mobileNumber: String) -> AnyPublisher<AuthenticateResponse, Error>
+    func getUserInfo() -> AnyPublisher<GetUserInfoResponse, Error>
 }
 
 struct MainAuthenticateWebRepository: AuthenticateWebRepository {
@@ -49,7 +61,13 @@ struct MainAuthenticateWebRepository: AuthenticateWebRepository {
         let params = ["user": ["email" : email , "password" : password]]
         let request: AnyPublisher<AuthenticateResponse, Error> = webRequest(api: API.login(params: params))
         
-        // Refactor this code to remove setting variables inside this call back
+        return request
+                .eraseToAnyPublisher()
+    }
+    
+    func getUserInfo() -> AnyPublisher<GetUserInfoResponse, Error> {
+        let request: AnyPublisher<GetUserInfoResponse, Error> = webRequest(api: API.getUserInfo)
+        
         return request
                 .eraseToAnyPublisher()
     }
@@ -58,7 +76,6 @@ struct MainAuthenticateWebRepository: AuthenticateWebRepository {
         let params = ["user": ["email" : email , "password" : password, "mobile": mobileNumber, "nickname": nickname]]
         let request: AnyPublisher<AuthenticateResponse, Error> = webRequest(api: API.register(params: params))
         
-        // Refactor this code to remove setting variables inside this call back
         return request
                 .eraseToAnyPublisher()
     }
@@ -69,22 +86,27 @@ extension MainAuthenticateWebRepository {
     enum API: APICall {
         case login(params: Parameters?)
         case register(params: Parameters?)
+        case getUserInfo
         
         var url: String {
             switch self {
             case .login:
-                return "\(MainAuthenticateWebRepository.AuthenticateAPI)/login"
+                "\(MainAuthenticateWebRepository.AuthenticateAPI)/login"
             case .register:
-                return "\(MainAuthenticateWebRepository.AuthenticateAPI)/register"
+                "\(MainAuthenticateWebRepository.AuthenticateAPI)/register"
+            case .getUserInfo:
+                "\(MainAuthenticateWebRepository.AuthenticateAPI)/getUserInfo"
             }
         }
         
         var method: HTTPMethod {
             switch self {
             case .login:
-                return .post
+                .post
             case .register:
-                return .post
+                .post
+            case .getUserInfo:
+                .get
             }
         }
         
@@ -95,18 +117,22 @@ extension MainAuthenticateWebRepository {
         var encoding: ParameterEncoding {
             switch self {
             case .login:
-                return JSONEncoding.default
+                JSONEncoding.default
             case .register:
-                return JSONEncoding.default
+                JSONEncoding.default
+            case .getUserInfo:
+                JSONEncoding.default
             }
         }
         
         var parameters: Parameters? {
             switch self {
             case let .login(params):
-                return params
+                params
             case let .register(params):
-                return params
+                params
+            case .getUserInfo:
+                nil
             }
         }
     }

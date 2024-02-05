@@ -44,6 +44,7 @@ struct EditUserSettingsView: View {
             }
             
             Button(action: {
+                self.hideKeyboard()
                 self.viewModel.saveUserInfo()
             }, label: {
                 Text("Submit")

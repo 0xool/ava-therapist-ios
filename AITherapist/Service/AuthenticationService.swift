@@ -33,8 +33,12 @@ class MainAuthenticationService: AuthenticationService {
     func checkUserLoggedStatus() {
         let cancelBag = CancelBag()
         
+        
         Just<Void>
             .withErrorType(Error.self)
+            .flatMap{
+                self.getUser()
+            }
             .flatMap({ [self, userDBRepository] in
                 loadSetting(cancelBag: cancelBag)
                 return userDBRepository.loadUser()
@@ -78,6 +82,17 @@ class MainAuthenticationService: AuthenticationService {
     func login(email: String, password: String) -> AnyPublisher<Void, Error>{
         authenticateRepository
             .login(email: email, password: password)
+            .ensureTimeSpan(requestHoldBackTimeInterval)
+            .map { [userDBRepository, settingDBRepository] in
+                _ = userDBRepository.store(user: $0.data.user)
+                _ = settingDBRepository.store(setting: $0.data.userSetting)
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func getUser() -> AnyPublisher<Void, Error>{
+        authenticateRepository
+            .getUserInfo()
             .ensureTimeSpan(requestHoldBackTimeInterval)
             .map { [userDBRepository, settingDBRepository] in
                 _ = userDBRepository.store(user: $0.data.user)

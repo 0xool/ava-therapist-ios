@@ -42,10 +42,6 @@ struct MainProfileService: ProfileService {
     func updateUserInfo(username: String, name: String, lastname: String)  {
         
         self.userWebRepository.editUserInfo(username: username, name: name, lastname: lastname)
-            .map{
-                print($0)
-                return $0
-            }
             .sink { (completion) in
                 switch completion{
                 case .failure(let error):
@@ -61,16 +57,6 @@ struct MainProfileService: ProfileService {
                 }
             } receiveValue: { _ in
                 
-
-
-                
-//                self.userDBRepository.updateUser(user: user)
-//                    .sink { _ in
-//
-//                    } receiveValue: { _ in
-//                        self.appState[\.userData].user = .loaded(user)
-//                    }
-//                    .store(in: cancelBag)
             }
             .store(in: cancelBag)
     }

@@ -34,7 +34,10 @@ extension SettingView {
         VStack{
             HStack{
                 Text("AI Personality")
-                
+                    .font(Font.custom("SF Pro Text", size: 17))
+                    .bold()
+                    .multilineTextAlignment(.center)
+                    .foregroundColor(ColorPallet.SolidDarkGreen)
                 Spacer()
                                 
                 Picker(selection: $viewModel.personality, label: Text("AI Personality")) {
@@ -50,6 +53,10 @@ extension SettingView {
             
             HStack{
                 Text("Notification")
+                    .font(Font.custom("SF Pro Text", size: 17))
+                    .bold()
+                    .multilineTextAlignment(.center)
+                    .foregroundColor(ColorPallet.SolidDarkGreen)
                 
                 Spacer()
                 
@@ -58,6 +65,7 @@ extension SettingView {
             .padding()
             
             Button(action: {
+                self.hideKeyboard()
                 self.viewModel.updateSetting()
             }, label: {
                 Text("Submit")
@@ -157,7 +165,11 @@ extension SettingView{
         }
         
         func updateSetting(){
-            self.setting = .loaded(.init(id: self.setting.value!.id, personaID: self.personality, isNotificationEnabled: self.showNotification))
+            guard let setting = self.setting.value else {
+                return
+            }
+            
+            self.setting = .loaded(.init(id: setting.id, personaID: self.personality, isNotificationEnabled: self.showNotification))
                         
             self.container.services.settingService.updateSetting(setting: loadableSubject(\.setting))
         }

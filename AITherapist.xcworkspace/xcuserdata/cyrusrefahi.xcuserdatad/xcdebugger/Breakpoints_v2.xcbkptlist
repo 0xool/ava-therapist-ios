@@ -278,196 +278,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "732CB4AD-C46A-4B5E-8BCA-0CA5AAF6FB45"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "AITherapist/Service/ProfileService.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "54"
-            endingLineNumber = "54"
-            landmarkName = "updateUserInfo(username:name:lastname:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "732CB4AD-C46A-4B5E-8BCA-0CA5AAF6FB45 - 138752521d037af5"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 () -&gt; () in closure #2 (Combine.Subscribers.Completion&lt;Swift.Error&gt;) -&gt; () in AITherapist.MainProfileService.updateUserInfo(username: Swift.String, name: Swift.String, lastname: Swift.String) -&gt; ()"
-                  moduleName = "AITherapist"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/cyrusrefahi/Documents/AITherapist/AITherapist/Service/ProfileService.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "55"
-                  endingLineNumber = "55"
-                  offsetFromSymbolStart = "168">
-               </Location>
-               <Location
-                  uuid = "732CB4AD-C46A-4B5E-8BCA-0CA5AAF6FB45 - 87b9b33932ce7265"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #2 (Combine.Subscribers.Completion&lt;Swift.Error&gt;) -&gt; () in AITherapist.MainProfileService.updateUserInfo(username: Swift.String, name: Swift.String, lastname: Swift.String) -&gt; ()"
-                  moduleName = "AITherapist"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/cyrusrefahi/Documents/AITherapist/AITherapist/Service/ProfileService.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "54"
-                  endingLineNumber = "54"
-                  offsetFromSymbolStart = "436">
-               </Location>
-               <Location
-                  uuid = "732CB4AD-C46A-4B5E-8BCA-0CA5AAF6FB45 - 138752521d037ad4"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 () -&gt; () in closure #2 (Combine.Subscribers.Completion&lt;Swift.Error&gt;) -&gt; () in AITherapist.MainProfileService.updateUserInfo(username: Swift.String, name: Swift.String, lastname: Swift.String) -&gt; ()"
-                  moduleName = "AITherapist"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/cyrusrefahi/Documents/AITherapist/AITherapist/Service/ProfileService.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "54"
-                  endingLineNumber = "54"
-                  offsetFromSymbolStart = "156">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "18E77B5E-0E89-4101-9D06-9F8F5DE37C38"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "AITherapist/Service/ProfileService.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "55"
-            endingLineNumber = "55"
-            landmarkName = "updateUserInfo(username:name:lastname:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "B4A28843-F2D7-43F0-B140-C0854199B725"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "AITherapist/Service/ProfileService.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "44"
-            endingLineNumber = "44"
-            landmarkName = "updateUserInfo(username:name:lastname:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "B4A28843-F2D7-43F0-B140-C0854199B725 - 50bdcb6f5a9d4c66"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "AITherapist.MainProfileService.updateUserInfo(username: Swift.String, name: Swift.String, lastname: Swift.String) -&gt; ()"
-                  moduleName = "AITherapist"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/cyrusrefahi/Documents/AITherapist/AITherapist/Service/ProfileService.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "45"
-                  endingLineNumber = "45"
-                  offsetFromSymbolStart = "460">
-               </Location>
-               <Location
-                  uuid = "B4A28843-F2D7-43F0-B140-C0854199B725 - c908cc6bc58a76bb"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (()) -&gt; () in AITherapist.MainProfileService.updateUserInfo(username: Swift.String, name: Swift.String, lastname: Swift.String) -&gt; ()"
-                  moduleName = "AITherapist"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/cyrusrefahi/Documents/AITherapist/AITherapist/Service/ProfileService.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "45"
-                  endingLineNumber = "45"
-                  offsetFromSymbolStart = "48">
-               </Location>
-               <Location
-                  uuid = "B4A28843-F2D7-43F0-B140-C0854199B725 - 50bdcb6f5a9d4c07"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "AITherapist.MainProfileService.updateUserInfo(username: Swift.String, name: Swift.String, lastname: Swift.String) -&gt; ()"
-                  moduleName = "AITherapist"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/cyrusrefahi/Documents/AITherapist/AITherapist/Service/ProfileService.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "44"
-                  endingLineNumber = "44"
-                  offsetFromSymbolStart = "268">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "895D3E0E-1432-4946-81A8-71467C9FA20A"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "AITherapist/Service/ProfileService.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "50"
-            endingLineNumber = "50"
-            landmarkName = "updateUserInfo(username:name:lastname:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "895D3E0E-1432-4946-81A8-71467C9FA20A - 87b9b33932ce72f8"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #2 (Combine.Subscribers.Completion&lt;Swift.Error&gt;) -&gt; () in AITherapist.MainProfileService.updateUserInfo(username: Swift.String, name: Swift.String, lastname: Swift.String) -&gt; ()"
-                  moduleName = "AITherapist"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/cyrusrefahi/Documents/AITherapist/AITherapist/Service/ProfileService.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "51"
-                  endingLineNumber = "51"
-                  offsetFromSymbolStart = "164">
-               </Location>
-               <Location
-                  uuid = "895D3E0E-1432-4946-81A8-71467C9FA20A - 87b9b33932ce72f8"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #2 (Combine.Subscribers.Completion&lt;Swift.Error&gt;) -&gt; () in AITherapist.MainProfileService.updateUserInfo(username: Swift.String, name: Swift.String, lastname: Swift.String) -&gt; ()"
-                  moduleName = "AITherapist"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/cyrusrefahi/Documents/AITherapist/AITherapist/Service/ProfileService.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "51"
-                  endingLineNumber = "51"
-                  offsetFromSymbolStart = "200">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "2DC0D459-B0D9-4CF9-AEA9-D4EBDADBD0F9"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
@@ -484,16 +294,160 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "E4AD4605-0471-4679-91D5-D7BF9C845C26"
+            uuid = "A4A1513A-4642-4F88-914C-B10465D64C8E"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "AITherapist/Service/ProfileService.swift"
+            filePath = "AITherapist/Presentation/UI/SettingView/SettingView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "47"
-            endingLineNumber = "47"
-            landmarkName = "updateUserInfo(username:name:lastname:)"
+            startingLineNumber = "168"
+            endingLineNumber = "168"
+            landmarkName = "updateSetting()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "DC660AE8-F551-4DF0-9651-084332332CB7"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "AITherapist/Presentation/UI/SettingView/SettingView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "172"
+            endingLineNumber = "172"
+            landmarkName = "updateSetting()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "0E35BCEE-04F2-4668-B6B3-0BAE497404D3"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "AITherapist/Presentation/UI/SettingView/SettingView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "169"
+            endingLineNumber = "169"
+            landmarkName = "updateSetting()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "9493FFEA-3404-429D-9D8D-603213D5BD70"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "AITherapist/Presentation/UI/SettingView/SettingView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "159"
+            endingLineNumber = "159"
+            landmarkName = "setSetting()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "9493FFEA-3404-429D-9D8D-603213D5BD70 - b89f3078b68161d7"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "AITherapist.SettingView.ViewModel.setSetting() -&gt; ()"
+                  moduleName = "AITherapist"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/cyrusrefahi/Documents/AITherapist/AITherapist/Presentation/UI/SettingView/SettingView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "159"
+                  endingLineNumber = "159"
+                  offsetFromSymbolStart = "68">
+               </Location>
+               <Location
+                  uuid = "9493FFEA-3404-429D-9D8D-603213D5BD70 - b89f3078b68161d7"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "AITherapist.SettingView.ViewModel.setSetting() -&gt; ()"
+                  moduleName = "AITherapist"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/cyrusrefahi/Documents/AITherapist/AITherapist/Presentation/UI/SettingView/SettingView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "159"
+                  endingLineNumber = "159"
+                  offsetFromSymbolStart = "380">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B55BDB3F-8D16-4105-B17B-81BD4B8D013D"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "AITherapist/Presentation/UI/SettingView/SettingView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "160"
+            endingLineNumber = "160"
+            landmarkName = "setSetting()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "5A2D5D61-B1F6-4C8A-95E2-FAD4B56C1B54"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "AITherapist/Presentation/UI/SettingView/SettingView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "163"
+            endingLineNumber = "163"
+            landmarkName = "setSetting()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D0A14F5E-4FA5-44C2-9069-AE424FC613D1"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "AITherapist/Service/AuthenticationService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "43"
+            endingLineNumber = "43"
+            landmarkName = "checkUserLoggedStatus()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "2745642E-591A-4BF5-A4C2-1C7F53AC95D3"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "AITherapist/Service/AuthenticationService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "99"
+            endingLineNumber = "99"
+            landmarkName = "getUser()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
