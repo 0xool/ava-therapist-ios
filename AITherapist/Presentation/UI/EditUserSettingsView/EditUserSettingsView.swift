@@ -44,7 +44,7 @@ struct EditUserSettingsView: View {
             }
             
             Button(action: {
-                
+                self.viewModel.saveUserInfo()
             }, label: {
                 Text("Submit")
                     .font(.callout)
@@ -112,6 +112,10 @@ extension EditUserSettingsView{
             self.username = container.appState[\.userData].user.value?.userName ?? ""
             self.name = container.appState[\.userData].user.value?.name ?? ""
             self.lastname = container.appState[\.userData].user.value?.lastName ?? ""
+        }
+        
+        func saveUserInfo(){
+            self.container.services.profileService.updateUserInfo(username: self.username, name: self.name, lastname: self.lastname)
         }
     }
 }

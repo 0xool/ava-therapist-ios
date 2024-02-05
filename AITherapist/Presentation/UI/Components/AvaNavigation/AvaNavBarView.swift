@@ -9,7 +9,6 @@ import Foundation
 import SwiftUI
 
 struct AvaNavBarView<Content: View, Background: View>: View {
-    
     @Environment(\.dismiss) var dismiss
     @State private var backButtonType: TopLeftButtonType = .nothing
     @State private var title: String = ""

@@ -59,7 +59,6 @@ struct MainJournalWebRepository: JournalWebRepository {
     }
     
     func deleteJournal(journalID: Int) -> AnyPublisher<Void, Error>{
-        
         let request: AnyPublisher<DeleteJournalResponse, Error> = webRequest(api: API.deleteJournal(journalID: journalID))
         
         return request

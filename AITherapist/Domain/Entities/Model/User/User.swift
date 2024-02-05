@@ -85,12 +85,12 @@ struct EditUserInfoRequest: Encodable{
     struct EditUserData: Encodable {
         var username: String
         var name: String
-        var lastName: String
+        var lastname: String
     }
 }
 
 struct EditUserInfoResponse: ServerResponse {
     var message: String?
     var code: Int?
-    var data: String
+    var data: String?
 }

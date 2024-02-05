@@ -15,6 +15,7 @@ protocol UserDBRepository {
     
     func loadUser() -> AnyPublisher<User, Error>
     func deleteUser() -> AnyPublisher<Void, Error>
+    func changeValue(_ change: @escaping () -> ()) -> AnyPublisher<Void, Error>
 }
 
 struct MainUserDBRepository: UserDBRepository {
@@ -42,6 +43,10 @@ struct MainUserDBRepository: UserDBRepository {
     
     func deleteUser() -> AnyPublisher<Void, Error> {
         self.deleteUserFromDB()
+    }
+    
+    func changeValue(_ change: @escaping () -> ()) -> AnyPublisher<Void, Error> {
+        persistentStore.Update(changeValue: change)
     }
 }
 

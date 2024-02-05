@@ -12,16 +12,16 @@ import SwiftUI
 protocol ProfileService {
     func saveProfileImage(image: PersistentImageModel)
     func loadProfileImage() -> AnyPublisher<Image?, Error>
-    func updateUserInfo(username: String, name: String, lastName: String, userID: Int)
+    func updateUserInfo(username: String, name: String, lastname: String)
 }
-
-
+ 
 struct MainProfileService: ProfileService {
     let imagePersistenceRepository: ImagePersistenceRepository
     let userWebRepository: UserWebRepository
     let userDBRepository: UserDBRepository
     
     let appState: Store<AppState>
+    private let cancelBag = CancelBag()
     
     func saveProfileImage(image: PersistentImageModel) {
         imagePersistenceRepository.saveImage(image, forKey: .profileImage)
@@ -39,30 +39,38 @@ struct MainProfileService: ProfileService {
             .eraseToAnyPublisher()
     }
     
-    func updateUserInfo(username: String, name: String, lastName: String, userID: Int)  {
-        let cancelBag = CancelBag()
+    func updateUserInfo(username: String, name: String, lastname: String)  {
         
-        self.userWebRepository.editUserInfo(username: username, name: name, lastName: lastName, userID: userID)
+        self.userWebRepository.editUserInfo(username: username, name: name, lastname: lastname)
+            .map{
+                print($0)
+                return $0
+            }
             .sink { (completion) in
                 switch completion{
                 case .failure(let error):
                     print(error)
                 case .finished:
-                    print("Finished")
+                    self.userDBRepository.changeValue {
+                        let user: User = self.appState[\.userData].user.value!
+                        user.name = name
+                        user.lastName = lastname
+                        user.userName = username
+                    }
+                    .sinkEmptyAndStore()
                 }
             } receiveValue: { _ in
-                let user: User = self.appState[\.userData].user.value!
-                user.name = name
-                user.lastName = lastName
-                user.userName = username
                 
-                self.userDBRepository.updateUser(user: user)
-                    .sink { _ in
-                        
-                    } receiveValue: { _ in
-                        self.appState[\.userData].user = .loaded(user)
-                    }
-                    .store(in: cancelBag)
+
+
+                
+//                self.userDBRepository.updateUser(user: user)
+//                    .sink { _ in
+//
+//                    } receiveValue: { _ in
+//                        self.appState[\.userData].user = .loaded(user)
+//                    }
+//                    .store(in: cancelBag)
             }
             .store(in: cancelBag)
     }
@@ -74,7 +82,7 @@ struct StubProfileService: ProfileService {
         
     }
     
-    func updateUserInfo(username: String, name: String, lastName: String, userID: Int){
+    func updateUserInfo(username: String, name: String, lastname: String){
         
     }
     

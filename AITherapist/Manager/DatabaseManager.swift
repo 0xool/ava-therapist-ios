@@ -20,12 +20,13 @@ protocol DataBase {
     
     func Write<T: Object>(writeData: T) -> AnyPublisher<Void, Error>
     func Update<T: Object>(value: T) -> AnyPublisher<Void,  Error>
-    func EntityExist<Element: Object>(id: Int, ofType: Element.Type) -> Bool
+    func Update(changeValue: @escaping () -> ()) -> AnyPublisher<Void,  Error>
     
+    func EntityExist<Element: Object>(id: Int, ofType: Element.Type) -> Bool    
     func DeleteLast<T: Object>(ofType: T.Type) -> AnyPublisher<Void,  Error>
     func DeleteAll<T: Object>(ofType: T.Type) -> AnyPublisher<Void,  Error>
-    func DeleteByID<T: Object>(ofType: T.Type, id: Int) -> AnyPublisher<Void,  Error>
     
+    func DeleteByID<T: Object>(ofType: T.Type, id: Int) -> AnyPublisher<Void,  Error>
     func DeleteByQuery<T: Object>(ofType: T.Type, query: @escaping (Query<T>) -> Query<Bool>) -> AnyPublisher<Void,  Error>
     func ClearAllData()
 }
@@ -190,6 +191,20 @@ class DataBaseManager: DataBase {
             do {
                 try self.realm.write {
                     self.realm.add(value, update: .modified)
+                }
+                promise(.success(()))
+            } catch {
+                promise(.failure(error))
+            }
+        }
+        .eraseToAnyPublisher()
+    }
+    
+    func Update(changeValue: @escaping () -> ()) -> AnyPublisher<Void,  Error> {
+        return Future<Void, Error> { promise in
+            do {
+                try self.realm.write {
+                    changeValue()
                 }
                 promise(.success(()))
             } catch {
