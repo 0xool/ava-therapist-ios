@@ -37,7 +37,9 @@ struct MainChatWebRepository: ChatWebRepository {
             let request: AnyPublisher<AddChatServerResponse, Error> = webRequest(api: API.addChat(params: params))
             
             return request
-                .map{ ($0.data.userChat, $0.data.botChat) }
+                .map{
+                    ($0.data.userChat, $0.data.botChat)
+                }
                 .eraseToAnyPublisher()
         } catch {
             return Fail(error: error).eraseToAnyPublisher()

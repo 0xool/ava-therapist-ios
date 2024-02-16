@@ -44,10 +44,12 @@ struct SaveChatRequsetBody: Encodable {
     var conversationID: Int
 }
 
-enum ChatServerState: String, PersistableEnum {
+enum ChatState: String, PersistableEnum {
     case BeingSent
     case ErrorWhileSending
     case NoStatus
+    case LoadingServerChat
+    case LastServerChat
 }
 
 
@@ -60,7 +62,7 @@ class Chat: Object, Codable, Identifiable {
     
     @Persisted var chatSequence: Int?
     @Persisted var isUserMessage: Bool
-    @Persisted var isSentToServer: ChatServerState?
+    @Persisted var chatState: ChatState = .NoStatus
 //    @Persisted var dateCreated: Date
     
     enum CodingKeys: String, CodingKey {
@@ -72,20 +74,19 @@ class Chat: Object, Codable, Identifiable {
 //        case dateCreated = "DateCreated"
     }
     
-    init(message: String, conversationID: Int, chatSequence: Int?, isUserMessage: Bool, isSentToserver: ChatServerState?){
+    init(message: String, conversationID: Int, chatSequence: Int?, isUserMessage: Bool, isSentToserver: ChatState = .NoStatus){
         super.init()
-        #warning("NEED DECOUPLING!")
         self.id = DataBaseManager.Instance.IncrementaChatID()
         self.message = message
         self.conversationID = conversationID
         
         self.chatSequence = chatSequence
         self.isUserMessage = isUserMessage
-        self.isSentToServer = isSentToserver
+        self.chatState = isSentToserver
 //        self.dateCreated = dateCreated
     }
     
-    init(id: Int, message: String, conversationID: Int, chatSequence: Int?, isUserMessage: Bool, isSentToserver: ChatServerState?){
+    init(id: Int, message: String, conversationID: Int, chatSequence: Int?, isUserMessage: Bool, isSentToserver: ChatState = .NoStatus){
         super.init()
         self.id = id
         self.message = message
@@ -93,7 +94,7 @@ class Chat: Object, Codable, Identifiable {
         
         self.chatSequence = chatSequence
         self.isUserMessage = isUserMessage
-        self.isSentToServer = isSentToserver
+        self.chatState = isSentToserver
     }
     
     override init() {
@@ -109,7 +110,7 @@ class Chat: Object, Codable, Identifiable {
         self.conversationID = try container.decode(Int.self , forKey: .conversationID)
         self.chatSequence = try container.decode(Int?.self , forKey: .chatSequence)
         self.isUserMessage = try container.decode(Bool.self , forKey: .isUserMessage)
-        self.isSentToServer = .NoStatus
+        self.chatState = .NoStatus
 //        dateCreated = try container.decode(Date.self , forKey: .dateCreated)
     }
     

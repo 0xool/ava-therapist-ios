@@ -1,5 +1,5 @@
 //
-//  TherapyChatView.swift
+//  ChatView.swift
 //  AITherapist
 //
 //  Created by Cyrus Refahi on 3/3/23.
@@ -12,7 +12,8 @@ import Speech
 import Combine
 import Foundation
 
-struct TherapyChatView: View {
+
+struct ChatView: View {
     @ObservedObject private(set) var viewModel: ViewModel
     @ObservedObject var micManager: MicManager = MicManager(numberOfSample: 30)
     @State private var isUsingMic = false
@@ -23,7 +24,6 @@ struct TherapyChatView: View {
     
     let withBackButton: Bool
     @Binding var showSheet: Bool
-    
     private let MessageViewLineLimitMax = 6
     
     init(viewModel: ViewModel, withBackButton: Bool = false, showSheet: Binding<Bool> = .constant(false)) {
@@ -34,7 +34,7 @@ struct TherapyChatView: View {
     
     var body: some View {
         ZStack{
-            mainChatView(chats: self.viewModel.chats.value ?? [])
+            mainChatView(chats: self.viewModel.getChats())
                 .onAppear{
                     self.viewModel.loadConversationChat()
                 }
@@ -56,9 +56,10 @@ struct TherapyChatView: View {
     }
     
     private func sendMessage() {
-        viewModel.sendMessage(userMessage)
         viewModel.speechRecognizer.transcript = ""
+        let message = userMessage
         userMessage = ""
+        viewModel.sendMessage(message)
     }
     
     private func speechBtnView(isHidden: Bool = false) -> some View {
@@ -79,7 +80,7 @@ struct TherapyChatView: View {
             Image(systemName: isRecording ? "stop.fill" : "mic.fill")
                 .font(.system(size: 20))
                 .cornerRadius(10)
-                .foregroundColor(ColorPallet.darkColor)
+                .foregroundColor(.white)
         }
         .hiddenModifier(isHide: isHidden)
     }
@@ -128,15 +129,17 @@ struct TherapyChatView: View {
     }
 }
 
-private extension TherapyChatView {
+private extension ChatView {
     private var notRequestedView: some View {
         Text("").onAppear{
-            //            self.viewModel.loadConversationChat
         }
     }
     
     func failedView(_ error: Error) -> some View {
-        self.showSheet.toggle()
+        self.viewModel.onBackToPreviousClicked {
+            self.showSheet.toggle()
+        }
+        
         return ErrorView(error: error, retryAction: {
             self.viewModel.loadConversationChat()
         })
@@ -152,6 +155,7 @@ private extension TherapyChatView {
                 ScrollViewReader{ proxy in
                     VStack {
                         backButton
+                        
                         ScrollView {
                             ForEach(chats, id: \.id) { chat in
                                 MessageView(chat: chat, onResendMessageClicked: self.viewModel.resendMessage)
@@ -177,7 +181,7 @@ private extension TherapyChatView {
                         }
                     }
                 }
-                            
+                
                 VStack{
                     if viewModel.isUserTurnToSpeak {
                         HStack(alignment: .center) {
@@ -194,7 +198,7 @@ private extension TherapyChatView {
                         }
                         .padding([.leading, .trailing], 8)
                         .frame(maxHeight: .infinity, alignment: .center)
-                        .background(ColorPallet.DarkGreen.opacity(0.6))
+                        .background(ColorPallet.DarkGreen)
                     }else{
                         CircleLoading()
                     }
@@ -210,11 +214,13 @@ private extension TherapyChatView {
     @ViewBuilder private var backButton: some View{
         if self.withBackButton{
             Button {
-                self.showSheet.toggle()
+                self.viewModel.onBackToPreviousClicked {
+                    self.showSheet.toggle()
+                }
             } label: {
                 Image(systemName: "chevron.backward")
                     .font(.subheadline)
-                    .foregroundStyle(.green)
+                    .foregroundStyle(ColorPallet.DiaryDateBlue)
                     .padding([.leading], 16)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .frame(height: 36)
@@ -227,11 +233,11 @@ private extension TherapyChatView {
             .textFieldStyle(ChatWithAiTextField())
             .modifier(PlaceholderStyle(showPlaceHolder: userMessage.isEmpty,
                                        placeholder: setPlaceHolder ? "" : "What's on your mind today?", isLargeChatbox: (userMessage.count > MessageViewLineLimitMax)))
-            .background(.white)
-            .frame(height: (userMessage.count > 35) ? 62 : 35)
+            .frame(height: (userMessage.count > 45) ? 62 : 35)
             .animation(.easeIn, value: userMessage)
-            .padding([.top], 4)
+            .background(ColorPallet.grey100)
             .cornerRadius(15)
+
     }
     
     struct ChatWithAiTextField: TextFieldStyle {
@@ -242,73 +248,94 @@ private extension TherapyChatView {
     }
 }
 
-extension TherapyChatView {
+extension ChatView {
     class ViewModel: ObservableObject {
         let container: DIContainer
         private var cancelBag = CancelBag()
         
-        @Published var chats: Loadable<[Chat]>
+        @Published var chats: Loadable<LazyList<Chat>> {
+            willSet{
+                guard let chatList = newValue.value else{
+                    return
+                }
+                
+                guard let isUserMessage = chatList.last?.isUserMessage else{
+                    return
+                }
+                
+                self.isUserTurnToSpeak = !isUserMessage || (chatList.last?.chatState == .ErrorWhileSending)
+            }
+        }
         @Published var isUserTurnToSpeak: Bool = true
         
         var speechRecognizer = SpeechManager()
-        let conversationID: Int
-        //        var didChange = PassthroughSubject<Void, Never>()
-        
+        let conversation: Conversation
         let isRunningTests: Bool
         private let initialAiMessage = "Hi this is Ava your personal therapist. How do you feel today?"
         
-        func sendMessage(_ chatMessage: String){
-            isUserTurnToSpeak = false
+        func sendMessage(_ message: String){
+            guard let chats = self.chats.value else{
+                return
+            }
             
-            self.container.services.chatService.sendChatToServer(message: chatMessage, conversationID: conversationID)
-                .sink { [weak self] error in
-                    self!.isUserTurnToSpeak = true
-#warning("Handel error message")
-                    // Set Last chat as Error proned ( Server had error)
-                    print("Error while sending message \(error)")
-                } receiveValue: {
-                    var newChats = self.chats.value ?? []
-                    newChats.append($0)
-                    newChats.append($1)
-                    self.chats = .loaded(newChats)
-                }
-                .store(in: self.cancelBag)
+            isUserTurnToSpeak = false
+            var newChats: [Chat] = Array(chats)
+            newChats.append(.init(message: message, conversationID: self.conversation.id, chatSequence: nil, isUserMessage: true, isSentToserver: .BeingSent))
+            self.chats = .loaded(newChats.lazyList)
+  
+            self.container.services.chatService.sendChatToServer(chats: loadableSubject(\.chats), message: message, conversationID: self.conversation.id, cancelBag: self.cancelBag)
         }
         
-        func addChatToConversation() {
+        func getChats() -> [Chat] {
+            guard let ch = self.chats.value else{
+                return []
+            }
             
+            return Array(ch)
         }
         
         func loadConversationChat() {
-            self.container.services.conversationService.loadConversationChat(conversation: loadableSubject(\.chats), conversationID: self.conversationID)
+            self.container.services.conversationService.loadConversationChat(conversation: loadableSubject(\.chats), conversationID: self.conversation.id)
         }
-        
-        private func addElement<T>(_ element: T, to array: [T]) -> [T] {
-            return array + [element]
-        }
-        
         
         func resendMessage(chat: Chat) {
-            self.container.services.chatService.deletePreviousUserMessage()
-            sendMessage(chat.message)
+            isUserTurnToSpeak = false
+            guard let chats = self.chats.value else{
+                return
+            }
+            
+            isUserTurnToSpeak = false
+            var newChats: [Chat] = Array(chats)
+            newChats.removeLast()
+            newChats.append(.init(id:chat.id, message: chat.message, conversationID: self.conversation.id, chatSequence: nil, isUserMessage: true, isSentToserver: .BeingSent))
+            self.chats = .loaded(newChats.lazyList)
+            
+            self.container.services.chatService.sendChatToServer(chats: loadableSubject(\.chats), message: chat.message, conversationID: self.conversation.id, cancelBag: self.cancelBag)
         }
         
         func setAiMessage(_ msg: String){
             let message = Message(content: msg, isUser: false)
-            //        conversation.messages.append(message)
             self.speechRecognizer.readOut(text: message.content)
         }
         
-        public func restart() {
-            setAiMessage("Hi i'm Ava the AI Therapist! How do you feel today?")
-            isUserTurnToSpeak = true
+        // Rule: Remove conversation if no chat initiated
+        func onBackToPreviousClicked(_ completion: @escaping () -> ()){
+            if let chats = self.chats.value {
+                if chats.count <= 1 {
+                    self.container.services.conversationService.deleteConversationAndUpdate(conversationID: self.self.conversation.id)
+                }else{                    
+                    self.container.services.conversationService.addConversationToDB(conversation: self.conversation)
+                }
+            }
+
+            completion()
         }
         
         init(conversation: Conversation, container: DIContainer, isRunningTests: Bool = ProcessInfo.processInfo.isRunningTests) {
-            _chats = .init(initialValue: .partialLoaded(Array(conversation.chats)))
+            _chats = .init(initialValue: .partialLoaded(Array(conversation.chats).lazyList))
             self.container = container
             self.isRunningTests = isRunningTests
-            self.conversationID = conversation.id
+            self.conversation = conversation
         }
     }
 }

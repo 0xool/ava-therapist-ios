@@ -19,6 +19,7 @@ protocol ChatService {
     func sendChatToServer(message: String, conversationID: Int) -> AnyPublisher<(Chat, Chat), Error>
     func deletePreviousUserMessage()
     func deleteAllChatFor(conversationID: Int)
+    func sendChatToServer(chats: LoadableSubject<LazyList<Chat>>, message:String, conversationID: Int, cancelBag: CancelBag)
 }
 
 struct MainChatService: ChatService {
@@ -81,10 +82,51 @@ struct MainChatService: ChatService {
         return chatRepository.sendChatToServer(data: .init(chat: .init(message: message, conversationID: conversationID)))
             .map{
                 saveChatInDB(chat: $0)
-                saveChatInDB(chat: $1)                
+                saveChatInDB(chat: $1)
                 return ($0, $1)
             }
             .eraseToAnyPublisher()
+    }
+    
+    func sendChatToServer(chats: LoadableSubject<LazyList<Chat>>, message:String, conversationID: Int, cancelBag: CancelBag){
+
+        guard let chatValue = chats.wrappedValue.value else {
+            return
+        }
+        
+
+        var updatedChats = Array(chatValue)
+        let serverChat: Chat = .init(id: updatedChats.last!.id + 1, message: "           ", conversationID: conversationID, chatSequence: nil, isUserMessage: false, isSentToserver: .LoadingServerChat)
+        updatedChats.append(serverChat)
+        chats.wrappedValue = .loaded(updatedChats.lazyList)
+
+        chatRepository.sendChatToServer(data: .init(chat: .init(message: message, conversationID: conversationID)))
+            .sink { completion in
+                switch completion {
+                case .finished:
+                    
+                    break
+                case .failure(_):
+                    var newChat = Array(chatValue)
+                    if let lastChat = newChat.last {
+                        lastChat.chatState = .ErrorWhileSending
+                        newChat.removeLast()
+                        newChat.append(lastChat)
+                        chats.wrappedValue = .loaded(newChat.lazyList)
+                    }
+                    break
+                }
+            } receiveValue: {
+                saveChatInDB(chat: $0)
+                saveChatInDB(chat: $1)
+                
+                var newChat = Array(chatValue)
+                newChat.append(.init(id: $1.id, message: $1.message, conversationID: conversationID, chatSequence: $1.chatSequence, isUserMessage: false, isSentToserver: .LastServerChat))
+                
+                chats.wrappedValue = .loaded(newChat.lazyList)
+            }
+            .store(in: cancelBag)
+
     }
     
     func deletePreviousUserMessage() {
@@ -123,5 +165,9 @@ struct StubChatService: ChatService {
     }
     
     func loadConversationChat(chats: LoadableSubject<LazyList<Chat>>, conversationID: Int) {
+    }
+    
+    func sendChatToServer(chats: LoadableSubject<LazyList<Chat>>, message:String, conversationID: Int, cancelBag: CancelBag){
+        
     }
 }

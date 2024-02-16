@@ -26,6 +26,26 @@ struct AuthenticationBackgroundView: View {
     }
 }
 
+struct ChatEarBackgroundView: View {
+    let backgroundColor: Color = ColorPallet.Verdigris
+
+    
+    var body: some View {
+        background
+    }
+    
+    @ViewBuilder var background: some View {
+        ZStack{
+            backgroundColor
+            Image("white-ear-bg")
+                .resizable()
+                .opacity(0.05)
+        }
+        .clipped()
+        .ignoresSafeArea()
+    }
+}
+
 struct TwoCircleBackgroundView: View {
     @State private var circleAnimationOffsetX: CGFloat = 0
     @State private var circleAnimationOffsetY: CGFloat = 0

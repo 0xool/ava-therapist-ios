@@ -56,8 +56,8 @@ struct ColorPallet{
     
     static let DiarySaveButtonBlue: Color = DeepAquaBlue
     static let LightSkyBlue: Color = Color(red: 0.65, green: 0.87, blue: 0.99)
-    
-    
+    static let grey100: Color = Color(red: 0.93, green: 0.94, blue: 0.94)
+    static let grey300: Color = Color(red: 0.53, green: 0.54, blue: 0.55)
 }
 
 

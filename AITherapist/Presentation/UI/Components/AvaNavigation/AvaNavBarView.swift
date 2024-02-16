@@ -29,11 +29,10 @@ struct AvaNavBarView<Content: View, Background: View>: View {
                     .backgroundStyle(.clear)
                     .padding(.top, 4)
                 self.content
-                    .padding([.leading, .trailing], 16)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .backgroundStyle(.clear)
             }
-        }
+        }        
         .toolbarBackground(.hidden, for: .navigationBar)
         .backgroundStyle(.clear)
         .onPreferenceChange(AvaNavigationBarTopLeftButtonRefrenceKeys.self, perform: { self.backButtonType = $0 })

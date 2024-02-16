@@ -163,7 +163,7 @@ class DataBaseManager: DataBase {
     }
     
     func IncrementaChatID() -> Int{
-        if let retNext = realm.objects(Chat.self).sorted(byKeyPath: "id").first?.id {
+        if let retNext = realm.objects(Chat.self).sorted(byKeyPath: "id", ascending: false).first?.id {
             return retNext + 1
         }else{
             return 1

@@ -10,18 +10,6 @@ import Combine
 
 struct ConversationListView: View {
     @ObservedObject private(set) var viewModel: ViewModel
-    @State private var searchText: String = ""
-    
-    var filteredConversationList: [Conversation] { self.viewModel.conversations.value?.filter({
-        
-        guard let summary = $0.summary else{
-            return false
-        }
-        
-        return summary.contains(self.searchText)
-        
-    }).sorted { $0.dateCreated > $1.dateCreated } ?? []
-    }
     
     var body: some View {
         mainContent
@@ -64,19 +52,9 @@ private extension ConversationListView {
 // MARK: Displaying Content
 private extension ConversationListView {
     func loadedView(_ conversationList: LazyList<Conversation>) -> some View {
-        let filteredConversationList = conversationList.filter({
-            if searchText.count == 0 { return true }
-            guard let summary = $0.summary else{
-                return false
-            }
-            
-            return summary.contains(self.searchText)
-            
-        }).sorted { $0.dateCreated > $1.dateCreated }
-        
-        return NavigationStack {
+        NavigationStack {
             VStack(spacing: 0){
-                SearchableCustom(searchtxt: $searchText)
+                SearchableCustom(searchtxt: $viewModel.searchText)
                     .padding(.bottom, 8)
                 
                 ConversationCellHeader()
@@ -84,23 +62,14 @@ private extension ConversationListView {
                     .zIndex(5)
                 ZStack{
                     List{
-                        ForEach (filteredConversationList, id: \.id){ conversation in
+                        ForEach (self.viewModel.getFilteredConversationList()
+                                 , id: \.id){ conversation in
                             ZStack{
                                 ConversationCell(conversation: conversation)
                                     .background(.clear)
                                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                                 
-                                AvaNavigationLink {
-                                    TherapyChatView(viewModel: .init(conversation: conversation, container: self.viewModel.container))
-                                        .avaNavigationBarTopLeftButton(.back)
-                                        .avaNavigationBarTitle("")
-                                } label: {
-                                    EmptyView()
-                                } background: {
-                                    TwoCircleBackgroundView()
-                                }
-                                .listRowBackground(Color.red)
-                                .opacity(0)
+                                NavigationChatView(conversation: conversation, container: self.viewModel.container)
                             }
                             .padding([.top, .bottom], 0)
                             .listRowSeparator(.hidden)
@@ -286,6 +255,7 @@ extension ConversationListView{
 
 extension ConversationListView {
     class ViewModel: ObservableObject {
+        @Published var searchText: String = ""
         let container: DIContainer
         let isRunningTests: Bool
         private var cancelBag = CancelBag()
@@ -295,12 +265,6 @@ extension ConversationListView {
                 self.container.appState[\.conversationData.conversations]
             }set{
                 self.container.appState[\.conversationData.conversations] = newValue
-            }
-        }
-        
-        var conversationsList: LazyList<Conversation> {
-            get{
-                conversations.value?.sorted(by: { $0.dateCreated > $1.dateCreated }).lazyList ?? [].lazyList
             }
         }
         
@@ -332,14 +296,28 @@ extension ConversationListView {
             loadConversationList()
         }
         
+        func getFilteredConversationList() -> LazyList<Conversation>{
+            guard let conversationsList = self.conversations.value else{
+                return [].lazyList
+            }
+            
+            return conversationsList.filter({
+                if searchText.count == 0 { return true }
+                guard let summary = $0.summary else{
+                    return false
+                }
+                
+                return summary.contains(self.searchText)
+                
+            }).sorted { $0.dateCreated > $1.dateCreated }.lazyList
+        }
+        
         func deleteConversation(at offsets: IndexSet) {
             guard let index = offsets.first?.codingKey.intValue else{
                 return
             }
             
-            guard let conversationID = self.conversations.value?[index].id else {
-                return
-            }
+            let conversationID = getFilteredConversationList()[index].id
             
             self.conversations = .loaded(self.conversations.value?.filter({ $0.id != conversationID
             }) .lazyList ?? [].lazyList)

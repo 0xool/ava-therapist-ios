@@ -14,6 +14,7 @@ struct AuthenticationView: View {
     @ObservedObject private(set) var viewModel: ViewModel
     @State var email: String = ""
     @State var password: String = ""
+    
     @State var rePassword: String = ""
     @State var mobileNumber: String = ""
     @State var nickname: String = ""
@@ -291,13 +292,6 @@ extension  AuthenticationView {
 }
 
 private extension AuthenticationView {
-    //    var notRequestedView: some View {
-    //        //        Text("").onAppear(perform: self.viewModel.reloadCountries)
-    //        AnimatedSpashView(loopMode: .loop)
-    //            .scaleEffect(0.4)
-    //            .foregroundColor(.red)
-    //    }
-    
     func loadingView(_ previouslyLoaded: User?) -> some View {
         ZStack{
             AuthenticationBackgroundView()

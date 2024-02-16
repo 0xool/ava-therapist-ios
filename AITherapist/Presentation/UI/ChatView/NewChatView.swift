@@ -14,7 +14,7 @@ struct NewChatView: View {
     var body: some View {
         content
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(TwoCircleBackgroundView())
+            .background(ChatEarBackgroundView())
     }
     
     @ViewBuilder private var content: some View {
@@ -39,7 +39,7 @@ struct NewChatView: View {
 // MARK: Loading Content
 private extension NewChatView {
     private func loadedView(_ conversation: Conversation) -> some View{
-        TherapyChatView(viewModel: .init(conversation: conversation, container: self.viewModel.container), withBackButton: true, showSheet: $show)
+        ChatView(viewModel: .init(conversation: conversation, container: self.viewModel.container), withBackButton: true, showSheet: $show)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
     
@@ -55,7 +55,6 @@ private extension NewChatView {
     
     func failedView(_ error: Error) -> some View {
         ErrorView(error: error, retryAction: {
-#warning("Handle Conversation ERROR")
             print("Handle Conversation ERROR")
         })
     }

@@ -13,8 +13,12 @@ protocol ConversationService {
     func loadConversationList(conversations: LoadableSubject<LazyList<Conversation>>)
     func loadConversationChat(conversation: LoadableSubject<Conversation>, conversationID: Int)
     func createNewConversation(conversation: LoadableSubject<Conversation>, conversationName: String)
+    
     func deleteConversation(conversationID: Int) -> AnyPublisher<Void, Error>
-    func loadConversationChat(conversation: LoadableSubject<[Chat]>, conversationID: Int)
+    func loadConversationChat(conversation: LoadableSubject<LazyList<Chat>>, conversationID: Int)
+    func deleteConversationAndUpdate(conversationID: Int)
+    
+    func addConversationToDB(conversation: Conversation)
 }
 
 struct MainConversationService: ConversationService {
@@ -56,9 +60,40 @@ struct MainConversationService: ConversationService {
                 conversationRepository.deleteConversation(conversationID: conversationID)
             })
             .flatMap({ [conversationDBRepository] in
+                
                 conversationDBRepository.deleteConversation(conversationID: conversationID)
             })
             .eraseToAnyPublisher()
+    }
+    
+    func addConversationToDB(conversation: Conversation){
+        _ = conversationDBRepository.store(conversation: conversation)
+    }
+    
+    func deleteConversationAndUpdate(conversationID: Int) {
+        let cancelBag = CancelBag()
+        if let conversations = appState[\.conversationData.conversations].value {
+            appState[\.conversationData.conversations] = .loaded(conversations.filter { $0.id != conversationID }.lazyList)
+        }
+    
+        Just<Void>
+            .withErrorType(Error.self)
+            .map({ [conversationRepository] in
+                _ = conversationRepository.deleteConversation(conversationID: conversationID)
+            })
+            .sink { completion in
+                switch completion {
+                case .failure(let error):
+                    print(error)
+                    break
+                case .finished:
+
+                    break
+                }
+            } receiveValue: { _ in
+                
+            }
+            .store(in: cancelBag)
     }
     
     func loadConversationChat(conversation: LoadableSubject<Conversation>, conversationID: Int){
@@ -80,7 +115,7 @@ struct MainConversationService: ConversationService {
             .store(in: cancelBag)
     }
     
-    func loadConversationChat(conversation: LoadableSubject<[Chat]>, conversationID: Int){
+    func loadConversationChat(conversation: LoadableSubject<LazyList<Chat>>, conversationID: Int){
         let cancelBag = CancelBag()
         conversation.wrappedValue.setIsLoading(cancelBag: cancelBag)
         
@@ -91,9 +126,6 @@ struct MainConversationService: ConversationService {
             }
             .flatMap { [chatService] in
                 chatService.loadChatFromDBBy(conversationID: conversationID)
-            }
-            .map{
-                Array($0)
             }
             .sinkToLoadable { conversation.wrappedValue = $0 }
             .store(in: cancelBag)
@@ -120,6 +152,7 @@ struct MainConversationService: ConversationService {
                 switch completion {
                 case .failure(let error):
                     conversation.wrappedValue = .failed(error)
+                    break
                 case .finished:
                     // Handle the successful completion
                     break
@@ -195,8 +228,7 @@ struct StubConversationService: ConversationService {
         
     }
     
-    func loadConversationChat(conversation: LoadableSubject<[Chat]>, conversationID: Int){
-        
+    func loadConversationChat(conversation: LoadableSubject<LazyList<Chat>>, conversationID: Int){
     }
     
     func deleteConversation(conversationID: Int) -> AnyPublisher<Void, Error> {
@@ -221,5 +253,13 @@ struct StubConversationService: ConversationService {
     }
     
     func loadConversationChat(conversation: LoadableSubject<Conversation>, conversationID: Int) {
+    }
+    
+    func deleteConversationAndUpdate(conversationID: Int){
+        
+    }
+    
+    func addConversationToDB(conversation: Conversation) {
+        
     }
 }
