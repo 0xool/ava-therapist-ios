@@ -33,7 +33,6 @@ class MainAuthenticationService: AuthenticationService {
     func checkUserLoggedStatus() {
         let cancelBag = CancelBag()
         
-        
         Just<Void>
             .withErrorType(Error.self)
             .flatMap{

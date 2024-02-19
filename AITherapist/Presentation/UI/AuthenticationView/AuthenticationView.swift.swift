@@ -23,6 +23,8 @@ struct AuthenticationView: View {
     @State private var showingAlert = false
     @State private var showLoginView = true
     
+    @EnvironmentObject var namespaceWrapper: NamespaceWrapper
+    
     var body: some View {
         self.content
             .background(Color(red: 220/255, green: 255/255, blue: 253/255))        
@@ -36,7 +38,7 @@ struct AuthenticationView: View {
             case .notRequested:
                 EmptyView()
             case let .isLoading(last, _):
-                loadingView(last)
+                loadingView()
             case let .loaded(user):
                 loadedView(user, showLoading: false)
             case let .failed(error):
@@ -69,7 +71,6 @@ struct AnimatedSplashView: UIViewRepresentable {
     
     func makeUIView(context: Context) -> Lottie.LottieAnimationView {
         let animationView = LottieAnimationView(name: "splashScreen")
-        //        (filePath: "AITherapist/Resources/Assets/AfterEffects/splashScreen.json")
         animationView.play{ status in
             if status{
                 withAnimation(.interactiveSpring(response: 0.7, dampingFraction: 0.5, blendDuration: 1)){
@@ -292,12 +293,13 @@ extension  AuthenticationView {
 }
 
 private extension AuthenticationView {
-    func loadingView(_ previouslyLoaded: User?) -> some View {
+    func loadingView() -> some View {
         ZStack{
             AuthenticationBackgroundView()
             CircleLoading()
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
         }
+        .matchedGeometryEffect(id: "logginBackground", in: self.namespaceWrapper.namespace)
     }
     
     func loadedView(_ user: User, showLoading: Bool) -> some View {
@@ -305,7 +307,13 @@ private extension AuthenticationView {
             if showLoading {
                 ActivityIndicatorView().padding()
             }
-            Text(user.token)
+            ZStack{
+                AuthenticationBackgroundView()
+                Text("Logged in succesfully")
+                CircleLoading()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+            }
+            .matchedGeometryEffect(id: "logginBackground", in: self.namespaceWrapper.namespace)
         }.padding(.bottom, 0)
     }
     

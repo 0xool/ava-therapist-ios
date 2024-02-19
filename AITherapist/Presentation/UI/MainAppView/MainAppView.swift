@@ -27,11 +27,12 @@ struct MainAppView: View {
                 { LoginView } else { mainAppView }
             }
         }
-        .animation(.easeIn, value: self.viewModel.user)
+//        .animation(.easeIn, value: self.viewModel.user)
     }
     
     @ViewBuilder var LoginView: some View {
         AuthenticationView(viewModel: .init(container: viewModel.container))
+            .environmentObject(NamespaceWrapper(self.mainViewNameSpace))
             .attachEnvironmentOverrides(onChange: viewModel.onChangeHandler)
             .modifier(RootViewAppearance(viewModel: .init(container: viewModel.container)))
     }
@@ -82,8 +83,8 @@ extension MainAppView {
         VStack{
             CircleLoading()
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-            Text("Logged in succesfully")
         }
+        .matchedGeometryEffect(id: "logginBackground", in: mainViewNameSpace)
     }
 }
 
