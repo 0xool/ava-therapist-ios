@@ -19,7 +19,6 @@ struct ChatView: View {
     @State private var isUsingMic = false
     
     @State private var isRecording = false
-    @State private var userMessage = ""
     @State private var setPlaceHolder = false
     
     let withBackButton: Bool
@@ -56,9 +55,7 @@ struct ChatView: View {
     }
     
     private func sendMessage() {
-        viewModel.speechRecognizer.transcript = ""
-        let message = userMessage
-        userMessage = ""
+        let message = self.viewModel.userMessage
         viewModel.sendMessage(message)
     }
     
@@ -74,7 +71,7 @@ struct ChatView: View {
                 viewModel.speechRecognizer.transcribe()
             }else{
                 viewModel.speechRecognizer.stopTranscribing()
-                userMessage = viewModel.speechRecognizer.transcript
+                self.viewModel.userMessage = viewModel.speechRecognizer.transcript
             }
         } label: {
             Image(systemName: isRecording ? "stop.fill" : "mic.fill")
@@ -192,8 +189,8 @@ private extension ChatView {
                             }
                             
                             ZStack{
-                                !isRecording ? sendBtnView(isHidden: userMessage.isEmpty) : nil
-                                speechBtnView(isHidden: !userMessage.isEmpty)
+                                !isRecording ? sendBtnView(isHidden: self.viewModel.userMessage.isEmpty) : nil
+                                speechBtnView(isHidden: !self.viewModel.userMessage.isEmpty)
                             }
                         }
                         .padding([.leading, .trailing], 8)
@@ -229,12 +226,12 @@ private extension ChatView {
     }
     
     private func textInputView() -> some View{
-        TextField("", text: $userMessage, axis: .vertical)
+        TextField("", text: $viewModel.userMessage, axis: .vertical)
             .textFieldStyle(ChatWithAiTextField())
-            .modifier(PlaceholderStyle(showPlaceHolder: userMessage.isEmpty,
-                                       placeholder: setPlaceHolder ? "" : "What's on your mind today?", isLargeChatbox: (userMessage.count > MessageViewLineLimitMax)))
-            .frame(height: (userMessage.count > 45) ? 62 : 35)
-            .animation(.easeIn, value: userMessage)
+            .modifier(PlaceholderStyle(showPlaceHolder: self.viewModel.userMessage.isEmpty,
+                                       placeholder: setPlaceHolder ? "" : "What's on your mind today?", isLargeChatbox: (self.viewModel.userMessage.count > MessageViewLineLimitMax)))
+            .frame(height: (self.viewModel.userMessage.count > 45) ? 62 : 35)
+            .animation(.easeIn, value: self.viewModel.userMessage)
             .background(ColorPallet.grey100)
             .cornerRadius(15)
 
@@ -267,6 +264,7 @@ extension ChatView {
             }
         }
         @Published var isUserTurnToSpeak: Bool = true
+        @Published var userMessage = ""
         
         var speechRecognizer = SpeechManager()
         let conversation: Conversation
@@ -274,6 +272,9 @@ extension ChatView {
         private let initialAiMessage = "Hi this is Ava your personal therapist. How do you feel today?"
         
         func sendMessage(_ message: String){
+            self.userMessage = ""
+            self.speechRecognizer.transcript = ""
+            
             guard let chats = self.chats.value else{
                 return
             }

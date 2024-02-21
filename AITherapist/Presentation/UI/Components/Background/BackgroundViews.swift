@@ -176,3 +176,35 @@ struct MenuBackground: View {
         }
     }
 }
+
+struct TabViewBackground: View {
+    private let screenWidth = UIViewController().view.bounds.width
+
+    var body: some View {
+        blueGradientBackgroundView
+    }
+    
+    @ViewBuilder private var blueGradientBackgroundView: some View {
+        
+        ZStack{
+            Rectangle()
+                .fill(ColorPallet.HomePageGradientBackground)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            
+            Circle()
+                .fill(Color(red: 0.16, green: 0.74, blue: 0.93).opacity(0.7))
+                .frame(width: screenWidth, height: screenWidth)
+                .blur(radius: 30)
+                .offset(y: -screenWidth + 100)
+            
+            Image("EarBG")
+                .resizable()
+                .scaledToFit()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+
+        .ignoresSafeArea()
+        
+    }
+}

@@ -27,7 +27,6 @@ struct MainAppView: View {
                 { LoginView } else { mainAppView }
             }
         }
-//        .animation(.easeIn, value: self.viewModel.user)
     }
     
     @ViewBuilder var LoginView: some View {
@@ -80,7 +79,8 @@ extension MainAppView {
     
     func loadingView() -> some View {
         // show logged in successfully
-        VStack{
+        ZStack{
+            TabViewBackground()
             CircleLoading()
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
         }

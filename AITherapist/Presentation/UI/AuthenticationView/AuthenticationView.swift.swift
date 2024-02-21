@@ -37,7 +37,7 @@ struct AuthenticationView: View {
             switch self.viewModel.user {
             case .notRequested:
                 EmptyView()
-            case let .isLoading(last, _):
+            case .isLoading(_, _):
                 loadingView()
             case let .loaded(user):
                 loadedView(user, showLoading: false)

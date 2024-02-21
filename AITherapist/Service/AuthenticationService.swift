@@ -58,15 +58,8 @@ class MainAuthenticationService: AuthenticationService {
         
         Just<Void>
             .withErrorType(Error.self)
-            .flatMap{ [userDBRepository] _ -> AnyPublisher<Bool, Error> in
-                userDBRepository.hasLoadedUser()
-            }
-            .flatMap{ hasLoaded in
-                if hasLoaded {
-                    return Just<Void>.withErrorType(Error.self)
-                } else {
-                    return self.login(email: email, password: password)
-                }
+            .flatMap{
+                self.login(email: email, password: password)
             }
             .flatMap({ [self, userDBRepository] in
                 loadSetting(cancelBag: cancelBag)
@@ -83,6 +76,7 @@ class MainAuthenticationService: AuthenticationService {
             .login(email: email, password: password)
             .ensureTimeSpan(requestHoldBackTimeInterval)
             .map { [userDBRepository, settingDBRepository] in
+                PersistentManager.SaveUserToken(token: $0.data.user.token)
                 _ = userDBRepository.store(user: $0.data.user)
                 _ = settingDBRepository.store(setting: $0.data.userSetting)
             }
@@ -94,6 +88,7 @@ class MainAuthenticationService: AuthenticationService {
             .getUserInfo()
             .ensureTimeSpan(requestHoldBackTimeInterval)
             .map { [userDBRepository, settingDBRepository] in
+                PersistentManager.SaveUserToken(token: $0.data.user.token)
                 _ = userDBRepository.store(user: $0.data.user)
                 _ = settingDBRepository.store(setting: $0.data.userSetting)
             }
@@ -151,6 +146,7 @@ extension MainAuthenticationService {
             .register(nickname: nickname, email: email, password: password, mobileNumber: mobileNumber)
             .ensureTimeSpan(requestHoldBackTimeInterval)
             .map { [userDBRepository, settingDBRepository] in
+                PersistentManager.SaveUserToken(token: $0.data.user.token)
                 _ = settingDBRepository.store(setting: $0.data.userSetting)
                 _ = userDBRepository.store(user: $0.data.user)
             }
