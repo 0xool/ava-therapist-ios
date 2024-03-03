@@ -206,6 +206,6 @@ extension JournalListView{
 
 #if DEBUG
 #Preview {
-    JournalListView(viewModel: .init(container: .init(appState: .preview, services: .stub)))
+    JournalListView(viewModel: .init(container: .init(appState: .previews, services: .stub)))
 }
 #endif

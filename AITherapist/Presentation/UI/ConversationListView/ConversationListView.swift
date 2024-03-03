@@ -262,9 +262,9 @@ extension ConversationListView {
         
         var conversations: Loadable<LazyList<Conversation>>{
             get{
-                self.container.appState[\.conversationData.conversations]
+                self.container.appState[\.userData.conversations]
             }set{
-                self.container.appState[\.conversationData.conversations] = newValue
+                self.container.appState[\.userData.conversations] = newValue
             }
         }
         
@@ -272,7 +272,7 @@ extension ConversationListView {
             self.container = coninater
             self.isRunningTests = isRunningTests
             
-            container.appState.value.conversationData.objectWillChange.sink { value in
+            container.appState.value.userData.objectWillChange.sink { value in
                 self.objectWillChange.send()
             }
             .store(in: self.cancelBag)
@@ -341,7 +341,7 @@ extension ConversationListView {
 #if DEBUG
 struct ConversationListView_Previews: PreviewProvider {
     static var previews: some View {
-        ConversationListView(viewModel: ConversationListView.ViewModel(coninater: .preview))
+        ConversationListView(viewModel: ConversationListView.ViewModel(coninater: .previews))
     }
 }
 #endif

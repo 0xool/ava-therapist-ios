@@ -28,8 +28,8 @@ struct DIContainer: EnvironmentKey {
 
 #if DEBUG
 extension DIContainer {
-    static var preview: Self {
-        .init(appState: AppState.preview, services: .stub)
+    static var previews: Self {
+        .init(appState: AppState.previews, services: .stub)
     }
 }
 #endif

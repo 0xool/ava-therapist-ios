@@ -27,6 +27,6 @@ struct NavigationChatView: View {
 
 #if DEBUG
 #Preview {
-    NavigationChatView(conversation: .init(id: 0, conversationName: "test", date: .now), container: .preview)
+    NavigationChatView(conversation: .init(id: 0, conversationName: "test", date: .now), container: .previews)
 }
 #endif

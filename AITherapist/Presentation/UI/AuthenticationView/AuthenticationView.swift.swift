@@ -335,7 +335,7 @@ private extension AuthenticationView {
 #if DEBUG
 struct AuthenticationView_Previews: PreviewProvider {
     static var previews: some View {
-        AuthenticationView(viewModel: .init(container: .preview))
+        AuthenticationView(viewModel: .init(container: .previews))
     }
 }
 #endif

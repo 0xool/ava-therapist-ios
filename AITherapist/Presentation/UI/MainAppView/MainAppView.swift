@@ -140,7 +140,7 @@ extension MainAppView {
 #if DEBUG
 struct MainContentView_Previews: PreviewProvider {
     static var previews: some View {
-        MainAppView(viewModel: MainAppView.ViewModel(container: .preview))
+        MainAppView(viewModel: MainAppView.ViewModel(container: .previews))
     }
 }
 #endif

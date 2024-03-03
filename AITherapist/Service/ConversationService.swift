@@ -72,8 +72,8 @@ struct MainConversationService: ConversationService {
     
     func deleteConversationAndUpdate(conversationID: Int) {
         let cancelBag = CancelBag()
-        if let conversations = appState[\.conversationData.conversations].value {
-            appState[\.conversationData.conversations] = .loaded(conversations.filter { $0.id != conversationID }.lazyList)
+        if let conversations = appState[\.userData.conversations].value {
+            appState[\.userData.conversations] = .loaded(conversations.filter { $0.id != conversationID }.lazyList)
         }
     
         Just<Void>
@@ -158,10 +158,10 @@ struct MainConversationService: ConversationService {
                     break
                 }
             } receiveValue: {
-                var conversations : [Conversation] = appState[\.conversationData.conversations].value!.map {$0}
+                var conversations : [Conversation] = appState[\.userData.conversations].value!.map {$0}
                 conversations.append($0)
                 
-                appState[\.conversationData.conversations] = .loaded(conversations.lazyList)
+                appState[\.userData.conversations] = .loaded(conversations.lazyList)
                  conversation.wrappedValue = .loaded($0)
             }
             .store(in: cancelBag)

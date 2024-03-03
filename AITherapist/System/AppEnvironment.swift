@@ -101,7 +101,9 @@ extension AppEnvironment {
         let journalDBRepository = MainJournalDBRepository()
         let settingDBRepository = MainSettingDBRepository()
         
-        return .init(conversationRepository: conversationDBRepository, userRepository: userDBRepository, insightRepository: insightDBRepository, chatRepository: chatDBRepository, journalRepository: journalDBRepository, settingRepository: settingDBRepository)
+        let activityDBRepository = MainActivityDBRepository()
+        
+        return .init(conversationRepository: conversationDBRepository, userRepository: userDBRepository, insightRepository: insightDBRepository, chatRepository: chatDBRepository, journalRepository: journalDBRepository, settingRepository: settingDBRepository, activityRepository: activityDBRepository)
     }
     
     private static func configurePersistenceRepositories(app: Store<AppState>) -> DIContainer.PersistenceRepositories {
@@ -122,6 +124,7 @@ extension AppEnvironment {
         let journalService = MainJournalService(journalRepository: webRepositories.journalRepository, journalDBRepository: dbRepositories.journalRepository, appState: appState)
         let profileService = MainProfileService(imagePersistenceRepository: persistenceRepositories.imagePersistenceRepository, userWebRepository: webRepositories.userRepository, userDBRepository: dbRepositories.userRepository, appState: appState)
         
+        let activityService = MainActivityService(activityDBRepository: dbRepositories.activityRepository, appState: appState)
         let settingService = MainSettingService(settingRepository: webRepositories.settingRepository, settingDBRepository: dbRepositories.settingRepository, appState: appState)
 
         let userPermissionsService = MainUserPermissionsService(
@@ -131,7 +134,7 @@ extension AppEnvironment {
                 }
             })
         
-        return .init(services: .init(conversationService: conversationService, userPermissionsService: userPermissionsService, authenticationService: authenticationService, insightService: insightService, chatService: chatService, journalService: journalService, profileService: profileService, settingService: settingService))
+        return .init(services: .init(conversationService: conversationService, userPermissionsService: userPermissionsService, authenticationService: authenticationService, insightService: insightService, chatService: chatService, journalService: journalService, profileService: profileService, settingService: settingService, activityService: activityService))
     }
 }
 
@@ -153,9 +156,12 @@ extension DIContainer {
         let conversationRepository: ConversationDBRepository
         let userRepository: UserDBRepository
         let insightRepository: InsightDBRepository
+        
         let chatRepository: ChatDBRepository
         let journalRepository: JournalDBRepository
         let settingRepository: SettingDBRepository
+        
+        let activityRepository: ActivityDBRepository
     }
     
     struct PersistenceRepositories {

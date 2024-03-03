@@ -71,7 +71,6 @@ struct AvaNavBarView<Content: View, Background: View>: View {
                     Button {
                         dismiss()
                         AppState.UserData.shared.logout()
-
                     } label: {
                         Image(systemName: "rectangle.portrait.and.arrow.right")
                             .font(.title3)

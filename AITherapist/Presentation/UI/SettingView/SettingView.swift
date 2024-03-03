@@ -178,6 +178,6 @@ extension SettingView{
 
 #if DEBUG
 #Preview {
-    SettingView(viewModel: .init(container: .preview))
+    SettingView(viewModel: .init(container: .previews))
 }
 #endif

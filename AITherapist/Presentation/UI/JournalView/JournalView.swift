@@ -400,7 +400,7 @@ struct JournalView_Preview: PreviewProvider {
     @Namespace static var namespace
     
     static var previews: some View{
-        JournalView(viewModel: .init(container: .preview))
+        JournalView(viewModel: .init(container: .previews))
     }
 }
 #endif

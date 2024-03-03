@@ -15,6 +15,9 @@ struct InsightView: View {
     @State private var isAnimatingMood = false
     @Binding private var showNewConversationChatView: Bool
     
+    @State var chartXPosAnchor: Double
+    @State var chartType: ChartView.ChartType = .line
+    
     @Namespace private var insightNamespace
     private let moods: [Mood]
     
@@ -25,25 +28,26 @@ struct InsightView: View {
         
         self.moods = viewModel.insight.value?.getDailyMoodsArray() ?? moods
         self._showNewConversationChatView = showNewConversationChatView
+        self.chartXPosAnchor = Double(Date.now.timeIntervalSince1970)
     }
     
     var body: some View {
-        MoodAnalyticsView(namespace: insightNamespace, isSource: showingModalSheet, showBackButton: true, withOptions: true, shown: $showingModalSheet, moods: self.moods)
+        MoodAnalyticsView(namespace: insightNamespace, isSource: showingModalSheet, showBackButton: true, withOptions: true, shown: $showingModalSheet, chartType: $chartType, chartXPosAnchor: $chartXPosAnchor, moods: self.moods)
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
             .opacity(showingModalSheet ? 1 : 0)
         
         ScrollView{
-            VStack{
+            LazyVStack{
                 WelcomeToHomeTitleView(name: self.viewModel.name)
                     .opacity(isAnimatingMood ? 1 : 0)
                 QuoteView(quote: self.viewModel.quote)
                 
-                if (self.viewModel.userInsightHasValues()) {
+                if (self.viewModel.userInsightEmptyValues()) {
                     createNewConversationButton
                 }else{
-                    VStack{
+                    LazyVStack{
                         Divider()
-                        MoodAnalyticsView(namespace: insightNamespace, isSource: !showingModalSheet, showBackButton: false, withOptions: false, shown: $showingModalSheet, moods: self.moods)
+                        MoodAnalyticsView(namespace: insightNamespace, isSource: !showingModalSheet, showBackButton: false, withOptions: false, shown: $showingModalSheet, chartType: $chartType, chartXPosAnchor: $chartXPosAnchor, moods: self.moods)
                             .opacity(isAnimatingMood ? 1 : 0)
                             .offset(x: isAnimatingMood ? 0 : -50, y: 0)
                             .onTapGesture{
@@ -54,6 +58,10 @@ struct InsightView: View {
                         Divider()
                         
                         GeneralSummaryView(generalSummaryText: self.viewModel.generalSummary)
+                            
+                        Divider()
+                        
+                        activityView
                             .padding(.bottom, 16)
                         
                         Divider()
@@ -73,6 +81,10 @@ struct InsightView: View {
                 }
             }
         }
+    }
+    
+    @ViewBuilder var activityView: some View{
+        ActivityView(viewModel: .init(container: self.viewModel.container))
     }
     
     @ViewBuilder var createNewConversationButton: some View{
@@ -168,26 +180,52 @@ struct MoodAnalyticsView: View {
     
     let withOptions: Bool
     @Binding var shown: Bool
+    
+    @Binding var chartType: ChartView.ChartType
+    @Binding var chartXPosAnchor: Double
     let moods: [Mood]
     
     var body: some View {
         VStack{
-            Button {
-                withAnimation(Animation.spring) {
-                    shown.toggle()
-                }
-            } label: {
-                Image(systemName: "x.circle.fill")
-                    .resizable()
-                    .frame(width: 25, height: 25)
-                    .padding([.leading], 8)
-            }
-            .foregroundStyle(.red)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .hiddenModifier(isHide: !showBackButton)
             
-            ChartView(isSource: isSource, chartNamespace: self.namespace, withChartOption: withOptions, moods: self.moods)
+            exitButton
+            
+            titleText
+            
+            Spacer()
+            
+            ChartView(chartType: $chartType, chartPosXCordinator: $chartXPosAnchor, isSource: isSource, chartNamespace: self.namespace, withChartOption: withOptions, moods: self.moods)
+                .frame(maxHeight: 300)
+                .frame(width: UIViewController().view.bounds.width)
+            
+            Spacer()
         }
+    }
+    
+    @ViewBuilder var exitButton: some View{
+        Button {
+            withAnimation(Animation.spring) {
+                shown.toggle()
+            }
+        } label: {
+            Image(systemName: "x.circle.fill")
+                .resizable()
+                .frame(width: 25, height: 25)
+                .padding([.leading], 8)
+        }
+        .foregroundStyle(.red)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .hiddenModifier(isHide: !showBackButton)
+    }
+    
+    @ViewBuilder var titleText: some View {
+        // Regular/Body
+        Text("Track your mood to discover personal patterns and gain self-insight.")
+//              .font(Font.custom("SF Pro Text", size: 17))
+          .multilineTextAlignment(.center)
+          .foregroundColor(ColorPallet.DarkBlueText)
+          .frame(width: 293, height: 46, alignment: .top)
+          .hiddenModifier(isHide: !showBackButton)
     }
 }
 
@@ -198,12 +236,13 @@ struct GeneralSummaryView: View {
         VStack{
             Text("General Summary")
                 .font(.title3)
-                .foregroundStyle(ColorPallet.DarkBlue)
+                .foregroundStyle(ColorPallet.DarkBlueText)
                 .bold()
             Text(generalSummaryText)
                 .font(.caption)
                 .padding([.top], 8)
-                .foregroundStyle(ColorPallet.DarkBlue)
+                .multilineTextAlignment(.center)
+                .foregroundStyle(ColorPallet.DarkBlueText)
         }
         .padding()
     }
@@ -263,7 +302,7 @@ extension InsightView {
             .store(in: cancelBag)
         }
         
-        func userInsightHasValues() -> Bool {
+        func userInsightEmptyValues() -> Bool {
             self.insight.value?.generalSummary == nil || self.insight.value?.dailyMoods.count == 0
         }
     }
@@ -272,7 +311,7 @@ extension InsightView {
 #if DEBUG
 struct InsightView_Previews: PreviewProvider {
     static var previews: some View {
-        InsightView(viewModel: .init(container: .preview), showNewConversationChatView: Binding.constant(false))
+        InsightView(viewModel: .init(container: .previews), showNewConversationChatView: Binding.constant(false))
     }
 }
 #endif

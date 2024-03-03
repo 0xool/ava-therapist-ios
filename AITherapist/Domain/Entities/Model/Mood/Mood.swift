@@ -9,9 +9,10 @@ import RealmSwift
 import Foundation
 import Charts
 
-class Mood: EmbeddedObject, Codable {
-    @Persisted var moodType: MoodType? = .EmotionNotDetected
-    @Persisted var dateCreated: Date?
+class Mood: Object, Codable, Identifiable {
+    var id: UUID = UUID()
+    @Persisted var moodType: MoodType = .EmotionNotDetected
+    @Persisted var dateCreated: Date
     @Persisted var moodString: String
     
     enum CodingKeys: String, CodingKey {
@@ -31,7 +32,7 @@ class Mood: EmbeddedObject, Codable {
         self.init(mood: mood, dateCreated: dateCreated, moodString: moodString)
     }
     
-    convenience init(mood: MoodType, dateCreated: Date?, moodString: String) {
+    convenience init(mood: MoodType, dateCreated: Date, moodString: String) {
         self.init()
         self.moodType = mood
         self.dateCreated = dateCreated
@@ -40,14 +41,13 @@ class Mood: EmbeddedObject, Codable {
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(moodType?.rawValue, forKey: .mood)
-        try container.encode(dateCreated?.description, forKey: .dateCreated)
+        try container.encode(moodType.rawValue, forKey: .mood)
+        try container.encode(dateCreated.description, forKey: .dateCreated)
         try container.encode(moodString, forKey: .moodString)
     }
 }
 
 enum MoodType: String, PersistableEnum {
-    
     case Happy
     case Sad
     case Angry
@@ -66,66 +66,99 @@ enum MoodType: String, PersistableEnum {
     var mood : String {
         switch self {
         case .Happy:
-            return "Happy"
+            "Happy"
         case .Sad:
-            return "Sad"
+            "Sad"
         case .Angry:
-            return "Angry"
+            "Angry"
         case .Anxious:
-            return "Anxious"
+            "Anxious"
         case .Depressed:
-            return "Depressed"
+            "Depressed"
         case .Excited:
-            return "Excited"
+            "Excited"
         case .Frustrated:
-            return "Frustrated"
+            "Frustrated"
         case .Guilty:
-            return "Guilty"
+            "Guilty"
         case .Lonely:
-            return "Lonely"
+            "Lonely"
         case .Nervous:
-            return "Nervous"
+            "Nervous"
         case .Tired:
-            return "Tired"
+            "Tired"
         case .Worried:
-            return "Worried"
+            "Worried"
         case .Stressed:
-            return "Stressed"
+            "Stressed"
         case .EmotionNotDetected:
-            return "EmotionNotDetected"
+            "EmotionNotDetected"
         }
     }
     
     var moodIntValue : Int {
         switch self {
         case .Happy:
-            return 1
+            1
         case .Sad:
-            return 2
+            2
         case .Angry:
-            return 3
+            3
         case .Anxious:
-            return 4
+            4
         case .Depressed:
-            return 5
+            5
         case .Excited:
-            return 6
+            6
         case .Frustrated:
-            return 7
+            7
         case .Guilty:
-            return 8
+            8
         case .Lonely:
-            return 9
+            9
         case .Nervous:
-            return 10
+            10
         case .Tired:
-            return 11
+            11
         case .Worried:
-            return 12
+            12
         case .Stressed:
-            return 13
+            13
         case .EmotionNotDetected:
-            return 14
+            14
+        }
+    }
+    
+    var emoji : String {
+        switch self {
+        case .Happy:
+            "😊"
+        case .Sad:
+            "😢"
+        case .Angry:
+            "😡"
+        case .Anxious:
+            "😰"
+        case .Depressed:
+            "😞"
+        case .Excited:
+            "😃"
+        case .Frustrated:
+            "😤"
+        case .Guilty:
+            "😔"
+        case .Lonely:
+            "😔"
+        case .Nervous:
+            "😨"
+        case .Tired:
+            "😴"
+        case .Worried:
+            "😟"
+        case .Stressed:
+            "😖"
+        case .EmotionNotDetected:
+            "😶"
         }
     }
     
@@ -162,6 +195,17 @@ enum MoodType: String, PersistableEnum {
         }
         
     }
+}
+
+extension Mood {
+    static let previews = [Mood(mood: .Happy, dateCreated: .now, moodString: "Happy"),
+                          Mood(mood: .Excited, dateCreated: .now + 1, moodString: "Excited"),
+                          Mood(mood: .Anxious, dateCreated: .now + 2, moodString: "Anxious"),
+                          Mood(mood: .Anxious, dateCreated: .now - 1, moodString: "Anxious"),
+                          Mood(mood: .Happy, dateCreated: .now + 10, moodString: "Happy"),
+                            Mood(mood: .Guilty, dateCreated: .now - 10, moodString: "Guilty") ]
+    
+    static let preview = Mood(mood: .Happy, dateCreated: .now, moodString: "Happy")
 }
 
 extension MoodType: Plottable{

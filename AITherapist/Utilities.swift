@@ -40,10 +40,12 @@ struct ColorPallet{
     static let CelesteLight: Color = Color(red: 0.76, green: 0.99, blue: 0.99)
     
     static let DarkBlue: Color = Color(red: 0.01, green: 0.16, blue: 0.21)
-    static let DeepAquaBlue: Color = Color(red: 0.08, green: 0.43, blue: 0.55)
+    static let DarkBlueText: Color = DarkBlue
     
+    static let DeepAquaBlue: Color = Color(red: 0.08, green: 0.43, blue: 0.55)
     static let IconBlue: Color = Color(red: 20/255, green: 110/255, blue: 139/255)
     static let TertiaryYellow: Color = Color(red: 0.93, green: 0.74, blue: 0.16)
+    
     static let HomePageGradientBackground = LinearGradient(colors: [MediumTurquoiseBlue, Celeste], startPoint: .top, endPoint: .bottom)
     
     static let Verdigris: Color = Color(red: 0.29, green: 0.69, blue: 0.69)
@@ -57,7 +59,9 @@ struct ColorPallet{
     static let DiarySaveButtonBlue: Color = DeepAquaBlue
     static let LightSkyBlue: Color = Color(red: 0.65, green: 0.87, blue: 0.99)
     static let grey100: Color = Color(red: 0.93, green: 0.94, blue: 0.94)
+    static let grey200: Color = Color(red: 0.67, green: 0.69, blue: 0.7)
     static let grey300: Color = Color(red: 0.53, green: 0.54, blue: 0.55)
+    
 }
 
 

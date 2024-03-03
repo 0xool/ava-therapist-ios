@@ -19,6 +19,7 @@ extension DIContainer {
         
         let profileService: ProfileService
         let settingService: SettingService
+        let activityService: ActivityService
         
         init(services: ServiceRepository) {
             self.conversationService = services.conversationService
@@ -31,12 +32,13 @@ extension DIContainer {
             
             self.profileService = services.profileService
             self.settingService = services.settingService
+            self.activityService = services.activityService
         }
         
         static var stub: Self {
             .init(services: .init(
                 conversationService: StubConversationService(),
-                  userPermissionsService: StubUserPermissionsService(), authenticationService: StubAuthenticateService(), insightService: StubInsightService(), chatService: StubChatService(), journalService: StubJournalService(), profileService:  StubProfileService(), settingService: StubSettingService()))
+                userPermissionsService: StubUserPermissionsService(), authenticationService: StubAuthenticateService(), insightService: StubInsightService(), chatService: StubChatService(), journalService: StubJournalService(), profileService:  StubProfileService(), settingService: StubSettingService(), activityService: StubActivityService()))
         }
     }
     
@@ -51,5 +53,6 @@ extension DIContainer {
         
         let profileService: ProfileService
         let settingService: SettingService
+        let activityService: ActivityService
     }
 }

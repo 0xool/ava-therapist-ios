@@ -10,7 +10,7 @@ import KeychainSwift
 
 class PersistentManager {
     static func UserHasFinishedOnboarding() -> Bool {
-        return UserDefaults.standard.bool(forKey: PersistentType.HasFinishedOnboarding.rawValue)
+        UserDefaults.standard.bool(forKey: PersistentType.HasFinishedOnboarding.rawValue)
     }
     
     static func SaveUserToken(token: String) {
@@ -19,6 +19,11 @@ class PersistentManager {
         
         let keychain = KeychainSwift()
         keychain.set(token, forKey: PersistentType.UserCookie.rawValue)
+    }
+
+    static func DeleteUserToken() {
+        let keychain = KeychainSwift()
+        keychain.delete(PersistentType.UserCookie.rawValue)
     }
     
     static func GetUserToken() -> String {

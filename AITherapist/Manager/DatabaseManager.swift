@@ -8,6 +8,7 @@
 import Foundation
 import RealmSwift
 import Combine
+import Realm
 
 protocol DataBase {
     func GetAll<T: Object>() -> Results<T>
@@ -88,12 +89,16 @@ class DataBaseManager: DataBase {
     }
     
     func ClearAllData() {
-        do {
-            try self.realm.write {
-                self.realm.deleteAll()
+        let delayInSeconds: TimeInterval = 3.0
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + delayInSeconds) {
+            do {
+                try self.realm.write {
+                    self.realm.deleteAll()
+                }
+            }catch {
+                
             }
-        }catch {
-            
         }
     }
     

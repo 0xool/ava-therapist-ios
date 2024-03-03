@@ -351,6 +351,6 @@ extension MainView {
 
 #if DEBUG
 #Preview{
-    MainView(viewModel: MainView.ViewModel(container: .preview ))
+    MainView(viewModel: MainView.ViewModel(container: .previews ))
 }
 #endif

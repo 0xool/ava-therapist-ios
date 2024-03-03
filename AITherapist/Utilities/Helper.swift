@@ -57,6 +57,14 @@ internal final class Inspection<V> {
     }
 }
 
+extension Date {
+    var startOfDay: Date {
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.year, .month, .day], from: self)
+        return calendar.date(from: components)!
+    }
+}
+
 extension Just where Output == Void {
     static func withErrorType<E>(_ errorType: E.Type) -> AnyPublisher<Void, E> {
         return withErrorType((), E.self)

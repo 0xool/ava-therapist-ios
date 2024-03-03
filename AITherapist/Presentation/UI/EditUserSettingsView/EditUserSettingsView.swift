@@ -123,6 +123,6 @@ extension EditUserSettingsView{
 
 #if DEBUG
 #Preview {
-    EditUserSettingsView(viewModel: .init(container: .preview))
+    EditUserSettingsView(viewModel: .init(container: .previews))
 }
 #endif

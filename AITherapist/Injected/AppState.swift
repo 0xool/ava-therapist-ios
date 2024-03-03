@@ -15,7 +15,7 @@ struct AppState: Equatable {
     var system = System()
     
     var permissions = Permissions()
-    var conversationData = ConversationData()
+//    var conversationData = ConversationData()
     var application = Application.instance
 }
 
@@ -31,24 +31,29 @@ extension AppState {
         @Published var insight: Loadable<Insight> = .notRequested
         var setting: Loadable<Setting> = .notRequested
         
+        @Published var conversations: Loadable<LazyList<Conversation>> = .notRequested
+        
         func logout() {
             self.user = .notRequested
             self.setting = .notRequested
+            self.insight = .notRequested
+            self.conversations = .notRequested
+            
             _ = MainUserDBRepository().deleteUser()
+            PersistentManager.DeleteUserToken()
             DataBaseManager.Instance.ClearAllData()
         }
     }
 }
 
-extension AppState{
-    class ConversationData: ObservableObject{
-        @Published var conversations: Loadable<LazyList<Conversation>> = .notRequested
-        
-        init(conversations: Loadable<LazyList<Conversation>> = .notRequested) {
-            self.conversations = conversations
-        }
-    }
-}
+//extension AppState{
+//    class ConversationData: ObservableObject{
+//        
+//        init(conversations: Loadable<LazyList<Conversation>> = .notRequested) {
+//            self.conversations = conversations
+//        }
+//    }
+//}
 
 extension AppState{
     class Application: ObservableObject{
@@ -100,7 +105,7 @@ func == (lhs: AppState, rhs: AppState) -> Bool {
 
 #if DEBUG
 extension AppState {
-    static var preview: AppState {
+    static var previews: AppState {
         var state = AppState()
         state.system.isActive = true
         return state
