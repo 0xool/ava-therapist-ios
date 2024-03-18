@@ -161,7 +161,7 @@ enum MoodType: String, PersistableEnum {
             "😶"
         }
     }
-    
+
     init(rawValue: Int) {
         switch rawValue {
         case 1:
@@ -197,13 +197,17 @@ enum MoodType: String, PersistableEnum {
     }
 }
 
+func getMoodEmojiFromString(mood: String?) -> String {
+    MoodType(primitivePlottable: mood ?? "EmotionNotDetected")?.emoji ?? MoodType.EmotionNotDetected.emoji
+}
+
 extension Mood {
     static let previews = [Mood(mood: .Happy, dateCreated: .now, moodString: "Happy"),
                           Mood(mood: .Excited, dateCreated: .now + 1, moodString: "Excited"),
                           Mood(mood: .Anxious, dateCreated: .now + 2, moodString: "Anxious"),
                           Mood(mood: .Anxious, dateCreated: .now - 1, moodString: "Anxious"),
                           Mood(mood: .Happy, dateCreated: .now + 10, moodString: "Happy"),
-                            Mood(mood: .Guilty, dateCreated: .now - 10, moodString: "Guilty") ]
+                        Mood(mood: .Guilty, dateCreated: .now - 10, moodString: "Guilty") ]
     
     static let preview = Mood(mood: .Happy, dateCreated: .now, moodString: "Happy")
 }

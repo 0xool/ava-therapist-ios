@@ -157,13 +157,11 @@ extension MainView {
                             .aspectRatio(contentMode: .fill)
                             .frame(width: 32, height: 32)
                         Text(self.title)
-                            .font(
-                                Font.custom("SF Pro Text", size: 10)
-                                    .weight(.medium)
-                            )
-                            .multilineTextAlignment(.center)
-                            .lineLimit(1)
-                            .font(.caption)
+                          .font(
+                            Font.custom("SF Pro Text", size: 10)
+                              .weight(.medium)
+                          )
+                          .multilineTextAlignment(.center)
                     }
                     .foregroundStyle(isSelected ? ColorPallet.DarkGreen : .gray)
                     .frame(maxWidth: .infinity)

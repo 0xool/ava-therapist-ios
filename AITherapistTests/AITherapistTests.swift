@@ -2,7 +2,7 @@
 //  AITherapistTests.swift
 //  AITherapistTests
 //
-//  Created by Cyrus Refahi on 10/6/23.
+//  Created by cyrus refahi on 3/13/24.
 //
 
 import XCTest
@@ -27,9 +27,9 @@ final class AITherapistTests: XCTestCase {
 
     func testPerformanceExample() throws {
         // This is an example of a performance test case.
-//        measure {
-//            // Put the code you want to measure the time of here.
-//        }
+        measure {
+            // Put the code you want to measure the time of here.
+        }
     }
 
 }

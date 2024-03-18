@@ -58,7 +58,7 @@ struct InsightView: View {
                         Divider()
                         
                         GeneralSummaryView(generalSummaryText: self.viewModel.generalSummary)
-                            
+                        
                         Divider()
                         
                         activityView
@@ -92,15 +92,15 @@ struct InsightView: View {
             self.showNewConversationChatView = true
         } label: {
             Text("Create a new Conversation")
-            .padding(.horizontal, 30)
-            .padding(.vertical, 5)
-            .frame(height: 54, alignment: .center)
-            .background(ColorPallet.SolidDarkGreen)
-            .foregroundStyle(ColorPallet.Celeste)
-            .cornerRadius(50)
-            .opacity(isAnimatingMood ? 1 : 0)
-            .offset(x: isAnimatingMood ? 0 : -50, y: 0)
-            .padding(.top, 50)
+                .padding(.horizontal, 30)
+                .padding(.vertical, 5)
+                .frame(height: 54, alignment: .center)
+                .background(ColorPallet.SolidDarkGreen)
+                .foregroundStyle(ColorPallet.Celeste)
+                .cornerRadius(50)
+                .opacity(isAnimatingMood ? 1 : 0)
+                .offset(x: isAnimatingMood ? 0 : -50, y: 0)
+                .padding(.top, 50)
         }
     }
     
@@ -127,6 +127,10 @@ extension InsightView {
             ZStack{
                 if isAnimatingQuote {
                     AnimatableText(text: quote)
+                        .font(
+                            Font.custom("SF Pro Text", size: 15)
+                                .weight(.semibold)
+                        )
                         .frame(maxHeight: .infinity, alignment: .center)
                 }
             }
@@ -219,13 +223,11 @@ struct MoodAnalyticsView: View {
     }
     
     @ViewBuilder var titleText: some View {
-        // Regular/Body
         Text("Track your mood to discover personal patterns and gain self-insight.")
-//              .font(Font.custom("SF Pro Text", size: 17))
-          .multilineTextAlignment(.center)
-          .foregroundColor(ColorPallet.DarkBlueText)
-          .frame(width: 293, height: 46, alignment: .top)
-          .hiddenModifier(isHide: !showBackButton)
+            .multilineTextAlignment(.center)
+            .foregroundColor(ColorPallet.DarkBlueText)
+            .frame(width: 293, height: 46, alignment: .top)
+            .hiddenModifier(isHide: !showBackButton)
     }
 }
 
@@ -235,13 +237,16 @@ struct GeneralSummaryView: View {
     var body: some View {
         VStack{
             Text("General Summary")
-                .font(.title3)
-                .foregroundStyle(ColorPallet.DarkBlueText)
-                .bold()
+                .font(
+                Font.custom("SF Pro Text", size: 17)
+                    .weight(.bold)
+            )
+            .foregroundStyle(ColorPallet.DarkBlueText)
             Text(generalSummaryText)
-                .font(.caption)
-                .padding([.top], 8)
+                .font(Font.custom("SF Pro Text", size: 15))
                 .multilineTextAlignment(.center)
+                .padding([.top], 8)
+            
                 .foregroundStyle(ColorPallet.DarkBlueText)
         }
         .padding()
@@ -253,7 +258,10 @@ struct WelcomeToHomeTitleView: View {
     
     var body: some View {
         Text("Welcome \(name)")
-            .font(.title2)
+            .font(
+                Font.custom("SF Pro Text", size: 17)
+                    .weight(.bold)
+            )
             .foregroundStyle(ColorPallet.DarkBlue)
             .lineLimit(1)
             .padding()

@@ -240,6 +240,8 @@ extension ActivityView {
     }
 }
 
+#if DEBUG
 #Preview {
     ActivityView(viewModel: .init(container: .previews))
 }
+#endif

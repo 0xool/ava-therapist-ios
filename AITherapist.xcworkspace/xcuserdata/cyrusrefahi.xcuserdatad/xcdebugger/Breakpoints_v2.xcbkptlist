@@ -18,53 +18,6 @@
             endingLineNumber = "46"
             landmarkName = "MainAppView"
             landmarkType = "24">
-            <Locations>
-               <Location
-                  uuid = "99A01813-C225-48C6-8D08-32AD28B2622F - 343ab58b644a3a0c"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "AITherapist.MainContentView.MainAppView.getter : some"
-                  moduleName = "AITherapist"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/cyrusrefahi/Documents/AITherapist/AITherapist/Presentation/MainContentView/MainContentView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "46"
-                  endingLineNumber = "46"
-                  offsetFromSymbolStart = "2224">
-               </Location>
-               <Location
-                  uuid = "99A01813-C225-48C6-8D08-32AD28B2622F - 343ab58b644a3a2d"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "AITherapist.MainContentView.MainAppView.getter : some"
-                  moduleName = "AITherapist"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/cyrusrefahi/Documents/AITherapist/AITherapist/Presentation/MainContentView/MainContentView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "45"
-                  endingLineNumber = "45"
-                  offsetFromSymbolStart = "2224">
-               </Location>
-               <Location
-                  uuid = "99A01813-C225-48C6-8D08-32AD28B2622F - 343ab58b644a3a0c"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "AITherapist.MainContentView.MainAppView.getter : some"
-                  moduleName = "AITherapist"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/cyrusrefahi/Documents/AITherapist/AITherapist/Presentation/MainContentView/MainContentView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "46"
-                  endingLineNumber = "46"
-                  offsetFromSymbolStart = "1480">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -81,38 +34,6 @@
             endingLineNumber = "142"
             landmarkName = "failedView(_:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "44CBEB0A-EC04-440A-B0EE-15C631D7CEBC - af8d9d7c0350eecd"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 () -&gt; () in AITherapist.TherapyChatView.notRequestedView.getter : some"
-                  moduleName = "AITherapist"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/cyrusrefahi/Documents/AITherapist/AITherapist/Presentation/UI/TherapyChat/View/TherapyChatView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "143"
-                  endingLineNumber = "143"
-                  offsetFromSymbolStart = "16">
-               </Location>
-               <Location
-                  uuid = "44CBEB0A-EC04-440A-B0EE-15C631D7CEBC - 1f8942afdea1e933"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "AITherapist.TherapyChatView.failedView(Swift.Error) -&gt; some"
-                  moduleName = "AITherapist"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/cyrusrefahi/Documents/AITherapist/AITherapist/Presentation/UI/TherapyChat/View/TherapyChatView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "142"
-                  endingLineNumber = "142"
-                  offsetFromSymbolStart = "80">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -129,38 +50,6 @@
             endingLineNumber = "131"
             landmarkName = "adapt(_:for:completion:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "C206686A-D719-4E18-B713-AF1B993134F4 - f0712ad29823adb4"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "AITherapistTests.RequestMocking.MockInterceptor.adapt(_: Foundation.URLRequest, for: Alamofire.Session, completion: (Swift.Result&lt;Foundation.URLRequest, AITherapistTests.RequestMocking.Error&gt;) -&gt; ()) -&gt; ()"
-                  moduleName = "AITherapistTests"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/cyrusrefahi/Documents/AITherapist/UnitTest/NetworkMocking/RequestMocking.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "131"
-                  endingLineNumber = "131"
-                  offsetFromSymbolStart = "1872">
-               </Location>
-               <Location
-                  uuid = "C206686A-D719-4E18-B713-AF1B993134F4 - 4f72e7a7c9a5fd50"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 @Swift.MainActor () -&gt; () in AITherapistTests.RequestMocking.MockInterceptor.adapt(_: Foundation.URLRequest, for: Alamofire.Session, completion: (Swift.Result&lt;Foundation.URLRequest, AITherapistTests.RequestMocking.Error&gt;) -&gt; ()) -&gt; ()"
-                  moduleName = "AITherapistTests"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/cyrusrefahi/Documents/AITherapist/UnitTest/NetworkMocking/RequestMocking.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "131"
-                  endingLineNumber = "131"
-                  offsetFromSymbolStart = "232">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy

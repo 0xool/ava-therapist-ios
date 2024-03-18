@@ -14,7 +14,7 @@ protocol ConversationService {
     func loadConversationChat(conversation: LoadableSubject<Conversation>, conversationID: Int)
     func createNewConversation(conversation: LoadableSubject<Conversation>, conversationName: String)
     
-    func deleteConversation(conversationID: Int) -> AnyPublisher<Void, Error>
+    func deleteConversation(conversationID: Int)
     func loadConversationChat(conversation: LoadableSubject<LazyList<Chat>>, conversationID: Int)
     func deleteConversationAndUpdate(conversationID: Int)
     
@@ -53,17 +53,33 @@ struct MainConversationService: ConversationService {
             .store(in: cancelBag)
     }
     
-    func deleteConversation(conversationID: Int) -> AnyPublisher<Void, Error> {
-        Just<Void>
+    func deleteConversation(conversationID: Int){
+        let cancelBag = CancelBag()
+        let conversations = self.appState[\.conversationData.conversations]
+        
+        self.appState[\.conversationData.conversations] = .loaded(conversations.value?.filter({ $0.id != conversationID
+        }) .lazyList ?? [].lazyList)
+        
+        return Just<Void>
             .withErrorType(Error.self)
             .flatMap({ [conversationRepository] in
                 conversationRepository.deleteConversation(conversationID: conversationID)
             })
-            .flatMap({ [conversationDBRepository] in
-                
+            .flatMap({ [conversationDBRepository] in                
                 conversationDBRepository.deleteConversation(conversationID: conversationID)
             })
-            .eraseToAnyPublisher()
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    break
+                case .failure:
+                    self.appState[\.conversationData.conversations] = conversations
+                    break
+                }
+            }, receiveValue: {
+                
+            })
+            .store(in: cancelBag)
     }
     
     func addConversationToDB(conversation: Conversation){
@@ -72,8 +88,8 @@ struct MainConversationService: ConversationService {
     
     func deleteConversationAndUpdate(conversationID: Int) {
         let cancelBag = CancelBag()
-        if let conversations = appState[\.userData.conversations].value {
-            appState[\.userData.conversations] = .loaded(conversations.filter { $0.id != conversationID }.lazyList)
+        if let conversations = appState[\.conversationData.conversations].value {
+            appState[\.conversationData.conversations] = .loaded(conversations.filter { $0.id != conversationID }.lazyList)
         }
     
         Just<Void>
@@ -158,10 +174,10 @@ struct MainConversationService: ConversationService {
                     break
                 }
             } receiveValue: {
-                var conversations : [Conversation] = appState[\.userData.conversations].value!.map {$0}
+                var conversations : [Conversation] = appState[\.conversationData.conversations].value!.map {$0}
                 conversations.append($0)
                 
-                appState[\.userData.conversations] = .loaded(conversations.lazyList)
+                appState[\.conversationData.conversations] = .loaded(conversations.lazyList)
                  conversation.wrappedValue = .loaded($0)
             }
             .store(in: cancelBag)
@@ -231,14 +247,9 @@ struct StubConversationService: ConversationService {
     func loadConversationChat(conversation: LoadableSubject<LazyList<Chat>>, conversationID: Int){
     }
     
-    func deleteConversation(conversationID: Int) -> AnyPublisher<Void, Error> {
-        return Just<Void>.withErrorType(Error.self)
+    func deleteConversation(conversationID: Int){
     }
-    
-    func createNewConversation() -> AnyPublisher<Void, Error> {
-        return Just<Void>.withErrorType(Error.self)
-    }
-    
+
     func loadConversationList(conversations: LoadableSubject<LazyList<Conversation>>) {
         let cancelBag = CancelBag()
         conversations.wrappedValue.setIsLoading(cancelBag: cancelBag)

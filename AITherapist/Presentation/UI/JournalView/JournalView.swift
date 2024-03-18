@@ -222,7 +222,7 @@ extension JournalView{
             .cornerRadius(10)
             .background(
                 RoundedRectangle(cornerRadius: 10)
-                    .fill(ColorPallet.CelesteLight)
+                    .fill(ColorPallet.LightCeleste)
                     .background{
                         RoundedRectangle(cornerRadius: 10)
                             .stroke(Color.black, lineWidth: 1)

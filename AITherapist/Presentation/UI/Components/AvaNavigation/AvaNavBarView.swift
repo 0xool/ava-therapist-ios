@@ -39,11 +39,15 @@ struct AvaNavBarView<Content: View, Background: View>: View {
         .onPreferenceChange(AvaNavigationBarTitleRefrenceKeys.self) { self.title = $0 }
     }
     
-    @ViewBuilder var HelpLineView: some View {
+    @ViewBuilder var helpLineView: some View {
         ZStack{
             Text("Helplines")
+            .font(
+            Font.custom("SF Pro Text", size: 12)
+            .weight(.medium)
+            )
+            .foregroundColor(.white)
                 .foregroundStyle(Color(red: 0.71, green: 0.99, blue: 0.99))
-                .font(helpLineFont)
                 .padding(8)
         }
         .background{
@@ -88,7 +92,7 @@ struct AvaNavBarView<Content: View, Background: View>: View {
             middleSection
                 .frame(maxWidth: .infinity, alignment: .center)
             
-            HelpLineView
+            helpLineView
                 .frame(maxWidth: .infinity, alignment: .trailing)
         }
         .frame(maxHeight: .infinity, alignment: .top)
@@ -101,11 +105,11 @@ struct AvaNavBarView<Content: View, Background: View>: View {
         }else{
             Text(title)
                 .font(
-                    Font.custom("SF Pro Display", size: 22)
-                        .weight(.bold)
+                Font.custom("SF Pro Display", size: 20)
+                .weight(.semibold)
                 )
-                .kerning(0.35)
-                .foregroundColor(.black)
+                .kerning(0.38)
+                .foregroundColor(ColorPallet.DarkBlueText)
         }
     }
 }

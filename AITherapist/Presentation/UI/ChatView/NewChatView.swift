@@ -39,13 +39,12 @@ struct NewChatView: View {
 // MARK: Loading Content
 private extension NewChatView {
     private func loadedView(_ conversation: Conversation) -> some View{
-        ChatView(viewModel: .init(conversation: conversation, container: self.viewModel.container), withBackButton: true, showSheet: $show)
+        ChatView(viewModel: .init(conversation: conversation, container: self.viewModel.container), isNewChat: true, withBackButton: true, showSheet: $show)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
     
     private var notRequestedView: some View {
         Text("").onAppear{
-            self.viewModel.createNewConversation()
         }
     }
     
@@ -73,6 +72,8 @@ extension NewChatView{
             self.container = coninater
             self.isRunningTests = isRunningTests
             _conversation = .init(initialValue: conversation)
+            
+            self.createNewConversation()
         }
         
         func createNewConversation() {

@@ -74,40 +74,47 @@ class Conversation: Object, Codable {
     
     @Persisted var chats: List<Chat>
     @Persisted var summary: String?
-//    @Persisted var topWords: List<String>
+    @Persisted var mood: String?
+    @Persisted var moodID: Int?
     
     enum CodingKeys: String, CodingKey {
         case id = "conversationID"
         case conversationName = "conversationName"
         case dateCreated = "dateCreated"
         case summary = "conversaionSummary"
+        
+        case mood = "mood"
+        case moodID = "moodID"
     }
     
     override init() {
         super.init()
     }
     
-    init(id: Int, conversationName: String, date: Date, summary: String? = nil){
+    init(id: Int, conversationName: String, date: Date, summary: String? = nil, mood: String? = nil, moodID: Int? = nil){
         super.init()
         self.id = id
         self.conversationName = conversationName
         
         self.dateCreated = date
         self.chats = List<Chat>()
-//        self.topWords = List<String>()
         
         self.summary = summary
+        self.mood = mood
+        self.moodID = moodID
     }
     
     required init(from decoder: Decoder) throws {
         super.init()
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        
         id = try container.decode(Int.self , forKey: .id)
         conversationName = try container.decode(String.self , forKey: .conversationName)
-        
         dateCreated = convertServerDateStringToDate(serverDate: try container.decode(String.self , forKey: .dateCreated))
         
         summary = try container.decodeIfPresent(String.self , forKey: .summary)
+        mood = try container.decodeIfPresent(String.self , forKey: .mood)
+        moodID = try container.decodeIfPresent(Int.self , forKey: .moodID)
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -117,5 +124,8 @@ class Conversation: Object, Codable {
         
         try container.encode(dateCreated , forKey: .dateCreated)
         try container.encode(summary , forKey: .summary)
+        
+        try container.encode(mood , forKey: .mood)
+        try container.encode(moodID , forKey: .moodID)
     }
 }

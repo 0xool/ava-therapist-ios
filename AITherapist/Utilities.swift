@@ -37,10 +37,12 @@ struct ColorPallet{
     
     static let MediumTurquoiseBlue: Color = Color(red: 0.37, green: 0.85, blue: 0.85)
     static let Celeste: Color = Color(red: 0.71, green: 0.99, blue: 0.99)
-    static let CelesteLight: Color = Color(red: 0.76, green: 0.99, blue: 0.99)
+    static let LighterCeleste: Color = Color(red: 0.73, green: 0.89, blue: 0.94)
+    static let LightCeleste: Color = Color(red: 0.76, green: 0.99, blue: 0.99)
     
     static let DarkBlue: Color = Color(red: 0.01, green: 0.16, blue: 0.21)
     static let DarkBlueText: Color = DarkBlue
+    static let DarkGreenText: Color = Color(red: 0.04, green: 0.29, blue: 0.37)
     
     static let DeepAquaBlue: Color = Color(red: 0.08, green: 0.43, blue: 0.55)
     static let IconBlue: Color = Color(red: 20/255, green: 110/255, blue: 139/255)

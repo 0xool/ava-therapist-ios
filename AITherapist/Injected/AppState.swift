@@ -15,7 +15,7 @@ struct AppState: Equatable {
     var system = System()
     
     var permissions = Permissions()
-//    var conversationData = ConversationData()
+    var conversationData = ConversationData()
     var application = Application.instance
 }
 
@@ -30,14 +30,11 @@ extension AppState {
         @Published var user: Loadable<User> = .notRequested
         @Published var insight: Loadable<Insight> = .notRequested
         var setting: Loadable<Setting> = .notRequested
-        
-        @Published var conversations: Loadable<LazyList<Conversation>> = .notRequested
-        
+                
         func logout() {
             self.user = .notRequested
             self.setting = .notRequested
             self.insight = .notRequested
-            self.conversations = .notRequested
             
             _ = MainUserDBRepository().deleteUser()
             PersistentManager.DeleteUserToken()
@@ -46,14 +43,15 @@ extension AppState {
     }
 }
 
-//extension AppState{
-//    class ConversationData: ObservableObject{
-//        
-//        init(conversations: Loadable<LazyList<Conversation>> = .notRequested) {
-//            self.conversations = conversations
-//        }
-//    }
-//}
+extension AppState{
+    class ConversationData: ObservableObject{
+        @Published var conversations: Loadable<LazyList<Conversation>> = .notRequested
+        
+        init(conversations: Loadable<LazyList<Conversation>> = .notRequested) {
+            self.conversations = conversations
+        }
+    }
+}
 
 extension AppState{
     class Application: ObservableObject{

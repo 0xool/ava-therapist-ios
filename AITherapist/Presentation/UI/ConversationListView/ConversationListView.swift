@@ -51,8 +51,9 @@ private extension ConversationListView {
 
 // MARK: Displaying Content
 private extension ConversationListView {
+    
     func loadedView(_ conversationList: LazyList<Conversation>) -> some View {
-        NavigationStack {
+        NavigationStack() {
             VStack(spacing: 0){
                 SearchableCustom(searchtxt: $viewModel.searchText)
                     .padding(.bottom, 8)
@@ -65,11 +66,11 @@ private extension ConversationListView {
                         ForEach (self.viewModel.getFilteredConversationList()
                                  , id: \.id){ conversation in
                             ZStack{
-                                ConversationCell(conversation: conversation)
-                                    .background(.clear)
-                                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                
-                                NavigationChatView(conversation: conversation, container: self.viewModel.container)
+                                ConversationCellView(conversation: conversation){
+                                    NavigationChatView(conversation: conversation, container: self.viewModel.container)
+                                }
+                                .background(.clear)
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
                             }
                             .padding([.top, .bottom], 0)
                             .listRowSeparator(.hidden)
@@ -78,7 +79,7 @@ private extension ConversationListView {
                             .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
                             .frame(maxHeight: .infinity)
                         }
-                        .onDelete(perform: self.viewModel.deleteConversation)
+                                 .onDelete(perform: self.viewModel.deleteConversation)
                     }
                     .padding(0)
                     .background(.clear)
@@ -94,22 +95,20 @@ private extension ConversationListView {
 extension ConversationListView{
     struct SearchableCustom: View {
         @Binding var searchtxt: String
-        @FocusState private var isSearchFocused: Bool // Track focus state
+        @FocusState private var isSearchFocused: Bool
         
         var body: some View {
             HStack {
                 HStack {
                     Image(systemName: "magnifyingglass")
                     TextField("Search keywords", text: $searchtxt)
-                        .focused($isSearchFocused) // Track focus state
+                        .font(Font.custom("SF Pro Text", size: 16))
+                        .focused($isSearchFocused)
                         .padding(.horizontal, 10)
                         .padding(.vertical, 8)
                 }
                 .padding(.horizontal)
-                .background(Color(.secondarySystemBackground))
-                .cornerRadius(10)
-                .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.gray, lineWidth: 1))
-                
+                .background(RoundedRectangle(cornerRadius: 25).fill(ColorPallet.LighterCeleste))                
                 if isSearchFocused {
                     Button("Cancel") {
                         searchtxt = ""
@@ -117,7 +116,7 @@ extension ConversationListView{
                             isSearchFocused = false
                         }
                     }
-                    .transition(.move(edge: .trailing)) // Add animation for cancel button
+                    .transition(.move(edge: .trailing))
                 }
             }
             .frame(maxWidth: .infinity)
@@ -136,119 +135,35 @@ extension ConversationListView{
             HStack(alignment: .center, spacing: 10) {
                 Text("Date")
                     .font(
-                        Font.custom("Inter", size: 12)
-                            .weight(.medium)
+                        Font.custom("SF Pro Text", size: 13)
+                            .weight(.semibold)
                     )
-                    .foregroundColor(ColorPallet.DarkBlue)
+                    .foregroundColor(ColorPallet.DarkGreenText)
                     .frame(width: 60)
-                
-                ConversationCustomDivider()
                 
                 HStack{
                     Spacer()
+                    
                     Text("Summary")
                         .font(
-                            Font.custom("Inter", size: 12)
-                                .weight(.medium)
+                            Font.custom("SF Pro Text", size: 13)
+                                .weight(.semibold)
                         )
-                        .foregroundColor(ColorPallet.DarkBlue)
+                        .foregroundColor(ColorPallet.DarkGreenText)
                     Spacer()
                 }
                 
-                ConversationCustomDivider()
-                
                 Text("Mood")
                     .font(
-                        Font.custom("Inter", size: 12)
-                            .weight(.medium)
+                        Font.custom("SF Pro Text", size: 13)
+                            .weight(.semibold)
                     )
-                    .foregroundColor(ColorPallet.DarkBlue)
+                    .foregroundColor(ColorPallet.DarkGreenText)
                     .frame(width: 70)
             }
             .frame(height: 15)
             .frame(maxWidth: .infinity)
             .padding([.leading, .trailing], 16)
-        }
-    }
-    
-    struct ConversationCell: View {
-        var conversation: Conversation
-        let imageName: String = "ImagePlaceholder"
-        
-        var body: some View {
-            cellView
-        }
-        
-        @ViewBuilder private var cellView: some View {
-            VStack(alignment: .center, spacing: 0) {
-                HStack(alignment: .center, spacing: 10) {
-                    Text(getDateString())
-                        .font(Font.custom("SF Pro Text", size: 11))
-                        .kerning(0.066)
-                        .multilineTextAlignment(.center)
-                        .foregroundColor(ColorPallet.DarkBlue)
-                        .frame(width: 60)
-                    
-                    ConversationCustomDivider()
-                    
-                    HStack{
-                        Spacer()
-                        Text(self.conversation.summary ?? "No Summary")
-                            .font(Font.custom("SF Pro Text", size: 11))
-                            .kerning(0.066)
-                            .foregroundColor((self.conversation.summary != nil) ? ColorPallet.DarkBlue : ColorPallet.TertiaryYellow)
-                        Spacer()
-                    }
-                    
-                    ConversationCustomDivider()
-                    
-                    Rectangle()
-                        .foregroundColor(.clear)
-                        .frame(width: 70, height: 70)
-                        .background(
-                            Image(self.imageName)
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(width: 70, height: 70)
-                                .clipped()
-                        )
-                        .cornerRadius(15)
-                }
-                .frame(height: 70)
-                .frame(maxWidth: .infinity)
-                .padding(16)
-                
-                Spacer()
-                
-                Rectangle()
-                    .fill(ColorPallet.MediumTurquoiseBlue)
-                    .frame(width: UIViewController().view.bounds.width, height: 1)
-            }
-            .padding(.horizontal, 16)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .cornerRadius(10)
-        }
-        
-        private func getDateString() -> String {
-            let components = conversation.dateCreated.get(.month, .day, .year)
-            if let day = components.day, let month = components.month, let year = components.year {
-                return "\(day)/\(month)/\(year)"
-            }
-            
-            return ""
-        }
-    }
-}
-
-extension ConversationListView{
-    struct ConversationCustomDivider: View {
-        let color: Color = ColorPallet.DarkBlue
-        let width: CGFloat = 1
-        var body: some View {
-            Rectangle()
-                .fill(color)
-                .frame(width: width)
-                .edgesIgnoringSafeArea(.horizontal)
         }
     }
 }
@@ -262,9 +177,9 @@ extension ConversationListView {
         
         var conversations: Loadable<LazyList<Conversation>>{
             get{
-                self.container.appState[\.userData.conversations]
+                self.container.appState[\.conversationData.conversations]
             }set{
-                self.container.appState[\.userData.conversations] = newValue
+                self.container.appState[\.conversationData.conversations] = newValue
             }
         }
         
@@ -272,7 +187,7 @@ extension ConversationListView {
             self.container = coninater
             self.isRunningTests = isRunningTests
             
-            container.appState.value.userData.objectWillChange.sink { value in
+            container.appState.value.conversationData.objectWillChange.sink { value in
                 self.objectWillChange.send()
             }
             .store(in: self.cancelBag)
@@ -318,22 +233,8 @@ extension ConversationListView {
             }
             
             let conversationID = getFilteredConversationList()[index].id
-            
-            self.conversations = .loaded(self.conversations.value?.filter({ $0.id != conversationID
-            }) .lazyList ?? [].lazyList)
             self.container.services.conversationService.deleteConversation(conversationID: conversationID)
-                .sink(receiveCompletion: { completion in
-                    switch completion {
-                    case .finished:
-                        break
-                    case .failure:
-                        //                        self.loadConversationList()
-                        break
-                    }
-                }, receiveValue: {
-                    
-                })
-                .store(in: self.cancelBag)
+            
         }
     }
 }

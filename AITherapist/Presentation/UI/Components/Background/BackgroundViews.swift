@@ -52,7 +52,7 @@ struct TwoCircleBackgroundView: View {
     let backgroundColor: Color
     let animate: Bool
     
-    init( backgroundColor: Color = ColorPallet.CelesteLight, animate: Bool = true) {
+    init( backgroundColor: Color = ColorPallet.LightCeleste, animate: Bool = true) {
         self.backgroundColor = backgroundColor
         self.animate = animate
     }

@@ -22,6 +22,8 @@ struct ContentMessageView: View {
     
     var body: some View {
             messageTextView
+            .font(Font.custom("SF Pro Text", size: 17)
+                .weight(.regular))
             .padding(10)
             .foregroundColor(isUser ? ColorPallet.DarkBlue : ColorPallet.SolidDarkGreen)
             .background(isUser ? ColorPallet.MediumTurquoiseBlue : ColorPallet.Celeste )

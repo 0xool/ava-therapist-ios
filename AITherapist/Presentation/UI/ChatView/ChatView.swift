@@ -20,15 +20,18 @@ struct ChatView: View {
     
     @State private var isRecording = false
     @State private var setPlaceHolder = false
+    let isNewChat: Bool
     
     let withBackButton: Bool
     @Binding var showSheet: Bool
     private let MessageViewLineLimitMax = 6
     
-    init(viewModel: ViewModel, withBackButton: Bool = false, showSheet: Binding<Bool> = .constant(false)) {
+    init(viewModel: ViewModel, isNewChat: Bool = false, withBackButton: Bool = false, showSheet: Binding<Bool> = .constant(false)) {
         self.viewModel = viewModel
         self.withBackButton = withBackButton
         self._showSheet = showSheet
+        
+        self.isNewChat = isNewChat
     }
     
     var body: some View {
@@ -152,19 +155,22 @@ private extension ChatView {
                 ScrollViewReader{ proxy in
                     VStack {
                         backButton
-                        
-                        ScrollView {
-                            ForEach(chats, id: \.id) { chat in
-                                MessageView(chat: chat, onResendMessageClicked: self.viewModel.resendMessage)
-                                    .padding([.leading, .trailing], 8)
-                                    .listRowSeparator(.hidden)
+                        ZStack{
+                            ScrollView {
+                                ForEach(chats, id: \.id) { chat in
+                                    MessageView(chat: chat, onResendMessageClicked: self.viewModel.resendMessage)
+                                        .padding([.leading, .trailing], 8)
+                                        .listRowSeparator(.hidden)
+                                }
                             }
+                            .safeAreaInset(edge: .top, spacing: 0){
+                                Spacer()
+                                    .frame(height: 20)
+                            }
+                            .scrollContentBackground(.hidden)
+                            
+                            initialChatOptionsView
                         }
-                        .safeAreaInset(edge: .top, spacing: 0){
-                            Spacer()
-                                .frame(height: 20)
-                        }
-                        .scrollContentBackground(.hidden)
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .onAppear{
@@ -208,6 +214,20 @@ private extension ChatView {
         }
     }
     
+    @ViewBuilder private var initialChatOptionsView: some View {
+        if self.viewModel.chats.value?.count ?? 0 <= 1
+            && isNewChat {
+            VStack{
+                Spacer()
+                NewChatChoiceView(onBubleClicked: { self.viewModel.sendMessage($0) })
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .padding()
+        }
+        
+        
+    }
+    
     @ViewBuilder private var backButton: some View{
         if self.withBackButton{
             Button {
@@ -234,7 +254,7 @@ private extension ChatView {
             .animation(.easeIn, value: self.viewModel.userMessage)
             .background(ColorPallet.grey100)
             .cornerRadius(15)
-
+        
     }
     
     struct ChatWithAiTextField: TextFieldStyle {
@@ -269,7 +289,15 @@ extension ChatView {
         var speechRecognizer = SpeechManager()
         let conversation: Conversation
         let isRunningTests: Bool
+        
         private let initialAiMessage = "Hi this is Ava your personal therapist. How do you feel today?"
+        
+        init(conversation: Conversation, container: DIContainer, isRunningTests: Bool = ProcessInfo.processInfo.isRunningTests) {
+            _chats = .init(initialValue: .partialLoaded(Array(conversation.chats).lazyList))
+            self.container = container
+            self.isRunningTests = isRunningTests
+            self.conversation = conversation
+        }
         
         func sendMessage(_ message: String){
             self.userMessage = ""
@@ -283,7 +311,7 @@ extension ChatView {
             var newChats: [Chat] = Array(chats)
             newChats.append(.init(message: message, conversationID: self.conversation.id, chatSequence: nil, isUserMessage: true, isSentToserver: .BeingSent))
             self.chats = .loaded(newChats.lazyList)
-  
+            
             self.container.services.chatService.sendChatToServer(chats: loadableSubject(\.chats), message: message, conversationID: self.conversation.id, cancelBag: self.cancelBag)
         }
         
@@ -324,20 +352,14 @@ extension ChatView {
             if let chats = self.chats.value {
                 if chats.count <= 1 {
                     self.container.services.conversationService.deleteConversationAndUpdate(conversationID: self.self.conversation.id)
-                }else{                    
+                }else{
                     self.container.services.conversationService.addConversationToDB(conversation: self.conversation)
                 }
             }
-
+            
             completion()
         }
         
-        init(conversation: Conversation, container: DIContainer, isRunningTests: Bool = ProcessInfo.processInfo.isRunningTests) {
-            _chats = .init(initialValue: .partialLoaded(Array(conversation.chats).lazyList))
-            self.container = container
-            self.isRunningTests = isRunningTests
-            self.conversation = conversation
-        }
     }
 }
 
