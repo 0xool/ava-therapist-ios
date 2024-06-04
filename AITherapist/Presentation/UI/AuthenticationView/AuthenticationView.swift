@@ -32,8 +32,9 @@ struct AuthenticationView: View {
     
     @ViewBuilder private var content: some View {
         ZStack{
-            authView
             
+            authView
+                        
             switch self.viewModel.user {
             case .notRequested:
                 EmptyView()
@@ -44,7 +45,7 @@ struct AuthenticationView: View {
             case let .failed(error):
                 loginViewOverlay()
                 failedView(error)
-            case .partialLoaded(_):
+            case .partialLoaded(_, _):
                 authView
             }
         }
@@ -326,7 +327,6 @@ private extension AuthenticationView {
     
     func failedView(_ error: Error) -> some View {
         ErrorView(error: error, retryAction: {
-            print("Error!!")
             self.viewModel.retry()
         })
     }

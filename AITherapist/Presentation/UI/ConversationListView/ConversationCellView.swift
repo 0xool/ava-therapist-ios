@@ -29,7 +29,7 @@ struct ConversationCellView<Content: View>: View {
                         .kerning(0.066)
                         .multilineTextAlignment(.center)
                         .foregroundColor(ColorPallet.DarkBlue)
-                        .frame(width: 60)
+                        .frame(width: 69)
                     
                     ConversationCustomDivider(height: labelHeight)
                     

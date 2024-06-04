@@ -26,11 +26,11 @@ struct ChatView: View {
     @Binding var showSheet: Bool
     private let MessageViewLineLimitMax = 6
     
-    init(viewModel: ViewModel, isNewChat: Bool = false, withBackButton: Bool = false, showSheet: Binding<Bool> = .constant(false)) {
+    init(viewModel: ViewModel, isNewChat: Bool = false, withBackButton: Bool = false, showChatSheet: Binding<Bool> = .constant(false)) {
         self.viewModel = viewModel
         self.withBackButton = withBackButton
-        self._showSheet = showSheet
         
+        self._showSheet = showChatSheet
         self.isNewChat = isNewChat
     }
     
@@ -50,16 +50,11 @@ struct ChatView: View {
                 EmptyView()
             case let .failed(error):
                 failedView(error)
-            case .partialLoaded(_):
+            case .partialLoaded(_, _):
                 notRequestedView
             }
-            
         }
-    }
-    
-    private func sendMessage() {
-        let message = self.viewModel.userMessage
-        viewModel.sendMessage(message)
+        .avaNavigationBarColor(isChat: true)
     }
     
     private func speechBtnView(isHidden: Bool = false) -> some View {
@@ -88,7 +83,7 @@ struct ChatView: View {
     private func sendBtnView(isHidden: Bool) -> some View {
         Button {
             setPlaceHolder = true
-            sendMessage()
+            self.viewModel.sendMessage()
         } label: {
             Image(systemName: "arrow.up.circle.fill")
                 .font(.system(size: 30))
@@ -146,7 +141,7 @@ private extension ChatView {
     }
     
     private func loadingView() -> some View {
-        CircleLoading()
+        CircleLoading(mainColor: ColorPallet.Celeste, secondaryColor: ColorPallet.Celeste)
     }
     
     private func mainChatView(chats: [Chat]) -> some View {
@@ -155,22 +150,7 @@ private extension ChatView {
                 ScrollViewReader{ proxy in
                     VStack {
                         backButton
-                        ZStack{
-                            ScrollView {
-                                ForEach(chats, id: \.id) { chat in
-                                    MessageView(chat: chat, onResendMessageClicked: self.viewModel.resendMessage)
-                                        .padding([.leading, .trailing], 8)
-                                        .listRowSeparator(.hidden)
-                                }
-                            }
-                            .safeAreaInset(edge: .top, spacing: 0){
-                                Spacer()
-                                    .frame(height: 20)
-                            }
-                            .scrollContentBackground(.hidden)
-                            
-                            initialChatOptionsView
-                        }
+                        chatView(chats: chats)
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .onAppear{
@@ -185,32 +165,55 @@ private extension ChatView {
                     }
                 }
                 
-                VStack{
-                    if viewModel.isUserTurnToSpeak {
-                        HStack(alignment: .center) {
-                            if self.isRecording {
-                                speechInputView()
-                            }else{
-                                textInputView()
-                            }
-                            
-                            ZStack{
-                                !isRecording ? sendBtnView(isHidden: self.viewModel.userMessage.isEmpty) : nil
-                                speechBtnView(isHidden: !self.viewModel.userMessage.isEmpty)
-                            }
-                        }
-                        .padding([.leading, .trailing], 8)
-                        .frame(maxHeight: .infinity, alignment: .center)
-                        .background(ColorPallet.DarkGreen)
-                    }else{
-                        CircleLoading()
-                    }
-                }
-                .frame(maxHeight: 75, alignment: .center)
+                userInputFieldView
+                    .frame(maxHeight: 75, alignment: .center)
             }
         }
         .onTapGesture {
             self.hideKeyboard()
+        }
+    }
+    
+    @ViewBuilder private var userInputFieldView: some View {
+        VStack{
+            if viewModel.isUserTurnToSpeak {
+                HStack(alignment: .center) {
+                    if !self.isRecording {
+                        textInputView()
+                    }else{
+                        speechInputView()
+                    }
+                    
+                    ZStack{
+                        !isRecording ? sendBtnView(isHidden: self.viewModel.userMessage.isEmpty) : nil
+                        speechBtnView(isHidden: !self.viewModel.userMessage.isEmpty)
+                    }
+                }
+                .padding([.leading, .trailing], 8)
+                .frame(maxHeight: .infinity, alignment: .center)
+                .background(ColorPallet.DarkBlue)
+            }else{
+                EmptyView()
+            }
+        }
+    }
+    
+    @ViewBuilder func chatView(chats: [Chat]) -> some View{
+        ZStack{
+            ScrollView {
+                ForEach(chats, id: \.id) { chat in
+                    MessageView(chat: chat, onResendMessageClicked: self.viewModel.resendMessage)
+                        .padding([.leading, .trailing], 8)
+                        .listRowSeparator(.hidden)
+                }
+            }
+            .safeAreaInset(edge: .top, spacing: 0){
+                Spacer()
+                    .frame(height: 20)
+            }
+            .scrollContentBackground(.hidden)
+            
+            initialChatOptionsView
         }
     }
     
@@ -224,8 +227,6 @@ private extension ChatView {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .padding()
         }
-        
-        
     }
     
     @ViewBuilder private var backButton: some View{
@@ -237,7 +238,7 @@ private extension ChatView {
             } label: {
                 Image(systemName: "chevron.backward")
                     .font(.subheadline)
-                    .foregroundStyle(ColorPallet.DiaryDateBlue)
+                    .foregroundStyle(ColorPallet.Celeste)
                     .padding([.leading], 16)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .frame(height: 36)
@@ -270,19 +271,7 @@ extension ChatView {
         let container: DIContainer
         private var cancelBag = CancelBag()
         
-        @Published var chats: Loadable<LazyList<Chat>> {
-            willSet{
-                guard let chatList = newValue.value else{
-                    return
-                }
-                
-                guard let isUserMessage = chatList.last?.isUserMessage else{
-                    return
-                }
-                
-                self.isUserTurnToSpeak = !isUserMessage || (chatList.last?.chatState == .ErrorWhileSending)
-            }
-        }
+        @Published var chats: Loadable<LazyList<Chat>>
         @Published var isUserTurnToSpeak: Bool = true
         @Published var userMessage = ""
         
@@ -293,13 +282,14 @@ extension ChatView {
         private let initialAiMessage = "Hi this is Ava your personal therapist. How do you feel today?"
         
         init(conversation: Conversation, container: DIContainer, isRunningTests: Bool = ProcessInfo.processInfo.isRunningTests) {
-            _chats = .init(initialValue: .partialLoaded(Array(conversation.chats).lazyList))
+            _chats = .init(initialValue: .partialLoaded(Array(conversation.chats).lazyList, cancelBag: self.cancelBag))
             self.container = container
             self.isRunningTests = isRunningTests
             self.conversation = conversation
         }
         
-        func sendMessage(_ message: String){
+        func sendMessage(_ message: String? = nil){
+            let message: String = message ?? self.userMessage
             self.userMessage = ""
             self.speechRecognizer.transcript = ""
             
@@ -312,7 +302,7 @@ extension ChatView {
             newChats.append(.init(message: message, conversationID: self.conversation.id, chatSequence: nil, isUserMessage: true, isSentToserver: .BeingSent))
             self.chats = .loaded(newChats.lazyList)
             
-            self.container.services.chatService.sendChatToServer(chats: loadableSubject(\.chats), message: message, conversationID: self.conversation.id, cancelBag: self.cancelBag)
+            self.container.services.chatService.sendChatToServer(chats: loadableSubject(\.chats), message: message, conversationID: self.conversation.id, isUserTurn: self.bindingSubject(\.isUserTurnToSpeak), cancelBag: self.cancelBag)
         }
         
         func getChats() -> [Chat] {
@@ -332,14 +322,12 @@ extension ChatView {
             guard let chats = self.chats.value else{
                 return
             }
-            
-            isUserTurnToSpeak = false
             var newChats: [Chat] = Array(chats)
             newChats.removeLast()
             newChats.append(.init(id:chat.id, message: chat.message, conversationID: self.conversation.id, chatSequence: nil, isUserMessage: true, isSentToserver: .BeingSent))
             self.chats = .loaded(newChats.lazyList)
             
-            self.container.services.chatService.sendChatToServer(chats: loadableSubject(\.chats), message: chat.message, conversationID: self.conversation.id, cancelBag: self.cancelBag)
+            self.container.services.chatService.sendChatToServer(chats: loadableSubject(\.chats), message: chat.message, conversationID: self.conversation.id, isUserTurn: self.bindingSubject(\.isUserTurnToSpeak), cancelBag: self.cancelBag)
         }
         
         func setAiMessage(_ msg: String){

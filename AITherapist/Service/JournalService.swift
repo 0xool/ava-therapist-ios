@@ -17,6 +17,7 @@ protocol JournalService {
     
     func saveJournal(journal: LoadableSubject<Journal>, _ completion: @escaping () -> ())
     func getJournal(byDate: Date, journal: LoadableSubject<Journal>)
+    func hasEntryOnDate(date: Date) -> Bool
 }
 
 struct MainJournalService: JournalService {
@@ -28,6 +29,10 @@ struct MainJournalService: JournalService {
         self.journalRepository = journalRepository
         self.journalDBRepository = journalDBRepository
         self.appState = appState
+    }
+    
+    func hasEntryOnDate(date: Date) -> Bool {
+        journalDBRepository.hasEntryOnDate(date)
     }
     
     func saveJournal(journal: LoadableSubject<Journal>, _ completion: @escaping () -> ()){
@@ -127,10 +132,6 @@ struct MainJournalService: JournalService {
             .withErrorType(Error.self)
             .flatMap { _ -> AnyPublisher<Void, Error> in
                 self.refreshJournal(byDate: byDate)
-                    .sinkEmptyAndStore()
-                
-                return Just<Void>
-                    .withErrorType(Error.self)
             }
             .flatMap { _ -> AnyPublisher<Journal, Error> in
                 journalDBRepository.getJournal(byDate: byDate)
@@ -144,8 +145,12 @@ struct MainJournalService: JournalService {
             .getJournalByDate(date: byDate)
             .ensureTimeSpan(requestHoldBackTimeInterval)
             .map { [journalDBRepository] in
-                journalDBRepository.store(journal: $0, fromServer: true)
-                    .sinkEmptyAndStore()
+                guard let webJournal = $0 else {
+                    return
+                }
+                
+                journalDBRepository.store(journal: webJournal, fromServer: true)
+                        .sinkEmptyAndStore()
             }
             .eraseToAnyPublisher()
     }
@@ -173,6 +178,10 @@ struct StubJournalService: JournalService {
     
     func getJournal(byDate: Date, journal: LoadableSubject<Journal>){
         journal.wrappedValue = .loaded(.init(id: 0, diaryMessage: "This Diary was writtne a while ago", diaryName: "jounal name", moodID: nil, summary: nil, dateCreated: .now, tags: [.Happy]))
+    }
+    
+    func hasEntryOnDate(date: Date) -> Bool {
+        false
     }
 }
 

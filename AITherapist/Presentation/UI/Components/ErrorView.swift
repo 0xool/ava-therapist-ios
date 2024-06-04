@@ -18,7 +18,7 @@ struct ErrorView: View {
     var body: some View {
         mainView
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(MenuBackground())
+            .background(.clear)
     }
     
     @ViewBuilder var mainView: some View {

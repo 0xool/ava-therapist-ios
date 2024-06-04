@@ -11,19 +11,30 @@ import Combine
 
 struct JournalView: View {
     @ObservedObject private(set) var viewModel: ViewModel
+    @State var showAllJournals: Bool = false
     
     init( viewModel: ViewModel) {
         self.viewModel = viewModel
     }
     
     var body: some View {
+        if self.showAllJournals{
+            JournalListView(showAllJournalsView: $showAllJournals, selectedDate: $viewModel.selectedDate, viewModel: .init(container: self.viewModel.container))
+        }else{
+            diaryEntryView
+        }
+    }
+}
+
+extension JournalView {
+    @ViewBuilder var diaryEntryView: some View {
         VStack{
             DatePicker("Select Date", selection: $viewModel.selectedDate, displayedComponents: [.date])
                 .padding(.horizontal)
                 .id(viewModel.selectedDate)
             
             VStack{
-                DaySelectorView(currentDate: $viewModel.selectedDate)
+                DaySelectorView(currentDate: $viewModel.selectedDate, viewModel: self.viewModel)
                 
                 JournalEntryView(journalEntryText: $viewModel.journalEntryText)
                 
@@ -49,7 +60,6 @@ struct JournalView: View {
     }
     
     @ViewBuilder var sendButton: some View{
-        
         VStack(spacing: 10) {
             Button {
                 self.viewModel.saveJournalEntry()
@@ -61,9 +71,13 @@ struct JournalView: View {
                         .background(RoundedRectangle(cornerRadius: 50).foregroundStyle(ColorPallet.DiarySaveButtonBlue))
                     
                     Text("Save")
-                        .bold()
+                        .font(
+                        Font.custom("SF Pro Text", size: 13)
+                        .weight(.bold)
+                        )
                         .multilineTextAlignment(.center)
-                        .foregroundColor(ColorPallet.DiaryIconBlue)
+                        .foregroundColor(self.viewModel.textFilled ? ColorPallet.Celeste : ColorPallet.DiaryIconBlue)
+                    
                 }
             }
             .padding(.horizontal, 30)
@@ -72,10 +86,13 @@ struct JournalView: View {
             .frame(maxWidth: .infinity)
             
             Button {
-                self.viewModel.saveJournalEntry()
+                self.showAllJournals = true
             } label: {
                 Text("All Journals")
-                    .bold()
+                    .font(
+                    Font.custom("SF Pro Text", size: 13)
+                    .weight(.bold)
+                    )
                     .underline()
                     .multilineTextAlignment(.center)
                     .foregroundColor(ColorPallet.DiaryDateBlue)
@@ -89,7 +106,7 @@ struct JournalView: View {
 
 extension JournalView{
     struct JournalTagView: View {
-        @ObservedObject private(set) var viewModel: ViewModel
+        let viewModel: ViewModel
         
         var body: some View {
             TagView()
@@ -119,7 +136,10 @@ extension JournalView{
                 
                 VStack{
                     Text("Choose a tag for today’s journal!")
-                        .bold()
+                        .font(
+                        Font.custom("SF Pro Text", size: 15)
+                        .weight(.semibold)
+                        )
                         .foregroundColor(ColorPallet.DiaryDateBlue)
                         .frame(height: 21, alignment: .center)
                     LazyVStack{
@@ -166,7 +186,7 @@ extension JournalView{
                 HStack(alignment: .center, spacing: 10) {
                     Text(tag.tag)
                         .font(Font.custom("SF Pro Text", size: 12))
-                        .foregroundColor(.black)
+                        .foregroundColor(ColorPallet.DarkBlue)
                 }
                 .padding(.horizontal, 5)
                 .padding(.vertical, 3)
@@ -198,8 +218,8 @@ extension JournalView{
             ZStack {
                 GeometryReader{ geo in
                     TextEditor(text: $journalEntryText)
-                        .font(Font.custom("SF Pro Text", size: 20))
-                        .foregroundColor(ColorPallet.DarkGreen)
+                        .font(Font.custom("SF Pro Text", size: 12))
+                        .foregroundColor(ColorPallet.grey400)
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
                         .scrollContentBackground(.hidden)
                         .background(.clear)
@@ -233,101 +253,7 @@ extension JournalView{
     }
 }
 
-extension JournalView {
-    struct DaySelectorView: View {
-        @Binding var currentDate: Date
-        
-        var body: some View {
-            ScrollViewReader { proxy in
-                ScrollView(.horizontal) {
-                    LazyHStack {
-                        ForEach(getDaysOfMonth(for: currentDate), id: \.self) { date in
-                            DaySelectorCell(day: date, isSelected: isSelected(date: date)).id(date)
-                                .onTapGesture {
-                                    withAnimation{
-                                        currentDate = date
-                                    }
-                                }
-                        }
-                    }
-                }
-                .scrollIndicators(.hidden)
-                .padding([.leading, .trailing], 8)
-                .frame(height: 100)
-                .onChange(of: currentDate) { newValue in
-                    withAnimation(.easeIn(duration: 5).delay(5)){
-                        proxy.scrollTo(getDaysOfMonth(for: currentDate).filter{ $0.get(.day) == currentDate.get(.day) }.first )
-                    }
-                }
-                .onAppear{
-                    withAnimation(.easeIn(duration: 5).delay(5)){
-                        proxy.scrollTo(getDaysOfMonth(for: currentDate).filter{ $0.get(.day) == currentDate.get(.day) }.first )
-                    }
-                }
-            }
-        }
-        
-        func isSelected(date: Date) -> Bool { date.get(.day) == currentDate.get(.day) }
-        
-        func getDaysOfMonth(for date: Date) -> [Date] {
-            let calendar = Calendar.current
-            let range = calendar.range(of: .day, in: .month, for: date)!
-            
-            let startDateComponents = calendar.dateComponents([.year, .month], from: date)
-            guard let startDate = calendar.date(from: startDateComponents) else {
-                return []
-            }
-            
-            var daysOfMonth: [Date] = []
-            
-            for day in range {
-                var components = DateComponents()
-                components.year = calendar.component(.year, from: startDate)
-                components.month = calendar.component(.month, from: startDate)
-                components.day = day
-                
-                if let date = calendar.date(from: components) {
-                    daysOfMonth.append(date)
-                }
-            }
-            
-            return daysOfMonth
-        }
-        
-        struct DaySelectorCell: View {
-            let day: Date
-            let isSelected: Bool
-            
-            var body: some View {
-                ZStack {
-                    VStack(alignment: .center, spacing: 3) {
-                        Text("\(getDayString(from: day))")
-                            .font(Font.custom("SF Pro Text", size: 13))
-                            .multilineTextAlignment(.center)
-                            .foregroundColor(isSelected ? ColorPallet.TertiaryYellow : .black)
-                        Text("\(day.get(.day))")
-                            .font(Font.custom("SF Pro Text", size: 16))
-                            .multilineTextAlignment(.center)
-                            .foregroundColor(isSelected ? ColorPallet.TertiaryYellow : .black)
-                            .frame(maxWidth: .infinity, minHeight: 18, maxHeight: 18, alignment: .top)
-                    }
-                    
-                }
-                .frame(width: 40, height: 51)
-                .background(isSelected ? ColorPallet.DiaryDateBlue : ColorPallet.DiaryDateBlue.opacity(0.3))
-                .cornerRadius(10)
-                .scaleEffect(isSelected ? 1.15 : 1)
-            }
-            
-            private func getDayString(from date: Date) -> String {
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "EEE" // "EEEE" represents the full weekday name
-                
-                return dateFormatter.string(from: date)
-            }
-        }
-    }
-}
+
 
 extension JournalView {
     class ViewModel: ObservableObject {
@@ -337,6 +263,11 @@ extension JournalView {
         
         @Published var tags = JournalTagType.allTypes
         @Published var showSuccesfullSave: Bool = false
+        var textFilled: Bool {
+            get{
+                !self.journalEntryText.isEmpty
+            }
+        }
         
         var journal: Journal = Journal()
         static let MAIN_JOURNAL_TEXT = "How is your day? What are you grateful for today?"
@@ -366,8 +297,7 @@ extension JournalView {
                     }
                     
                     self.tags = JournalTagType.allTypes.filter{ !self.journal.tags.contains($0) }.sorted()
-                    self.journalEntryText = self.journal.diaryMessage
-                                        
+                    self.journalEntryText = self.journal.diaryMessage                                        
                 }
                 .store(in: cancelBag)
         }
@@ -377,7 +307,8 @@ extension JournalView {
         }
         
         func saveJournalEntry(){
-            if !onSaveEnterInputCorrect(journalEntryText){return}
+            if !onSaveEnterInputCorrect(journalEntryText){ return }
+            
             self.journal.dateCreated = self.selectedDate
             self.journal.diaryName = "Diary Name: \(selectedDate)"
             

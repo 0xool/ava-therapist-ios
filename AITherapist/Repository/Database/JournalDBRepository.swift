@@ -14,6 +14,7 @@ protocol JournalDBRepository {
     func loadJournals() -> AnyPublisher<LazyList<Journal>, Error>
     func deleteJournal(journalID: Int) -> AnyPublisher<Void, Error>
     func getJournal(byDate: Date) -> AnyPublisher<Journal, Error>
+    func hasEntryOnDate(_ date: Date) -> Bool
 }
 
 struct MainJournalDBRepository: JournalDBRepository {
@@ -39,52 +40,44 @@ struct MainJournalDBRepository: JournalDBRepository {
     func deleteJournal(journalID: Int) -> AnyPublisher<Void, Error> {
         deleteJournalData(journalID: journalID)
     }
+    
+    func hasEntryOnDate(_ date: Date) -> Bool{
+        dateExistsInDB(date)
+    }
 }
 
 extension MainJournalDBRepository {
     private func writeJournalData(journal: Journal, fromServer: Bool = false) -> AnyPublisher<Void, Error> {
-        var journal = journal
-        return Just<Void>
+        Just<Void>
             .withErrorType(Error.self)
-            .flatMap { _ in
-                self.deleteJournalIfExistsByDate(journal: &journal, fromServer: fromServer)
-            }
             .flatMap{ _ in
-                return persistentStore.Write(writeData: journal)
+                persistentStore.Write(writeData: journal)
             }
             .eraseToAnyPublisher()
     }
     
-    private func deleteJournalIfExistsByDate(journal: inout Journal,fromServer: Bool = false) -> AnyPublisher<Void, Error>{
-        let dateString = journal.dateCreated.description.prefix(10).description
-        return persistentStore.GetByQuery(ofType: Journal.self) {
-            $0.dateCreatedString == dateString
-        }
-            .map{ [journal] in
-                guard let journalDB = $0.first else{
-                    return
-                }
+    private func dateExistsInDB(_ date: Date) -> Bool {
+        let dateString = date.description.prefix(10).description
 
-                // Due to not storing this data in the storage
-                #warning("instead of delete update the values!!")
-                if fromServer {
-                    journal.tags = journalDB.tags
-                }
-                
-                _ = persistentStore.DeleteByID(ofType: Journal.self, id: journalDB.id )
-            }
-            .eraseToAnyPublisher()
+        guard let result = (persistentStore.GetByQuery(ofType: Journal.self){
+            $0.dateCreatedString == dateString
+        }) else{
+            return true
+        }
+
+        return !result.isEmpty
     }
     
     private func getJournalByDate(date: Date) -> AnyPublisher<Journal, Error>{
         let dateString = date.description.prefix(10).description
+        
         return persistentStore.GetByQuery(ofType: Journal.self) {
             $0.dateCreatedString == dateString
         }
-            .map{
-                $0.first ?? Journal()
-            }
-            .eraseToAnyPublisher()
+        .map{
+            $0.first ?? Journal()
+        }
+        .eraseToAnyPublisher()
     }
     
     private func isSameDay(firstDate: Date, secondDate: Date) -> Bool{

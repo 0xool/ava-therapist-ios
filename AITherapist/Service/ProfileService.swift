@@ -50,10 +50,10 @@ struct MainProfileService: ProfileService {
                     self.userDBRepository.changeValue {
                         let user: User = self.appState[\.userData].user.value!
                         user.name = name
-                        user.lastName = lastname
+                        user.lastname = lastname
                         user.userName = username
                     }
-                    .sinkEmptyAndStore()
+                    .sinkEmptyAndStore()                    
                 }
             } receiveValue: { _ in
                 

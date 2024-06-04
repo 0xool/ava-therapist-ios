@@ -9,9 +9,12 @@ import Foundation
 import SwiftUI
 
 struct AvaNavBarView<Content: View, Background: View>: View {
+    @State private var showHelpLine: Bool = false
     @Environment(\.dismiss) var dismiss
     @State private var backButtonType: TopLeftButtonType = .nothing
+    
     @State private var title: String = ""
+    @State private var isChatBar: Bool = false
     
     let content: Content
     let background: Background
@@ -32,11 +35,17 @@ struct AvaNavBarView<Content: View, Background: View>: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .backgroundStyle(.clear)
             }
-        }        
+        }
+        .fullScreenCover(isPresented: self.$showHelpLine, content: {
+            HelpLineView {
+                self.showHelpLine = false
+            }
+        })
         .toolbarBackground(.hidden, for: .navigationBar)
         .backgroundStyle(.clear)
         .onPreferenceChange(AvaNavigationBarTopLeftButtonRefrenceKeys.self, perform: { self.backButtonType = $0 })
         .onPreferenceChange(AvaNavigationBarTitleRefrenceKeys.self) { self.title = $0 }
+        .onPreferenceChange(AvaNavigationBarColorRefrenceKeys.self) { self.isChatBar = $0 }
     }
     
     @ViewBuilder var helpLineView: some View {
@@ -66,7 +75,7 @@ struct AvaNavBarView<Content: View, Background: View>: View {
                     } label: {
                         Image(systemName: "chevron.backward")
                             .font(.subheadline)
-                            .foregroundStyle(ColorPallet.IconBlue)
+                            .foregroundStyle(self.isChatBar ? ColorPallet.Celeste : ColorPallet.IconBlue)
                             .padding([.leading], 8)
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -94,6 +103,9 @@ struct AvaNavBarView<Content: View, Background: View>: View {
             
             helpLineView
                 .frame(maxWidth: .infinity, alignment: .trailing)
+                .onTapGesture {
+                    self.showHelpLine = true
+                }
         }
         .frame(maxHeight: .infinity, alignment: .top)
         .frame(width: UIScreen.main.bounds.width, height: 40)
@@ -101,7 +113,7 @@ struct AvaNavBarView<Content: View, Background: View>: View {
     
     @ViewBuilder var middleSection: some View{
         if self.title.isEmpty {
-            LogoIcon()
+            LogoIcon(isChatBar: self.isChatBar)
         }else{
             Text(title)
                 .font(
@@ -109,7 +121,6 @@ struct AvaNavBarView<Content: View, Background: View>: View {
                 .weight(.semibold)
                 )
                 .kerning(0.38)
-                .foregroundColor(ColorPallet.DarkBlueText)
         }
     }
 }

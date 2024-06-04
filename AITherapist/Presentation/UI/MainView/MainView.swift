@@ -58,24 +58,39 @@ extension MainView {
                     .fill(ColorPallet.Celeste)
                     .frame(height: tabBarSize)
                     .frame(maxWidth: .infinity)
-                    .shadow(color: ColorPallet.DarkGreen, radius: 4, x: 0, y: -1)
+                    .shadow(color: ColorPallet.DarkGreen.opacity(0.3), radius: 4, x: 0, y: -1)
                     .mask(Rectangle().padding(.top, -10))
                     .ignoresSafeArea()
+                    .zIndex(5)
+                
+                Circle()
+                    .frame(width: 85, height: 85)
+                    .foregroundColor(ColorPallet.Celeste)
+                    .offset(y: -42)
+                    .zIndex(5)
+                Circle()
+                    .frame(width: 85, height: 85)
+                    .foregroundColor(ColorPallet.Celeste)
+                    .offset(y: -42)
+                    .shadow(color: ColorPallet.DarkGreen.opacity(0.3), radius: 4, x: 0, y: -1)
+                    .zIndex(3)
         
                 HStack{
                     self.homeTabIcon
                         .navigationTitle("")
                     self.chatHistoryTabIcon
-                    NewChatTabIconMenu()
+                    newChatTabIconMenu
                         .onTapGesture {
                             withAnimation{
                                 viewModel.showNewChat.toggle()
                             }
                         }
+                        .zIndex(10)
                     self.journalTabIcon
                         .navigationTitle("Journal")
                     self.profileTabIcon
                 }
+                .zIndex(5)
                 .frame(height: tabBarSize)
                 .frame(maxWidth: .infinity)
                 .offset(y: -16)
@@ -95,6 +110,35 @@ extension MainView {
                 }
             }
         }
+        
+        @ViewBuilder private var newChatTabIconMenu: some View {
+            let iconOffset: CGFloat = 10
+            
+            ZStack{
+
+                Circle()
+                    .frame(width: 75, height: 75)
+                    .foregroundColor(ColorPallet.MediumTurquoiseBlue)
+                    .offset(y: iconOffset)
+                Image(systemName: "plus.message")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 50, height: 50)
+                    .foregroundStyle(ColorPallet.DarkGreen)
+                    .offset(y: iconOffset)
+                Text("New Chat")
+                    .font(
+                        Font.custom("SF Pro Text", size: 10)
+                            .weight(.medium)
+                    )
+                    .multilineTextAlignment(.center)
+                    .font(.caption)
+                    .foregroundColor(ColorPallet.DarkGreen)
+                    .offset(y: 60.2)
+            }
+            .offset(y: -36)
+        }
+
         
         @ViewBuilder var homeTabIcon: some View {
             TabIcon(imageName: "house", filledImageName: "house.fill", title: "Home", isSelected: self.mainViewState == .Home, tabTopViewNameSpace: tabTopViewNameSpace) {
@@ -158,47 +202,16 @@ extension MainView {
                             .frame(width: 32, height: 32)
                         Text(self.title)
                           .font(
-                            Font.custom("SF Pro Text", size: 10)
+                            Font.custom("SF Pro Text", size: 8)
                               .weight(.medium)
                           )
+                          .lineLimit(1)
                           .multilineTextAlignment(.center)
                     }
                     .foregroundStyle(isSelected ? ColorPallet.DarkGreen : .gray)
                     .frame(maxWidth: .infinity)
                 }
             }
-        }
-    }
-}
-
-extension MainView {
-    struct NewChatTabIconMenu: View {
-        var body: some View {
-            ZStack{
-                Circle()
-                    .frame(width: 80, height: 80)
-                    .foregroundColor(ColorPallet.Celeste)
-                    .shadow(color: ColorPallet.DarkGreen, radius: 0.5, x: 0, y: 1)
-                Circle()
-                    .frame(width: 75, height: 75)
-                    .foregroundColor(ColorPallet.MediumTurquoiseBlue)
-                Image(systemName: "plus.message")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 50, height: 50)
-                    .foregroundStyle(ColorPallet.DarkGreen)
-                Text("New Chat")
-                    .font(
-                        Font.custom("SF Pro Text", size: 10)
-                            .weight(.medium)
-                    )
-                    .multilineTextAlignment(.center)
-                    .font(.caption)
-                    .foregroundColor(ColorPallet.DarkGreen)
-                    .offset(y: 60.2)
-            }
-            .offset(y: -36)
-            .zIndex(20)
         }
     }
 }
@@ -225,7 +238,7 @@ extension MainView {
                 .opacity(self.viewState == .Home ? 1 : 0)
                 
                 LodableTabView(viewState: .ChatHistory){
-                    ConversationListView(viewModel: .init(coninater: self.viewModel.container))
+                    ConversationListView(viewModel: .init(coninater: self.viewModel.container), showNewConversationChatView: $viewModel.showNewChat)
                 }
                 .opacity(self.viewState == .ChatHistory ? 1 : 0)
                 
@@ -239,7 +252,6 @@ extension MainView {
                 }
                 .opacity(self.viewState == .Profile ? 1 : 0)
             }
-            //            .avaNavigationLogOutBackButtonHidden(s true)
             .environmentObject(viewModel)
         }
     }

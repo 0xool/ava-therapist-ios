@@ -19,6 +19,9 @@ struct Constants {
     static let MainUrl = WebProtocol + BaseUrl + port
     static let bgQueue = DispatchQueue(label: "bg_parse_queue")
     static let testQueue = DispatchQueue(label: "test")
+    
+    static let EmergencyPhoneNumber = "988"
+    static let InitialChatMessageBubbles: [String] = ["Experiencing stress right now", "Feeling down and need to talk", "Having trouble sleeping", "Feeling hopeless or lost", "Feeling grateful and blessed", "Excited and motivated"]
 }
 //======================================================================================================
 extension Constants {

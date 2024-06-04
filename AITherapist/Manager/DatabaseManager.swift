@@ -17,13 +17,14 @@ protocol DataBase {
     
     func GetByTypeID<T: Object>(ofType: T.Type, id: Int, query: @escaping (Query<T>) -> Query<Bool>) -> AnyPublisher<Results<T>, Error>
     func GetByQuery<T: Object>(ofType: T.Type, query: @escaping (Query<T>) -> Query<Bool>) -> AnyPublisher<Results<T>, Error>
+    func GetByQuery<T: Object>(ofType: T.Type, query: @escaping (Query<T>) -> Query<Bool>) -> Results<T>?
     func GetCount<T: Object>(value: T.Type) -> Int
     
     func Write<T: Object>(writeData: T) -> AnyPublisher<Void, Error>
     func Update<T: Object>(value: T) -> AnyPublisher<Void,  Error>
     func Update(changeValue: @escaping () -> ()) -> AnyPublisher<Void,  Error>
     
-    func EntityExist<Element: Object>(id: Int, ofType: Element.Type) -> Bool    
+    func EntityExist<Element: Object>(id: Int, ofType: Element.Type) -> Bool
     func DeleteLast<T: Object>(ofType: T.Type) -> AnyPublisher<Void,  Error>
     func DeleteAll<T: Object>(ofType: T.Type) -> AnyPublisher<Void,  Error>
     
@@ -33,7 +34,6 @@ protocol DataBase {
 }
 
 class DataBaseManager: DataBase {
-    
     static let Instance = DataBaseManager()
     private var realm: Realm
     private var cancellable: AnyCancellable?
@@ -90,7 +90,7 @@ class DataBaseManager: DataBase {
     
     func ClearAllData() {
         let delayInSeconds: TimeInterval = 3.0
-
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + delayInSeconds) {
             do {
                 try self.realm.write {
@@ -157,14 +157,22 @@ class DataBaseManager: DataBase {
         
         Future<Results<T>, Error> { promise in
             let value: Results<T> = self.realm.objects(T.self) .where(query)
-#warning("FIX!!!")
-            //            if (value.count <= 0){
-            promise(.success(value))
-            //            }else{
-            //                promise(.failure(DataBaseError.NotFound))
-            //            }
+//            if (value.count <= 0){
+                promise(.success(value))
+//            }else{
+//                promise(.failure(DataBaseError.NotFound))
+//            }
         }
         .eraseToAnyPublisher()
+    }
+    
+    func GetByQuery<T: Object>(ofType: T.Type, query: @escaping (Query<T>) -> Query<Bool>) -> Results<T>? {
+        let value: Results<T> = self.realm.objects(T.self) .where(query)
+        if (value.count <= 0){
+            return value
+        }else{
+            return nil
+        }
     }
     
     func IncrementaChatID() -> Int{

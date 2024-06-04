@@ -11,6 +11,7 @@ struct ContentMessageView: View {
     var contentMessage: String
     var isUser: Bool
     let animateText: Bool
+    
     @State var animate: Bool
     
     init(contentMessage: String, isUser: Bool, withAnimation: Bool = false, animateText: Bool = false) {
@@ -21,12 +22,12 @@ struct ContentMessageView: View {
     }
     
     var body: some View {
-            messageTextView
+        messageTextView
             .font(Font.custom("SF Pro Text", size: 17)
                 .weight(.regular))
             .padding(10)
-            .foregroundColor(isUser ? ColorPallet.DarkBlue : ColorPallet.SolidDarkGreen)
-            .background(isUser ? ColorPallet.MediumTurquoiseBlue : ColorPallet.Celeste )
+            .foregroundColor(isUser ? ColorPallet.DarkBlue : .white)
+            .background(isUser ? ColorPallet.Celeste : ColorPallet.DeepAquaBlue )
             .clipShape(isUser ? .rect(
                 topLeadingRadius: 5,
                 bottomLeadingRadius: 15,

@@ -12,7 +12,7 @@ import Combine
 protocol AuthenticationService {
     func loginUser(email: String, password: String)
     func registerUser(nickname: String, email: String, password: String, mobileNumber: String)
-    func checkUserLoggedStatus()
+    func checkUserStatus(loading: Binding<Bool>)
 }
 
 class MainAuthenticationService: AuthenticationService {
@@ -30,7 +30,7 @@ class MainAuthenticationService: AuthenticationService {
         self.settingDBRepository = settingDBRepository
     }
     
-    func checkUserLoggedStatus() {
+    func checkUserStatus(loading: Binding<Bool>) {
         let cancelBag = CancelBag()
         
         Just<Void>
@@ -44,10 +44,13 @@ class MainAuthenticationService: AuthenticationService {
             })
             .sink{ subscriptionCompletion in
                 if let _ = subscriptionCompletion.error {
+                    self.appState[\.userData.user] = .failed(APIError.unexpectedResponse)
+                    loading.wrappedValue = false
                 }
             } receiveValue: { user in
                 PersistentManager.SaveUserToken(token: user.token)
                 self.appState[\.userData.user] = .loaded(user)
+                loading.wrappedValue = false
             }
             .store(in: cancelBag)
     }
@@ -155,7 +158,7 @@ extension MainAuthenticationService {
 }
 
 struct StubAuthenticateService: AuthenticationService {
-    func checkUserLoggedStatus() {
+    func checkUserStatus(loading: Binding<Bool>) {
     }
     
     func loginUser(email: String, password: String) {

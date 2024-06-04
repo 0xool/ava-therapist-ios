@@ -91,7 +91,7 @@ struct InsightView: View {
         Button {
             self.showNewConversationChatView = true
         } label: {
-            Text("Create a new Conversation")
+            Text("Create new Conversation")
                 .padding(.horizontal, 30)
                 .padding(.vertical, 5)
                 .frame(height: 54, alignment: .center)

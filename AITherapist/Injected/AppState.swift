@@ -40,6 +40,10 @@ extension AppState {
             PersistentManager.DeleteUserToken()
             DataBaseManager.Instance.ClearAllData()
         }
+        
+        func signIn() {
+            
+        }
     }
 }
 

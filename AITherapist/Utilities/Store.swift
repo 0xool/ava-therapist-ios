@@ -46,6 +46,15 @@ extension ObservableObject {
             self?[keyPath: keyPath] = $0
         })
     }
+    
+    func bindingSubject<Value>(_ keyPath: WritableKeyPath<Self, Value>) -> Binding<Value> {
+        let defaultValue = self[keyPath: keyPath]
+        return .init(get: { [weak self] in
+            self?[keyPath: keyPath] ?? defaultValue
+        }, set: { [weak self] in
+            self?[keyPath: keyPath] = $0
+        })
+    }
 }
 
 extension Binding where Value: Equatable {

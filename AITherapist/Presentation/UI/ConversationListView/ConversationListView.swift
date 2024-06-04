@@ -10,10 +10,13 @@ import Combine
 
 struct ConversationListView: View {
     @ObservedObject private(set) var viewModel: ViewModel
+    @Binding var showNewConversationChatView: Bool
+
     
     var body: some View {
         mainContent
             .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .ignoresSafeArea(.keyboard)
     }
     
     @ViewBuilder var mainContent: some View {
@@ -26,8 +29,8 @@ struct ConversationListView: View {
             loadedView(conversations)
         case let .failed(error):
             failedView(error)
-        case .partialLoaded(_):
-            notRequestedView
+        case let .partialLoaded(conversations, _):
+            loadedView(conversations)
         }
     }
 }
@@ -52,42 +55,74 @@ private extension ConversationListView {
 // MARK: Displaying Content
 private extension ConversationListView {
     
-    func loadedView(_ conversationList: LazyList<Conversation>) -> some View {
-        NavigationStack() {
-            VStack(spacing: 0){
-                SearchableCustom(searchtxt: $viewModel.searchText)
-                    .padding(.bottom, 8)
-                
-                ConversationCellHeader()
-                    .frame(height: 25)
-                    .zIndex(5)
-                ZStack{
-                    List{
-                        ForEach (self.viewModel.getFilteredConversationList()
-                                 , id: \.id){ conversation in
-                            ZStack{
-                                ConversationCellView(conversation: conversation){
-                                    NavigationChatView(conversation: conversation, container: self.viewModel.container)
+    @ViewBuilder func loadedView(_ conversationList: LazyList<Conversation>) -> some View {
+        if conversationList.isEmpty {
+            VStack{
+                Spacer()
+                VStack(spacing: 8){
+                    Text("No Journal Entry")
+                        .font(Font.custom("SF Pro Text", size: 12))
+                        .bold()
+                        .foregroundColor(ColorPallet.DiaryDateBlue)
+                        .frame(height: 21, alignment: .center)
+                    createNewConversationButton
+                }
+                Spacer()
+            }
+        }else{
+            NavigationStack() {
+                VStack(spacing: 0){
+                    SearchableCustom(searchtxt: $viewModel.searchText)
+                        .padding(.bottom, 8)
+                    
+                    ConversationCellHeader()
+                        .frame(height: 25)
+                        .zIndex(5)
+                    ZStack{
+                        List{
+                            ForEach (self.viewModel.getFilteredConversationList()
+                                     , id: \.id){ conversation in
+                                ZStack{
+                                    ConversationCellView(conversation: conversation){
+                                        NavigationChatView(conversation: conversation, container: self.viewModel.container)
+                                    }
+                                    .background(.clear)
+                                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                                 }
-                                .background(.clear)
-                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                .padding([.top, .bottom], 0)
+                                .listRowSeparator(.hidden)
+                                .listRowBackground(Color.clear)
+                                .listRowSpacing(5)
+                                .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
+                                .frame(maxHeight: .infinity)
                             }
-                            .padding([.top, .bottom], 0)
-                            .listRowSeparator(.hidden)
-                            .listRowBackground(Color.clear)
-                            .listRowSpacing(5)
-                            .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
-                            .frame(maxHeight: .infinity)
+                                     .onDelete(perform: self.viewModel.deleteConversation)
                         }
-                                 .onDelete(perform: self.viewModel.deleteConversation)
+                        .padding(0)
+                        .background(.clear)
+                        .scrollContentBackground(.hidden)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+                        .listStyle(.plain)
+                        .refreshable {
+                            self.viewModel.container.services.conversationService.loadConversationList()
+                        }
                     }
-                    .padding(0)
-                    .background(.clear)
-                    .scrollContentBackground(.hidden)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-                    .listStyle(.plain)
                 }
             }
+        }
+    }
+    
+    @ViewBuilder var createNewConversationButton: some View{
+        Button {
+            self.showNewConversationChatView = true
+        } label: {
+            Text("Create new Conversation")
+                .padding(.horizontal, 30)
+                .padding(.vertical, 5)
+                .frame(height: 54, alignment: .center)
+                .background(ColorPallet.SolidDarkGreen)
+                .foregroundStyle(ColorPallet.Celeste)
+                .cornerRadius(50)
         }
     }
 }
@@ -204,7 +239,7 @@ extension ConversationListView {
         }
         
         func loadConversationList() {
-            self.container.services.conversationService.loadConversationList(conversations: self.loadableSubject(\.conversations))
+            self.container.services.conversationService.loadConversationList()
         }
         
         func loadConversationListOnRetry(){
@@ -242,7 +277,7 @@ extension ConversationListView {
 #if DEBUG
 struct ConversationListView_Previews: PreviewProvider {
     static var previews: some View {
-        ConversationListView(viewModel: ConversationListView.ViewModel(coninater: .previews))
+        ConversationListView(viewModel: ConversationListView.ViewModel(coninater: .previews), showNewConversationChatView: .constant(false))
     }
 }
 #endif

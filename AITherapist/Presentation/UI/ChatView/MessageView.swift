@@ -31,7 +31,7 @@ struct MessageView : View {
                               )
                 
                 if self.chat.chatState == .LoadingServerChat {
-                    LoadingIndicator(animation: .circleBlinks, color: ColorPallet.DarkGreen, size: .small, speed: .fast)
+                    CircleLoading(circleSize: 10, mainColor: ColorPallet.Celeste, secondaryColor: ColorPallet.Celeste)
                 }
             }
             .frame(maxWidth: .infinity, alignment: chat.isUserMessage ? .trailing : .leading )

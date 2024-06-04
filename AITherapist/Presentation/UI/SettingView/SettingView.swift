@@ -118,7 +118,7 @@ extension SettingView {
                     }
             case let .failed(error): // if the request failed
                 failedView(error: error)
-            case .partialLoaded(_):
+            case .partialLoaded(_, _):
                 Text("Not requested")
             }
         }

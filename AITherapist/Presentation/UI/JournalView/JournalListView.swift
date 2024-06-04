@@ -8,19 +8,20 @@
 import SwiftUI
 
 struct JournalListView: View {
-    @Namespace var journalNameSpace
     @State var showJournalEditView = false
     @State var selectedIndex = 0
     @State var selectedJournal: Journal = .init()
     
+    @Binding var showAllJournalsView: Bool
+    @Binding var selectedDate: Date
     @ObservedObject var viewModel: ViewModel
-            
+    
     var body: some View {
         mainContent
     }
     
     @ViewBuilder var mainContent: some View {
-        switch self.viewModel.diaryBook {
+        switch self.viewModel.journals {
         case .notRequested:
             notRequestedView
         case .isLoading(last: _, cancelBag: _):
@@ -29,15 +30,10 @@ struct JournalListView: View {
             loadedView(diaryBook)
         case let .failed(error):
             failedView(error)
-        case .partialLoaded(_):
+        case .partialLoaded(_, _):
             notRequestedView
         }
     }
-    
-//    @ViewBuilder var listCellBackground: some View {
-//        RoundedRectangle(cornerRadius: 15)
-//            .fill(ColorPallet.SecondaryColorGreen.gradient)
-//    }
 }
 
 // MARK: Loading Content
@@ -52,9 +48,7 @@ private extension JournalListView {
     
     func failedView(_ error: Error) -> some View {
         ErrorView(error: error, retryAction: {
-
-#warning("Handle Journal ERROR")
-            print("Handle Journal ERROR")
+            self.showAllJournalsView = false
         })
     }
 }
@@ -62,119 +56,138 @@ private extension JournalListView {
 // MARK: Displaying Content
 private extension JournalListView{
     func loadedView(_ diaryBook: [Journal]) -> some View {
-        ZStack{
-            if !self.showJournalEditView{
-                journalList(diaryBook: diaryBook)
+        let diaryBook = diaryBook.sorted{ $0.dateCreated > $1.dateCreated }
+        return journalList(diaryBook: diaryBook)
+    }
+    
+    func journalList(diaryBook: [Journal]) -> some View {
+        @ViewBuilder var journalListView: some View {
+            ScrollView{
+                VStack{
+                    ForEach(Array(diaryBook.enumerated()), id: \.offset){ index, journal in
+                        Button(action: {
+                            self.selectedDate = journal.dateCreated
+                            self.showAllJournalsView = false
+                        }, label: {
+                            ListContent(journal: journal)
+                        })
+                    }
+                }
+            }
+        }
+        
+        return VStack{
+            if diaryBook.isEmpty {
+                Spacer()
+                VStack(spacing: 8){
+                    Text("No Journal Entry")
+                        .font(Font.custom("SF Pro Text", size: 12))
+                        .bold()
+                        .foregroundColor(ColorPallet.DiaryDateBlue)
+                        .frame(height: 21, alignment: .center)
+                    createNewJournalButton
+                }
+                Spacer()
             }else{
-//                JournalView(namespace: journalNameSpace, journal: selectedJournal, index: selectedIndex, viewModel: .init())
+                SearchableCustom(searchtxt: $viewModel.searchText)
+                    .padding(.bottom, 8)
+                journalListView
             }
         }
     }
     
-    func journalList(diaryBook: [Journal]) -> some View {
-        ScrollView{
-            VStack{
-                ForEach(Array(diaryBook.enumerated()), id: \.offset){ index, journal in
-                    ListContent(namespace: journalNameSpace, journal: journal, index: index,  showDetail: $showJournalEditView){
-                            self.selectedIndex = $0
-                            self.selectedJournal = $1
+    @ViewBuilder var createNewJournalButton: some View{
+        Button {
+            self.showAllJournalsView = false
+        } label: {
+            Text("Add Journal Entry")
+                .padding(.horizontal, 20)
+                .padding(.vertical, 5)
+                .frame(height: 40, alignment: .center)
+                .background(ColorPallet.SolidDarkGreen)
+                .foregroundStyle(ColorPallet.Celeste)
+                .cornerRadius(40)
+        }
+    }
+
+}
+
+extension JournalListView{
+    struct SearchableCustom: View {
+        @Binding var searchtxt: String
+        @FocusState private var isSearchFocused: Bool
+        
+        var body: some View {
+            HStack {
+                HStack {
+                    Image(systemName: "magnifyingglass")
+                    TextField("Search keywords", text: $searchtxt)
+                        .font(Font.custom("SF Pro Text", size: 16))
+                        .focused($isSearchFocused)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 8)
+                }
+                .padding(.horizontal)
+                .background(RoundedRectangle(cornerRadius: 25).fill(ColorPallet.LighterCeleste))
+                if isSearchFocused {
+                    Button("Cancel") {
+                        searchtxt = ""
+                        withAnimation(.spring()) {
+                            isSearchFocused = false
                         }
-                        .frame(maxWidth: .infinity, minHeight: 80)
-                        .padding(16)
-                        .shadow(color: .gray, radius: 1, x: 2, y: 2)
-                    
-                    Divider()
+                    }
+                    .transition(.move(edge: .trailing))
                 }
             }
+            .frame(maxWidth: .infinity)
+            .padding(.horizontal)
         }
     }
 }
 
 extension JournalListView{
     struct ListContent: View {
-        var namespace: Namespace.ID
         let journal: Journal
-        let index: Int
-        
-        @State var showInnerContent: Bool = false
-        @Binding var showDetail: Bool
-        let onClickJournal: (_ index: Int, _ journal: Journal) -> ()
-        
+                
         var body: some View {
-            VStack{
-                ZStack{
-                    VStack{
-                        Text(journal.dateCreated.description)
-                            .font(
-                                Font.custom("SF Pro Text", size: 25)
-                                    .weight(.bold)
-                            )
-                            .multilineTextAlignment(.center)
-                            .foregroundColor(Color(red: 0.15, green: 0.15, blue: 0.15))
-                            .padding([.top], 8)
-                            .matchedGeometryEffect(id: "journalDate\(index)", in: namespace)
-                        
-                        Text(journal.diaryName)
-                            .matchedGeometryEffect(id: "journalTitle\(index)", in: namespace)
-                        
-                        if showInnerContent {
-                            Text(journal.diaryMessage)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .fill(ColorPallet.creameColor.gradient.opacity(0.7))
-                                        .blur(radius: 30)
-                                        .padding(-8)
-                                        .hiddenModifier(isHide: !showInnerContent)
-                                        .matchedGeometryEffect(id: "journalContetnBackground\(index)", in: namespace)
-                                    
-                                )
-                                .padding([.top], showInnerContent ? 8 : 0)
-                                .padding([.bottom], showInnerContent ? 16 : 0)
-                                .padding([.leading, .trailing], showInnerContent ? 32 : 0)
-                                .matchedGeometryEffect(id: "journalContent\(index)", in: namespace)
-                        }
-                    }
-
-                    Button {
-                        withAnimation{
-                            onClickJournal(index, journal)
-                            showDetail.toggle()
-                        }
-                    } label: {
-                        Rectangle().fill(.clear)
-                    }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            
+            VStack(alignment: .leading, spacing: 0) {
+                HStack{
+                    cellTitleTextView
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                    
                 }
+                .frame(height: 50)
+                .padding(.horizontal, 20)
                 
-                Spacer()
-                expandButton
-                
+                Rectangle()
+                    .fill(ColorPallet.MediumTurquoiseBlue)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 1)
             }
-            .background(ColorPallet.LightGreen.gradient)
-            .clipShape(RoundedRectangle(cornerRadius: 15))
-            .matchedGeometryEffect(id: "journalDetailView\(index)", in: namespace)
+            .padding(.vertical, 0)
+            .frame(maxWidth: .infinity)
+            
         }
         
-        @ViewBuilder var expandButton: some View{
-            Button {
-                withAnimation {
-                    showInnerContent.toggle()
-                }
-            } label: {
-                Image(systemName: showInnerContent ? "arrowtriangle.up.fill" : "arrowtriangle.down.fill")
-                    .foregroundColor(.green)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+        @ViewBuilder var cellTitleTextView: some View {
+            VStack(alignment: .leading){
+                Text(Date.getJournalDateWithMonthDayYearFormat(date: journal.dateCreated))
+                    .font(
+                        Font.custom("SF Pro Text", size: 15)
+                            .weight(.semibold)
+                    )
+                    .multilineTextAlignment(.leading)
+                    .foregroundColor(ColorPallet.DarkGreenText)
+                 
+                    Text(journal.diaryMessage)
+                        .font(Font.custom("SF Pro Text", size: 15))
+                        .multilineTextAlignment(.leading)
+                        .lineLimit(1)
+                        .foregroundColor(ColorPallet.grey400)
+//                        .frame(width: 114, alignment: .leading)
             }
-            .frame(height: 30)
-            .frame(maxWidth: .infinity)
-            .background(.ultraThinMaterial)
-            .clipShape(.rect(
-                topLeadingRadius: 0,
-                bottomLeadingRadius: 15,
-                bottomTrailingRadius: 15,
-                topTrailingRadius: 0
-            ))
-            .matchedGeometryEffect(id: "journalButton\(index)", in: namespace)
             
         }
     }
@@ -182,30 +195,30 @@ extension JournalListView{
 
 extension JournalListView{
     class ViewModel: ObservableObject {
+        @Published var searchText: String = ""
         let container: DIContainer
         let isRunningTests: Bool
         private var cancelBag = CancelBag()
         
-        @Published var diaryBook: Loadable<[Journal]>
+        @Published var journals: Loadable<[Journal]>
         
-        init(container: DIContainer, isRunningTests: Bool = false, cancelBag: CancelBag = CancelBag(), diaryBook: Loadable<[Journal]> = .notRequested) {
+        init(container: DIContainer, isRunningTests: Bool = false, cancelBag: CancelBag = CancelBag(), journals: Loadable<[Journal]> = .notRequested) {
             self.container = container
             self.isRunningTests = isRunningTests
             self.cancelBag = cancelBag
-            self.diaryBook = diaryBook
-
+            self.journals = journals
+            
             loadJournals()
         }
         
         func loadJournals(){
-            self.container.services.journalService.loadJournalList(journals: loadableSubject(\.diaryBook))
+            self.container.services.journalService.loadJournalList(journals: loadableSubject(\.journals))
         }
-        
     }
 }
 
 #if DEBUG
 #Preview {
-    JournalListView(viewModel: .init(container: .init(appState: .previews, services: .stub)))
+    JournalListView(showAllJournalsView: .constant(false), selectedDate: .constant(.now), viewModel: .init(container: .init(appState: .previews, services: .stub), journals: .loaded(Journal.journals)))
 }
 #endif

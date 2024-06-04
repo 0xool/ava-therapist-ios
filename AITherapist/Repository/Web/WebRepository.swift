@@ -31,6 +31,16 @@ extension WebRepository {
     }
     
     func webRequest<D: ServerResponse>(webApi: APICall) -> AnyPublisher<D, Error> {
+        guard let sessionCookie = self.session.configuration.httpCookieStorage?.cookies?.first(where: { $0.name == "jwt" }) else {
+            AppState.UserData.shared.logout()
+            return Fail(error: ClientError.invalidURL).eraseToAnyPublisher()
+        }
+
+        if sessionCookie.value == "" || sessionCookie.value.isEmpty {
+            AppState.UserData.shared.logout()
+            return Fail(error: ClientError.invalidURL).eraseToAnyPublisher()
+        }
+        
         self.session.configuration.httpCookieStorage?.cookies?.forEach({
             AFSession.session.configuration.httpCookieStorage?.setCookie($0)
         })

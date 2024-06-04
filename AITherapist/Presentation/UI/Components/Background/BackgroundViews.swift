@@ -27,8 +27,8 @@ struct AuthenticationBackgroundView: View {
 }
 
 struct ChatEarBackgroundView: View {
-    let backgroundColor: Color = ColorPallet.Verdigris
-
+    let backgroundColor: Color = ColorPallet.DeepAquaBlue
+    
     
     var body: some View {
         background
@@ -179,7 +179,7 @@ struct MenuBackground: View {
 
 struct TabViewBackground: View {
     private let screenWidth = UIViewController().view.bounds.width
-
+    
     var body: some View {
         blueGradientBackgroundView
     }
@@ -187,9 +187,15 @@ struct TabViewBackground: View {
     @ViewBuilder private var blueGradientBackgroundView: some View {
         
         ZStack{
-            Rectangle()
-                .fill(ColorPallet.HomePageGradientBackground)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            LinearGradient(
+                stops: [
+                    Gradient.Stop(color: ColorPallet.SkyBlue, location: 0.00),
+                    Gradient.Stop(color: ColorPallet.Celeste, location: 1.00),
+                ],
+                startPoint: UnitPoint(x: 0.5, y: 0),
+                endPoint: UnitPoint(x: 0.5, y: 0.55)
+            )
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
             
             Circle()
                 .fill(Color(red: 0.16, green: 0.74, blue: 0.93).opacity(0.7))
@@ -201,9 +207,10 @@ struct TabViewBackground: View {
                 .resizable()
                 .scaledToFit()
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .opacity(0.5)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-
+        
         .ignoresSafeArea()
         
     }

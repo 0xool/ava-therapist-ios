@@ -19,6 +19,7 @@ protocol ConversationService {
     func deleteConversationAndUpdate(conversationID: Int)
     
     func addConversationToDB(conversation: Conversation)
+    func loadConversationList()
 }
 
 struct MainConversationService: ConversationService {
@@ -50,6 +51,27 @@ struct MainConversationService: ConversationService {
             })
             .ensureTimeSpan(requestHoldBackTimeInterval)
             .sinkToLoadable { conversations.wrappedValue = $0 }
+            .store(in: cancelBag)
+    }
+    
+    func loadConversationList() {
+        
+        let cancelBag = CancelBag()
+
+        self.appState[\.conversationData.conversations].setIsLoading(cancelBag: cancelBag)
+  
+        Just<Void>
+            .withErrorType(Error.self)
+            .flatMap { _ -> AnyPublisher<Void, Error> in
+                self.refreshConversationList()
+            }
+            .flatMap({ [conversationDBRepository] in
+                conversationDBRepository.loadConversations()
+            })
+            .ensureTimeSpan(requestHoldBackTimeInterval)
+            .sinkToLoadable {
+                self.appState[\.conversationData.conversations] = $0
+            }
             .store(in: cancelBag)
     }
     
@@ -209,7 +231,7 @@ struct MainConversationService: ConversationService {
     }
     
     func refreshConversationList() -> AnyPublisher<Void, Error> {
-        return conversationRepository
+        conversationRepository
             .loadConversationList()
             .ensureTimeSpan(requestHoldBackTimeInterval)
             .map { [conversationDBRepository] in
@@ -271,6 +293,10 @@ struct StubConversationService: ConversationService {
     }
     
     func addConversationToDB(conversation: Conversation) {
+        
+    }
+    
+    func loadConversationList(){
         
     }
 }

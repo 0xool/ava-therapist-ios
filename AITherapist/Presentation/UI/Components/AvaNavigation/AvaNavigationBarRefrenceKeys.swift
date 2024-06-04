@@ -40,6 +40,14 @@ struct AvaNavigationBarTitleRefrenceKeys: PreferenceKey{
     }
 }
 
+struct AvaNavigationBarColorRefrenceKeys: PreferenceKey{
+    static var defaultValue: Bool = false
+    
+    static func reduce(value: inout Bool, nextValue: () -> Bool) {
+        value = nextValue()
+    }
+}
+
 struct AvaNavigationLogoutClickedRefrenceKeys: PreferenceKey{
     static var defaultValue: () -> () = {}
     
@@ -63,5 +71,9 @@ extension View {
     
     func avaNavigationBarBackground(_ show: Bool) -> some View{
         preference(key: AvaNavigationBarShowBackgroundRefrenceKeys.self, value: show)
+    }
+    
+    func avaNavigationBarColor(isChat: Bool) -> some View {
+        preference(key: AvaNavigationBarColorRefrenceKeys.self, value: isChat)
     }
 }

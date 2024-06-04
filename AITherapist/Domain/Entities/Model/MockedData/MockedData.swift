@@ -60,7 +60,7 @@ extension Chat{
 }
 
 extension User {
-    static let mockedUser: User = User(id: 1, userName: "cyrus", therapistID: nil, mobile: "310", name: "John", lastName: "Doe", email: "johndoe32@gmail.com", generalSummary: nil, token: "123")
+    static let mockedUser: User = User(id: 1, userName: "cyrus", therapistID: nil, mobile: "310", name: "John", lastname: "Doe", email: "johndoe32@gmail.com", generalSummary: nil, token: "123")
 }
 
 #endif

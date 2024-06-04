@@ -8,10 +8,13 @@
 import SwiftUI
 
 struct LogoIcon: View {
+    let isChatBar: Bool
+    
     var body: some View {
         Logo()
             .frame(width: 42.97, height: 24.25)
-            .foregroundStyle(ColorPallet.SolidDarkGreen)
+            .foregroundColor(self.isChatBar ? ColorPallet.Celeste : ColorPallet.SolidDarkGreen)
+
     }
 }
 

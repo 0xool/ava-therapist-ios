@@ -112,7 +112,7 @@ extension EditUserSettingsView{
             
             self.username = container.appState[\.userData].user.value?.userName ?? ""
             self.name = container.appState[\.userData].user.value?.name ?? ""
-            self.lastname = container.appState[\.userData].user.value?.lastName ?? ""
+            self.lastname = container.appState[\.userData].user.value?.lastname ?? ""
         }
         
         func saveUserInfo(){

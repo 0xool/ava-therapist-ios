@@ -21,7 +21,7 @@ class User: Object, Codable {
     
     @Persisted var mobile: String
     @Persisted var name: String?
-    @Persisted var lastName: String?
+    @Persisted var lastname: String?
     
     @Persisted var email: String
     @Persisted var generalSummary: String?
@@ -33,7 +33,7 @@ class User: Object, Codable {
         case therapistID = "therapistID"
         case mobile = "mobile"
         case name = "name"
-        case lastName = "lastName"
+        case lastname = "lastname"
         case email = "email"
         case generalSummary = "generalSummary"
         case token = "token"
@@ -43,7 +43,7 @@ class User: Object, Codable {
         super.init()
     }
 
-    convenience init(id: Int, userName: String, therapistID: Int?, mobile: String, name: String?, lastName: String?, email: String, generalSummary: String?, token: String) {
+    convenience init(id: Int, userName: String, therapistID: Int?, mobile: String, name: String?, lastname: String?, email: String, generalSummary: String?, token: String) {
         self.init()
         self.id = id
         
@@ -52,7 +52,7 @@ class User: Object, Codable {
         self.mobile = mobile
         
         self.name = name
-        self.lastName = lastName
+        self.lastname = lastname
         self.email = email
         
         self.generalSummary = generalSummary
@@ -68,8 +68,7 @@ class User: Object, Codable {
         
         mobile = try container.decode(String.self , forKey: .mobile)
         name = try container.decode(String?.self , forKey: .name)
-        lastName = try container.decodeIfPresent(String.self , forKey: .lastName)
-        
+        lastname = try container.decodeIfPresent(String.self , forKey: .lastname)
         email = try container.decode(String.self , forKey: .email)
         generalSummary = try container.decodeIfPresent(String.self , forKey: .generalSummary)
         if let token = try? container.decode(String.self , forKey: .token) {

@@ -40,7 +40,7 @@ extension AuthenticationView {
         }
         
         func retry(){
-            user = .notRequested
+            self.container.appState[\.userData].logout()
         }
         
 //        var localeReader: LocaleReader {

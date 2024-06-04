@@ -14,7 +14,7 @@ protocol JournalWebRepository: WebRepository {
     func addJournal(journal: Journal) -> AnyPublisher<Void, Error>
     func deleteJournal(journalID: Int) -> AnyPublisher<Void, Error>
     
-    func getJournalByDate(date: Date) -> AnyPublisher<Journal, Error>
+    func getJournalByDate(date: Date) -> AnyPublisher<Journal?, Error>
 }
 
 struct MainJournalWebRepository: JournalWebRepository {
@@ -68,7 +68,7 @@ struct MainJournalWebRepository: JournalWebRepository {
             .eraseToAnyPublisher()
     }
     
-    func getJournalByDate(date: Date) -> AnyPublisher<Journal, Error>{
+    func getJournalByDate(date: Date) -> AnyPublisher<Journal?, Error>{
         let request: AnyPublisher<GetJournalByDateResponse, Error> = webRequest(api: API.getDiaryByDate(date: date.description))
         
         return request

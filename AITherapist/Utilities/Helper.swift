@@ -105,7 +105,7 @@ extension Publisher {
     
     func sinkEmptyAndStore(cancelBag: CancelBag = CancelBag()) {
         return sink(receiveCompletion: { subscriptionCompletion in
-            if let error = subscriptionCompletion.error {
+            if let _ = subscriptionCompletion.error {
             }
         }, receiveValue: { value in
             
@@ -212,6 +212,14 @@ extension Date {
         dateFormatter.timeZone = TimeZone(identifier: "UTC") // Assuming the input string is in UTC
         
         return dateFormatter.date(from: dateString) ?? .now
+    }
+    
+    static func getJournalDateWithMonthDayYearFormat(date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMMM d, yyyy"
+        let formattedDate = dateFormatter.string(from: date)
+        
+        return formattedDate
     }
     
     static func yesterday() -> Date? {

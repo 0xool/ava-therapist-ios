@@ -11,7 +11,7 @@ struct NewChatChoiceView: View {
     let onBubleClicked: (String) -> ()
     let initialTextList: [String]
     
-    init(onBubleClicked: @escaping (String) -> Void, initialTextList: [String] = ["Don’t know why, but anxious!", "I’m overwhelmed.", "Let’s just talk.", "I'm having a blast"]) {
+    init(onBubleClicked: @escaping (String) -> Void, initialTextList: [String] = Constants.InitialChatMessageBubbles) {
         self.onBubleClicked = onBubleClicked
         self.initialTextList = initialTextList
     }
@@ -20,7 +20,7 @@ struct NewChatChoiceView: View {
         FlexibleStack {
             ForEach(initialTextList, id: \.self) { text in
                 Text(text)
-                .font(Font.custom("SF Pro Text", size: 12))
+                    .font(Font.custom("SF Pro Text", size: 10).bold())
                 .padding()
                 .foregroundStyle(ColorPallet.DarkBlueText)
                 .background(

@@ -183,5 +183,19 @@ struct GetAllJournalResponse: ServerResponse {
 struct GetJournalByDateResponse: ServerResponse {
     var code: Int?
     var message: String?
-    var data: Journal
+    var data: Journal?
+}
+
+extension Journal {
+    static let journals: [Journal] = [
+        Journal(id: 1, diaryMessage: "I had a great day today", diaryName: "My Day", moodID: 1, summary: "I had a great day today", dateCreated: Date(), tags: [.Personal, .Happy]),
+        Journal(id: 2, diaryMessage: "I had a bad day today", diaryName: "My Day", moodID: 3, summary: "I had a bad day today", dateCreated: Date(), tags: [.Personal, .Sad]),
+        Journal(id: 3, diaryMessage: "I had a great day today", diaryName: "My Day", moodID: 1, summary: "I had a great day today", dateCreated: Date(), tags: [.Personal, .Happy]),
+        Journal(id: 4, diaryMessage: "I had a bad day today", diaryName: "My Day", moodID: 3, summary: "I had a bad day today", dateCreated: Date(), tags: [.Personal, .Sad]),
+        Journal(id: 5, diaryMessage: "I had a great day today", diaryName: "My Day", moodID: 1, summary: "I had a great day today", dateCreated: Date(), tags: [.Personal, .Happy]),
+        Journal(id: 6, diaryMessage: "I had a bad day today", diaryName: "My Day", moodID: 3, summary: "I had a bad day today", dateCreated: Date(), tags: [.Personal, .Sad]),
+        Journal(id: 7, diaryMessage: "I had a great day today", diaryName: "My Day", moodID: 1, summary: "I had a great day today", dateCreated: Date(), tags: [.Personal, .Happy]),
+        Journal(id: 8, diaryMessage: "I had a bad day today", diaryName: "My Day", moodID: 3, summary: "I had a bad day today", dateCreated: Date(), tags: [.Personal, .Sad]),
+        Journal(id: 9, diaryMessage: "I had a great day today", diaryName: "My Day", moodID: 1, summary: "I had a great day today", dateCreated: Date(), tags: [.Personal, .Happy]),
+    ]
 }

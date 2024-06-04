@@ -16,15 +16,19 @@ struct MainAppView: View {
     
     @State private var showBG: Bool = true
     
-    var body: some View {
+    var body: some View {        
         Group {
             if viewModel.isRunningTests {
                 Text("Running unit tests")
             }else if (PersistentManager.UserHasFinishedOnboarding()){
                 Text("OnboardingView")
             }else{
-                if self.viewModel.user.value == nil
-                { LoginView } else { mainAppView }
+                if self.viewModel.initalLoading {
+                    splashView
+                }else{
+                    if self.viewModel.user.value == nil
+                    { LoginView } else { mainAppView }
+                }
             }
         }
     }
@@ -37,7 +41,7 @@ struct MainAppView: View {
     }
     
     @ViewBuilder var splashView: some View {
-        AuthenticationBackgroundView()
+        loadingView()
             .matchedGeometryEffect(id: "MainBackground", in: mainViewNameSpace, isSource: showBG)
     }
     
@@ -60,7 +64,7 @@ struct MainAppView: View {
                     }
             case let .failed(error): // if the request failed
                 failedView(error: error)
-            case .partialLoaded(_):
+            case .partialLoaded(_, _):
                 Text("Not requested")
             }
         }.background(
@@ -84,7 +88,6 @@ extension MainAppView {
             CircleLoading()
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
         }
-        .matchedGeometryEffect(id: "logginBackground", in: mainViewNameSpace)
     }
 }
 
@@ -92,10 +95,11 @@ extension MainAppView {
 
 extension MainAppView {
     class ViewModel: ObservableObject {
-        
         let container: DIContainer
         let isRunningTests: Bool
         var anyCancellable: AnyCancellable? = nil
+        
+        @Published var initalLoading: Bool = true
         
         var user: Loadable<User>{
             get{
@@ -116,7 +120,7 @@ extension MainAppView {
         init(container: DIContainer, isRunningTests: Bool = ProcessInfo.processInfo.isRunningTests){
             self.container = container
             self.isRunningTests = isRunningTests
-            self.container.services.authenticationService.checkUserLoggedStatus()
+            self.container.services.authenticationService.checkUserStatus(loading: self.bindingSubject(\.initalLoading))
             
             anyCancellable = container.appState.value.userData.objectWillChange.sink { (_) in
                 self.objectWillChange.send()
