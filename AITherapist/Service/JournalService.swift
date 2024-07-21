@@ -46,7 +46,7 @@ struct MainJournalService: JournalService {
         }
         
         Just<Void>
-            .withErrorType(Error.self)
+            .withErrorType(ServerError.self)
             .flatMap{
                 journalRepository
                     .addJournal(journal: journal.wrappedValue.value!)
@@ -130,7 +130,7 @@ struct MainJournalService: JournalService {
         
         Just<Void>
             .withErrorType(Error.self)
-            .flatMap { _ -> AnyPublisher<Void, Error> in
+            .flatMap { _ -> AnyPublisher<Void, any Error> in
                 self.refreshJournal(byDate: byDate)
             }
             .flatMap { _ -> AnyPublisher<Journal, Error> in
@@ -140,7 +140,7 @@ struct MainJournalService: JournalService {
             .store(in: cancelBag)
     }
     
-    func refreshJournal(byDate: Date) -> AnyPublisher<Void, Error>{
+    func refreshJournal(byDate: Date) -> AnyPublisher<Void, any Error>{
         journalRepository
             .getJournalByDate(date: byDate)
             .ensureTimeSpan(requestHoldBackTimeInterval)
@@ -151,7 +151,7 @@ struct MainJournalService: JournalService {
                 
                 journalDBRepository.store(journal: webJournal, fromServer: true)
                         .sinkEmptyAndStore()
-            }
+            }.mapError({ $0 })
             .eraseToAnyPublisher()
     }
     

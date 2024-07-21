@@ -9,11 +9,11 @@ import Foundation
 import KeychainSwift
 
 class PersistentManager {
-    static func UserHasFinishedOnboarding() -> Bool {
+    static func userHasFinishedOnboarding() -> Bool {
         UserDefaults.standard.bool(forKey: PersistentType.HasFinishedOnboarding.rawValue)
     }
     
-    static func SaveUserToken(token: String) {
+    static func saveUserToken(token: String) {
         // If token has been unverififed web call should invalidate it and get a new one
         if token.count == 0 { return }
         
@@ -21,21 +21,31 @@ class PersistentManager {
         keychain.set(token, forKey: PersistentType.UserCookie.rawValue)
     }
 
-    static func DeleteUserToken() {
+    static func deleteUserToken() {
         let keychain = KeychainSwift()
         keychain.delete(PersistentType.UserCookie.rawValue)
     }
     
-    static func GetUserToken() -> String {
+    static func getUserToken() -> String {
         let keychain = KeychainSwift()
         let token = keychain.get(PersistentType.UserCookie.rawValue) ?? ""
         return token
+    }
+    
+    static func getNotificationSeen() -> Bool {
+        KeychainSwift().get(PersistentType.NotificationSeen.rawValue) == "true"
+    }
+    
+    static func saveNotificationSeen() {
+        let keychain = KeychainSwift()
+        keychain.set(true, forKey: PersistentType.NotificationSeen.rawValue)
     }
 }
 
 extension PersistentManager {
     enum PersistentType: String{
         case HasFinishedOnboarding = "HasFinishedOnboarding"
+        case NotificationSeen = "NotificationSeen"
         case UserCookie = "JWT"
     }
 }

@@ -3,13 +3,11 @@
 
 #include <cstddef>
 #include <cstdint>
-#include <exception>
 #include <functional>
 #include <memory>
 #include <string>
 #include <utility>
 
-#include <realm/util/buffer.hpp>
 #include <realm/util/functional.hpp>
 #include <realm/util/future.hpp>
 #include <realm/sync/client_base.hpp>
@@ -23,14 +21,6 @@ class Client {
 public:
     using port_type = sync::port_type;
 
-    using Error = ClientError;
-
-    static constexpr milliseconds_type default_connect_timeout = sync::default_connect_timeout;
-    static constexpr milliseconds_type default_connection_linger_time = sync::default_connection_linger_time;
-    static constexpr milliseconds_type default_ping_keepalive_period = sync::default_ping_keepalive_period;
-    static constexpr milliseconds_type default_pong_keepalive_timeout = sync::default_pong_keepalive_timeout;
-    static constexpr milliseconds_type default_fast_reconnect_limit = sync::default_fast_reconnect_limit;
-
     using Config = ClientConfig;
 
     /// \throw util::EventLoop::Implementation::NotAvailable if no event loop
@@ -40,13 +30,6 @@ public:
     Client(Client&&) noexcept;
     ~Client() noexcept;
 
-    /// Run the internal event-loop of the client. At most one thread may
-    /// execute run() at any given time. The call will not return until somebody
-    /// calls stop().
-    void run() noexcept;
-
-    /// See run().
-    ///
     /// Thread-safe.
     void shutdown() noexcept;
 
@@ -102,6 +85,9 @@ public:
     /// by any thread, and by multiple threads concurrently.
     bool wait_for_session_terminations_or_client_stopped();
 
+    /// Async version of wait_for_session_terminations_or_client_stopped().
+    util::Future<void> notify_session_terminated();
+
     /// Returns false if the specified URL is invalid.
     bool decompose_server_url(const std::string& url, ProtocolEnvelope& protocol, std::string& address,
                               port_type& port, std::string& path) const;
@@ -112,38 +98,28 @@ private:
 };
 
 
-class BadServerUrl; // Exception
-
-
 /// \brief Client-side representation of a Realm file synchronization session.
 ///
 /// A synchronization session deals with precisely one local Realm file. To
 /// synchronize multiple local Realm files, you need multiple sessions.
 ///
 /// A session object is always associated with a particular client object (\ref
-/// Client). The application must ensure that the destruction of the associated
-/// client object never happens before the destruction of the session
-/// object. The consequences of a violation are unspecified.
-///
-/// A session object is always associated with a particular local Realm file,
-/// however, a session object does not represent a session until it is bound to
-/// a server side Realm, i.e., until bind() is called. From the point of view of
-/// the thread that calls bind(), the session starts precisely when the
-/// execution of bind() starts, i.e., before bind() returns.
+/// Client). Destroying the client while sessions still exist will forcibly
+/// close the sessions. This is intended only for the convenience of code which
+/// finds it difficult to ensure that objects are torn down in the correct
+/// order, and using closed sessions has unspecified results.
 ///
 /// At most one session is allowed to exist for a particular local Realm file
-/// (file system inode) at any point in time. Multiple session objects may
-/// coexists for a single file, as long as bind() has been called on at most one
-/// of them. Additionally, two bound session objects for the same file are
-/// allowed to exist at different times, if they have no overlap in time (in
-/// their bound state), as long as they are associated with the same client
-/// object, or with two different client objects that do not overlap in
-/// time. This means, in particular, that it is an error to create two bound
-/// session objects for the same local Realm file, if they are associated with
-/// two different client objects that overlap in time, even if the session
-/// objects do not overlap in time (in their bound state). It is the
-/// responsibility of the application to ensure that these rules are adhered
-/// to. The consequences of a violation are unspecified.
+/// (file system inode) at any point in time. Two session objects for the same
+/// file are allowed to exist at different times, if they have no overlap in
+/// time as long as they are associated with the same client object, or with
+/// two different client objects that do not overlap in time. This means, in
+/// particular, that it is an error to create two session objects for the same
+/// local Realm file, if they are associated with two different client objects
+/// that overlap in time, even if the session objects do not overlap in time
+/// (in their bound state). It is the responsibility of the application to
+/// ensure that these rules are adhered to. The consequences of a violation are
+/// unspecified.
 ///
 /// Thread-safety: It is safe for multiple threads to construct, use (with some
 /// exceptions), and destroy session objects concurrently, regardless of whether
@@ -152,10 +128,8 @@ class BadServerUrl; // Exception
 /// thread-safe, while others are not.
 ///
 /// Callback semantics: All session specific callback functions will be executed
-/// by the event loop thread, i.e., the thread that calls Client::run(). No
-/// callback function will be called before Session::bind() is called. Callback
-/// functions that are specified prior to calling bind() (e.g., any passed to
-/// set_progress_handler()) may start to execute before bind() returns, as long
+/// by the event loop thread, i.e., the thread that calls Client::run(). Callback
+/// functions may start to execute before Session's constructor returns, as long
 /// as some thread is executing Client::run(). Likewise, completion handlers,
 /// such as those passed to async_wait_for_sync_completion() may start to
 /// execute before the submitting function returns. All session specific
@@ -176,7 +150,9 @@ public:
     using SyncTransactCallback = void(VersionID old_version, VersionID new_version);
     using ProgressHandler = void(std::uint_fast64_t downloaded_bytes, std::uint_fast64_t downloadable_bytes,
                                  std::uint_fast64_t uploaded_bytes, std::uint_fast64_t uploadable_bytes,
-                                 std::uint_fast64_t progress_version, std::uint_fast64_t snapshot_version);
+                                 std::uint_fast64_t snapshot_version, double download_estimate,
+                                 double upload_estimate, int64_t query_version);
+    using ConnectionStateChangeListener = void(ConnectionState, std::optional<SessionErrorInfo>);
     using WaitOperCompletionHandler = util::UniqueFunction<void(Status)>;
     using SSLVerifyCallback = bool(const std::string& server_address, port_type server_port, const char* pem_data,
                                    size_t pem_size, int preverify_ok, int depth);
@@ -206,6 +182,11 @@ public:
         /// On the MongoDB Realm-based Sync server, virtual paths are not coupled
         /// to file system paths, and thus, these restrictions do not apply.
         std::string realm_identifier = "";
+
+        // If the client has successfully contacted the server, then this will be
+        // set to true, otherwise it is false and the sync sessions will attempt
+        // to update the location info if the connection fails.
+        bool server_verified = false;
 
         /// The user id of the logged in user for this sync session. This will be used
         /// along with the server_address/server_port/protocol_envelope to determine
@@ -267,7 +248,7 @@ public:
         /// If ssl_trust_certificate_path is None (default), ssl_verify_callback
         /// (see below) is used if set, and the default device trust/anchor
         /// store is used otherwise.
-        util::Optional<std::string> ssl_trust_certificate_path;
+        std::optional<std::string> ssl_trust_certificate_path;
 
         ///
         /// DEPRECATED - Will be removed in a future release
@@ -332,12 +313,12 @@ public:
         std::string signed_user_token;
 
         using ClientReset = sync::ClientReset;
-        util::Optional<ClientReset> client_reset_config;
+        std::optional<ClientReset> client_reset_config;
 
         ///
         /// DEPRECATED - Will be removed in a future release
         ///
-        util::Optional<SyncConfig::ProxyConfig> proxy_config;
+        std::optional<SyncConfig::ProxyConfig> proxy_config;
 
         /// When integrating a flexible sync bootstrap, process this many bytes of
         /// changeset data in a single integration attempt.
@@ -349,14 +330,107 @@ public:
         /// This feature exists exclusively for testing purposes at this time.
         bool simulate_integration_error = false;
 
-        std::function<SyncClientHookAction(const SyncClientHookData&)> on_sync_client_event_hook;
+        util::UniqueFunction<SyncClientHookAction(const SyncClientHookData&)> on_sync_client_event_hook;
+
+
+        /// Set a handler to monitor the state of download and upload progress.
+        ///
+        /// The handler must have signature
+        ///
+        ///     void(uint_fast64_t downloaded_bytes, uint_fast64_t downloadable_bytes,
+        ///          uint_fast64_t uploaded_bytes, uint_fast64_t uploadable_bytes,
+        ///          uint_fast64_t progress_version);
+        ///
+        /// downloaded_bytes is the size in bytes of all downloaded changesets.
+        /// downloadable_bytes is equal to downloaded_bytes plus an estimate of
+        /// the size of the remaining server history.
+        ///
+        /// uploaded_bytes is the size in bytes of all locally produced changesets
+        /// that have been received and acknowledged by the server.
+        /// uploadable_bytes is the size in bytes of all locally produced changesets.
+        ///
+        /// Due to the nature of the merge rules, it is possible that the size of an
+        /// uploaded changeset uploaded from one client is not equal to the size of
+        /// the changesets that other clients will download.
+        ///
+        /// Typical uses of this function:
+        ///
+        /// Upload completion can be checked by
+        ///
+        ///    bool upload_complete = (uploaded_bytes == uploadable_bytes);
+        ///
+        /// Download completion could be checked by
+        ///
+        ///     bool download_complete = (downloaded_bytes == downloadable_bytes);
+        ///
+        /// However, download completion might never be reached because the server
+        /// can receive new changesets from other clients. downloadable_bytes can
+        /// decrease for two reasons: server side compaction and changesets of
+        /// local origin. Code using downloadable_bytes must not assume that it
+        /// is increasing.
+        ///
+        /// Upload progress can be calculated by caching an initial value of
+        /// uploaded_bytes from the last, or next, callback. Then
+        ///
+        ///     double upload_progress =
+        ///        (uploaded_bytes - initial_uploaded_bytes)
+        ///       -------------------------------------------
+        ///       (uploadable_bytes - initial_uploaded_bytes)
+        ///
+        /// Download progress can be calculates similarly:
+        ///
+        ///     double download_progress =
+        ///        (downloaded_bytes - initial_downloaded_bytes)
+        ///       -----------------------------------------------
+        ///       (downloadable_bytes - initial_downloaded_bytes)
+        ///
+        /// progress_version is 0 at the start of a session. When at least one
+        /// DOWNLOAD message has been received from the server, progress_version is
+        /// positive. progress_version can be used to ensure that the reported
+        /// progress contains information obtained from the server in the current
+        /// session. The server will send a message as soon as possible, and the
+        /// progress handler will eventually be called with a positive progress_version
+        /// unless the session is interrupted before a message from the server has
+        /// been received.
+        ///
+        /// The handler is called on the event loop thread.The handler after bind(),
+        /// after each DOWNLOAD message, and after each local transaction
+        /// (nonsync_transact_notify).
+        util::UniqueFunction<ProgressHandler> progress_handler;
+
+        /// Install a connection state change listener.
+        ///
+        /// Sets a function to be called whenever the state of the underlying
+        /// network connection changes between "disconnected", "connecting", and
+        /// "connected". The initial state is always "disconnected". The next state
+        /// after "disconnected" is always "connecting". The next state after
+        /// "connecting" is either "connected" or "disconnected". The next state
+        /// after "connected" is always "disconnected". A switch to the
+        /// "disconnected" state only happens when an error occurs.
+        ///
+        /// Whenever the installed function is called, an SessionErrorInfo object is passed
+        /// when, and only when the passed state is ConnectionState::disconnected.
+        ///
+        /// When multiple sessions share a single connection, the state changes will
+        /// be reported for each session in turn.
+        ///
+        /// The callback function will always be called by the thread that executes
+        /// the event loop (Client::run()). If the
+        /// callback function throws an exception, that exception will "travel" out
+        /// through Client::run().
+        util::UniqueFunction<ConnectionStateChangeListener> connection_state_change_listener;
+
+        /// Is this session being opened for a realm whose path ends in ".fresh"? If so,
+        /// it will be downloading a fresh copy of the realm data from the server.
+        bool fresh_realm_download = false;
+
+        /// Schema version
+        ///
+        /// Note: Currently set only for FLX sync.
+        uint64_t schema_version = -1; // = ObjectStore::NotVersioned
     };
 
     /// \brief Start a new session for the specified client-side Realm.
-    ///
-    /// Note that the session is not fully activated until you call bind().
-    /// Also note that if you call set_sync_transact_callback(), it must be
-    /// done before calling bind().
     Session(Client&, std::shared_ptr<DB>, std::shared_ptr<SubscriptionStore>, std::shared_ptr<MigrationStore>,
             Config&& = {});
 
@@ -396,175 +470,6 @@ public:
     /// constructor and assignment operator.
     void detach() noexcept;
 
-    /// \brief Set a function to be called when the local Realm has changed due
-    /// to integration of a downloaded changeset.
-    ///
-    /// Specify the callback function that will be called when one or more
-    /// transactions are performed to integrate downloaded changesets into the
-    /// client-side Realm, that is associated with this session.
-    ///
-    /// The callback function will always be called by the thread that executes
-    /// the event loop (Client::run()), but not until bind() is called. If the
-    /// callback function throws an exception, that exception will "travel" out
-    /// through Client::run().
-    ///
-    /// Note: Any call to this function must have returned before bind() is
-    /// called. If this function is called multiple times, each call overrides
-    /// the previous setting.
-    ///
-    /// Note: This function is **not thread-safe**. That is, it is an error if
-    /// it is called while another thread is executing any member function on
-    /// the same Session object.
-    ///
-    /// CAUTION: The specified callback function may get called before the call
-    /// to bind() returns, and it may get called (or continue to execute) after
-    /// the session object is destroyed. Please see "Callback semantics" section
-    /// under Session for more on this.
-    void set_sync_transact_callback(util::UniqueFunction<SyncTransactCallback>);
-
-    /// \brief Set a handler to monitor the state of download and upload
-    /// progress.
-    ///
-    /// The handler must have signature
-    ///
-    ///     void(uint_fast64_t downloaded_bytes, uint_fast64_t downloadable_bytes,
-    ///          uint_fast64_t uploaded_bytes, uint_fast64_t uploadable_bytes,
-    ///          uint_fast64_t progress_version);
-    ///
-    /// downloaded_bytes is the size in bytes of all downloaded changesets.
-    /// downloadable_bytes is equal to downloaded_bytes plus an estimate of
-    /// the size of the remaining server history.
-    ///
-    /// uploaded_bytes is the size in bytes of all locally produced changesets
-    /// that have been received and acknowledged by the server.
-    /// uploadable_bytes is the size in bytes of all locally produced changesets.
-    ///
-    /// Due to the nature of the merge rules, it is possible that the size of an
-    /// uploaded changeset uploaded from one client is not equal to the size of
-    /// the changesets that other clients will download.
-    ///
-    /// Typical uses of this function:
-    ///
-    /// Upload completion can be checked by
-    ///
-    ///    bool upload_complete = (uploaded_bytes == uploadable_bytes);
-    ///
-    /// Download completion could be checked by
-    ///
-    ///     bool download_complete = (downloaded_bytes == downloadable_bytes);
-    ///
-    /// However, download completion might never be reached because the server
-    /// can receive new changesets from other clients. downloadable_bytes can
-    /// decrease for two reasons: server side compaction and changesets of
-    /// local origin. Code using downloadable_bytes must not assume that it
-    /// is increasing.
-    ///
-    /// Upload progress can be calculated by caching an initial value of
-    /// uploaded_bytes from the last, or next, callback. Then
-    ///
-    ///     double upload_progress =
-    ///        (uploaded_bytes - initial_uploaded_bytes)
-    ///       -------------------------------------------
-    ///       (uploadable_bytes - initial_uploaded_bytes)
-    ///
-    /// Download progress can be calculates similarly:
-    ///
-    ///     double download_progress =
-    ///        (downloaded_bytes - initial_downloaded_bytes)
-    ///       -----------------------------------------------
-    ///       (downloadable_bytes - initial_downloaded_bytes)
-    ///
-    /// progress_version is 0 at the start of a session. When at least one
-    /// DOWNLOAD message has been received from the server, progress_version is
-    /// positive. progress_version can be used to ensure that the reported
-    /// progress contains information obtained from the server in the current
-    /// session. The server will send a message as soon as possible, and the
-    /// progress handler will eventually be called with a positive progress_version
-    /// unless the session is interrupted before a message from the server has
-    /// been received.
-    ///
-    /// The handler is called on the event loop thread.The handler after bind(),
-    /// after each DOWNLOAD message, and after each local transaction
-    /// (nonsync_transact_notify).
-    ///
-    /// set_progress_handler() is not thread safe and it must be called before
-    /// bind() is called. Subsequent calls to set_progress_handler() overwrite
-    /// the previous calls. Typically, this function is called once per session.
-    ///
-    /// CAUTION: The specified callback function may get called before the call
-    /// to bind() returns, and it may get called (or continue to execute) after
-    /// the session object is destroyed. Please see "Callback semantics" section
-    /// under Session for more on this.
-    void set_progress_handler(util::UniqueFunction<ProgressHandler>);
-
-    using ConnectionStateChangeListener = void(ConnectionState, util::Optional<SessionErrorInfo>);
-
-    /// \brief Install a connection state change listener.
-    ///
-    /// Sets a function to be called whenever the state of the underlying
-    /// network connection changes between "disconnected", "connecting", and
-    /// "connected". The initial state is always "disconnected". The next state
-    /// after "disconnected" is always "connecting". The next state after
-    /// "connecting" is either "connected" or "disconnected". The next state
-    /// after "connected" is always "disconnected". A switch to the
-    /// "disconnected" state only happens when an error occurs.
-    ///
-    /// Whenever the installed function is called, an SessionErrorInfo object is passed
-    /// when, and only when the passed state is ConnectionState::disconnected.
-    ///
-    /// When multiple sessions share a single connection, the state changes will
-    /// be reported for each session in turn.
-    ///
-    /// The callback function will always be called by the thread that executes
-    /// the event loop (Client::run()), but not until bind() is called. If the
-    /// callback function throws an exception, that exception will "travel" out
-    /// through Client::run().
-    ///
-    /// Note: Any call to this function must have returned before bind() is
-    /// called. If this function is called multiple times, each call overrides
-    /// the previous setting.
-    ///
-    /// Note: This function is **not thread-safe**. That is, it is an error if
-    /// it is called while another thread is executing any member function on
-    /// the same Session object.
-    ///
-    /// CAUTION: The specified callback function may get called before the call
-    /// to bind() returns, and it may get called (or continue to execute) after
-    /// the session object is destroyed. Please see "Callback semantics" section
-    /// under Session for more on this.
-    void set_connection_state_change_listener(util::UniqueFunction<ConnectionStateChangeListener>);
-
-    //@{
-    /// Deprecated! Use set_connection_state_change_listener() instead.
-    using ErrorHandler = void(const SessionErrorInfo&);
-    void set_error_handler(util::UniqueFunction<ErrorHandler>);
-    //@}
-
-    /// @{ \brief Bind this session to the specified server side Realm.
-    ///
-    /// No communication takes place on behalf of this session before the
-    /// session is bound, but as soon as the session becomes bound, the server
-    /// will start to push changes to the client, and vice versa.
-    ///
-    /// If a callback function was set using set_sync_transact_callback(), then
-    /// that callback function will start to be called as changesets are
-    /// downloaded and integrated locally. It is important to understand that
-    /// callback functions are executed by the event loop thread (Client::run())
-    /// and the callback function may therefore be called before bind() returns.
-    ///
-    /// Note: It is an error if this function is called more than once per
-    /// Session object.
-    ///
-    /// Note: This function is **not thread-safe**. That is, it is an error if
-    /// it is called while another thread is executing any member function on
-    /// the same Session object.
-    ///
-    /// bind() binds this session to the specified server side Realm using the
-    /// parameters specified in the Session::Config object.
-    ///
-    /// The two other forms of bind() are convenience functions.
-    void bind();
-
     /// @}
 
     /// \brief Refresh the access token associated with this session.
@@ -591,22 +496,17 @@ public:
     /// condition by detecting the `ProtocolError::token_expired` error, and
     /// always initiate a token renewal in this case.
     ///
-    /// It is an error to call this function before calling `Client::bind()`.
-    ///
     /// Note: This function is thread-safe.
     ///
     /// \param signed_user_token A cryptographically signed token describing the
     /// identity and access rights of the current user. See ProtocolEnvelope.
-    void refresh(const std::string& signed_user_token);
+    void refresh(std::string_view signed_user_token);
 
     /// \brief Inform the synchronization agent about changes of local origin.
     ///
     /// This function must be called by the application after a transaction
     /// performed on its behalf, that is, after a transaction that is not
     /// performed to integrate a changeset that was downloaded from the server.
-    ///
-    /// It is an error to call this function before bind() has been called, and
-    /// has returned.
     ///
     /// Note: This function is fully thread-safe. That is, it may be called by
     /// any thread, and by multiple threads concurrently.
@@ -623,7 +523,7 @@ public:
     /// Upload is considered complete when all non-empty changesets of local
     /// origin have been uploaded to the server, and the server has acknowledged
     /// reception of them. Changesets of local origin introduced after the
-    /// initiation of the session (after bind() is called) will generally not be
+    /// initiation of the session will generally not be
     /// considered for upload unless they are announced to this client through
     /// nonsync_transact_notify() prior to the initiation of the wait operation,
     /// i.e., prior to the invocation of async_wait_for_upload_completion() or
@@ -649,9 +549,6 @@ public:
     /// application may assume, however, that async_wait_for_upload_completion()
     /// will not affect the waiting period of
     /// async_wait_for_download_completion(), and vice versa.
-    ///
-    /// It is an error to call these functions before bind() has been called,
-    /// and has returned.
     ///
     /// The specified completion handlers will always be executed by the thread
     /// that executes the event loop (the thread that calls Client::run()). If
@@ -689,9 +586,6 @@ public:
     /// client's event loop thread exits from Client::run(), whichever happens
     /// first.
     ///
-    /// It is an error to call these functions before bind() has been called,
-    /// and has returned.
-    ///
     /// CAUTION: If Client::run() returns while a wait operation is in progress,
     /// these waiting functions return immediately, even if the completion
     /// condition is not yet satisfied. The completion condition is guaranteed
@@ -723,14 +617,9 @@ public:
     /// periods of time, as that would effectively disable the built-in "server
     /// hammering" protection.
     ///
-    /// It is an error to call this function before bind() has been called, and
-    /// has returned.
-    ///
     /// This function is fully thread-safe. That is, it may be called by any
     /// thread, and by multiple threads concurrently.
     void cancel_reconnect_delay();
-
-    void on_new_flx_sync_subscription(int64_t new_version);
 
     util::Future<std::string> send_test_command(std::string command_body);
 
@@ -741,6 +630,8 @@ public:
     std::string get_appservices_connection_id();
 
 private:
+    // This is a bare pointer rather than bind_ptr to avoid requiring the
+    // definition of SessionWrapper here.
     SessionWrapper* m_impl = nullptr;
 
     void abandon() noexcept;
@@ -750,14 +641,6 @@ private:
 std::ostream& operator<<(std::ostream& os, SyncConfig::ProxyConfig::Type);
 
 // Implementation
-
-class BadServerUrl : public Exception {
-public:
-    BadServerUrl(std::string_view url)
-        : Exception(ErrorCodes::BadServerUrl, util::format("Unable to parse server URL '%1'", url))
-    {
-    }
-};
 
 inline Session::Session(Session&& sess) noexcept
     : m_impl{sess.m_impl}
@@ -785,18 +668,6 @@ inline void Session::detach() noexcept
     if (m_impl)
         abandon();
     m_impl = nullptr;
-}
-
-inline void Session::set_error_handler(util::UniqueFunction<ErrorHandler> handler)
-{
-    auto handler_2 = [handler = std::move(handler)](ConnectionState state,
-                                                    const util::Optional<SessionErrorInfo>& error_info) {
-        if (state != ConnectionState::disconnected)
-            return;
-        REALM_ASSERT(error_info);
-        handler(*error_info); // Throws
-    };
-    set_connection_state_change_listener(std::move(handler_2)); // Throws
 }
 
 inline void Session::async_wait_for_sync_completion(WaitOperCompletionHandler handler)

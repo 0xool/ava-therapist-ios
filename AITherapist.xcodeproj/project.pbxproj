@@ -59,6 +59,7 @@
 		A56D93912AFB321100A66366 /* NewChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56D93902AFB321100A66366 /* NewChatView.swift */; };
 		A56E17A029B2DB680077B76B /* SpeakManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56E179F29B2DB680077B76B /* SpeakManager.swift */; };
 		A574F5132B03171D00624890 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A574F5122B03171D00624890 /* ProfileView.swift */; };
+		A57520E02C4B4F000085BFB4 /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57520DF2C4B4F000085BFB4 /* NotificationView.swift */; };
 		A576DFB92B2AD4D5004C950B /* MockedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A576DFB62B2AD46A004C950B /* MockedData.swift */; };
 		A577D5DE2AB7A2A100D48F94 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A525EEAD29B172BF00A57CE8 /* Assets.xcassets */; };
 		A578EACC2AA418A200D992AD /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = A578EACB2AA418A200D992AD /* Message.swift */; };
@@ -111,6 +112,7 @@
 		A5B7D5E829B41997001D7113 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5B7D5E729B41997001D7113 /* Utilities.swift */; };
 		A5BBCED12B1291B9000AC83C /* ImagePersistenceRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BBCED02B1291B9000AC83C /* ImagePersistenceRepository.swift */; };
 		A5BBCED42B129F83000AC83C /* ProfileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BBCED32B129F83000AC83C /* ProfileService.swift */; };
+		A5C0C2172C4C3F4E00B4F358 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C0C2162C4C3F4E00B4F358 /* NotificationManager.swift */; };
 		A5C2D3452B564E1300F97116 /* HelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C2D3442B564E1300F97116 /* HelpView.swift */; };
 		A5C55FDB2AA55DBD00154ED0 /* CancelBag.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C55FDA2AA55DBD00154ED0 /* CancelBag.swift */; };
 		A5C7675F2B4343A800DDD3C5 /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C7675E2B4343A800DDD3C5 /* UserManager.swift */; };
@@ -300,6 +302,7 @@
 		A56D93902AFB321100A66366 /* NewChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewChatView.swift; sourceTree = "<group>"; };
 		A56E179F29B2DB680077B76B /* SpeakManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeakManager.swift; sourceTree = "<group>"; };
 		A574F5122B03171D00624890 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		A57520DF2C4B4F000085BFB4 /* NotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
 		A576DFB62B2AD46A004C950B /* MockedData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockedData.swift; sourceTree = "<group>"; };
 		A578EACB2AA418A200D992AD /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		A57AD7CF2AA64AB8008EC1FB /* ConversationWebRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationWebRepository.swift; sourceTree = "<group>"; };
@@ -351,6 +354,7 @@
 		A5B7D5E729B41997001D7113 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Utilities.swift; path = AITherapist/Utilities.swift; sourceTree = SOURCE_ROOT; };
 		A5BBCED02B1291B9000AC83C /* ImagePersistenceRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePersistenceRepository.swift; sourceTree = "<group>"; };
 		A5BBCED32B129F83000AC83C /* ProfileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileService.swift; sourceTree = "<group>"; };
+		A5C0C2162C4C3F4E00B4F358 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		A5C148872B29555200D6C836 /* JournalWebRepositoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalWebRepositoryTests.swift; sourceTree = "<group>"; };
 		A5C2D3442B564E1300F97116 /* HelpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpView.swift; sourceTree = "<group>"; };
 		A5C55FDA2AA55DBD00154ED0 /* CancelBag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelBag.swift; sourceTree = "<group>"; };
@@ -840,6 +844,14 @@
 			path = /Users/cyrusrefahi/Documents/AITherapist/AITherapist/Presentation/UI/ProfileView;
 			sourceTree = "<absolute>";
 		};
+		A57520DE2C4B4ECD0085BFB4 /* NotificationView */ = {
+			isa = PBXGroup;
+			children = (
+				A57520DF2C4B4F000085BFB4 /* NotificationView.swift */,
+			);
+			path = NotificationView;
+			sourceTree = "<group>";
+		};
 		A576DFB82B2AD4A8004C950B /* MockedData */ = {
 			isa = PBXGroup;
 			children = (
@@ -1032,6 +1044,7 @@
 		A59EB1512ACA28A900F31A12 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				A57520DE2C4B4ECD0085BFB4 /* NotificationView */,
 				A5A7C66B2BB50A17009D1C46 /* HelpLineView */,
 				A5EBAED02B69F48A00D45C08 /* SettingView */,
 				A54A9BB92B5E0C2B00ADEE2C /* EditUserSettingsView */,
@@ -1155,6 +1168,7 @@
 			isa = PBXGroup;
 			children = (
 				A5A708CB29C5342B001BCF2F /* SpeechManager.swift */,
+				A5C0C2162C4C3F4E00B4F358 /* NotificationManager.swift */,
 				A56E179F29B2DB680077B76B /* SpeakManager.swift */,
 				A5B7D5D829B3B640001D7113 /* DatabaseManager.swift */,
 				A5B7D5DE29B3D4B3001D7113 /* NetworkManager.swift */,
@@ -1507,6 +1521,7 @@
 				A574F5132B03171D00624890 /* ProfileView.swift in Sources */,
 				A5B7D5D929B3B640001D7113 /* DatabaseManager.swift in Sources */,
 				A50F0E552AC1233B0081AD4C /* GeneralUserSummary.swift in Sources */,
+				A57520E02C4B4F000085BFB4 /* NotificationView.swift in Sources */,
 				A55B0FF22B7C544500598201 /* NavigationChatView.swift in Sources */,
 				A5A35AD52B7EDF7600E85A5E /* TypeWriterView.swift in Sources */,
 				A5BBCED12B1291B9000AC83C /* ImagePersistenceRepository.swift in Sources */,
@@ -1520,6 +1535,7 @@
 				A52EF6D72B0EE50F007D17CE /* AnimatableText.swift in Sources */,
 				A5EFC5962AC10FC600D6097B /* Mood.swift in Sources */,
 				A59C64002ACA37EE00B76256 /* SignUpView.swift in Sources */,
+				A5C0C2172C4C3F4E00B4F358 /* NotificationManager.swift in Sources */,
 				A58AA49E2AD8E9B1001F7253 /* ChatService.swift in Sources */,
 				A51CF3C22AF850010006F275 /* AvaNavigationLink.swift in Sources */,
 				A59C63FE2ACA37EE00B76256 /* SpeechVisualBarView.swift in Sources */,

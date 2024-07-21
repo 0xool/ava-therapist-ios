@@ -70,6 +70,7 @@ public:
     {
     }
     bool match(size_t index, Mixed) noexcept final;
+    bool match(size_t index) noexcept final;
 
 private:
     T& m_keys;
@@ -83,6 +84,7 @@ public:
     {
     }
     bool match(size_t index, Mixed) noexcept final;
+    bool match(size_t index) noexcept final;
 };
 
 class Array : public Node, public ArrayParent {
@@ -135,11 +137,6 @@ public:
     /// The effect of calling this function on an unattached accessor is
     /// undefined.
     void set_type(Type);
-
-    /// Construct a complete copy of this array (including its subarrays) using
-    /// the specified target allocator and return just the reference to the
-    /// underlying memory.
-    MemRef clone_deep(Allocator& target_alloc) const;
 
     /// Construct an empty integer array of the specified type, and return just
     /// the reference to the underlying memory.
@@ -274,10 +271,6 @@ public:
     /// specified value.
     void ensure_minimum_width(int_fast64_t value);
 
-    /// This one may change the represenation of the array, so be carefull if
-    /// you call it after ensure_minimum_width().
-    void set_all_to_zero();
-
     /// Add \a diff to the element at the specified index.
     void adjust(size_t ndx, int_fast64_t diff);
 
@@ -399,7 +392,11 @@ public:
     template <class cond>
     size_t find_first(int64_t value, size_t start = 0, size_t end = size_t(-1)) const
     {
+        static cond c;
         REALM_ASSERT(start <= m_size && (end <= m_size || end == size_t(-1)) && start <= end);
+        if (end - start == 1) {
+            return c(get(start), value) ? start : realm::not_found;
+        }
         // todo, would be nice to avoid this in order to speed up find_first loops
         QueryStateFindFirst state;
         Finder finder = m_vtable->finder[cond::condition];
@@ -431,6 +428,15 @@ public:
     /// This number is exactly the number of bytes that will be
     /// written by a non-recursive invocation of write().
     size_t get_byte_size() const noexcept;
+
+    // Get the number of bytes used by this array and its sub-arrays
+    size_t get_byte_size_deep() const noexcept
+    {
+        size_t mem = 0;
+        _mem_usage(mem);
+        return mem;
+    }
+
 
     /// Get the maximum number of bytes that can be written by a
     /// non-recursive invocation of write() on an array with the
@@ -537,6 +543,8 @@ protected:
 private:
     ref_type do_write_shallow(_impl::ArrayWriterBase&) const;
     ref_type do_write_deep(_impl::ArrayWriterBase&, bool only_if_modified) const;
+
+    void _mem_usage(size_t& mem) const noexcept;
 
 #ifdef REALM_DEBUG
     void report_memory_usage_2(MemUsageHandler&) const;
@@ -944,12 +952,6 @@ inline size_t Array::get_byte_size() const noexcept
 
 
 //-------------------------------------------------
-
-inline MemRef Array::clone_deep(Allocator& target_alloc) const
-{
-    char* header = get_header_from_data(m_data);
-    return clone(MemRef(header, m_ref, m_alloc), m_alloc, target_alloc); // Throws
-}
 
 inline MemRef Array::create_empty_array(Type type, bool context_flag, Allocator& alloc)
 {

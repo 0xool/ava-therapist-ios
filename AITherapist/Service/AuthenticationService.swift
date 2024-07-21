@@ -44,11 +44,11 @@ class MainAuthenticationService: AuthenticationService {
             })
             .sink{ subscriptionCompletion in
                 if let _ = subscriptionCompletion.error {
-                    self.appState[\.userData.user] = .failed(APIError.unexpectedResponse)
+                    self.appState[\.userData.user] = .notRequested
                     loading.wrappedValue = false
                 }
             } receiveValue: { user in
-                PersistentManager.SaveUserToken(token: user.token)
+                PersistentManager.saveUserToken(token: user.token)
                 self.appState[\.userData.user] = .loaded(user)
                 loading.wrappedValue = false
             }
@@ -62,7 +62,7 @@ class MainAuthenticationService: AuthenticationService {
         Just<Void>
             .withErrorType(Error.self)
             .flatMap{
-                self.login(email: email, password: password)
+                self.login(email: email, password: password).mapError{$0}
             }
             .flatMap({ [self, userDBRepository] in
                 loadSetting(cancelBag: cancelBag)
@@ -74,12 +74,12 @@ class MainAuthenticationService: AuthenticationService {
             .store(in: cancelBag)
     }
     
-    func login(email: String, password: String) -> AnyPublisher<Void, Error>{
+    func login(email: String, password: String) -> AnyPublisher<Void, ServerError>{
         authenticateRepository
             .login(email: email, password: password)
             .ensureTimeSpan(requestHoldBackTimeInterval)
             .map { [userDBRepository, settingDBRepository] in
-                PersistentManager.SaveUserToken(token: $0.data.user.token)
+                PersistentManager.saveUserToken(token: $0.data.user.token)
                 _ = userDBRepository.store(user: $0.data.user)
                 _ = settingDBRepository.store(setting: $0.data.userSetting)
             }
@@ -91,10 +91,11 @@ class MainAuthenticationService: AuthenticationService {
             .getUserInfo()
             .ensureTimeSpan(requestHoldBackTimeInterval)
             .map { [userDBRepository, settingDBRepository] in
-                PersistentManager.SaveUserToken(token: $0.data.user.token)
+                PersistentManager.saveUserToken(token: $0.data.user.token)
                 _ = userDBRepository.store(user: $0.data.user)
                 _ = settingDBRepository.store(setting: $0.data.userSetting)
             }
+            .mapError{$0}
             .eraseToAnyPublisher()
     }
     
@@ -149,10 +150,11 @@ extension MainAuthenticationService {
             .register(nickname: nickname, email: email, password: password, mobileNumber: mobileNumber)
             .ensureTimeSpan(requestHoldBackTimeInterval)
             .map { [userDBRepository, settingDBRepository] in
-                PersistentManager.SaveUserToken(token: $0.data.user.token)
+                PersistentManager.saveUserToken(token: $0.data.user.token)
                 _ = settingDBRepository.store(setting: $0.data.userSetting)
                 _ = userDBRepository.store(user: $0.data.user)
             }
+            .mapError{$0}
             .eraseToAnyPublisher()
     }
 }

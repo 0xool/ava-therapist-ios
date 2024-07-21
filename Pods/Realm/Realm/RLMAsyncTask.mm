@@ -22,7 +22,7 @@
 #import "RLMRealm_Private.hpp"
 #import "RLMRealmConfiguration_Private.hpp"
 #import "RLMScheduler.h"
-#import "RLMSyncSubscription_Private.h"
+#import "RLMSyncSubscription_Private.hpp"
 #import "RLMUtil.hpp"
 
 #import <realm/exceptions.hpp>
@@ -41,11 +41,13 @@ static NSError *s_canceledError = [NSError errorWithDomain:NSPOSIXErrorDomain
     NSLocalizedDescriptionKey: @"Operation canceled"
 }];
 
+typedef void(^CoreProgressNotificationBlock)(NSUInteger transferredBytes, NSUInteger transferrableBytes, double estimate);
+
 __attribute__((objc_direct_members))
 @implementation RLMAsyncOpenTask {
     RLMUnfairMutex _mutex;
     std::shared_ptr<realm::AsyncOpenTask> _task;
-    std::vector<RLMProgressNotificationBlock> _progressBlocks;
+    std::vector<CoreProgressNotificationBlock> _progressBlocks;
     bool _cancel;
 
     RLMRealmConfiguration *_configuration;
@@ -56,11 +58,12 @@ __attribute__((objc_direct_members))
     RLMRealm *_backgroundRealm;
 }
 
-- (void)addProgressNotificationOnQueue:(dispatch_queue_t)queue block:(RLMProgressNotificationBlock)block {
-    auto wrappedBlock = ^(NSUInteger transferred_bytes, NSUInteger transferrable_bytes) {
+- (void)addSyncProgressNotificationOnQueue:(dispatch_queue_t)queue block:(RLMSyncProgressNotificationBlock)block {
+    auto wrappedBlock = ^(NSUInteger transferred_bytes, NSUInteger transferrable_bytes, double estimate) {
         dispatch_async(queue, ^{
             @autoreleasepool {
-                block(transferred_bytes, transferrable_bytes);
+                RLMSyncProgress progress = {.transferredBytes = transferred_bytes, .transferrableBytes = transferrable_bytes, .progressEstimate = estimate};
+                block(progress);
             }
         });
     };
@@ -74,8 +77,18 @@ __attribute__((objc_direct_members))
     }
 }
 
+- (void)addProgressNotificationOnQueue:(dispatch_queue_t)queue block:(RLMProgressNotificationBlock)block {
+    [self addSyncProgressNotificationOnQueue:queue block:^(RLMSyncProgress progress) {
+        block(progress.transferredBytes, progress.transferrableBytes);
+    }];
+}
+
 - (void)addProgressNotificationBlock:(RLMProgressNotificationBlock)block {
     [self addProgressNotificationOnQueue:dispatch_get_main_queue() block:block];
+}
+
+- (void)addSyncProgressNotificationBlock:(RLMSyncProgressNotificationBlock)block {
+    [self addSyncProgressNotificationOnQueue:dispatch_get_main_queue() block:block];
 }
 
 - (void)cancel {
@@ -245,6 +258,7 @@ __attribute__((objc_direct_members))
         if (subscriptions.state == RLMSyncSubscriptionStatePending) {
             // FIXME: need cancellation for waiting for the subscription
             return [subscriptions waitForSynchronizationOnQueue:nil
+                                                        timeout:0
                                                 completionBlock:^(NSError *error) {
                 if (error) {
                     std::lock_guard lock(_mutex);
@@ -472,5 +486,86 @@ __attribute__((objc_direct_members))
 
     // It has either been completed or cancelled, so call the callback immediately
     completion();
+}
+@end
+
+@implementation RLMAsyncSubscriptionTask {
+    RLMUnfairMutex _mutex;
+
+    RLMSyncSubscriptionSet *_subscriptionSet;
+    dispatch_queue_t _queue;
+    NSTimeInterval _timeout;
+    void (^_completion)(NSError *);
+
+    dispatch_block_t _worker;
+}
+
+- (instancetype)initWithSubscriptionSet:(RLMSyncSubscriptionSet *)subscriptionSet
+                                  queue:(nullable dispatch_queue_t)queue
+                                timeout:(NSTimeInterval)timeout
+                             completion:(void(^)(NSError *))completion {
+    if (!(self = [super init])) {
+        return self;
+    }
+
+    _subscriptionSet = subscriptionSet;
+    _queue = queue;
+    _timeout = timeout;
+    _completion = completion;
+
+    return self;
+}
+
+- (void)waitForSubscription {
+    if (_timeout != 0) {
+        std::lock_guard lock(_mutex);
+        // Setup timer
+        dispatch_time_t time = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(_timeout * NSEC_PER_SEC));
+        // If the call below doesn't return after `time` seconds, the internal completion is called with an error.
+        _worker = dispatch_block_create(DISPATCH_BLOCK_ASSIGN_CURRENT, ^{
+            NSString* errorMessage = [NSString stringWithFormat:@"Waiting for update timed out after %.01f seconds.", _timeout];
+            NSError* error = [NSError errorWithDomain:NSPOSIXErrorDomain code:ETIMEDOUT userInfo:@{NSLocalizedDescriptionKey: errorMessage}];
+            [self invokeCompletionWithError:error];
+        });
+
+        dispatch_after(time, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), _worker);
+    }
+
+    [self waitForSync];
+}
+
+- (void)waitForSync {
+    std::lock_guard lock(_mutex);
+    if (_completion) {
+        _subscriptionSet->_subscriptionSet->get_state_change_notification(realm::sync::SubscriptionSet::State::Complete)
+            .get_async([self](realm::StatusWith<realm::sync::SubscriptionSet::State> state) noexcept {
+                NSError *error = makeError(state);
+                [self invokeCompletionWithError:error];
+            });
+    }
+}
+
+- (void)invokeCompletionWithError:(NSError * _Nullable)error {
+    void (^completion)(NSError *);
+    {
+        std::lock_guard lock(_mutex);
+        std::swap(completion, _completion);
+        if (_worker) {
+            dispatch_block_cancel(_worker);
+            _worker = nil;
+        }
+        _subscriptionSet = nil;
+    }
+
+    if (completion) {
+        if (_queue) {
+            dispatch_async(_queue, ^{
+                completion(error);
+            });
+            return;
+        }
+
+        completion(error);
+    }
 }
 @end

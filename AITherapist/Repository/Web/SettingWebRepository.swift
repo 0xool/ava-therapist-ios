@@ -10,8 +10,8 @@ import Combine
 import Alamofire
 
 protocol SettingWebRepository: WebRepository {
-    func editSettingInfo(setting: Setting) -> AnyPublisher<Void, Error>
-    func getAllPersona() -> AnyPublisher<[Persona], Error>
+    func editSettingInfo(setting: Setting) -> AnyPublisher<Void, ServerError>
+    func getAllPersona() -> AnyPublisher<[Persona], ServerError>
 }
 
 struct MainSettingWebRepository: SettingWebRepository {
@@ -31,25 +31,25 @@ struct MainSettingWebRepository: SettingWebRepository {
     }
  
     
-    func editSettingInfo(setting: Setting) -> AnyPublisher<Void, Error>
+    func editSettingInfo(setting: Setting) -> AnyPublisher<Void, ServerError>
     {
         let request = UpdateSettingRequest(setting: setting)
         
         do {
             let parameters = try JSONEncoder().encode(request)
             let params = try JSONSerialization.jsonObject(with: parameters, options: []) as? [String: Any] ?? [:]
-            let request: AnyPublisher<UpdateSettingResponse, Error> = webRequest(api: API.updateSetting(params: params))
+            let request: AnyPublisher<UpdateSettingResponse, ServerError> = webRequest(api: API.updateSetting(params: params))
                         
             return request
                 .map{ _ in }
                 .eraseToAnyPublisher()
         } catch {
-            return Fail(error: error).eraseToAnyPublisher()
+            return Fail(error: ServerError()).eraseToAnyPublisher()
         }
     }
     
-    func getAllPersona() -> AnyPublisher<[Persona], Error>{
-        let request: AnyPublisher<GetAllPersonaResponse, Error> =
+    func getAllPersona() -> AnyPublisher<[Persona], ServerError>{
+        let request: AnyPublisher<GetAllPersonaResponse, ServerError> =
         webRequest(api: API.getAllPersona)
         
         return request

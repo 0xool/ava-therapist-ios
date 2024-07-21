@@ -20,45 +20,58 @@ protocol WebRepository {
 
 // MARK: General Request
 extension WebRepository {
-    func webRequest<D: ServerResponse>(url: String, method: HTTPMethod, parameters: Parameters? = nil, encoding: ParameterEncoding = URLEncoding.default, headers: HTTPHeaders? = nil) -> AnyPublisher<D, Error> {
+    func webRequest<D: ServerResponse>(url: String, method: HTTPMethod, parameters: Parameters? = nil, encoding: ParameterEncoding = URLEncoding.default, headers: HTTPHeaders? = nil) -> AnyPublisher<D, ServerError> {
         webRequest(webApi: WebAPI.init(url: url, method: method, headers: headers, encoding: encoding, parameters: parameters, baseURL: self.baseURL))
             .eraseToAnyPublisher()
     }
     
-    func webRequest<D: ServerResponse>(api: APICall) -> AnyPublisher<D, Error> {
+    func webRequest<D: ServerResponse>(api: APICall) -> AnyPublisher<D, ServerError> {
         webRequest(webApi: WebAPI.init(url: api.url, method: api.method, headers: api.headers, encoding: api.encoding, parameters: api.parameters, baseURL: self.baseURL))
             .eraseToAnyPublisher()
     }
     
-    func webRequest<D: ServerResponse>(webApi: APICall) -> AnyPublisher<D, Error> {
+    func webRequest<D: ServerResponse>(webApi: APICall) -> AnyPublisher<D, ServerError> {
         guard let sessionCookie = self.session.configuration.httpCookieStorage?.cookies?.first(where: { $0.name == "jwt" }) else {
             AppState.UserData.shared.logout()
-            return Fail(error: ClientError.invalidURL).eraseToAnyPublisher()
+            return Fail(error: ServerError(message: "Invalid Cookie", code: 500, clientError: .invalidCookie)).eraseToAnyPublisher()
         }
 
         if sessionCookie.value == "" || sessionCookie.value.isEmpty {
             AppState.UserData.shared.logout()
-            return Fail(error: ClientError.invalidURL).eraseToAnyPublisher()
         }
         
         self.session.configuration.httpCookieStorage?.cookies?.forEach({
             AFSession.session.configuration.httpCookieStorage?.setCookie($0)
         })
         
-        return Future<D, Error> { promise in
+        return Future<D, ServerError> { promise in
             AFSession.request(webApi.url, method: webApi.method, parameters: webApi.parameters, encoding: webApi.encoding, headers: webApi.headers)
                 .validate()
                 .responseDecodable(of: D.self) { response in
+                    
                     switch response.result {
                     case .success(let data):
                         promise(.success(data))
                     case .failure(let error):
-                    // if code is 401 then we should logout the user
+                    
                         if let code = response.response?.statusCode, code == 401 {
                             AppState.UserData.shared.logout()
                         }
                         
-                        promise(.failure(error))
+                        guard let errorData = response.data else {
+                            promise(.failure(ServerError(message: "Unexpected Response", code: error.responseCode, clientError: .unexpectedResponse)))
+                            return
+                        }
+                        
+
+                        do{
+                            let decoder = JSONDecoder()
+                            let serverError = try decoder.decode(ServerError.self, from: errorData)
+                            promise(.failure(serverError))
+                        }catch{
+                            print("Error info: \(error)")
+                            promise(.failure(ServerError(message: "Unexpected Response", code: 400, clientError: .unexpectedResponse)))
+                        }
                     }
                 }
         }
@@ -89,7 +102,7 @@ func setAFSession(_ session: URLSession, queue: DispatchQueue) -> Session {
 // MARK: COOKIE
 extension WebRepository {
     func SetCookie(cookie: String) {
-        PersistentManager.SaveUserToken(token: cookie)
+        PersistentManager.saveUserToken(token: cookie)
     }
 }
 
@@ -110,12 +123,6 @@ extension WebRepository {
 }
 
 // MARK: Model
-enum ClientError: Error {
-    case invalidURL
-    case httpCode(HTTPCode)
-    case unexpectedResponse
-    case imageDeserialization
-}
 
 struct ServerResponseModel<T: Codable>: ServerResponse {
     var data: T

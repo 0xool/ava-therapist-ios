@@ -85,7 +85,7 @@ struct MainConversationService: ConversationService {
         return Just<Void>
             .withErrorType(Error.self)
             .flatMap({ [conversationRepository] in
-                conversationRepository.deleteConversation(conversationID: conversationID)
+                conversationRepository.deleteConversation(conversationID: conversationID).mapError{$0}
             })
             .flatMap({ [conversationDBRepository] in                
                 conversationDBRepository.deleteConversation(conversationID: conversationID)
@@ -178,6 +178,7 @@ struct MainConversationService: ConversationService {
                     chatService.saveChatInDB(chat: chat)
                 }
             }
+            .mapError({ $0 })
             .eraseToAnyPublisher()
     }
     
@@ -241,6 +242,7 @@ struct MainConversationService: ConversationService {
                     _ = conversationDBRepository.store(conversation: conversation)
                 }
             }
+            .mapError{ $0 }
             .eraseToAnyPublisher()
     }
     

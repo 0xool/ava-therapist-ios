@@ -31,13 +31,15 @@
 
 namespace realm::app {
 
-struct AppError : public RuntimeError {
-    util::Optional<int> additional_status_code;
+struct AppError : public Exception {
+    std::optional<int> additional_status_code;
 
     std::string link_to_server_logs;
+    std::string server_error;
 
-    AppError(ErrorCodes::Error error_code, std::string message, std::string link = "",
-             util::Optional<int> additional_error_code = util::none);
+    AppError(ErrorCodes::Error ec, std::string message, std::string link = "",
+             std::optional<int> additional_error_code = std::nullopt,
+             std::optional<std::string> server_err = std::nullopt);
 
     bool is_json_error() const
     {
@@ -76,6 +78,7 @@ std::ostream& operator<<(std::ostream& os, AppError error);
  * An HTTP method type.
  */
 enum class HttpMethod { get, post, patch, put, del };
+std::ostream& operator<<(std::ostream&, HttpMethod);
 
 /**
  * Request/Response headers type
@@ -111,15 +114,10 @@ struct Request {
      * The body of the request.
      */
     std::string body;
-
-    /// Indicates if the request uses the refresh token or the access token
-    bool uses_refresh_token = false;
-
-    /**
-     * A recursion counter to prevent too many redirects
-     */
-    int redirect_count = 0;
 };
+
+/// What type of auth token should be used for a HTTP request.
+enum class RequestTokenType { NoAuth, AccessToken, RefreshToken };
 
 /**
  * The contents of an HTTP response.
@@ -156,20 +154,7 @@ struct GenericNetworkTransport {
     virtual ~GenericNetworkTransport() = default;
     virtual void send_request_to_server(const Request& request,
                                         util::UniqueFunction<void(const Response&)>&& completion) = 0;
-
-    void send_request_to_server(Request&& request,
-                                util::UniqueFunction<void(Request&&, const Response&)>&& completion)
-    {
-        auto request_ptr = std::make_unique<Request>(std::move(request));
-        const auto& request_ref = *request_ptr;
-        send_request_to_server(request_ref, [request_ptr = std::move(request_ptr),
-                                             completion = std::move(completion)](const Response& response) {
-            completion(std::move(*request_ptr), response);
-        });
-    }
 };
-
-const char* httpmethod_to_string(HttpMethod method);
 
 } // namespace realm::app
 

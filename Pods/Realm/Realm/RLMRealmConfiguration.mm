@@ -32,7 +32,7 @@
 #import "RLMUser_Private.hpp"
 
 #import <realm/object-store/sync/sync_manager.hpp>
-#import <realm/object-store/util/bson/bson.hpp>
+#import <realm/util/bson/bson.hpp>
 #import <realm/sync/config.hpp>
 #else
 @class RLMSyncConfiguration;
@@ -130,8 +130,6 @@ NSString *RLMRealmPathForFile(NSString *fileName) {
     configuration->_customSchema = _customSchema;
     configuration->_eventConfiguration = _eventConfiguration;
     configuration->_migrationObjectClass = _migrationObjectClass;
-    configuration->_initialSubscriptions = _initialSubscriptions;
-    configuration->_rerunOnOpen = _rerunOnOpen;
     return configuration;
 }
 
@@ -174,7 +172,6 @@ NSString *RLMRealmPathForFile(NSString *fileName) {
     if (inMemoryIdentifier.length == 0) {
         @throw RLMException(@"In-memory identifier must not be empty");
     }
-    _config.sync_config = nullptr;
     _seedFilePath = nil;
 
     RLMNSStringToStdString(_config.path, [NSTemporaryDirectory() stringByAppendingPathComponent:inMemoryIdentifier]);
@@ -361,14 +358,12 @@ static bool isSync(realm::Realm::Config const& config) {
         _config.sync_config = nullptr;
         return;
     }
-    RLMUser *user = syncConfiguration.user;
-    if (user.state == RLMUserStateRemoved) {
-        @throw RLMException(@"Cannot set a sync configuration which has an errored-out user.");
+    auto& rawConfig = syncConfiguration.rawConfiguration;
+    if (rawConfig.user->state() == realm::SyncUser::State::Removed) {
+        @throw RLMException(@"Cannot set a sync configuration which has a removed user.");
     }
 
-    NSAssert(user.identifier, @"Cannot call this method on a user that doesn't have an identifier.");
-    _config.in_memory = false;
-    _config.sync_config = std::make_shared<realm::SyncConfig>(syncConfiguration.rawConfiguration);
+    _config.sync_config = std::make_shared<realm::SyncConfig>(rawConfig);
     _config.path = syncConfiguration.path;
 
     // The manual client reset handler doesn't exist on the raw config,

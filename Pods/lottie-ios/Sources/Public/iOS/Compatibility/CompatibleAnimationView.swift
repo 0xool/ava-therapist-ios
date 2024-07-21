@@ -6,7 +6,7 @@
 //
 
 import Foundation
-#if os(iOS) || os(tvOS) || os(watchOS) || targetEnvironment(macCatalyst)
+#if canImport(UIKit)
 import UIKit
 
 /// An Objective-C compatible wrapper around Lottie's Animation class.
@@ -30,7 +30,7 @@ public final class CompatibleAnimation: NSObject {
 
   // MARK: Internal
 
-  internal var animation: LottieAnimation? {
+  var animation: LottieAnimation? {
     LottieAnimation.named(name, bundle: bundle, subdirectory: subdirectory)
   }
 
@@ -77,15 +77,15 @@ public enum CompatibleRenderingEngineOption: Int {
   {
     switch configuration {
     case .shared:
-      return LottieConfiguration.shared
+      LottieConfiguration.shared
     case .defaultEngine:
-      return LottieConfiguration(renderingEngine: .coreAnimation)
+      LottieConfiguration(renderingEngine: .coreAnimation)
     case .automatic:
-      return LottieConfiguration(renderingEngine: .automatic)
+      LottieConfiguration(renderingEngine: .automatic)
     case .mainThread:
-      return LottieConfiguration(renderingEngine: .mainThread)
+      LottieConfiguration(renderingEngine: .mainThread)
     case .coreAnimation:
-      return LottieConfiguration(renderingEngine: .coreAnimation)
+      LottieConfiguration(renderingEngine: .coreAnimation)
     }
   }
 }
@@ -193,28 +193,27 @@ public final class CompatibleAnimationView: UIView {
     commonInit()
   }
 
-  required init?(coder _: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
+  required init?(coder: NSCoder) {
+    animationView = LottieAnimationView()
+    super.init(coder: coder)
+    commonInit()
   }
 
   // MARK: Public
 
-  @objc
-  public var compatibleAnimation: CompatibleAnimation? {
+  @objc public var compatibleAnimation: CompatibleAnimation? {
     didSet {
       animationView.animation = compatibleAnimation?.animation
     }
   }
 
-  @objc
-  public var loopAnimationCount: CGFloat = 0 {
+  @objc public var loopAnimationCount: CGFloat = 0 {
     didSet {
       animationView.loopMode = loopAnimationCount == -1 ? .loop : .repeat(Float(loopAnimationCount))
     }
   }
 
-  @objc
-  public var compatibleDictionaryTextProvider: CompatibleDictionaryTextProvider? {
+  @objc public var compatibleDictionaryTextProvider: CompatibleDictionaryTextProvider? {
     didSet {
       animationView.textProvider = compatibleDictionaryTextProvider?.textProvider ?? DefaultTextProvider()
     }
@@ -287,15 +286,15 @@ public final class CompatibleAnimationView: UIView {
     get {
       switch animationView.backgroundBehavior {
       case .stop:
-        return .stop
+        .stop
       case .pause:
-        return .pause
+        .pause
       case .pauseAndRestore:
-        return .pauseAndRestore
+        .pauseAndRestore
       case .forceFinish:
-        return .forceFinish
+        .forceFinish
       case .continuePlaying:
-        return .continuePlaying
+        .continuePlaying
       }
     }
     set {
@@ -442,7 +441,7 @@ public final class CompatibleAnimationView: UIView {
   public func getColorValue(for keypath: CompatibleAnimationKeypath, atFrame: CGFloat) -> UIColor? {
     let value = animationView.getValue(for: keypath.animationKeypath, atFrame: atFrame)
     guard let colorValue = value as? LottieColor else {
-      return nil;
+      return nil
     }
 
     return UIColor(
@@ -533,7 +532,7 @@ public final class CompatibleDictionaryTextProvider: NSObject {
 
   // MARK: Internal
 
-  internal var textProvider: AnimationTextProvider? {
+  var textProvider: AnimationKeypathTextProvider? {
     DictionaryTextProvider(values)
   }
 

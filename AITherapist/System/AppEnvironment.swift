@@ -64,7 +64,7 @@ extension AppEnvironment {
             HTTPCookiePropertyKey.domain: Constants.BaseUrl,
             HTTPCookiePropertyKey.path: "/",
             HTTPCookiePropertyKey.name: "jwt",
-            HTTPCookiePropertyKey.value: PersistentManager.GetUserToken()
+            HTTPCookiePropertyKey.value: PersistentManager.getUserToken()
         ]
         
         if let cookie = HTTPCookie(properties: cookieProps) {

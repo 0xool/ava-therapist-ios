@@ -117,10 +117,22 @@ private func createEquatableBinding<T: ThreadConfined, V: Equatable>(
     /// Objects must have observers removed before being added to a realm.
     /// They are stored here so that if they are appended through the Bound Property
     /// system, they can be de-observed before hand.
-    @Unchecked
-    fileprivate static var observedObjects = [NSObject: SwiftUIKVO.Subscription]()
+    private static let observedObjects = AllocatedUnfairLock([NSObject: Subscription]())
 
-    @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+    static func store(_ obj: NSObject, _ subscription: Subscription) {
+        SwiftUIKVO.observedObjects.withLock {
+            $0[obj] = subscription
+        }
+    }
+
+    static func cancel(_ obj: NSObject) {
+        SwiftUIKVO.observedObjects.withLock {
+            if let subscription: Subscription = $0.removeValue(forKey: obj) {
+                subscription.removeObservers()
+            }
+        }
+    }
+
     struct Subscription: Combine.Subscription {
         let observer: NSObject
         let value: NSObject
@@ -134,23 +146,16 @@ private func createEquatableBinding<T: ThreadConfined, V: Equatable>(
         }
 
         func cancel() {
-            removeObservers()
-            SwiftUIKVO.observedObjects.removeValue(forKey: value)
+            SwiftUIKVO.cancel(value)
         }
 
         fileprivate func removeObservers() {
-            guard SwiftUIKVO.observedObjects.keys.contains(value) else {
-                return
-            }
             keyPaths.forEach {
                 value.removeObserver(observer, forKeyPath: $0)
             }
         }
 
         fileprivate func addObservers() {
-            guard SwiftUIKVO.observedObjects.keys.contains(value) else {
-                return
-            }
             keyPaths.forEach {
                 value.addObserver(observer, forKeyPath: $0, options: .init(), context: nil)
             }
@@ -230,7 +235,7 @@ private final class ObservableStoragePublisher<ObjectType>: Publisher where Obje
             }
             let subscription = SwiftUIKVO.Subscription(observer: kvo, value: value, keyPaths: keyPaths)
             subscriber.receive(subscription: subscription)
-            SwiftUIKVO.observedObjects[value] = subscription
+            SwiftUIKVO.store(value, subscription)
         }
     }
 }
@@ -639,7 +644,10 @@ extension Projection: _ObservedResultsValue { }
 @propertyWrapper public struct ObservedSectionedResults<Key: _Persistable & Hashable, ResultType>: DynamicProperty, BoundCollection where ResultType: _ObservedResultsValue & RealmFetchable & KeypathSortable & Identifiable {
     public typealias Element = ResultType
 
-    private class Storage: ObservableResultsStorage<SectionedResults<Key, ResultType>> {
+    private class Storage: ObservableResultsStorage<Results<ResultType>> {
+        var sectionedResults: SectionedResults<Key, ResultType>!
+        var token: AnyCancellable?
+
         override func updateValue() {
             let realm = try! Realm(configuration: configuration ?? Realm.Configuration.defaultConfiguration)
             var results = realm.objects(ResultType.self)
@@ -654,7 +662,24 @@ extension Projection: _ObservedResultsValue { }
                 sortDescriptors.append(.init(keyPath: keyPathString, ascending: true))
             }
 
-            value = results.sectioned(sortDescriptors: sortDescriptors, sectionBlock)
+            value = results
+
+            /*
+             Observing the sectioned results directly doesn't allow the SwiftUI diff to work
+             correctly as the previous state of the sectioned results will have the new values.
+
+             An example of when this is an issue is when an item is deleted in a List containing sectioned results,
+             the diff needs a stable state of the previous transaction but due to
+             the observation callback calling calculate_sections the collection will be brought up to date.
+
+             The solution around this is to store a frozen copy of the sectioned results and observe the parent `Results` instead.
+             Each time the results observation callback is invoked and the SwiftUI View is redrawn the sectioned results will be updated.
+             */
+            sectionedResults = value.sectioned(sortDescriptors: sortDescriptors, sectionBlock).freeze()
+            token = self.objectWillChange.sink { [weak self] _ in
+                guard let self = self else { return }
+                self.sectionedResults = self.value.sectioned(sortDescriptors: self.sortDescriptors, self.sectionBlock).freeze()
+            }
         }
 
         var sortDescriptors: [SortDescriptor] = [] {
@@ -679,7 +704,7 @@ extension Projection: _ObservedResultsValue { }
             if self.sortDescriptors.isEmpty {
                 throwRealmException("sortDescriptors must not be empty when sectioning ObservedSectionedResults with `sectionBlock`")
             }
-            super.init(value.sectioned(sortDescriptors: self.sortDescriptors, self.sectionBlock), keyPaths)
+            super.init(value, keyPaths)
         }
     }
 
@@ -712,11 +737,23 @@ extension Projection: _ObservedResultsValue { }
     /// :nodoc:
     public var wrappedValue: SectionedResults<Key, ResultType> {
         storage.setupValue()
-        return storage.value
+        return storage.sectionedResults
     }
     /// :nodoc:
     public var projectedValue: Self {
         return self
+    }
+
+    /// Removes items from an `@ObservedSectionedResults` collection
+    /// with a given `IndexSet` and `ResultsSection`.
+    /// - Parameters:
+    ///   - offsets: Index offsets in the section.
+    ///   - section: The section containing the items to remove.
+    public func remove(atOffsets offsets: IndexSet,
+                       section: ResultsSection<Key, ResultType>) where ResultType: ObjectBase & ThreadConfined {
+        write(wrappedValue) { collection in
+            collection.realm?.delete(offsets.compactMap { section[$0].thaw() ?? nil })
+        }
     }
 
     private init(type: ResultType.Type,
@@ -1163,7 +1200,7 @@ public extension BoundCollection where Value == List<Element>, Element: ObjectBa
     func append(_ value: Value.Element) {
         write { list in
             if value.realm == nil && list.realm != nil {
-                SwiftUIKVO.observedObjects[value]?.cancel()
+                SwiftUIKVO.cancel(value)
             }
             list.append(thawObjectIfFrozen(value))
         }
@@ -1217,7 +1254,7 @@ public extension BoundCollection where Value == MutableSet<Element>, Element: Ob
     func insert(_ value: Value.Element) {
         write { mutableSet in
             if value.realm == nil && mutableSet.realm != nil {
-                SwiftUIKVO.observedObjects[value]?.cancel()
+                SwiftUIKVO.cancel(value)
             }
             mutableSet.insert(thawObjectIfFrozen(value))
         }
@@ -1230,7 +1267,7 @@ public extension BoundCollection where Value == Results<Element>, Element: Objec
     func append(_ value: Value.Element) {
         write { results in
             if value.realm == nil && results.realm != nil {
-                SwiftUIKVO.observedObjects[value]?.cancel()
+                SwiftUIKVO.cancel(value)
             }
             results.realm?.add(thawObjectIfFrozen(value))
         }
@@ -1243,7 +1280,7 @@ public extension BoundCollection where Value == Results<Element>, Element: Proje
     func append(_ value: Value.Element) {
         write { results in
             if value.realm == nil && results.realm != nil {
-                SwiftUIKVO.observedObjects[value.rootObject]?.cancel()
+                SwiftUIKVO.cancel(value.rootObject)
             }
             results.realm?.add(thawObjectIfFrozen(value.rootObject))
         }
@@ -1305,7 +1342,7 @@ public extension BoundMap where Value.Value: ObjectBase & ThreadConfined {
         }
         // if the value is unmanaged but the map is managed, we are adding this value to the realm
         if value.realm == nil && self.wrappedValue.realm != nil {
-            SwiftUIKVO.observedObjects[value]?.cancel()
+            SwiftUIKVO.cancel(value)
         }
         write(self.wrappedValue) { map in
             var m = map
@@ -1526,10 +1563,16 @@ private class ObservableAsyncOpenStorage: ObservableObject {
     }
 
     private func asyncOpenForUser(_ user: User) {
+        let initialSubscriptions = configuration?.syncConfiguration?.initialSubscriptions
+
         // Set the `syncConfiguration` depending if there is partition value (pbs) or not (flx).
         var config: Realm.Configuration
         if let partitionValue = partitionValue {
             config = user.configuration(partitionValue: partitionValue, cancelAsyncOpenOnNonFatalErrors: true)
+        } else if let initialSubscriptions {
+            config = user.flexibleSyncConfiguration(cancelAsyncOpenOnNonFatalErrors: true,
+                                                    initialSubscriptions: ObjectiveCSupport.convert(block: initialSubscriptions.callback),
+                                                    rerunOnOpen: initialSubscriptions.rerunOnOpen)
         } else {
             config = user.flexibleSyncConfiguration(cancelAsyncOpenOnNonFatalErrors: true)
         }
@@ -1854,17 +1897,18 @@ private class ObservableAsyncOpenStorage: ObservableObject {
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 extension SwiftUIKVO {
     @objc(removeObserversFromObject:) static func removeObservers(object: NSObject) -> Bool {
-        if let subscription = SwiftUIKVO.observedObjects[object] {
-            subscription.removeObservers()
-            return true
-        } else {
+        Self.observedObjects.withLock {
+            if let subscription = $0[object] {
+                subscription.removeObservers()
+                return true
+            }
             return false
         }
     }
 
     @objc(addObserversToObject:) static func addObservers(object: NSObject) {
-        if let subscription = SwiftUIKVO.observedObjects[object] {
-            subscription.addObservers()
+        Self.observedObjects.withLock {
+            $0[object]?.addObservers()
         }
     }
 }

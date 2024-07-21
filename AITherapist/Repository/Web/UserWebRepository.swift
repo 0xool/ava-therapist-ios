@@ -10,7 +10,7 @@ import Combine
 import Alamofire
 
 protocol UserWebRepository: WebRepository {
-    func editUserInfo(username: String, name: String, lastname: String) -> AnyPublisher<Void, Error>
+    func editUserInfo(username: String, name: String, lastname: String) -> AnyPublisher<Void, ServerError>
 }
 
 struct MainUserWebRepository: UserWebRepository {
@@ -29,38 +29,21 @@ struct MainUserWebRepository: UserWebRepository {
         self.AFSession = setAFSession(session, queue: bgQueue)
     }
     
-    func editUserInfo(username: String, name: String, lastname: String) -> AnyPublisher<Void, Error> {
+    func editUserInfo(username: String, name: String, lastname: String) -> AnyPublisher<Void, ServerError> {
         let requestParams: EditUserInfoRequest = EditUserInfoRequest(user: .init(username: username, name: name, lastname: lastname))
         
         do {
             let parameters = try JSONEncoder().encode(requestParams)
             let params = try JSONSerialization.jsonObject(with: parameters, options: []) as? [String: Any] ?? [:]
-            let request: AnyPublisher<EditUserInfoResponse, Error> = webRequest(api: API.editUserInfo(params: params))
+            let request: AnyPublisher<EditUserInfoResponse, ServerError> = webRequest(api: API.editUserInfo(params: params))
             
             return request
                 .map{ _ in }
                 .eraseToAnyPublisher()
         } catch {
-            return Fail(error: error).eraseToAnyPublisher()
+            return Fail(error: ServerError()).eraseToAnyPublisher()
         }
     }
-//    func editUserInfo(username: String, name: String, lastname: String) -> AnyPublisher<Void, Error> {
-//        let requestParams = EditUserInfoRequest(user: .init(username: username, name: name, lastname: lastname))
-//        
-//        do {
-//            let parameters = try JSONEncoder().encode(requestParams)
-//            let params = try JSONSerialization.jsonObject(with: parameters, options: []) as? [String: Any] ?? [:]
-//            let request: AnyPublisher<EditUserInfoResponse, Error> = webRequest(api: API.editUserInfo(params: params))
-//                        
-//            return request
-//                .map{ test in
-//                    print(test)
-//                }
-//                .eraseToAnyPublisher()
-//        } catch {
-//            return Fail(error: error).eraseToAnyPublisher()
-//        }
-//    }
 }
 
 extension MainUserWebRepository {

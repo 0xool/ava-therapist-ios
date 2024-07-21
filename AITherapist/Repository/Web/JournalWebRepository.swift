@@ -10,11 +10,11 @@ import Foundation
 import Alamofire
 
 protocol JournalWebRepository: WebRepository {
-    func loadJournalList() -> AnyPublisher<[Journal], Error>
-    func addJournal(journal: Journal) -> AnyPublisher<Void, Error>
-    func deleteJournal(journalID: Int) -> AnyPublisher<Void, Error>
+    func loadJournalList() -> AnyPublisher<[Journal], ServerError>
+    func addJournal(journal: Journal) -> AnyPublisher<Void, ServerError>
+    func deleteJournal(journalID: Int) -> AnyPublisher<Void, ServerError>
     
-    func getJournalByDate(date: Date) -> AnyPublisher<Journal?, Error>
+    func getJournalByDate(date: Date) -> AnyPublisher<Journal?, ServerError>
 }
 
 struct MainJournalWebRepository: JournalWebRepository {
@@ -31,9 +31,9 @@ struct MainJournalWebRepository: JournalWebRepository {
         self.AFSession = setAFSession(session, queue: bgQueue)
     }
     
-    func loadJournalList() -> AnyPublisher<[Journal], Error> {
+    func loadJournalList() -> AnyPublisher<[Journal], ServerError> {
         
-        let request: AnyPublisher<GetAllJournalResponse, Error> = webRequest(api: API.allJournals)
+        let request: AnyPublisher<GetAllJournalResponse, ServerError> = webRequest(api: API.allJournals)
         
         return request
             .map{
@@ -42,24 +42,24 @@ struct MainJournalWebRepository: JournalWebRepository {
             .eraseToAnyPublisher()
     }
     
-    func addJournal(journal: Journal) -> AnyPublisher<Void, Error> {
+    func addJournal(journal: Journal) -> AnyPublisher<Void, ServerError> {
         let request: AddJournalRequest = AddJournalRequest(diary: journal)
         
         do {
             let parameters = try JSONEncoder().encode(request)
             let params = try JSONSerialization.jsonObject(with: parameters, options: []) as? [String: Any] ?? [:]
-            let request: AnyPublisher<AddJournalResponse, Error> = webRequest(api: API.addJournal(params: params))
+            let request: AnyPublisher<AddJournalResponse, ServerError> = webRequest(api: API.addJournal(params: params))
                         
             return request
                 .map{ _ in }
                 .eraseToAnyPublisher()
         } catch {
-            return Fail(error: error).eraseToAnyPublisher()
+            return Fail(error: ServerError()).eraseToAnyPublisher()
         }
     }
     
-    func deleteJournal(journalID: Int) -> AnyPublisher<Void, Error>{
-        let request: AnyPublisher<DeleteJournalResponse, Error> = webRequest(api: API.deleteJournal(journalID: journalID))
+    func deleteJournal(journalID: Int) -> AnyPublisher<Void, ServerError>{
+        let request: AnyPublisher<DeleteJournalResponse, ServerError> = webRequest(api: API.deleteJournal(journalID: journalID))
         
         return request
             .map{ _ in
@@ -68,8 +68,8 @@ struct MainJournalWebRepository: JournalWebRepository {
             .eraseToAnyPublisher()
     }
     
-    func getJournalByDate(date: Date) -> AnyPublisher<Journal?, Error>{
-        let request: AnyPublisher<GetJournalByDateResponse, Error> = webRequest(api: API.getDiaryByDate(date: date.description))
+    func getJournalByDate(date: Date) -> AnyPublisher<Journal?, ServerError>{
+        let request: AnyPublisher<GetJournalByDateResponse, ServerError> = webRequest(api: API.getDiaryByDate(date: date.description))
         
         return request
             .map{

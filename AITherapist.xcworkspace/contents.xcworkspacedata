@@ -2,12 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "absolute:AITherapist.xcodeproj">
+      location = "group:AITherapist.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Pods/Pods.xcodeproj">
-   </FileRef>
-   <FileRef
-      location = "group:AITherapist.xcodeproj">
    </FileRef>
 </Workspace>

@@ -10,7 +10,7 @@ import Alamofire
 import Combine
 
 protocol InsightWebRepository: WebRepository {
-    func loadInsight() -> AnyPublisher<Insight, Error>
+    func loadInsight() -> AnyPublisher<Insight, ServerError>
 }
 
 struct MainInsightWebRepository: InsightWebRepository {
@@ -28,8 +28,8 @@ struct MainInsightWebRepository: InsightWebRepository {
         self.AFSession = setAFSession(session, queue: bgQueue)
     }
     
-    func loadInsight() -> AnyPublisher<Insight, Error> {
-        let request: AnyPublisher<LoadInsightServerResponse, Error> = webRequest(api: API.getInsight)
+    func loadInsight() -> AnyPublisher<Insight, ServerError> {
+        let request: AnyPublisher<LoadInsightServerResponse, ServerError> = webRequest(api: API.getInsight)
         
         return request
             .map{

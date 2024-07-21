@@ -1,18 +1,18 @@
 PODS:
-  - Alamofire (5.8.0)
-  - AlamofireImage (4.2.0):
-    - Alamofire (~> 5.4)
+  - Alamofire (5.9.1)
+  - AlamofireImage (4.3.0):
+    - Alamofire (~> 5.8)
   - FDSoundActivatedRecorder (3.1.0)
   - KeychainSwift (20.0.0)
-  - lottie-ios (4.2.0)
-  - Realm (10.42.1):
-    - Realm/Headers (= 10.42.1)
-  - Realm/Headers (10.42.1)
-  - RealmSwift (10.42.1):
-    - Realm (= 10.42.1)
+  - lottie-ios (4.5.0)
+  - Realm (10.52.2):
+    - Realm/Headers (= 10.52.2)
+  - Realm/Headers (10.52.2)
+  - RealmSwift (10.52.2):
+    - Realm (= 10.52.2)
 
 DEPENDENCIES:
-  - Alamofire (~> 5.8)
+  - Alamofire
   - AlamofireImage (~> 4.2)
   - FDSoundActivatedRecorder (~> 3.1)
   - KeychainSwift (~> 20.0)
@@ -30,14 +30,14 @@ SPEC REPOS:
     - RealmSwift
 
 SPEC CHECKSUMS:
-  Alamofire: 0e92e751b3e9e66d7982db43919d01f313b8eb91
-  AlamofireImage: 34a2d90b0e5fe6a5605f85ae4b7b01e784c60192
+  Alamofire: f36a35757af4587d8e4f4bfa223ad10be2422b8c
+  AlamofireImage: 843953fa97bee5f561cf05d83abd759e590b068d
   FDSoundActivatedRecorder: f08e5114767d843a7d781488cb3ed209a3ffe546
   KeychainSwift: 0ce6a4d13f7228054d1a71bb1b500448fb2ab837
-  lottie-ios: 809ecf2d460ed650a6aed7aa88b2ec45fab4779c
-  Realm: f433b80a05f68575e88364d6fcc6234965ccc5af
-  RealmSwift: 757e1416e2314f7e1543abdb2aa65b311d7b6545
+  lottie-ios: a881093fab623c467d3bce374367755c272bdd59
+  Realm: e44eb7d20fe469fe1179894fd356727b8fbe61c2
+  RealmSwift: 7aacbd3101158f7d54c930bcfcfaafadbd376ffc
 
-PODFILE CHECKSUM: 9fd20d64d0cebf5d8a44dfee4d28b661efc53496
+PODFILE CHECKSUM: 0d16ba9882f16f9be26741d2199cfb1d0652ef2a
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.15.2

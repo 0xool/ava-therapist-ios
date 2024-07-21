@@ -34,7 +34,7 @@ public typealias AsyncTransactionId = RLMAsyncTransactionId
  the code which uses the Realm within an `autoreleasepool {}` and ensure you have no other strong
  references to it.
 
- - warning Non-frozen `RLMRealm` instances are thread-confined and cannot be
+ - warning: Non-frozen `RLMRealm` instances are thread-confined and cannot be
  shared across threads or dispatch queues. Trying to do so will cause an
  exception to be thrown. You must obtain an instance of `RLMRealm` on each
  thread or queue you want to interact with the Realm on. Realms can be confined
@@ -208,8 +208,8 @@ public typealias AsyncTransactionId = RLMAsyncTransactionId
          */
         public func addProgressNotification(queue: DispatchQueue = .main,
                                             block: @escaping (SyncSession.Progress) -> Void) {
-            rlmTask.addProgressNotification(on: queue) { transferred, transferrable in
-                block(SyncSession.Progress(transferred: transferred, transferrable: transferrable))
+            rlmTask.addSyncProgressNotification(on: queue) { progress in
+                block(SyncSession.Progress(transferred: progress.transferredBytes, transferrable: progress.transferrableBytes, estimate: progress.progressEstimate))
             }
         }
     }
@@ -388,7 +388,7 @@ public typealias AsyncTransactionId = RLMAsyncTransactionId
     /**
      Asynchronously performs actions contained within the given block inside a write transaction.
      The write transaction is begun asynchronously as if calling `beginAsyncWrite`,
-     and by default the transaction is commited asynchronously after the block completes.
+     and by default the transaction is committed asynchronously after the block completes.
      You can also explicitly call `commitWrite` or `cancelWrite` from
      within the block to synchronously commit or cancel the write transaction.
      Returning without one of these calls is equivalent to calling `commitWrite`.
@@ -482,7 +482,7 @@ public typealias AsyncTransactionId = RLMAsyncTransactionId
      This becomes `true` following a call to `beginAsyncWrite`, `commitAsyncWrite`,
      or `writeAsync`, and remains so until all scheduled async write work has completed.
 
-     @warning If this is `true`, closing or invalidating the Realm will block until scheduled work has completed.
+     - warning: If this is `true`, closing or invalidating the Realm will block until scheduled work has completed.
      */
     public var isPerformingAsynchronousWriteOperations: Bool {
         return rlmRealm.isPerformingAsynchronousWriteOperations
@@ -1101,7 +1101,6 @@ extension Realm {
      - returns: A `SyncSubscriptionSet`.
      - Warning: This feature is currently in beta and its API is subject to change.
      */
-    @available(*, message: "This feature is currently in beta.")
     public var subscriptions: SyncSubscriptionSet {
         return SyncSubscriptionSet(rlmRealm.subscriptions)
     }
@@ -1232,7 +1231,6 @@ extension Realm {
         self = Realm(rlmRealm.wrappedValue)
     }
 
-#if swift(>=5.8)
     /**
      Asynchronously obtains a `Realm` instance isolated to the given Actor.
 
@@ -1272,6 +1270,7 @@ extension Realm {
         self = Realm(rlmRealm.wrappedValue)
     }
 
+#if compiler(<6)
     /**
      Performs actions contained within the given block inside a write transaction.
 
@@ -1326,14 +1325,16 @@ extension Realm {
             fatalError("asyncWrite() can only be called on main thread or actor-isolated Realms")
         }
         return try await withoutActuallyEscaping(block) { block in
-            try await asyncWrite(actor: actor, Unchecked(block)).wrappedValue
+            try await Self.asyncWrite(actor: actor, realm: Unchecked(rlmRealm), Unchecked(block)).wrappedValue
         }
     }
 
-    private func asyncWrite<Result>(actor: isolated any Actor,
-                                    _ block: Unchecked<(() throws -> Result)>) async throws
+    private static func asyncWrite<Result>(actor: isolated any Actor,
+                                           realm: Unchecked<RLMRealm>,
+                                           _ block: Unchecked<(() throws -> Result)>) async throws
     -> Unchecked<Result> {
-        let write = rlmRealm.beginAsyncWrite()
+        let realm = realm.wrappedValue
+        let write = realm.beginAsyncWrite()
         await withTaskCancellationHandler {
             await write.wait()
         } onCancel: {
@@ -1345,12 +1346,12 @@ extension Realm {
             try Task.checkCancellation()
             ret = try block.wrappedValue()
         } catch {
-            if isInWriteTransaction { cancelWrite() }
+            if realm.inWriteTransaction { realm.cancelWriteTransaction() }
             throw error
         }
 
-        if isInWriteTransaction {
-            try await rlmRealm.commitAsyncWrite(withGrouping: false)
+        if realm.inWriteTransaction {
+            try await realm.commitAsyncWrite(withGrouping: false)
         }
         return Unchecked(ret)
     }
@@ -1383,7 +1384,117 @@ extension Realm {
             task.complete(false)
         }
     }
-#endif
+
+#else // compiler(<6)
+
+    /**
+     Performs actions contained within the given block inside a write transaction.
+
+     This function differs from synchronous ``write`` in that it suspends the
+     calling task while waiting for its turn to write rather than blocking the
+     thread. In addition, the actual i/o to write data to disk is done by a
+     background worker thread. For small writes, using this function on the
+     main thread may block the main thread for less time than manually
+     dispatching the write to a background thread.
+
+     If the block throws an error, the transaction will be canceled and any
+     changes made before the error will be rolled back.
+
+     Only one write transaction can be open at a time for each Realm file. Write
+     transactions cannot be nested, and trying to begin a write transaction on a
+     Realm which is already in a write transaction will throw an exception.
+     Calls to `write` from `Realm` instances for the same Realm file in other
+     threads or other processes will block until the current write transaction
+     completes or is cancelled.
+
+     Before beginning the write transaction, `asyncWrite` updates the `Realm`
+     instance to the latest Realm version, as if `asyncRefresh()` had been called,
+     and generates notifications if applicable. This has no effect if the Realm
+     was already up to date.
+
+     You can skip notifying specific notification blocks about the changes made
+     in this write transaction by passing in their associated notification
+     tokens. This is primarily useful when the write transaction is saving
+     changes already made in the UI and you do not want to have the notification
+     block attempt to re-apply the same changes.
+
+     The tokens passed to this function must be for notifications for this Realm
+     which were added on the same actor as the write transaction is being
+     performed on. Notifications for different threads cannot be skipped using
+     this method.
+
+     - parameter tokens: An array of notification tokens which were returned
+                         from adding callbacks which you do not want to be
+                         notified for the changes made in this write transaction.
+
+     - parameter block: The block containing actions to perform.
+     - returns: The value returned from the block, if any.
+
+     - throws: An `NSError` if the transaction could not be completed successfully.
+               `CancellationError` if the task is cancelled.
+               If `block` throws, the function throws the propagated `ErrorType` instead.
+     */
+    @discardableResult
+    public func asyncWrite<Result>(_isolation actor: isolated any Actor = #isolation, _ block: (() throws -> Result)) async throws -> Result {
+        guard rlmRealm.actor != nil else {
+            fatalError("asyncWrite() can only be called on main thread or actor-isolated Realms")
+        }
+        let realm = rlmRealm
+        let write = realm.beginAsyncWrite()
+        await withTaskCancellationHandler {
+            await write.wait()
+        } onCancel: {
+            actor.invoke { write.complete(true) }
+        }
+
+        let ret: Result
+        do {
+            try Task.checkCancellation()
+            ret = try block()
+        } catch {
+            if realm.inWriteTransaction { realm.cancelWriteTransaction() }
+            throw error
+        }
+
+        if realm.inWriteTransaction {
+            let error = await withCheckedContinuation { continuation in
+                realm.commitAsyncWrite(withGrouping: false, completion: continuation.resume)
+            }
+            if let error {
+                throw error
+            }
+        }
+        return ret
+    }
+
+    /**
+     Updates the Realm and outstanding objects managed by the Realm to point to
+     the most recent data and deliver any applicable notifications.
+
+     This function should be used instead of synchronous ``refresh`` in async
+     functions, as it suspends the calling task (if required) rather than
+     blocking.
+
+     - warning: This function is only supported for main thread and
+                actor-isolated Realms.
+     - returns: Whether there were any updates for the Realm. Note that `true`
+                may be returned even if no data actually changed.
+     */
+    @discardableResult
+    public func asyncRefresh(_isolation: isolated any Actor = #isolation) async -> Bool {
+        guard rlmRealm.actor != nil else {
+            fatalError("asyncRefresh() can only be called on main thread or actor-isolated Realms")
+        }
+        guard let task = RLMRealmRefreshAsync(rlmRealm) else {
+            return false
+        }
+        return await withTaskCancellationHandler {
+            await task.wait()
+        } onCancel: {
+            task.complete(false)
+        }
+    }
+#endif // compiler(<6)
 }
 
 @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
@@ -1462,14 +1573,18 @@ extension RLMAsyncDownloadTask: TaskWithCancellation {}
 @available(macOS 10.15, tvOS 13.0, iOS 13.0, watchOS 6.0, *)
 internal extension Actor {
     func verifier() -> (@Sendable () -> Void) {
-#if swift(>=5.9)
+#if compiler(>=5.10)
+        // This was made backdeployable in Xcode 15.3
+        return {
+            self.preconditionIsolated()
+        }
+#else
         // When possible use the official API for actor checking
         if #available(macOS 14.0, iOS 17.0, tvOS 17.0, watchOS 10.0, *) {
             return {
                 self.preconditionIsolated()
             }
         }
-#endif
 
         // This exploits a hole in Swift's type system to construct a function
         // which is isolated to the current actor, and then casts away that
@@ -1477,6 +1592,7 @@ internal extension Actor {
         // from outside the actor when actor data race checking is enabled.
         let fn: () -> Void = { _ = self }
         return unsafeBitCast(fn, to: (@Sendable () -> Void).self)
+#endif
     }
 
     // Asynchronously invoke the given block on the actor. This takes a

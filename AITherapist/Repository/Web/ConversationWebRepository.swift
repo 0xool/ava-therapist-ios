@@ -10,9 +10,9 @@ import Alamofire
 import Combine
 
 protocol ConversationWebRepository: WebRepository {
-    func loadConversationList() -> AnyPublisher<[Conversation], Error>
-    func addConversation(data: AddConversationRequest) -> AnyPublisher<Conversation, Error>
-    func deleteConversation(conversationID: Int) -> AnyPublisher<Void, Error>
+    func loadConversationList() -> AnyPublisher<[Conversation], ServerError>
+    func addConversation(data: AddConversationRequest) -> AnyPublisher<Conversation, ServerError>
+    func deleteConversation(conversationID: Int) -> AnyPublisher<Void, ServerError>
 }
 
 struct MainConversationWebRepository: ConversationWebRepository {
@@ -31,9 +31,9 @@ struct MainConversationWebRepository: ConversationWebRepository {
         self.AFSession = setAFSession(session, queue: bgQueue)
     }
     
-    func loadConversationList() -> AnyPublisher<[Conversation], Error> {
+    func loadConversationList() -> AnyPublisher<[Conversation], ServerError> {
         
-        let request: AnyPublisher<ConversationsResponse, Error> =
+        let request: AnyPublisher<ConversationsResponse, ServerError> =
         webRequest(api: API.getConversationList)
         
         return request
@@ -41,22 +41,22 @@ struct MainConversationWebRepository: ConversationWebRepository {
             .eraseToAnyPublisher()
     }
     
-    func addConversation(data: AddConversationRequest) -> AnyPublisher<Conversation, Error> {
+    func addConversation(data: AddConversationRequest) -> AnyPublisher<Conversation, ServerError> {
         do {
             let parameters = try JSONEncoder().encode(data)
             let params = try JSONSerialization.jsonObject(with: parameters, options: []) as? [String: Any] ?? [:]
-            let request: AnyPublisher<AddConversationResponse, Error> = webRequest(api: API.addConversation(params: params))
+            let request: AnyPublisher<AddConversationResponse, ServerError> = webRequest(api: API.addConversation(params: params))
             
             return request
                 .map{ $0.data }
                 .eraseToAnyPublisher()
         } catch {
-            return Fail(error: error).eraseToAnyPublisher()
+            return Fail(error: ServerError(message: "Data not in correct format", code: nil, clientError: .serializationError)).eraseToAnyPublisher()
         }
     }
     
-    func deleteConversation(conversationID: Int) -> AnyPublisher<Void, Error>{
-        let request: AnyPublisher<DeleteConversationResponse, Error> = webRequest(api: API.deleteConversation(conversationID: conversationID))
+    func deleteConversation(conversationID: Int) -> AnyPublisher<Void, ServerError>{
+        let request: AnyPublisher<DeleteConversationResponse, ServerError> = webRequest(api: API.deleteConversation(conversationID: conversationID))
         
         return request
             .map{ _ in }

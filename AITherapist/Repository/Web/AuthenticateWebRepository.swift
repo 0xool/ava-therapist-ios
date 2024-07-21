@@ -37,9 +37,9 @@ struct GetUserInfoResponse: ServerResponse{
 }
 
 protocol AuthenticateWebRepository: WebRepository {
-    func login(email: String, password: String) -> AnyPublisher<AuthenticateResponse, Error>
-    func register(nickname: String, email: String, password: String, mobileNumber: String) -> AnyPublisher<AuthenticateResponse, Error>
-    func getUserInfo() -> AnyPublisher<GetUserInfoResponse, Error>
+    func login(email: String, password: String) -> AnyPublisher<AuthenticateResponse, ServerError>
+    func register(nickname: String, email: String, password: String, mobileNumber: String) -> AnyPublisher<AuthenticateResponse, ServerError>
+    func getUserInfo() -> AnyPublisher<GetUserInfoResponse, ServerError>
 }
 
 struct MainAuthenticateWebRepository: AuthenticateWebRepository {
@@ -57,24 +57,24 @@ struct MainAuthenticateWebRepository: AuthenticateWebRepository {
         self.AFSession = setAFSession(session, queue: bgQueue)
     }
     
-    func login(email: String, password: String) -> AnyPublisher<AuthenticateResponse, Error> {
+    func login(email: String, password: String) -> AnyPublisher<AuthenticateResponse, ServerError> {
         let params = ["user": ["email" : email , "password" : password]]
-        let request: AnyPublisher<AuthenticateResponse, Error> = webRequest(api: API.login(params: params))
+        let request: AnyPublisher<AuthenticateResponse, ServerError> = webRequest(api: API.login(params: params))
         
         return request
                 .eraseToAnyPublisher()
     }
     
-    func getUserInfo() -> AnyPublisher<GetUserInfoResponse, Error> {
-        let request: AnyPublisher<GetUserInfoResponse, Error> = webRequest(api: API.getUserInfo)
+    func getUserInfo() -> AnyPublisher<GetUserInfoResponse, ServerError> {
+        let request: AnyPublisher<GetUserInfoResponse, ServerError> = webRequest(api: API.getUserInfo)
         
         return request
                 .eraseToAnyPublisher()
     }
     
-    func register(nickname: String, email: String, password: String, mobileNumber: String) -> AnyPublisher<AuthenticateResponse, Error> {
+    func register(nickname: String, email: String, password: String, mobileNumber: String) -> AnyPublisher<AuthenticateResponse, ServerError> {
         let params = ["user": ["email" : email , "password" : password, "mobile": mobileNumber, "nickname": nickname]]
-        let request: AnyPublisher<AuthenticateResponse, Error> = webRequest(api: API.register(params: params))
+        let request: AnyPublisher<AuthenticateResponse, ServerError> = webRequest(api: API.register(params: params))
         
         return request
                 .eraseToAnyPublisher()

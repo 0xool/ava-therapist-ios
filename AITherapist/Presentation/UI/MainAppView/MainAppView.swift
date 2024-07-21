@@ -16,24 +16,27 @@ struct MainAppView: View {
     
     @State private var showBG: Bool = true
     
-    var body: some View {        
+    var body: some View {
         Group {
             if viewModel.isRunningTests {
                 Text("Running unit tests")
-            }else if (PersistentManager.UserHasFinishedOnboarding()){
+            }else if (PersistentManager.userHasFinishedOnboarding()){
                 Text("OnboardingView")
             }else{
                 if self.viewModel.initalLoading {
                     splashView
                 }else{
                     if self.viewModel.user.value == nil
-                    { LoginView } else { mainAppView }
+                    { loginView } else {
+                        if self.viewModel.hasSeenNotification
+                        { mainAppView } else{ notificationView }
+                    }
                 }
             }
         }
     }
     
-    @ViewBuilder var LoginView: some View {
+    @ViewBuilder var loginView: some View {
         AuthenticationView(viewModel: .init(container: viewModel.container))
             .environmentObject(NamespaceWrapper(self.mainViewNameSpace))
             .attachEnvironmentOverrides(onChange: viewModel.onChangeHandler)
@@ -43,6 +46,10 @@ struct MainAppView: View {
     @ViewBuilder var splashView: some View {
         loadingView()
             .matchedGeometryEffect(id: "MainBackground", in: mainViewNameSpace, isSource: showBG)
+    }
+    
+    @ViewBuilder var notificationView: some View{
+        NotificationView(viewModel: .init(notificationViewSeen: self.$viewModel.hasSeenNotification))
     }
     
     @ViewBuilder var mainAppView: some View {
@@ -100,6 +107,7 @@ extension MainAppView {
         var anyCancellable: AnyCancellable? = nil
         
         @Published var initalLoading: Bool = true
+        @Published var hasSeenNotification = PersistentManager.getNotificationSeen()
         
         var user: Loadable<User>{
             get{

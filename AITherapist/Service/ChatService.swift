@@ -13,10 +13,10 @@ import SwiftUI
 protocol ChatService {
     func loadConversationChat(chats: LoadableSubject<LazyList<Chat>>, conversationID: Int)
     func loadChatFromDBBy(conversationID: Int) -> AnyPublisher<LazyList<Chat>, Error>
-    func getChatsForConversationFromServer(conversationID: Int) -> AnyPublisher<LazyList<Chat>, Error>
+    func getChatsForConversationFromServer(conversationID: Int) -> AnyPublisher<LazyList<Chat>, ServerError>
     
     func saveChatInDB(chat: Chat)
-    func sendChatToServer(message: String, conversationID: Int) -> AnyPublisher<(Chat, Chat), Error>
+    func sendChatToServer(message: String, conversationID: Int) -> AnyPublisher<(Chat, Chat), ServerError>
     func deletePreviousUserMessage()
     func deleteAllChatFor(conversationID: Int)
     func sendChatToServer(chats: LoadableSubject<LazyList<Chat>>, message:String, conversationID: Int, isUserTurn: Binding<Bool>, cancelBag: CancelBag)
@@ -65,7 +65,7 @@ struct MainChatService: ChatService {
             .eraseToAnyPublisher()
     }
     
-    func getChatsForConversationFromServer(conversationID: Int) -> AnyPublisher<LazyList<Chat>, Error>{
+    func getChatsForConversationFromServer(conversationID: Int) -> AnyPublisher<LazyList<Chat>, ServerError>{
         chatRepository.loadChatsForConversation(conversationID: conversationID)
             .map{
                 $0.lazyList
@@ -77,7 +77,7 @@ struct MainChatService: ChatService {
         return ProcessInfo.processInfo.isRunningTests ? 0 : 0.5
     }
     
-    func sendChatToServer(message: String, conversationID: Int) -> AnyPublisher<(Chat, Chat), Error>{
+    func sendChatToServer(message: String, conversationID: Int) -> AnyPublisher<(Chat, Chat), ServerError>{
 
         return chatRepository.sendChatToServer(data: .init(chat: .init(message: message, conversationID: conversationID)))
             .map{
@@ -136,9 +136,9 @@ struct MainChatService: ChatService {
 }
 
 struct StubChatService: ChatService {
-    func sendChatToServer(message: String, conversationID: Int) -> AnyPublisher<(Chat, Chat), Error> {
+    func sendChatToServer(message: String, conversationID: Int) -> AnyPublisher<(Chat, Chat), ServerError> {
         Just((Chat(), Chat()))
-        .setFailureType(to: Error.self)
+        .setFailureType(to: ServerError.self)
         .eraseToAnyPublisher()
     }
     
@@ -153,9 +153,9 @@ struct StubChatService: ChatService {
         
     }
     
-    func getChatsForConversationFromServer(conversationID: Int) -> AnyPublisher<LazyList<Chat>, Error> {
+    func getChatsForConversationFromServer(conversationID: Int) -> AnyPublisher<LazyList<Chat>, ServerError> {
         Just([].lazyList)
-        .setFailureType(to: Error.self)
+        .setFailureType(to: ServerError.self)
         .eraseToAnyPublisher()
     }
     

@@ -35,19 +35,24 @@ typedef void(^RLMOptionalErrorBlock)(NSError * _Nullable);
 
 /// Properties representing the configuration of a client
 /// that communicate with a particular Realm application.
+///
+/// `RLMAppConfiguration` options cannot be modified once the `RLMApp` using it
+/// is created. App's configuration values are cached when the App is created so any modifications after it
+/// will not have any effect.
 @interface RLMAppConfiguration : NSObject <NSCopying>
 
-/// A custom base URL to request against.
-@property (nonatomic, strong, nullable) NSString *baseURL;
+/// A custom base URL to request against. If not set or set to nil, the default base url for app services will be returned.
+@property (nonatomic, strong, null_resettable) NSString *baseURL;
 
 /// The custom transport for network calls to the server.
 @property (nonatomic, strong, nullable) id<RLMNetworkTransport> transport;
 
-/// A custom app name.
-@property (nonatomic, strong, nullable) NSString *localAppName;
-
-/// A custom app version.
-@property (nonatomic, strong, nullable) NSString *localAppVersion;
+/// :nodoc:
+@property (nonatomic, strong, nullable) NSString *localAppName
+    __attribute__((deprecated("This field is not used")));
+/// :nodoc:
+@property (nonatomic, strong, nullable) NSString *localAppVersion
+    __attribute__((deprecated("This field is not used")));
 
 /// The default timeout for network requests.
 @property (nonatomic, assign) NSUInteger defaultRequestTimeoutMS;
@@ -70,32 +75,39 @@ typedef void(^RLMOptionalErrorBlock)(NSError * _Nullable);
  */
 @property (nonatomic, nullable, copy) RLMSyncTimeoutOptions *syncTimeouts;
 
+/// :nodoc:
+- (instancetype)initWithBaseURL:(nullable NSString *)baseURL
+                      transport:(nullable id<RLMNetworkTransport>)transport
+                   localAppName:(nullable NSString *)localAppName
+                localAppVersion:(nullable NSString *)localAppVersion
+__attribute__((deprecated("localAppName and localAppVersion are unused")));
+
+/// :nodoc:
+- (instancetype)initWithBaseURL:(nullable NSString *) baseURL
+                      transport:(nullable id<RLMNetworkTransport>)transport
+                   localAppName:(nullable NSString *)localAppName
+                localAppVersion:(nullable NSString *)localAppVersion
+        defaultRequestTimeoutMS:(NSUInteger)defaultRequestTimeoutMS
+__attribute__((deprecated("localAppName and localAppVersion are unused")));
+
 /**
 Create a new Realm App configuration.
 
 @param baseURL A custom base URL to request against.
 @param transport A custom network transport.
-@param localAppName A custom app name.
-@param localAppVersion A custom app version.
 */
 - (instancetype)initWithBaseURL:(nullable NSString *)baseURL
-                      transport:(nullable id<RLMNetworkTransport>)transport
-                   localAppName:(nullable NSString *)localAppName
-                localAppVersion:(nullable NSString *)localAppVersion;
+                      transport:(nullable id<RLMNetworkTransport>)transport;
 
 /**
  Create a new Realm App configuration.
 
  @param baseURL A custom base URL to request against.
  @param transport A custom network transport.
- @param localAppName A custom app name.
- @param localAppVersion A custom app version.
  @param defaultRequestTimeoutMS A custom default timeout for network requests.
  */
 - (instancetype)initWithBaseURL:(nullable NSString *) baseURL
                       transport:(nullable id<RLMNetworkTransport>)transport
-                   localAppName:(nullable NSString *)localAppName
-                localAppVersion:(nullable NSString *)localAppVersion
         defaultRequestTimeoutMS:(NSUInteger)defaultRequestTimeoutMS;
 
 @end

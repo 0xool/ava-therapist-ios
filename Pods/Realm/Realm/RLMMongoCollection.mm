@@ -27,6 +27,7 @@
 #import "RLMUpdateResult_Private.hpp"
 #import "RLMUser_Private.hpp"
 
+#import <realm/object-store/sync/app_user.hpp>
 #import <realm/object-store/sync/mongo_client.hpp>
 #import <realm/object-store/sync/mongo_collection.hpp>
 #import <realm/object-store/sync/mongo_database.hpp>
@@ -125,7 +126,7 @@ __attribute__((objc_direct_members))
 }
 
 - (realm::app::MongoCollection)collection:(NSString *)name {
-    return _user._syncUser->mongo_client(self.serviceName.UTF8String)
+    return _user.user->mongo_client(self.serviceName.UTF8String)
         .db(self.databaseName.UTF8String).collection(name.UTF8String);
 }
 
@@ -188,7 +189,7 @@ __attribute__((objc_direct_members))
 - (void)insertManyDocuments:(NSArray<NSDictionary<NSString *, id<RLMBSON>> *> *)documents
                  completion:(RLMMongoInsertManyBlock)completion {
     self.collection.insert_many(toBsonArray(documents),
-                                [completion](std::vector<realm::bson::Bson> insertedIds,
+                                [completion](realm::bson::BsonArray insertedIds,
                                              std::optional<realm::app::AppError> error) {
         if (error) {
             return completion(nil, makeError(*error));
@@ -216,13 +217,17 @@ __attribute__((objc_direct_members))
 - (void)countWhere:(NSDictionary<NSString *, id<RLMBSON>> *)document
              limit:(NSInteger)limit
         completion:(RLMMongoCountBlock)completion {
-    self.collection.count(toBsonDocument(document), limit,
-                          [completion](uint64_t count,
-                                       std::optional<realm::app::AppError> error) {
+    self.collection.count_bson(toBsonDocument(document), limit,
+                               [completion](std::optional<realm::bson::Bson>&& value,
+                                            std::optional<realm::app::AppError>&& error) {
         if (error) {
             return completion(0, makeError(*error));
         }
-        completion(static_cast<NSInteger>(count), nil);
+        if (value->type() == realm::bson::Bson::Type::Int64) {
+            return completion(static_cast<NSInteger>(static_cast<int64_t>(*value)), nil);
+        }
+        // If the collection does not exist the call returns undefined
+        return completion(0, nil);
     });
 }
 
@@ -428,7 +433,7 @@ __attribute__((objc_direct_members))
         baseArgs["ids"] = RLMConvertRLMBSONToBson(idFilter);
     }
     auto args = realm::bson::BsonArray{baseArgs};
-    auto app = self.user.app._realmApp;
+    auto app = self.user.user->app();
     auto request = app->make_streaming_request(app->current_user(), "watch", args,
                                                std::optional<std::string>(self.serviceName.UTF8String));
     auto changeStream = [[RLMChangeStream alloc] initWithChangeEventSubscriber:delegate scheduler:scheduler];

@@ -10,8 +10,8 @@ import Combine
 import Alamofire
 
 protocol ChatWebRepository: WebRepository {
-    func loadChatsForConversation(conversationID: Int) -> AnyPublisher<[Chat], Error>
-    func sendChatToServer(data: SaveChatRequset) -> AnyPublisher<(Chat, Chat), Error>
+    func loadChatsForConversation(conversationID: Int) -> AnyPublisher<[Chat], ServerError>
+    func sendChatToServer(data: SaveChatRequset) -> AnyPublisher<(Chat, Chat), ServerError>
 }
 
 struct MainChatWebRepository: ChatWebRepository {
@@ -29,12 +29,12 @@ struct MainChatWebRepository: ChatWebRepository {
         self.AFSession = setAFSession(session, queue: bgQueue)
     }
     
-    func sendChatToServer(data: SaveChatRequset) -> AnyPublisher<(Chat, Chat), Error> {
+    func sendChatToServer(data: SaveChatRequset) -> AnyPublisher<(Chat, Chat), ServerError> {
         
         do {
             let parameters = try JSONEncoder().encode(data)
             let params = try JSONSerialization.jsonObject(with: parameters, options: []) as? [String: Any] ?? [:]
-            let request: AnyPublisher<AddChatServerResponse, Error> = webRequest(api: API.addChat(params: params))
+            let request: AnyPublisher<AddChatServerResponse, ServerError> = webRequest(api: API.addChat(params: params))
             
             return request
                 .map{
@@ -42,13 +42,13 @@ struct MainChatWebRepository: ChatWebRepository {
                 }
                 .eraseToAnyPublisher()
         } catch {
-            return Fail(error: error).eraseToAnyPublisher()
+            return Fail(error: ServerError(message: "Data format not correct", code: nil, clientError: .serializationError)).eraseToAnyPublisher()
         }
     }
     
-    func loadChatsForConversation(conversationID: Int) -> AnyPublisher<[Chat], Error> {
+    func loadChatsForConversation(conversationID: Int) -> AnyPublisher<[Chat], ServerError> {
         
-        let request: AnyPublisher<GetConversationChatServerResponse, Error> = webRequest(api: API.getConversationChats(conversationID: conversationID))
+        let request: AnyPublisher<GetConversationChatServerResponse, ServerError> = webRequest(api: API.getConversationChats(conversationID: conversationID))
         
         return request
             .map{

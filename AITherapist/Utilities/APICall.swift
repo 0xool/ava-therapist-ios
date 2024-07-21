@@ -16,7 +16,7 @@ protocol APICall {
     var parameters: Parameters? { get }
 }
 
-enum APIError: Swift.Error {
+enum APIError: Error {
     case invalidURL
     case httpCode(HTTPCode)
     case unexpectedResponse

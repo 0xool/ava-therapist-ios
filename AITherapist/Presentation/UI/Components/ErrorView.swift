@@ -9,10 +9,22 @@ import SwiftUI
 
 struct ErrorView: View {
     let error: Error
+    let message: String
     let retryAction: () -> Void
     
     private var formHeight: CGFloat {
         CGFloat(UIViewController().view.bounds.height * 0.7)
+    }
+    
+    init(error: Error, retryAction: @escaping () -> Void) {
+        self.error = error
+        self.retryAction = retryAction
+        if let serverError = error as? ServerError {
+            self.message = serverError.message ?? "Network error"
+        }else{
+            message = error.localizedDescription
+        }
+        
     }
     
     var body: some View {
@@ -32,20 +44,23 @@ struct ErrorView: View {
                     .frame(alignment: .top)
                     .padding(.top, 16)
                 VStack{
-                    Text("Looks like something went wrong!")
+//                    Text("Looks like something went wrong!")
+//                        .fixedSize(horizontal: false, vertical: true)
+//                        .font(Font.custom("SF Pro Text", size: 17))
+//                        .multilineTextAlignment(.center)
+//                        .lineLimit(3)
+//                        .foregroundColor(ColorPallet.DarkBlue)
+//                        .frame(alignment: .top)
+                    
+                    Text(message)
                         .fixedSize(horizontal: false, vertical: true)
                         .font(Font.custom("SF Pro Text", size: 17))
                         .multilineTextAlignment(.center)
                         .lineLimit(3)
                         .foregroundColor(ColorPallet.DarkBlue)
                         .frame(alignment: .top)
-                    Text("\(error.localizedDescription)")
-                        .fixedSize(horizontal: false, vertical: true)
-                        .font(.footnote)
-                        .multilineTextAlignment(.center)
-                        .lineLimit(3)
-                        .foregroundColor(ColorPallet.DarkBlue)
-                        .frame(alignment: .top)
+                }.onAppear {
+                    print(error)
                 }
                                 
                 errorIcon

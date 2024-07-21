@@ -76,6 +76,7 @@ struct MainInsightService: InsightService {
             .map { [insightDBRepository] in
                 _ = insightDBRepository.store(insight: $0)
             }
+            .mapError{$0}
             .eraseToAnyPublisher()
     }
     

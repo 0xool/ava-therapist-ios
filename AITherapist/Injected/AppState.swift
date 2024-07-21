@@ -17,6 +17,8 @@ struct AppState: Equatable {
     var permissions = Permissions()
     var conversationData = ConversationData()
     var application = Application.instance
+    
+    var notification = Notification()
 }
 
 extension AppState {
@@ -37,7 +39,7 @@ extension AppState {
             self.insight = .notRequested
             
             _ = MainUserDBRepository().deleteUser()
-            PersistentManager.DeleteUserToken()
+            PersistentManager.deleteUserToken()
             DataBaseManager.Instance.ClearAllData()
         }
         
@@ -81,6 +83,12 @@ extension AppState {
     struct System: Equatable {
         var isActive: Bool = false
         var keyboardHeight: CGFloat = 0
+    }
+}
+
+extension AppState{
+    struct Notification: Equatable {
+        
     }
 }
 
