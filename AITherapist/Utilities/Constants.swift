@@ -8,7 +8,7 @@
 import Foundation
 
 struct Constants {
-    static let test = true
+    static let test = false
     static let WebProtocol = test ? "http://" : "https://"
     static let BaseUrl = test ? "localhost" : "aitherapist.online"
     

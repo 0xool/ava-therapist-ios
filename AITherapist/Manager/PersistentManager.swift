@@ -33,12 +33,12 @@ class PersistentManager {
     }
     
     static func getNotificationSeen() -> Bool {
-        KeychainSwift().get(PersistentType.NotificationSeen.rawValue) == "true"
+        KeychainSwift().get(PersistentType.NotificationSeen.rawValue) == PersistentType.NotificationSeen.rawValue
     }
     
     static func saveNotificationSeen() {
         let keychain = KeychainSwift()
-        keychain.set(true, forKey: PersistentType.NotificationSeen.rawValue)
+        keychain.set(PersistentType.NotificationSeen.rawValue, forKey: PersistentType.NotificationSeen.rawValue)
     }
 }
 

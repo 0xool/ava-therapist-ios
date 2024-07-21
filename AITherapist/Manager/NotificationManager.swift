@@ -10,7 +10,7 @@ import SwiftUI
 
 protocol NotificationProtocol {
     func requestNotifAuthorization(onSuccess: @escaping () -> (), onFailiure: @escaping () -> ())
-    func scheduelNotification()
+    func scheduelNotification(_ time: NotificationTime)
 }
 
 class NotificationManager: NotificationProtocol {
@@ -22,36 +22,53 @@ class NotificationManager: NotificationProtocol {
             if let error = error {
                 print("ERROR: \(error)")
                 onFailiure()
-//                hasEnabledNotif = false
+                //                hasEnabledNotif = false
             }else{
                 print("SUCCESS")
                 onSuccess()
-//                self.scheduelNotification()
-//                hasEnabledNotif = true
+                //                self.scheduelNotification()
+                //                hasEnabledNotif = true
             }
         }
     }
     
-    func scheduelNotification() {
+    func scheduelNotification(_ time: NotificationTime) {
         let content = UNMutableNotificationContent()
-        content.title = "Reminder"
-        content.body = "Notification"
+        content.title = "How are you doing?"
+        content.body = "Lets have a chat"
         content.sound = .default
         content.badge = 1
         
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
+        var dateComponents = DateComponents()
+        
+        switch time {
+        case .Morning:
+            dateComponents.hour = 8
+            dateComponents.minute = 0
+        case .Afternoon:
+            dateComponents.hour = 12
+            dateComponents.minute = 0
+        case .Evening:
+            dateComponents.hour = 17
+            dateComponents.minute = 0
+        case .Night:
+            dateComponents.hour = 20
+            dateComponents.minute = 0
+        }
+        
+        
+        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
         
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+        
         UNUserNotificationCenter.current().add(request)
     }
 }
 
 
-extension NotificationManager {
-    enum NotificationTime: String {
-        case Morning = "Morning"
-        case Afternoon = "Afternoon"
-        case Evening = "Evening"
-        case Night = "Night"
-    }
+enum NotificationTime: String {
+    case Morning = "Morning"
+    case Afternoon = "Afternoon"
+    case Evening = "Evening"
+    case Night = "Night"
 }

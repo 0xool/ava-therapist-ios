@@ -107,7 +107,7 @@ extension MainAppView {
         var anyCancellable: AnyCancellable? = nil
         
         @Published var initalLoading: Bool = true
-        @Published var hasSeenNotification = PersistentManager.getNotificationSeen()
+        @Published var hasSeenNotification: Bool
         
         var user: Loadable<User>{
             get{
@@ -128,6 +128,8 @@ extension MainAppView {
         init(container: DIContainer, isRunningTests: Bool = ProcessInfo.processInfo.isRunningTests){
             self.container = container
             self.isRunningTests = isRunningTests
+            self.hasSeenNotification = PersistentManager.getNotificationSeen()
+
             self.container.services.authenticationService.checkUserStatus(loading: self.bindingSubject(\.initalLoading))
             
             anyCancellable = container.appState.value.userData.objectWillChange.sink { (_) in
