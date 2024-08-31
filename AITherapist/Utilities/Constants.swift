@@ -8,7 +8,7 @@
 import Foundation
 
 struct Constants {
-    static let test = false
+    static let test = true
     static let WebProtocol = test ? "http://" : "https://"
     static let BaseUrl = test ? "localhost" : "aitherapist.online"
     
@@ -161,7 +161,6 @@ extension Constants {
             "The brain uses both hemispheres to process information, dispelling the myth of left-brain/right-brain dominance.",
             "Epigenetics explores how external factors can influence gene expression.",
         ],
-        
             .NatureandEnvironment: [
                 "Biodiversity is essential for the health of ecosystems and the planet.",
                 "Human activities, such as deforestation and pollution, impact the environment.",

@@ -117,6 +117,9 @@ struct LoginPanelView: View {
                         .fill(ColorPallet.Celeste)
                         .padding(1)
                 )
+                .onTapGesture {
+                    onGoogleLoginClicked()
+                }
             
             Image("FacebookIcon")
                 .frame(width: thirdPartyIconSize, height: thirdPartyIconSize)

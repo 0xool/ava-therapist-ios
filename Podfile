@@ -13,6 +13,8 @@ target 'AITherapist' do
   pod 'RealmSwift', '~> 10.42'
   pod 'FDSoundActivatedRecorder', '~> 3.1' 
   pod 'KeychainSwift', '~> 20.0'
+  pod 'GoogleSignIn'
+  pod 'GoogleSignInSwiftSupport'
  # Pods for AITherapist
 
 end

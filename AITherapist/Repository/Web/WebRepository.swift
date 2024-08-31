@@ -31,21 +31,34 @@ extension WebRepository {
     }
     
     func webRequest<D: ServerResponse>(webApi: APICall) -> AnyPublisher<D, ServerError> {
-        guard let sessionCookie = self.session.configuration.httpCookieStorage?.cookies?.first(where: { $0.name == "jwt" }) else {
+        
+        guard let _ = self.session.configuration.httpCookieStorage?.cookies?.first(where: { $0.name == "jwt" }) else {
             AppState.UserData.shared.logout()
             return Fail(error: ServerError(message: "Invalid Cookie", code: 500, clientError: .invalidCookie)).eraseToAnyPublisher()
         }
-
-        if sessionCookie.value == "" || sessionCookie.value.isEmpty {
-            AppState.UserData.shared.logout()
-        }
         
-        self.session.configuration.httpCookieStorage?.cookies?.forEach({
-            AFSession.session.configuration.httpCookieStorage?.setCookie($0)
-        })
+        var headers = HTTPHeaders()
+        webApi.headers?.forEach{ headers.add($0) }
+        
+        let token = PersistentManager.instance.getUserCookieToken()
+        let cookieProps = [
+            HTTPCookiePropertyKey.domain: Constants.BaseUrl,
+            HTTPCookiePropertyKey.path: "/",
+            HTTPCookiePropertyKey.name: "jwt",
+            HTTPCookiePropertyKey.value: token
+        ]
+        
+        if let cookie = HTTPCookie(properties: cookieProps) {
+            self.session.configuration.httpCookieStorage?.setCookie(cookie)
+            AFSession.session.configuration.httpCookieStorage?.setCookie(cookie)
+        }
+    
+        
+        let authToken = PersistentManager.instance.getUserAuthToken()        
+        headers.add(HTTPHeader(name: "Authorization", value: "Bearer \(authToken)"))
         
         return Future<D, ServerError> { promise in
-            AFSession.request(webApi.url, method: webApi.method, parameters: webApi.parameters, encoding: webApi.encoding, headers: webApi.headers)
+            AFSession.request(webApi.url, method: webApi.method, parameters: webApi.parameters, encoding: webApi.encoding, headers: headers)
                 .validate()
                 .responseDecodable(of: D.self) { response in
                     
@@ -53,7 +66,7 @@ extension WebRepository {
                     case .success(let data):
                         promise(.success(data))
                     case .failure(let error):
-                    
+                        
                         if let code = response.response?.statusCode, code == 401 {
                             AppState.UserData.shared.logout()
                         }
@@ -102,7 +115,7 @@ func setAFSession(_ session: URLSession, queue: DispatchQueue) -> Session {
 // MARK: COOKIE
 extension WebRepository {
     func SetCookie(cookie: String) {
-        PersistentManager.saveUserToken(token: cookie)
+        PersistentManager.instance.saveUserCookieToken(token: cookie)
     }
 }
 

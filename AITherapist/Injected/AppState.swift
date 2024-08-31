@@ -39,13 +39,11 @@ extension AppState {
             self.insight = .notRequested
             
             _ = MainUserDBRepository().deleteUser()
-            PersistentManager.deleteUserToken()
+            PersistentManager.instance.deleteUserCookieToken()
+            PersistentManager.instance.deleteUserAuthToken()
             DataBaseManager.Instance.ClearAllData()
         }
         
-        func signIn() {
-            
-        }
     }
 }
 

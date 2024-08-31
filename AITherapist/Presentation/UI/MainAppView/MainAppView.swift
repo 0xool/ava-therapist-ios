@@ -20,16 +20,22 @@ struct MainAppView: View {
         Group {
             if viewModel.isRunningTests {
                 Text("Running unit tests")
-            }else if (PersistentManager.userHasFinishedOnboarding()){
+            }else if (PersistentManager.instance.userHasFinishedOnboarding()){
                 Text("OnboardingView")
             }else{
                 if self.viewModel.initalLoading {
                     splashView
                 }else{
                     if self.viewModel.user.value == nil
-                    { loginView } else {
+                    {
+                        loginView
+                    } else {
                         if self.viewModel.hasSeenNotification
-                        { mainAppView } else{ notificationView }
+                        {
+                            mainAppView
+                        } else{
+                            notificationView
+                        }
                     }
                 }
             }
@@ -128,9 +134,11 @@ extension MainAppView {
         init(container: DIContainer, isRunningTests: Bool = ProcessInfo.processInfo.isRunningTests){
             self.container = container
             self.isRunningTests = isRunningTests
-            self.hasSeenNotification = PersistentManager.getNotificationSeen()
+            self.hasSeenNotification = PersistentManager.instance.getNotificationSeen()
 
             self.container.services.authenticationService.checkUserStatus(loading: self.bindingSubject(\.initalLoading))
+            
+            
             
             anyCancellable = container.appState.value.userData.objectWillChange.sink { (_) in
                 self.objectWillChange.send()

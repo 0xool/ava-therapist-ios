@@ -19,21 +19,23 @@ class User: Object, Codable {
     @Persisted var userName: String
     @Persisted var therapistID: Int?
     
-    @Persisted var mobile: String
+    @Persisted var mobile: String?
     @Persisted var name: String?
     @Persisted var lastname: String?
     
     @Persisted var email: String
     @Persisted var generalSummary: String?
-    @Persisted var token: String
+    @Persisted var token: String?
         
     enum CodingKeys: String, CodingKey {
         case id = "userID"
         case userName = "username"
         case therapistID = "therapistID"
+        
         case mobile = "mobile"
         case name = "name"
         case lastname = "lastname"
+        
         case email = "email"
         case generalSummary = "generalSummary"
         case token = "token"
@@ -43,7 +45,7 @@ class User: Object, Codable {
         super.init()
     }
 
-    convenience init(id: Int, userName: String, therapistID: Int?, mobile: String, name: String?, lastname: String?, email: String, generalSummary: String?, token: String) {
+    convenience init(id: Int, userName: String, therapistID: Int?, mobile: String?, name: String?, lastname: String?, email: String, generalSummary: String?, token: String?) {
         self.init()
         self.id = id
         
@@ -66,12 +68,12 @@ class User: Object, Codable {
         userName = try container.decode(String.self , forKey: .userName)
         therapistID = try container.decode(Int?.self , forKey: .therapistID)
         
-        mobile = try container.decode(String.self , forKey: .mobile)
+        mobile = try container.decode(String?.self , forKey: .mobile)
         name = try container.decode(String?.self , forKey: .name)
         lastname = try container.decodeIfPresent(String.self , forKey: .lastname)
         email = try container.decode(String.self , forKey: .email)
         generalSummary = try container.decodeIfPresent(String.self , forKey: .generalSummary)
-        if let token = try? container.decode(String.self , forKey: .token) {
+        if let token = try? container.decode(String?.self , forKey: .token) {
             self.token = token
             UserDefaults.standard.set(token, forKey: "token")
         }

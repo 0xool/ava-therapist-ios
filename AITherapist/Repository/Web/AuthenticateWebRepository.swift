@@ -9,37 +9,12 @@ import Foundation
 import Alamofire
 import Combine
 
-// Refactor this in both backend and frontend to fix this respose setup
-struct AuthenticateResponse: ServerResponse{
-    var message: String?
-    var code: Int?
-    var data: AuthenticateResponseData
-
-    struct AuthenticateResponseData: Decodable {
-        var auth: Bool
-        let token: String
-        let id: Int
-        
-        let user: User
-        let userSetting: Setting
-    }
-}
-
-struct GetUserInfoResponse: ServerResponse{
-    var message: String?
-    var code: Int?
-    var data: GetUserInfoResponseData
-
-    struct GetUserInfoResponseData: Decodable {
-        let user: User
-        let userSetting: Setting
-    }
-}
-
 protocol AuthenticateWebRepository: WebRepository {
     func login(email: String, password: String) -> AnyPublisher<AuthenticateResponse, ServerError>
-    func register(nickname: String, email: String, password: String, mobileNumber: String) -> AnyPublisher<AuthenticateResponse, ServerError>
+    func register(name: String, email: String, password: String, mobileNumber: String) -> AnyPublisher<AuthenticateResponse, ServerError>
     func getUserInfo() -> AnyPublisher<GetUserInfoResponse, ServerError>
+    
+    func authenticateUserWithThirdParty(provider: String, token: String) -> AnyPublisher<AuthenticateResponse, ServerError>
 }
 
 struct MainAuthenticateWebRepository: AuthenticateWebRepository {
@@ -72,9 +47,17 @@ struct MainAuthenticateWebRepository: AuthenticateWebRepository {
                 .eraseToAnyPublisher()
     }
     
-    func register(nickname: String, email: String, password: String, mobileNumber: String) -> AnyPublisher<AuthenticateResponse, ServerError> {
-        let params = ["user": ["email" : email , "password" : password, "mobile": mobileNumber, "nickname": nickname]]
+    func register(name: String, email: String, password: String, mobileNumber: String) -> AnyPublisher<AuthenticateResponse, ServerError> {
+        let params = ["user": ["email" : email , "password" : password, "mobile": mobileNumber, "name": name]]
         let request: AnyPublisher<AuthenticateResponse, ServerError> = webRequest(api: API.register(params: params))
+        
+        return request
+                .eraseToAnyPublisher()
+    }
+    
+    func authenticateUserWithThirdParty(provider: String, token: String) -> AnyPublisher<AuthenticateResponse, ServerError>{
+        let params = ["user": ["provider" : provider , "token" : token]]
+        let request: AnyPublisher<AuthenticateResponse, ServerError> = webRequest(api: API.login(params: params))
         
         return request
                 .eraseToAnyPublisher()
@@ -82,11 +65,11 @@ struct MainAuthenticateWebRepository: AuthenticateWebRepository {
 }
 
 extension MainAuthenticateWebRepository {
-    
     enum API: APICall {
         case login(params: Parameters?)
         case register(params: Parameters?)
         case getUserInfo
+        case thirdPartyAuth(params: Parameters?)
         
         var url: String {
             switch self {
@@ -96,6 +79,8 @@ extension MainAuthenticateWebRepository {
                 "\(MainAuthenticateWebRepository.AuthenticateAPI)/register"
             case .getUserInfo:
                 "\(MainAuthenticateWebRepository.AuthenticateAPI)/getUserInfo"
+            case .thirdPartyAuth:
+                "\(MainAuthenticateWebRepository.AuthenticateAPI)/thirdPartyAuth"
             }
         }
         
@@ -107,6 +92,8 @@ extension MainAuthenticateWebRepository {
                 .post
             case .getUserInfo:
                 .get
+            case .thirdPartyAuth:
+                .post
             }
         }
         
@@ -122,6 +109,8 @@ extension MainAuthenticateWebRepository {
                 JSONEncoding.default
             case .getUserInfo:
                 JSONEncoding.default
+            case .thirdPartyAuth:
+                JSONEncoding.default
             }
         }
         
@@ -133,8 +122,37 @@ extension MainAuthenticateWebRepository {
                 params
             case .getUserInfo:
                 nil
+            case let .thirdPartyAuth(params):
+                params
             }
         }
     }
     
+}
+
+// Refactor this in both backend and frontend to fix this respose setup
+struct AuthenticateResponse: ServerResponse{
+    var message: String?
+    var code: Int?
+    var data: AuthenticateResponseData
+
+    struct AuthenticateResponseData: Decodable {
+        var auth: Bool
+        let token: String
+        let id: Int
+        
+        let user: User
+        let userSetting: Setting
+    }
+}
+
+struct GetUserInfoResponse: ServerResponse{
+    var message: String?
+    var code: Int?
+    var data: GetUserInfoResponseData
+
+    struct GetUserInfoResponseData: Decodable {
+        let user: User
+        let userSetting: Setting
+    }
 }

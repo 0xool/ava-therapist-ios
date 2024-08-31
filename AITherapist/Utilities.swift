@@ -8,9 +8,6 @@
 import Foundation
 import SwiftUI
 
-
-
-
 struct ColorPallet{
     static let creameColor: Color = Color(red: 253/255, green: 232/255, blue: 182/255)
     static let greenBackground: Color = Color(red: 222/255, green: 254/255, blue: 202/255)

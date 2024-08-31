@@ -233,7 +233,7 @@ extension NotificationView{
         }
         
         func onNotificationSet() {
-            PersistentManager.saveNotificationSeen()
+            PersistentManager.instance.saveNotificationSeen()
             self.notificationViewSeen = true
         }
     }

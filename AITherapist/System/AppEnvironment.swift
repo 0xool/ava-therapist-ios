@@ -58,18 +58,23 @@ extension AppEnvironment {
         configuration.timeoutIntervalForRequest = 60
         configuration.timeoutIntervalForResource = 120
         
-//        configuration.waitsForConnectivity = true
         configuration.httpMaximumConnectionsPerHost = 5
+        let token = PersistentManager.instance.getUserCookieToken()
         let cookieProps = [
             HTTPCookiePropertyKey.domain: Constants.BaseUrl,
             HTTPCookiePropertyKey.path: "/",
             HTTPCookiePropertyKey.name: "jwt",
-            HTTPCookiePropertyKey.value: PersistentManager.getUserToken()
+            HTTPCookiePropertyKey.value: token
         ]
         
         if let cookie = HTTPCookie(properties: cookieProps) {
             configuration.httpCookieStorage?.setCookie(cookie)
         }
+        
+        configuration.httpAdditionalHeaders = [
+            "Authorization": "Bearer \(token)"
+        ]
+        
         configuration.urlCache = .shared
         return URLSession(configuration: configuration)
     }
