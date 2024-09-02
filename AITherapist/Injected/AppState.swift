@@ -8,6 +8,7 @@
 
 import SwiftUI
 import Combine
+import FirebaseAuth
 
 struct AppState: Equatable {
     var userData = UserData.shared
@@ -39,9 +40,16 @@ extension AppState {
             self.insight = .notRequested
             
             _ = MainUserDBRepository().deleteUser()
+            
             PersistentManager.instance.deleteUserCookieToken()
             PersistentManager.instance.deleteUserAuthToken()
             DataBaseManager.Instance.ClearAllData()
+            
+            do{
+                try Auth.auth().signOut()
+            }catch {
+                print("Error while signing out from Firebase")
+            }
         }
         
     }

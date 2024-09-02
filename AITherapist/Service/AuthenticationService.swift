@@ -13,6 +13,10 @@ import FirebaseAuth
 import GoogleSignIn
 import FirebaseCore
 
+import AuthenticationServices
+import CryptoKit
+import CommonCrypto
+
 protocol AuthenticationService {
     func loginUser(email: String, password: String)
     func registerUser(name: String, email: String, password: String, mobileNumber: String)
@@ -20,6 +24,8 @@ protocol AuthenticationService {
     
     func authenticateUserWithThirdParty(provider: Provider, token: String)
     func signInGoogle()
+    func handleSingInWithAppleRequest(request: ASAuthorizationAppleIDRequest)
+    func handleSingInWithAppleCompletion(result: Result<ASAuthorization, Error>)
     func signOut()
 }
 
@@ -29,6 +35,7 @@ class MainAuthenticationService: AuthenticationService {
     let settingDBRepository: SettingDBRepository
     
     let appState: Store<AppState>
+    private var currentNonce: String?
     
     init(appState: Store<AppState>, authenticateRepository: AuthenticateWebRepository, userDBRepository: UserDBRepository, settingDBRepository: SettingDBRepository){
         self.appState = appState
@@ -63,6 +70,7 @@ class MainAuthenticationService: AuthenticationService {
             }
             .store(in: cancelBag)
     }
+    
     
     func loginUser(email: String, password: String) {
         let cancelBag = CancelBag()
@@ -121,6 +129,98 @@ class MainAuthenticationService: AuthenticationService {
     }
 }
 
+//        MARK: Sing In With Apple
+
+extension MainAuthenticationService{
+    
+    func handleSingInWithAppleRequest(request: ASAuthorizationAppleIDRequest) {
+        let cancelBag = CancelBag()
+        
+        self.appState[\.userData.user].setIsLoading(cancelBag: cancelBag)
+        request.requestedScopes = [.email, .fullName]
+        let nonce = randomNonceString()
+        self.currentNonce = nonce
+        request.nonce = sha256(nonce)
+    }
+    
+    func handleSingInWithAppleCompletion(result: Result<ASAuthorization, Error>){
+        let cancelBag = CancelBag()
+        
+        if case .failure(let failure) = result {
+            self.appState[\.userData.user].cancelLoading()
+        }
+        else if case .success(let success) = result {
+            if let appleIdCredentials = success.credential as? ASAuthorizationAppleIDCredential {
+                guard let nonce = currentNonce else{
+                    self.appState[\.userData.user].cancelLoading()
+                    fatalError("Invalid State: a login callback was recived, but no login request was sent")
+                }
+                
+                guard let appleIDToken = appleIdCredentials.identityToken else{
+                    self.appState[\.userData.user].cancelLoading()
+                    return
+                }
+                
+                guard let idTokenString = String(data: appleIDToken, encoding: .utf8) else{
+                    self.appState[\.userData.user].cancelLoading()
+                    return
+                }
+                
+                let credential = OAuthProvider.credential(providerID: .apple, idToken: idTokenString, rawNonce: nonce)
+                
+                Auth.auth().signIn(with: credential) {res,err in
+                    
+                    guard err == nil else {
+                        self.appState[\.userData.user].cancelLoading()
+                        return
+                    }
+                    
+                    Auth.auth().currentUser?.getIDToken(completion: { token, err in
+                        guard err == nil else {
+                            self.appState[\.userData.user].cancelLoading()
+                            return
+                        }
+                                                                
+                        self.authenticateWithServer(token)
+                    })
+                }
+            }
+        }
+    }
+    
+    private func randomNonceString(length: Int = 32) -> String {
+        precondition(length > 0)
+        var randomBytes = [UInt8](repeating: 0, count: length)
+        let errorCode = SecRandomCopyBytes(kSecRandomDefault, randomBytes.count, &randomBytes)
+        if errorCode != errSecSuccess {
+            fatalError(
+                "Unable to generate nonce. SecRandomCopyBytes failed with OSStatus \(errorCode)"
+            )
+        }
+        
+        let charset: [Character] =
+        Array("0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._")
+        
+        let nonce = randomBytes.map { byte in
+            // Pick a random character from the set, wrapping around if needed.
+            charset[Int(byte) % charset.count]
+        }
+        
+        return String(nonce)
+    }
+    
+    @available(iOS 13, *)
+    private func sha256(_ input: String) -> String {
+        let inputData = Data(input.utf8)
+        let hashedData = SHA256.hash(data: inputData)
+        let hashString = hashedData.compactMap {
+            String(format: "%02x", $0)
+        }.joined()
+        
+        return hashString
+    }
+}
+
 // MARK: Google Sign In
 
 extension MainAuthenticationService {
@@ -140,10 +240,12 @@ extension MainAuthenticationService {
             }
             
             guard let user = result?.user else {
+                self?.appState[\.userData.user].cancelLoading()
                 return
             }
             
             guard let idToken = user.idToken?.tokenString else{
+                self?.appState[\.userData.user].cancelLoading()
                 return
             }
             
@@ -152,7 +254,7 @@ extension MainAuthenticationService {
             
             Auth.auth().signIn(with: credential) {res,err in
                 
-                guard error == nil else {
+                guard err == nil else {
                     self?.appState[\.userData.user].cancelLoading()
                     return
                 }
@@ -266,23 +368,21 @@ extension MainAuthenticationService {
 // MARK: Stubs
 
 struct StubAuthenticateService: AuthenticationService {
-    func signInGoogle() {
-    }
+    func handleSingInWithAppleRequest(request: ASAuthorizationAppleIDRequest){}
     
-    func signOut() {
-    }
+    func handleSingInWithAppleCompletion(result: Result<ASAuthorization, Error>){}
+        
+    func signInGoogle() {}
     
-    func checkUserStatus(loading: Binding<Bool>) {
-    }
+    func signOut() {}
     
-    func loginUser(email: String, password: String) {
-    }
+    func checkUserStatus(loading: Binding<Bool>) {}
     
-    func registerUser(name: String, email: String, password: String, mobileNumber: String){
-    }
+    func loginUser(email: String, password: String) {}
     
-    func authenticateUserWithThirdParty(provider: Provider, token: String){
-    }
+    func registerUser(name: String, email: String, password: String, mobileNumber: String){}
+    
+    func authenticateUserWithThirdParty(provider: Provider, token: String){}
 }
 
 enum Provider {

@@ -6,19 +6,21 @@
 //
 
 import SwiftUI
+import AuthenticationServices
+import GoogleSignInSwift
 
 struct LoginPanelView: View {
     @Binding var email: String
     @Binding var password: String
     @Binding var showCreateAcount: Bool
+
+
+    let viewModel: AuthenticationView.ViewModel
+    let onGoogleLoginClicked: () -> ()
+    let onLoginClicked: () -> ()
     
     @State private var isEmailFocused: Bool = false
     @State private var isPasswordFocused: Bool = false
-    
-    let onGoogleLoginClicked: () -> ()
-    let onFacebookLoginClicked: () -> ()
-    let onLoginClicked: () -> ()
-    
     private let thirdPartyIconSize: CGFloat = 40
     
     var body: some View {
@@ -45,11 +47,14 @@ struct LoginPanelView: View {
             Spacer()
             
             newToAvaView
-        }.onTapGesture {
-            self.hideKeyboard()
+
         }
         
-        .background(background)
+        .background(background
+            .onTapGesture {
+                self.hideKeyboard()
+            }
+        )
     }
     
     @ViewBuilder var background: some View {
@@ -106,41 +111,23 @@ struct LoginPanelView: View {
     }
     
     @ViewBuilder var thirdPartyLoginBtnView: some View {
-        HStack(spacing: 50) {
+        VStack(spacing: 32) {
             
-            Image("GoogleIcon")
-                .frame(width: thirdPartyIconSize, height: thirdPartyIconSize)
-                .padding(.horizontal, 5)
-                .padding(.vertical, 2)
-                .background(
-                    Circle()
-                        .fill(ColorPallet.Celeste)
-                        .padding(1)
-                )
-                .onTapGesture {
-                    onGoogleLoginClicked()
-                }
+            GoogleSignInButton (style: .wide) {
+                onGoogleLoginClicked()
+            }
+            .frame(height: 10)
+            .padding(.horizontal)
             
-            Image("FacebookIcon")
-                .frame(width: thirdPartyIconSize, height: thirdPartyIconSize)
-                .padding(.horizontal, 5)
-                .padding(.vertical, 2)
-                .background(
-                    Circle()
-                        .fill(ColorPallet.Celeste)
-                        .padding(1)
-                )
-            
-            Image(systemName: "apple.logo")
-                .font(.title)
-                .frame(width: thirdPartyIconSize, height: thirdPartyIconSize)
-                .padding(.horizontal, 5)
-                .padding(.vertical, 2)
-                .background(
-                    Circle()
-                        .fill(ColorPallet.Celeste)
-                        .padding(1)
-                )
+            SignInWithAppleButton { req in
+                self.viewModel.container.services.authenticationService.handleSingInWithAppleRequest(request: req)
+            } onCompletion: { res in
+                self.viewModel.container.services.authenticationService.handleSingInWithAppleCompletion(result: res)
+            }
+            .frame(height: 45)
+            .padding(.horizontal)
+        
+
         }
         .padding(0)
     }
@@ -169,5 +156,5 @@ struct LoginPanelView: View {
 }
 
 #Preview {
-    LoginPanelView(email: Binding.constant(""), password: Binding.constant(""), showCreateAcount: Binding.constant(true), onGoogleLoginClicked: {}, onFacebookLoginClicked: {}, onLoginClicked: {})
+    LoginPanelView(email: Binding.constant(""), password: Binding.constant(""), showCreateAcount: Binding.constant(true), viewModel: .init(container: .previews), onGoogleLoginClicked: {}, onLoginClicked: {})
 }

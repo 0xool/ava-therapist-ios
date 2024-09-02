@@ -27,6 +27,7 @@ extension AuthenticationView {
         // Misc
         let container: DIContainer
         private var cancelBag = CancelBag()
+        private var currentNonce: String? = ""
         var user: Loadable<User>{
             get{
                 self.container.appState[\.userData.user]
@@ -42,19 +43,6 @@ extension AuthenticationView {
         func retry(){
             self.container.appState[\.userData].logout()
         }
-        
-//        var localeReader: LocaleReader {
-//            LocaleReader(viewModel: self)
-//        }
-        
-        // MARK: - Side Effects
-        
-//        func reloadCountries() {
-//            container.services.countriesService
-//                .load(countries: loadableSubject(\.countries),
-//                      search: countriesSearch.searchText,
-//                      locale: countriesSearch.locale)
-//        }
         
         func requestPushPermission() {
             container.services.userPermissionsService

@@ -43,8 +43,10 @@ struct AuthenticationView: View {
             case let .loaded(user):
                 loadedView(user, showLoading: false)
             case let .failed(error):
-                loginViewOverlay()
-                failedView(error)
+                if error.localizedDescription != "Canceled by user" {
+                    loginViewOverlay()
+                    failedView(error)
+                }                
             case .partialLoaded(_, _):
                 authView
             }
@@ -95,13 +97,9 @@ extension  AuthenticationView {
     }
     
     func loginView() -> some View {
-        LoginPanelView(email: $email, password: $password, showCreateAcount: $showLoginView) {
-            
+        LoginPanelView(email: $email, password: $password, showCreateAcount: $showLoginView, viewModel: self.viewModel) {            
             viewModel.container.services.authenticationService.signInGoogle()
-            
-        } onFacebookLoginClicked: {
-            
-        } onLoginClicked: {
+        }  onLoginClicked: {
             self.login()
         }
         .alert(viewModel.alertMessage.rawValue, isPresented: $showingAlert) {

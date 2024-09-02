@@ -324,6 +324,7 @@
 		A58AA4982AD7C86B001F7253 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Constants.swift; path = AITherapist/Utilities/Constants.swift; sourceTree = SOURCE_ROOT; };
 		A58AA49A2AD8D8A3001F7253 /* ChatWebRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatWebRepository.swift; sourceTree = "<group>"; };
 		A58AA49D2AD8E9B1001F7253 /* ChatService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatService.swift; sourceTree = "<group>"; };
+		A596A8A42C829B96006B58A3 /* AITherapist.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AITherapist.entitlements; sourceTree = "<group>"; };
 		A596AD1129B4385100C19DA6 /* MicManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicManager.swift; sourceTree = "<group>"; };
 		A59B81042B0B59EA00FC4661 /* BackgroundViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundViews.swift; sourceTree = "<group>"; };
 		A59C63CB2ACA37EE00B76256 /* LoginViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
@@ -689,6 +690,7 @@
 		A525EEA829B172BC00A57CE8 /* AITherapist */ = {
 			isa = PBXGroup;
 			children = (
+				A596A8A42C829B96006B58A3 /* AITherapist.entitlements */,
 				A5CA949D2AA81B4000E25A46 /* Info.plist */,
 				A57AD7D62AA677ED008EC1FB /* Service */,
 				A569DF052AA448C0006D39AA /* Utilities */,
@@ -1802,6 +1804,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = AITherapist/AITherapist.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"AITherapist/Preview Content\"";
@@ -1840,6 +1843,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = AITherapist/AITherapist.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
